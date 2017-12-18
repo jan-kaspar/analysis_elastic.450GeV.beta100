@@ -1,0 +1,82 @@
+#!/bin/bash
+
+files_per_block="100"
+
+#----------------------------------------------------------------------------------------------------
+
+function FlushBuffer()
+{
+	local buffer="$1"
+	local block_idx="$2"
+
+	local dir="../$subdir/block${block_idx}"
+	mkdir -p "$dir"
+
+	echo "* $dir"
+	
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+			s|\$RUN|$run|;\
+		" > "$dir/input_files.h"
+
+	echo "#include \"../parameters.h\"" > "$dir/parameters.h"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	subdir="$1"
+	run="$2"
+
+	buffer=""
+	buffer_size="0"
+
+	block_idx="0"
+
+	for file in `das_client --query "file dataset=$dataset run=$run" --limit=0|grep store`
+	do
+		if [ -n "$buffer" ]
+		then
+			buffer="$buffer,\n"
+			#buffer="$buffer\n"
+		fi
+		buffer="$buffer\t\t\"root://cmsxrootd.fnal.gov//$file\""
+		#buffer="${buffer}root://cmsxrootd.fnal.gov//$file"
+
+		let buffer_size+=1
+
+		if [ "$buffer_size" -ge "$files_per_block" ]
+		then
+			FlushBuffer "$buffer" "$block_idx"
+	
+			buffer=""
+			let buffer_size=0
+			let block_idx+=1
+		fi
+	done
+
+	if [ "$buffer_size" -gt "0" ]
+	then
+		FlushBuffer "$buffer" "$block_idx"
+	
+		buffer=""
+		let buffer_size=0
+		let block_idx+=1
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+#dataset="/ExpressPhysics/Run2017F-Express-v1/FEVT"
+dataset="/ZeroBias/Run2017F-PromptReco-v1/AOD"
+
+MakeFiles "DS-scheme3" "306380" &
+
+MakeFiles "DS-scheme4" "306381" &
+
+MakeFiles "DS-scheme5" "306402" &
+
+MakeFiles "DS-scheme6" "306405" &
+
+MakeFiles "DS-scheme7" "306406" &
