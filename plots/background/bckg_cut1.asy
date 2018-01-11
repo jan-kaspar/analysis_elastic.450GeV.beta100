@@ -6,6 +6,8 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
+	"DS-scheme1",
+	"DS-scheme2",
 	"DS-scheme3",
 	"DS-scheme4",
 	"DS-scheme5",

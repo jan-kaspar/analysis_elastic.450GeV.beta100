@@ -6,6 +6,8 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
+	"DS-scheme1",
+	"DS-scheme2",
 	"DS-scheme3",
 	"DS-scheme4",
 	"DS-scheme5",
@@ -18,7 +20,7 @@ string dgns[] = {
 	"45t_56b"
 };
 
-int cuts[] = { 2 };
+int cuts[] = { 1, 2 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6 };
 real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0 };
