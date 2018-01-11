@@ -8,5 +8,5 @@ void Init_additional()
 		f = "../" + f;
 
 	anal.lumi_section_min = 2;
-	anal.lumi_section_max = 40;
+	anal.lumi_section_max = 22;
 }

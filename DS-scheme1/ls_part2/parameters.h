@@ -7,6 +7,6 @@ void Init_additional()
 	for (auto &f : distilledNtuples)
 		f = "../" + f;
 
-	anal.lumi_section_min = 41;
-	anal.lumi_section_max = 80;
+	anal.lumi_section_min = 23;
+	anal.lumi_section_max = 43;
 }
