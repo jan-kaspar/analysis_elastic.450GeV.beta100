@@ -71,6 +71,10 @@ function MakeFiles()
 #dataset="/ExpressPhysics/Run2017F-Express-v1/FEVT"
 dataset="/ZeroBias/Run2017F-PromptReco-v1/AOD"
 
+MakeFiles "DS-scheme1" "306373" &
+
+MakeFiles "DS-scheme2" "306379" &
+
 MakeFiles "DS-scheme3" "306380" &
 
 MakeFiles "DS-scheme4" "306381" &
