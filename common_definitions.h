@@ -605,6 +605,8 @@ struct Analysis
 	double cut7_a, cut7_c, cut7_si;
 	double cut8_a, cut8_c, cut8_si;
 
+	unsigned int lumi_section_min = 0, lumi_section_max = 10000;
+
 	std::vector< std::pair<double, double> > timeIntervals;
 
 	unsigned int N_cuts;	// number of cuts - indexed from 1!
@@ -693,6 +695,9 @@ struct Analysis
 	{
 		printf("t_min=%E, t_max=%E, t_min_full=%E, t_max_full=%E\n", t_min, t_max, t_min_full, t_max_full);
 		printf("t_min_fit=%E\n", t_min_fit);
+
+		printf("\n");
+		printf("lumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
 
 		printf("\n");
 		printf("%lu time intervals:\n", timeIntervals.size());

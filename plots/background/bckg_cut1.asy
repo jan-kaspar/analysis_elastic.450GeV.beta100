@@ -20,6 +20,12 @@ string dgns[] = {
 	"45t_56b"
 };
 
+string parts[], p_labels[];
+pen p_pens[];
+parts.push(""); p_pens.push(red); p_labels.push("full");
+parts.push("/ls_part1"); p_pens.push(blue); p_labels.push("first part");
+parts.push("/ls_part2"); p_pens.push(heavygreen); p_labels.push("second part");
+
 int cuts[] = { 1 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6 };
@@ -57,8 +63,6 @@ for (int ci : cuts.keys)
 		{
 			string dgn = dgns[dgi];
 			string f = topDir + dataset+"/distributions_" + dgn + ".root";
-	
-			// ---------- discriminator distribution ----------
 
 			string obj_name_par = format("elastic cuts/cut %i", cut) + format("/g_cut_parameters", cut);
 			RootObject obj_par = RootGetObject(f, obj_name_par);
@@ -71,22 +75,32 @@ for (int ci : cuts.keys)
 
 			NewPad(label_cut[idx]);
 
-			string obj_name_h = format("elastic cuts/cut %i", cut) + format("/h_cq%i", cut);
-			RootObject obj_h = RootGetObject(f, obj_name_h);
-
 			real scale = scale_y[idx];
 
-			draw(scale(scale, 1.), obj_h, "vl,eb", red+1pt);
+			for (int pti : parts.keys)
+			{
+
+				string f = topDir + dataset + parts[pti] +"/distributions_" + dgn + ".root";
+				string obj_name_h = format("elastic cuts/cut %i", cut) + format("/h_cq%i", cut);
+				RootObject obj_h = RootGetObject(f, obj_name_h);
+
+				draw(scale(scale, 1.), obj_h, "vl,eb", p_pens[pti]+1pt);
+			}
 
 			xlimits(-lim_q[idx], +lim_q[idx], Crop);
 
-			yaxis(XEquals(+n_si * csi * scale, false), blue+dashed);
-			yaxis(XEquals(-n_si * csi * scale, false), blue+dashed);
+			yaxis(XEquals(+n_si * csi * scale, false), dashed);
+			yaxis(XEquals(-n_si * csi * scale, false), dashed);
 
-			//AddToLegend(format("<mean = $%#.3f$", obj_h.rExec("GetMean") * scale));
-			//AddToLegend(format("<RMS = $%#.3f$", obj_h.rExec("GetRMS") * scale));
-			//AddToLegend(format("<cut = $\pm%#.3f$", n_si * csi * scale));
 			AttachLegend(replace(dgn, "_", " -- "), NW, NW);
+		}
+
+		if (dsi == 0)
+		{
+			NewPad(false);
+			for (int pti : parts.keys)
+				AddToLegend(p_labels[pti], p_pens[pti]);
+			AttachLegend();
 		}
 	}
 }
