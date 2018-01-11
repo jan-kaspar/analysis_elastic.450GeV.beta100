@@ -780,16 +780,15 @@ int main(int argc, char **argv)
 
 	map<unsigned int, pair<unsigned int, unsigned int> > runTimestampBoundaries;
 
+	unsigned int lumi_section_min = 100000, lumi_section_max = 0;
+
 	// build histograms
 	for (int ev_idx = 0; ev_idx < ch_in->GetEntries(); ++ev_idx)
 	{
 		ch_in->GetEntry(ev_idx);
 
-		// TODO
-		/*
-		if (ev.lumi_section < 10 || ev.lumi_section > 30)
-			continue;
-		*/
+		lumi_section_min = min(lumi_section_min, ev.lumi_section);
+		lumi_section_max = max(lumi_section_max, ev.lumi_section);
 
 		// remove troublesome runs
 		if (SkipRun(ev.run_num))
@@ -816,6 +815,10 @@ int main(int argc, char **argv)
 			if ( (time_group % time_group_divisor) != time_group_remainder)
 				continue;
 		}
+
+		// check lumi section - selected?
+		if (ev.lumi_section < anal.lumi_section_min || ev.lumi_section > anal.lumi_section_max)
+			continue;
 
 		// diagonal cut
 		// TODO
@@ -1439,6 +1442,8 @@ int main(int argc, char **argv)
 	}
 	
 	printf("---------------------------- after event loop ---------------------------\n");
+
+	printf("\nlumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
 
 	for (auto &p : runTimestampBoundaries)
 	{
