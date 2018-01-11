@@ -781,6 +781,7 @@ int main(int argc, char **argv)
 	map<unsigned int, pair<unsigned int, unsigned int> > runTimestampBoundaries;
 
 	unsigned int lumi_section_min = 100000, lumi_section_max = 0;
+	map<unsigned int, unsigned int> m_lumi_section_n_ev;
 
 	// build histograms
 	for (int ev_idx = 0; ev_idx < ch_in->GetEntries(); ++ev_idx)
@@ -789,6 +790,7 @@ int main(int argc, char **argv)
 
 		lumi_section_min = min(lumi_section_min, ev.lumi_section);
 		lumi_section_max = max(lumi_section_max, ev.lumi_section);
+		m_lumi_section_n_ev[ev.lumi_section]++;
 
 		// remove troublesome runs
 		if (SkipRun(ev.run_num))
@@ -1442,6 +1444,8 @@ int main(int argc, char **argv)
 	printf("---------------------------- after event loop ---------------------------\n");
 
 	printf("\nlumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
+	for (const auto &p : m_lumi_section_n_ev)
+		printf("    LS %u : %u events\n", p.first, p.second);
 
 	for (auto &p : runTimestampBoundaries)
 	{
