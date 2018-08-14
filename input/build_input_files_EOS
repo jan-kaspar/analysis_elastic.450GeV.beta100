@@ -1,0 +1,73 @@
+#!/bin/bash
+
+files_per_block="100"
+
+#----------------------------------------------------------------------------------------------------
+
+function FlushBuffer()
+{
+	local buffer="$1"
+	local block_idx="$2"
+
+	local dir="../$subdir/block${block_idx}"
+	mkdir -p "$dir"
+
+	echo "* $dir"
+	
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+			s|\$RUN|$run|;\
+		" > "$dir/input_files.h"
+
+	echo "#include \"../parameters.h\"" > "$dir/parameters.h"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	subdir="$1"
+	run="$2"
+
+	buffer=""
+	buffer_size="0"
+
+	block_idx="0"
+
+	for file in `eos ls $eos_dir|grep run_${run}|grep _re_reco.root`
+	do
+		if [ -n "$buffer" ]
+		then
+			buffer="$buffer,\n"
+		fi
+		buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir/$file\""
+
+		let buffer_size+=1
+
+		if [ "$buffer_size" -ge "$files_per_block" ]
+		then
+			FlushBuffer "$buffer" "$block_idx"
+	
+			buffer=""
+			let buffer_size=0
+			let block_idx+=1
+		fi
+	done
+
+	if [ "$buffer_size" -gt "0" ]
+	then
+		FlushBuffer "$buffer" "$block_idx"
+	
+		buffer=""
+		let buffer_size=0
+		let block_idx+=1
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+eos_dir="/eos/totem/data/offline/2018/450GeV/test_2018_05_08/version1"
+
+MakeFiles "DS1" "315922"
+MakeFiles "DS2" "315934"
+MakeFiles "DS3" "315956"

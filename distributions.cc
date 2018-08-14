@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 		return rcIncompatibleDiagonal;
 
 	// default parameters
-	unsigned int detailsLevel = 10; 	// 0: no details, 1: some details, >= 2 all details
+	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
 	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
 	string cutSelectionString;
 	string outputDir = ".";
@@ -241,7 +241,7 @@ int main(int argc, char **argv)
 			while (pch != NULL)
 			{
 				unsigned int cut = atoi(pch);
-				if (cut < 1 || cut > 7)
+				if (cut < 1 || cut > 10)
 				{
 					printf("ERROR: invalid cut number %u.\n", cut);
 					return 2;
@@ -260,6 +260,8 @@ int main(int argc, char **argv)
 	printf("------------------------------- analysis --------------------------------\n");
 	anal.Print();
 	printf("\n");
+
+	printf("* cut_y_min = %.3f\n", cut_y_min);
 
 	// alignment init
 	for (unsigned int i = 0; i < alignmentSources.size(); ++i)
@@ -374,8 +376,7 @@ int main(int argc, char **argv)
 	}
 
 	// book metadata histograms
-	double timestamp_min = 0E3, timestamp_max = 20E3;
-	unsigned int timestamp_bins = 20001;	// max - min + 1
+	unsigned int timestamp_bins = timestamp_max - timestamp_min + 1;
 
 	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
 	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
@@ -433,14 +434,29 @@ int main(int argc, char **argv)
 		double x_min=0., x_max=0., y_min=0., y_max = 0.;
 		double q_max = 0.;
 
-		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 1000E-6; }
-		if (i == 2) { x_min = -500E-6; x_max = +500E-6; y_min = -500E-6; y_max = 500E-6; q_max = 100E-6; }
-		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = 1.; q_max = 2.; }
-		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = 1.; q_max = 2.; }
-		if (i == 5) { x_min = -3.; x_max = +7.; y_min = -1.5; y_max = 1.5; q_max = 1000E-3; }
-		if (i == 6) { x_min = -3.; x_max = +7.; y_min = -1.5; y_max = 1.5; q_max = 1000E-3; }
-		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = +1.; q_max = 1000E-3; }
-		if (i == 8) { x_min = -600E-6; x_max = +600E-6; y_min = -4.; y_max = +4.; q_max = 500E-3; }
+		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 500E-6; }
+		if (i == 2) { x_min = 0E-6; x_max = +300E-6; y_min = 0E-6; y_max = 300E-6; q_max = 100E-6; }
+
+		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
+		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
+
+		if (i == 5) { x_min = +7.; x_max = +37.; y_min = -10.; y_max = +5.; q_max = 0.5; }
+		if (i == 6) { x_min = -37.; x_max = -7.; y_min = -5.; y_max = +5.; q_max = 0.5; }
+
+		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -10.; y_max = +10.; q_max = 6.; }
+
+		if (i == 8) { x_min = -200E-6; x_max = +200E-6; y_min = -100.; y_max = +100.; q_max = 10.0; }
+		
+		if (i == 9) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
+		if (i == 10) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
+
+		if ((i == 2 || i == 5 || i == 6) && diagonal == d45t_56b)
+		{
+			swap(x_min, x_max);
+			swap(y_min, y_max);
+			for (auto p : {&x_min, &x_max, &y_min, &y_max})
+				*p = - (*p);
+		}
 
 		unsigned int bins_1D = 100;
 		unsigned int bins_2D = 100;
@@ -821,15 +837,10 @@ int main(int argc, char **argv)
 			continue;
 
 		// diagonal cut
-		// TODO
-		//bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
-		bool allDiagonalRPs = ev.h.L_2_F.v && ev.h.R_2_F.v;
+		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
 
 		if (!allDiagonalRPs)
 			continue;
-		
-		h_timestamp_dgn->Fill(ev.timestamp);
-		//g_timestamp_vs_ev_idx_dgn->SetPoint(g_timestamp_vs_ev_idx_dgn->GetN(), ev_idx, ev.timestamp);
 
 		// select the elastic-trigger bunch(es) only
 		if (SkipBunch(ev.run_num, ev.bunch_num))
@@ -850,6 +861,25 @@ int main(int argc, char **argv)
 			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
+
+		// hit-map cuts
+		bool skip_due_to_y = false;
+		for (const auto &y : {h_al.L_2_F.y, h_al.L_1_F.y, h_al.R_1_F.y, h_al.R_2_F.y})
+		{
+			if (fabs(y) < cut_y_min)
+				skip_due_to_y = true;
+		}
+
+		if (skip_due_to_y)
+			continue;
+		
+		h_timestamp_dgn->Fill(ev.timestamp);
+		//g_timestamp_vs_ev_idx_dgn->SetPoint(g_timestamp_vs_ev_idx_dgn->GetN(), ev_idx, ev.timestamp);
+
+		/*
+		if (h_al.R_2_F.x < -50. || h_al.R_2_F.x > +50. || fabs(h_al.R_2_F.y) < 45.4)
+			continue;
+		*/
 
 		// fill pre-selection histograms
 		h_y_L_2_F_vs_x_L_2_F_al_nosel->Fill(h_al.L_2_F.x, h_al.L_2_F.y);
@@ -893,15 +923,6 @@ int main(int argc, char **argv)
 		double ta_y_R = (env.v_y_R_F * h_al.y_R_N - env.v_y_R_N * h_al.y_R_F) / D_y_R;
 
 		double ta_y = (ta_y_L + ta_y_R) / 2.;
-		*/
-
-		// hit-map cuts
-		/*
-		if (h_al.L_2_F.x < -50. || h_al.L_2_F.x > +50. || fabs(h_al.L_2_F.y) < 45.1)
-			continue;
-
-		if (h_al.R_2_F.x < -50. || h_al.R_2_F.x > +50. || fabs(h_al.R_2_F.y) < 45.4)
-			continue;
 		*/
 
 		// cut evaluation
@@ -1666,13 +1687,16 @@ int main(int argc, char **argv)
 	TCanvas *c;
 	
 	gDirectory = outF->mkdir("metadata");
-	if (detailsLevel >= 2)
+	if (detailsLevel >= 0)
 	{
-		h_timestamp_dgn->Write();
 		h_timestamp_B0->SetLineColor(4);
-		h_timestamp_B0->Write();
 		h_timestamp_sel->SetLineColor(2);
+
+		/*
+		h_timestamp_dgn->Write();
+		h_timestamp_B0->Write();
 		h_timestamp_sel->Write();
+		*/
 
 		c = new TCanvas("rate cmp");
 		h_timestamp_dgn->Draw();
@@ -1841,8 +1865,9 @@ int main(int argc, char **argv)
 		c->SetLogz(1);
 		h2_cq_full[ci]->Draw("colz");
 
-		double lim = h2_cq_full[ci]->GetXaxis()->GetXmax();
-		double qa[2] = {-lim, +lim};
+		const double x_min = h2_cq_full[ci]->GetXaxis()->GetXmin();
+		const double x_max = h2_cq_full[ci]->GetXaxis()->GetXmax();
+		double qa[2] = {x_min, x_max};
 		double qbp[2]= {(+anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[0] - anal.ccc[ci])/anal.ccb[ci],
 			(+anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[1] - anal.ccc[ci])/anal.ccb[ci]};
 		double qbm[2]= {(-anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[0] - anal.ccc[ci])/anal.ccb[ci],
