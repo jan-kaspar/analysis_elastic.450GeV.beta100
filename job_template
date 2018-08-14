@@ -6,7 +6,7 @@ export STAGE_HOST=castorpublic
 export STAGE_SVCCLASS=default
 
 source "/cvmfs/cms.cern.ch/cmsset_default.sh"
-cd "/afs/cern.ch/work/j/jkaspar/software/ctpps/production/CMSSW_9_2_0/src"
+cd "$CMSSW_BASE/src"
 cmsenv
 
 # EOS configuration

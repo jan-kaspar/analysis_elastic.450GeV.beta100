@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 		return rcIncompatibleDiagonal;
 
 	// default parameters
-	unsigned int detailsLevel = 10; 	// 0: no details, 1: some details, >= 2 all details
+	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
 	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
 	string cutSelectionString;
 	string outputDir = ".";
@@ -434,13 +434,21 @@ int main(int argc, char **argv)
 		double q_max = 0.;
 
 		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 1000E-6; }
-		if (i == 2) { x_min = -500E-6; x_max = +500E-6; y_min = -500E-6; y_max = 500E-6; q_max = 100E-6; }
+		if (i == 2) { x_min = 200E-6; x_max = +500E-6; y_min = 200E-6; y_max = 500E-6; q_max = 100E-6; }
 		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = 1.; q_max = 2.; }
 		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = 1.; q_max = 2.; }
 		if (i == 5) { x_min = -3.; x_max = +7.; y_min = -1.5; y_max = 1.5; q_max = 1000E-3; }
 		if (i == 6) { x_min = -3.; x_max = +7.; y_min = -1.5; y_max = 1.5; q_max = 1000E-3; }
 		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1.; y_max = +1.; q_max = 1000E-3; }
 		if (i == 8) { x_min = -600E-6; x_max = +600E-6; y_min = -4.; y_max = +4.; q_max = 500E-3; }
+
+		if (i == 2 && diagonal == d45t_56b)
+		{
+			swap(x_min, x_max);
+			swap(y_min, y_max);
+			for (auto p : {&x_min, &x_max, &y_min, &y_max})
+				*p = - (*p);
+		}
 
 		unsigned int bins_1D = 100;
 		unsigned int bins_2D = 100;
@@ -1841,8 +1849,9 @@ int main(int argc, char **argv)
 		c->SetLogz(1);
 		h2_cq_full[ci]->Draw("colz");
 
-		double lim = h2_cq_full[ci]->GetXaxis()->GetXmax();
-		double qa[2] = {-lim, +lim};
+		const double x_min = h2_cq_full[ci]->GetXaxis()->GetXmin();
+		const double x_max = h2_cq_full[ci]->GetXaxis()->GetXmax();
+		double qa[2] = {x_min, x_max};
 		double qbp[2]= {(+anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[0] - anal.ccc[ci])/anal.ccb[ci],
 			(+anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[1] - anal.ccc[ci])/anal.ccb[ci]};
 		double qbm[2]= {(-anal.n_si*anal.csi[ci] - anal.cca[ci]*qa[0] - anal.ccc[ci])/anal.ccb[ci],

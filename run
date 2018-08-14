@@ -66,6 +66,7 @@ function RunOneDiagonal()
 		local job_log_file=".${tag}_${diag}.log_job"
 
 		cat "$top_dir/job_template" | sed "\
+				s|\$CMSSW_BASE|$CMSSW_BASE|; \
 				s|\$JOB_DIR|$job_dir|; \
 				s|\$JOB_LOG_FILE|$job_log_file|; \
 				s|\$COMMAND|{ time \"./$exe_file\" \"$diag\" $options ; } \&> \"$log\"|; \
