@@ -5,9 +5,16 @@ include "../run_info.asy";
 
 string topDir = "../../";
 
-string datasets[], ds_labels[];
-datasets.push("DS1_ZeroBias/block0"); ds_labels.push("DS1");
-//datasets.push("DS3_ZeroBias/block0"); ds_labels.push("DS3");
+string datasets[];
+//datasets.push("DS-323893/ZeroBias");
+datasets.push("DS-323899/ZeroBias");
+/*
+datasets.push("DS-323907/ZeroBias");
+datasets.push("DS-323919/ZeroBias");
+datasets.push("DS-323932/ZeroBias");
+datasets.push("DS-323933/ZeroBias");
+datasets.push("DS-323934/ZeroBias");
+*/
 
 string diagonals[] = { "45b", "45t" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
@@ -41,7 +48,7 @@ for (int dsi : datasets.keys)
 		NewPage();
 
 		NewPad(false, -1, -1);
-		label("\vbox{\SetFontSizesXX\hbox{"+ds_labels[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
+		label("\vbox{\SetFontSizesXX\hbox{"+datasets[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
 	
 		for (int ri : row_captions.keys)
 		{
@@ -65,16 +72,19 @@ for (int dsi : datasets.keys)
 				if (template == "")
 					continue;
 
-				real y_max = 1.0;
+				real y_max = 0.5;
 		
 				NewPad("time$\ung{h}$", "destructive pile-up probability", c, r);
-				DrawRunBands(ds_labels[dsi], 0, y_max);
+				DrawRunBands(datasets[dsi], 0, y_max);
 		
 				for (int ci : criteria.keys)
 				{
 					string element = replace(template, "#", criteria[ci]);
 					pen p = StdPen(ci);
-					draw(swToHours, RootGetObject(f, dgn+"/"+element+"/rel", search=false), "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
+
+					RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
+					if (obj.valid)
+						draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 				}
 				
 				ylimits(0, y_max, Crop);

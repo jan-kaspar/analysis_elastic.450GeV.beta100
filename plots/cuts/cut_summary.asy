@@ -6,12 +6,7 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	//"DS1",
-	//"DS2",
-	//"DS3",
-
-	//"DS1",
-	"DS1-y-cut",
+	"DS-323899/Totem1",
 };
 
 string dgns[] = {
@@ -19,22 +14,22 @@ string dgns[] = {
 	"45t_56b"
 };
 
-int cuts[] = { 1, 2, 5, 6, 7, 8 };
+int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
 
-real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6 };
-real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0 };
+real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1, 1 };
+real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1, 1 };
 
-string label_x[] = { "$\th_x^{*R}\ung{\mu rad}$", "$\th_y^{*R}\ung{\mu rad}$", "$\th_x^{*R}\ung{\mu rad}$", "$\th_x^{*L}\ung{\mu rad}$", "$y^{R,N}\ung{mm}$", "$y^{L,N}\ung{mm}$", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$" };
-string label_y[] = { "$\th_x^{*L}\ung{\mu rad}$", "$\th_y^{*L}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$y^{R,F} - y^{R,N}\ung{mm}$", "$y^{L,F} - y^{L,N}\ung{mm}$", "$\De^{R-L} x^*\ung{mm}$", "$\De^{R-L} y^*\ung{mm}$" };
-string label_cut[] = { "$\De^{R-L} \th_x^{*}\ung{\mu rad}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$cq5$", "$cq6$", "$cq7$", "$cq8$" };
+string label_x[] = { "$\th_x^{*R}\ung{\mu rad}$", "$\th_y^{*R}\ung{\mu rad}$", "$\th_x^{*R}\ung{\mu rad}$", "$\th_x^{*L}\ung{\mu rad}$", "$y^{R,N}\ung{mm}$", "$y^{L,N}\ung{mm}$", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", "$x^{R,N}\ung{mm}$", "$x^{L,N}\ung{mm}$" };
+string label_y[] = { "$\th_x^{*L}\ung{\mu rad}$", "$\th_y^{*L}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$y^{R,F} - y^{R,N}\ung{mm}$", "$y^{L,F} - y^{L,N}\ung{mm}$", "$\De^{R-L} x^*\ung{mm}$", "$\De^{R-L} y^*\ung{mm}$", "$x^{R,F} - x^{R,N}\ung{mm}$", "$x^{L,F} - x^{L,N}\ung{mm}$" };
+string label_cut[] = { "$\De^{R-L} \th_x^{*}\ung{\mu rad}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$cq5$", "$cq6$", "$cq7$", "$cq8$", "$cq9$", "$cq10$" };
 
-real lim_x_low[] = { -1000, +1, -1000, -1000, +1, +1, -750, -200 };
-real lim_x_high[] = { +1000, -1, +1000, +1000, -1, -1, +750, +200 };
+real lim_x_low[] = { -1000, +1, -1000, -1000, +1, +1, -750, -200, -15, -15 };
+real lim_x_high[] = { +1000, -1, +1000, +1000, -1, -1, +750, +200, +15, +15 };
 
-real lim_y_low[] = { -1000, +1, -0.8, -0.8, +1, +1, -10, -100 };
-real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +10, +100 };
+real lim_y_low[] = { -1000, +1, -0.8, -0.8, +1, +1, -10, -100, -5, -5 };
+real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +10, +100, +5, +5 };
 
-real lim_q[] = { 250., 50, 10., 10., 1., 1., 2.5, 10. };
+real lim_q[] = { 250., 50, 10., 10., 1., 1., 2.5, 10., 2, 2 };
 
 //----------------------------------------------------------------------------------------------------
 

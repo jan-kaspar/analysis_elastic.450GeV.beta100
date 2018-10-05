@@ -5,10 +5,16 @@ include "../run_info.asy";
 
 string topDir = "../../";
 
-string datasets[], ds_labels[];
-datasets.push("DS1/block0"); ds_labels.push("DS1");
-datasets.push("DS2/block0"); ds_labels.push("DS2");
-datasets.push("DS3/block0"); ds_labels.push("DS3");
+string datasets[];
+//datasets.push("DS-323893/Totem1");
+datasets.push("DS-323899/Totem1");
+/*
+datasets.push("DS-323907/Totem1");
+datasets.push("DS-323919/Totem1");
+datasets.push("DS-323932/Totem1");
+datasets.push("DS-323933/Totem1");
+datasets.push("DS-323934/Totem1");
+*/
 
 string diagonals[] = { "45b", "45t" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
@@ -93,7 +99,7 @@ for (int dsi : datasets.keys)
 				real y_max = 1.;
 		
 				NewPad("time$\ung{h}$", "probability", c, r);
-				DrawRunBands(ds_labels[dsi], 0, y_max);
+				DrawRunBands(datasets[dsi], 0, y_max);
 
 				string on_den = dgn+"/"+ replace(replace(template, "<OP>", "&&"), "<Q>", "pat_suff") +"/rel";
 				string on_num_tr = dgn+"/"+ replace(replace(template, "<OP>", "&&"), "<Q>", "tr") +"/rel";

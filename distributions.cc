@@ -378,6 +378,7 @@ int main(int argc, char **argv)
 	// book metadata histograms
 	unsigned int timestamp_bins = timestamp_max - timestamp_min + 1;
 
+	TH1D *h_timestamp_input = new TH1D("h_timestamp_input", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
 	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
 	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
 	TH1D *h_timestamp_sel = new TH1D("h_timestamp_sel", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
@@ -444,8 +445,7 @@ int main(int argc, char **argv)
 		if (i == 6) { x_min = -37.; x_max = -7.; y_min = -5.; y_max = +5.; q_max = 0.5; }
 
 		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -10.; y_max = +10.; q_max = 6.; }
-
-		if (i == 8) { x_min = -200E-6; x_max = +200E-6; y_min = -100.; y_max = +100.; q_max = 10.0; }
+		if (i == 8) { x_min = -200E-6; x_max = +200E-6; y_min = -100.; y_max = +100.; q_max = 20.0; }
 		
 		if (i == 9) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 		if (i == 10) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
@@ -838,6 +838,8 @@ int main(int argc, char **argv)
 
 		// diagonal cut
 		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
+
+		h_timestamp_input->Fill(ev.timestamp);
 
 		if (!allDiagonalRPs)
 			continue;
@@ -1689,8 +1691,10 @@ int main(int argc, char **argv)
 	gDirectory = outF->mkdir("metadata");
 	if (detailsLevel >= 0)
 	{
-		h_timestamp_B0->SetLineColor(4);
-		h_timestamp_sel->SetLineColor(2);
+		h_timestamp_input->SetLineColor(1);
+		h_timestamp_dgn->SetLineColor(2);
+		h_timestamp_B0->SetLineColor(6);
+		h_timestamp_sel->SetLineColor(4);
 
 		/*
 		h_timestamp_dgn->Write();
@@ -1699,8 +1703,9 @@ int main(int argc, char **argv)
 		*/
 
 		c = new TCanvas("rate cmp");
-		h_timestamp_dgn->Draw();
-		h_timestamp_B0->Draw("sames");
+		h_timestamp_input->Draw();
+		h_timestamp_dgn->Draw("sames");
+		//h_timestamp_B0->Draw("sames");
 		h_timestamp_sel->Draw("sames");
 		c->Write();
 	

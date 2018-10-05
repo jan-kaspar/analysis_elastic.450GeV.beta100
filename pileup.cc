@@ -347,7 +347,7 @@ int main(int argc, char **argv)
 	InitInputFiles();
 
 	// TODO: remove
-	input_files.resize(10);
+	//input_files.resize(10);
 
 	printf("* input files: \n");
 	for (unsigned int i = 0; i < input_files.size(); i++)

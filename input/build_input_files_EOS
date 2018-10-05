@@ -26,48 +26,41 @@ function FlushBuffer()
 
 function MakeFiles()
 {
-	subdir="$1"
-	run="$2"
+	run="$1"
+	trigger="$2"
+	subdir="$3"
+	filter="$4"
 
 	buffer=""
-	buffer_size="0"
 
-	block_idx="0"
-
-	for file in `eos ls $eos_dir|grep run_${run}|grep _re_reco.root`
+	for file in `eos ls $eos_dir/$subdir|grep run_${run}|grep $filter`
 	do
 		if [ -n "$buffer" ]
 		then
 			buffer="$buffer,\n"
 		fi
-		buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir/$file\""
-
-		let buffer_size+=1
-
-		if [ "$buffer_size" -ge "$files_per_block" ]
-		then
-			FlushBuffer "$buffer" "$block_idx"
-	
-			buffer=""
-			let buffer_size=0
-			let block_idx+=1
-		fi
+		buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir/$subdir/$file\""
 	done
 
-	if [ "$buffer_size" -gt "0" ]
-	then
-		FlushBuffer "$buffer" "$block_idx"
+	local dir="../DS-$run/$trigger"
+	mkdir -p "$dir"
+
+	echo "* $dir"
 	
-		buffer=""
-		let buffer_size=0
-		let block_idx+=1
-	fi
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+			s|\$RUN|$run|;\
+		" > "$dir/input_files.h"
+
+	#echo "#include \"../parameters.h\"" > "$dir/parameters.h"
 }
 
 #----------------------------------------------------------------------------------------------------
 
-eos_dir="/eos/totem/data/offline/2018/450GeV/test_2018_05_08/version1"
+eos_dir="/eos/totem/data/offline/2018/450GeV/test_2018_10_02/"
 
-MakeFiles "DS1" "315922"
-MakeFiles "DS2" "315934"
-MakeFiles "DS3" "315956"
+for run in 323893 323899 323907 323919 323932 323933 323934
+do
+	MakeFiles "$run" "Totem1" "version1" "_reco.root"
+	MakeFiles "$run" "ZeroBias" "version1_ZeroBias" "_reco_ZeroBias.root"
+done

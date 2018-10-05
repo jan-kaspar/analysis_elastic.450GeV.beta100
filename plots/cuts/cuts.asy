@@ -6,10 +6,13 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	"DS1",
-	//"DS2",
-	//"DS3",
-	//"DS1-y-cut",
+	"DS-323893/Totem1",
+	"DS-323899/Totem1",
+	"DS-323907/Totem1",
+	"DS-323919/Totem1",
+	"DS-323932/Totem1",
+	"DS-323933/Totem1",
+	"DS-323934/Totem1",
 };
 
 string dgns[] = {
@@ -17,8 +20,8 @@ string dgns[] = {
 	"45t_56b"
 };
 
-int cuts[] = { 1, 2, 5, 6, 7, 8 };
-int cuts[] = { 9 };
+int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
+int cuts[] = { 8, 9, 10 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1, 1 };
 real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1, 1 };
@@ -56,6 +59,8 @@ for (int ci : cuts.keys)
 	for (int dsi : datasets.keys)
 	{
 		string dataset = datasets[dsi];
+
+		write("  - " + dataset);
 
 		for (int dgi : dgns.keys)
 		{

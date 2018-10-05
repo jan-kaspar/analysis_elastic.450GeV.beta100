@@ -5,9 +5,14 @@ include "../run_info.asy";
 
 string topDir = "../../";
 
-string datasets[], ds_labels[];
-datasets.push("DS1_ZeroBias/block0"); ds_labels.push("DS1");
-//datasets.push("DS3_ZeroBias/block0"); ds_labels.push("DS3");
+string datasets[];
+datasets.push("DS-323893/ZeroBias");
+datasets.push("DS-323899/ZeroBias");
+datasets.push("DS-323907/ZeroBias");
+datasets.push("DS-323919/ZeroBias");
+datasets.push("DS-323932/ZeroBias");
+datasets.push("DS-323933/ZeroBias");
+datasets.push("DS-323934/ZeroBias");
 
 string diagonals[] = { "45b", "45t" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
@@ -18,37 +23,41 @@ string criteria[] = { "pat_suff_destr", "pl_suff_destr" };
 
 xSizeDef = 10cm;
 
-//----------------------------------------------------------------------------------------------------
-
 TGraph_errorBar = None;
 
-int c = 0;
+//----------------------------------------------------------------------------------------------------
+
 frame fr_leg;
+
+NewPad(false);
+for (int di : diagonals.keys)
+	NewPadLabel(dgn_labels[di]);
 
 for (int dsi : datasets.keys)
 {
+	NewRow();
+
+	NewPadLabel(datasets[dsi]);
+
 	string f = topDir + datasets[dsi]+"/pileup_combined.root";
 
 	for (int di : diagonals.keys)
 	{
 		string dgn = diagonals[di];
 
-		++c;
+		real y_max = 0.5;
 		
-		NewPad(false, c, 0);
-		label("\vbox{\SetFontSizesXX\hbox{"+ds_labels[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
-	
-	
-		real y_max = 1.0;
-		
-		NewPad("time$\ung{h}$", "destructive pile-up probability", c, 1);
-		DrawRunBands(ds_labels[dsi], 0, y_max);
+		NewPad("time$\ung{h}$", "destructive pile-up probability");
+		DrawRunBands(datasets[dsi], 0, y_max);
 		
 		for (int ci : criteria.keys)
 		{
 			string element = replace(template, "#", criteria[ci]);
 			pen p = StdPen(ci);
-			draw(swToHours, RootGetObject(f, dgn+"/"+element+"/rel", search=false), "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
+
+			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
+			if (obj.valid)
+				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}
 		
 		ylimits(0, y_max, Crop);
@@ -58,9 +67,7 @@ for (int dsi : datasets.keys)
 	}
 }
 
-++c;
-
-NewPad(false, c, 1);
+NewPad(false);
 attach(fr_leg);
 
 GShipout(hSkip=1mm, vSkip=0mm);

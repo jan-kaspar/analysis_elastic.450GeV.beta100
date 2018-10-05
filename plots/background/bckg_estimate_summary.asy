@@ -2,7 +2,13 @@ import root;
 import pad_layout;
 
 string datasets[];
+datasets.push("DS-323893/Totem1");
 datasets.push("DS-323899/Totem1");
+datasets.push("DS-323907/Totem1");
+datasets.push("DS-323919/Totem1");
+datasets.push("DS-323932/Totem1");
+datasets.push("DS-323933/Totem1");
+datasets.push("DS-323934/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
@@ -38,21 +44,24 @@ void MakeComparison(string quantity, real xscale, string unit, string obj, real 
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
+	
+NewPad(false);
+for (int dgi : diagonals.keys)
+	NewPadLabel(dgn_labels[dgi]);
 
 for (int dsi : datasets.keys)
 {
 	dataset = datasets[dsi];
 
 	write("* " + dataset);
+	
+	NewRow();
+
+	NewPadLabel(dataset);
 
 	for (int dgi : diagonals.keys)
 	{
-		NewRow();
-
 		diagonal = diagonals[dgi];
-
-		NewPad(false);
-		label(replace("{\SetFontSizesXX\vbox{\hbox{"+dataset+"}\hbox{"+dgn_labels[dgi]+"}}}", "_", "\_"));
 
 		string combinations[];
 		pen comb_pens[];
@@ -67,20 +76,7 @@ for (int dsi : datasets.keys)
 		combinations.push("cuts:1,2,5,6,8,9,10"); comb_pens.push(red+2pt);
 		
 		MakeComparison("$\De^{\rm R-L} x^*$", 1e0, "mm", "cut 7/h_cq7", xlimit=5, sigma=0.5, xStep=1., xstep=0.2, combinations, comb_pens);
-		
-		/*
-		//--------------------
-		//NewPage();
-		
-		string combinations[];
-		pen comb_pens[];
-		
-		combinations.push("no_cuts"); comb_pens.push(gray);
-		combinations.push("cuts:1"); comb_pens.push(heavygreen);
-		
-		MakeComparison("$\De\th_y^*$", 1e6, "\mu rad", "cut 2/h_cq2", xlimit=15, sigma=0.5, xStep=5, xstep=1, combinations, comb_pens);
-		*/
 	}
-
-	GShipout("cut_distributions_" + replace(dataset, "/", "_") + ".pdf");
 }
+
+GShipout(vSkip=1mm);

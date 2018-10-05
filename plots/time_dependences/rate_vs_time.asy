@@ -2,19 +2,22 @@ import root;
 import pad_layout;
 include "../run_info.asy";
 
-string datasets[], d_labels[];
-datasets.push("DS1"); d_labels.push("DS1");
-datasets.push("DS1-y-cut"); d_labels.push("DS1");
-//datasets.push("DS2-y-cut"); d_labels.push("DS2");
-//datasets.push("DS3-y-cut"); d_labels.push("DS3");
-//datasets.push("DS1"); d_labels.push("DS1");
+string datasets[];
+datasets.push("DS-323893/Totem1");;
+datasets.push("DS-323899/Totem1");;
+datasets.push("DS-323907/Totem1");;
+datasets.push("DS-323919/Totem1");;
+datasets.push("DS-323932/Totem1");;
+datasets.push("DS-323933/Totem1");;
+datasets.push("DS-323934/Totem1");;
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 string types[], t_labels[];
 pen t_pens[];
-types.push("dgn"); t_labels.push("diagonal"); t_pens.push(red);
+types.push("input"); t_labels.push("coincidence of 2 RPs (220-fr)"); t_pens.push(heavygreen);
+types.push("dgn"); t_labels.push("coincidence of 4 RPs (220-fr and 210-fr)"); t_pens.push(red);
 types.push("sel"); t_labels.push("selected"); t_pens.push(blue);
 
 string topDir = "../../";
@@ -26,9 +29,9 @@ ySizeDef = 6cm;
 
 TGraph_errorBar = None;
 
-int rebin = 10;
+int rebin = 30;
 
-transform swToMinutes = shift(-1010, 0) * scale(1/60, 1);
+transform swToMinutes = scale(1/60, 1);
 
 //----------------------------------------------------------------------------------------------------
 
@@ -66,9 +69,6 @@ for (int dsi : datasets.keys)
 		//currentpad.yTicks = RightTicks(1., 0.2);
 		real y_min = 0, y_max = 20;
 
-		if (datasets[dsi] == "DS1" && diagonals[dgni] == "45b_56t")
-			y_max = 200.;
-	
 		//DrawRunBands(fills[dsi], y_min, y_max);
 
 		for (int ti : types.keys)
@@ -84,14 +84,9 @@ for (int dsi : datasets.keys)
 	}
 }
 
-/*
 NewPad(false);
-for (int dgni : diagonals.keys)
-{
-	AddToLegend(dgn_labels[dgni], dgn_pens[dgni]);
-}
+for (int ti : types.keys)
+	AddToLegend(t_labels[ti], t_pens[ti]);
 AttachLegend();
-
-*/
 
 GShipout(vSkip=0mm);

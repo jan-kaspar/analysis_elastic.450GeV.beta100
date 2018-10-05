@@ -7,7 +7,7 @@ function RunCompilation()
 {
 	cd ".."
 	./run distributions.cc -no-bckg -no-run "$dataset" || exit 1
-	#./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
+	./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
 	cd - > /dev/null
 }
 
@@ -40,11 +40,11 @@ function RunCutCombinationReconstructions()
 	
 		cd "$tag" || continue
 	
-		../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
-		../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
+		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
+		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
 
-		#../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
-		#../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
+		../../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
+		../../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
 	
 		cd ".."
 	done
@@ -72,8 +72,8 @@ function RunNSiReconstructions()
 	
 		cd "$tag" || continue
 	
-		../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../$dataset" -n-si "$n_si" &> "log_45b_56t" &
-		../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../$dataset" -n-si "$n_si" &> "log_45t_56b" &
+		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -n-si "$n_si" &> "log_45b_56t" &
+		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -n-si "$n_si" &> "log_45t_56b" &
 	
 		cd ".."
 	done
@@ -83,13 +83,13 @@ function RunNSiReconstructions()
 #----------------------------------------------------------------------------------------------------
 
 datasets=(
-	#"DS1"
-	#"DS2"
-	#"DS3"
-
-	#"DS1-y-cut"
-	"DS2-y-cut"
-	"DS3-y-cut"
+	"DS-323893/Totem1"
+	"DS-323899/Totem1"
+	"DS-323907/Totem1"
+	"DS-323919/Totem1"
+	"DS-323932/Totem1"
+	"DS-323933/Totem1"
+	"DS-323934/Totem1"
 )
 
 for dataset in "${datasets[@]}"
@@ -98,6 +98,8 @@ do
 
 	RunCompilation
 
+	cwd=`pwd -P`
+
 	mkdir -p "$dataset"
 	cd "$dataset"
 
@@ -105,5 +107,5 @@ do
 
 	#RunNSiReconstructions
 
-	cd ".."
+	cd "$cwd"
 done
