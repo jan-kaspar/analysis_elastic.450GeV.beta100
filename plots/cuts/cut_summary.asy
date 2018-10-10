@@ -6,13 +6,7 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	"DS-323893/Totem1",
 	"DS-323899/Totem1",
-	"DS-323907/Totem1",
-	"DS-323919/Totem1",
-	"DS-323932/Totem1",
-	"DS-323933/Totem1",
-	"DS-323934/Totem1",
 };
 
 string dgns[] = {
@@ -21,7 +15,6 @@ string dgns[] = {
 };
 
 int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
-int cuts[] = { 8, 9, 10 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1, 1 };
 real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1, 1 };
@@ -38,39 +31,37 @@ real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +10, +100, +5, +5 };
 
 real lim_q[] = { 250., 50, 10., 10., 1., 1., 2.5, 10., 2, 2 };
 
+//----------------------------------------------------------------------------------------------------
+
+NewPad(false);
+
 for (int ci : cuts.keys)
 {
 	int cut = cuts[ci];
 	int idx = cut - 1;
 
-	write(format("* cut %i", cut));
+	NewPad(false);
+	label("{\SetFontSizesXX " + format("cut %i", cut) + "}");
+}
 
-	NewPad(false);
-	
-	NewPad(false);
-	label("\SetFontSizesXX before cuts");
-	
-	NewPad(false);
-	label("\SetFontSizesXX after cuts");
-	
-	NewPad(false);
-	label("\SetFontSizesXX discriminator distribution");
+for (int dsi : datasets.keys)
+{
+	string dataset = datasets[dsi];
 
-	for (int dsi : datasets.keys)
+	for (int dgi : dgns.keys)
 	{
-		string dataset = datasets[dsi];
-
-		write("  - " + dataset);
-
-		for (int dgi : dgns.keys)
-		{
-			string dgn = dgns[dgi];
-			string f = topDir + dataset+"/distributions_" + dgn + ".root";
+		string dgn = dgns[dgi];
+		string f = topDir + dataset+"/distributions_" + dgn + ".root";
 	
-			NewRow();
+		NewRow();
 
-			NewPad(false);
-			label("\vbox{\SetFontSizesXX\hbox{"+format("cut %i", cut)+"}\hbox{"+dataset+"}\hbox{"+replace(dgn, "_", "--")+"}}");
+		NewPad(false);
+		label("\vbox{\SetFontSizesXX\hbox{"+dataset+"}\hbox{"+replace(dgn, "_", "--")+"}}");
+
+		for (int ci : cuts.keys)
+		{
+			int cut = cuts[ci];
+			int idx = cut - 1;
 	
 			// ---------- before cuts ----------
 
@@ -84,6 +75,7 @@ for (int ci : cuts.keys)
 
 			// ---------- after cuts ----------
 			
+			/*
 			NewPad(label_x[idx], label_y[idx]);
 			scale(Linear, Linear, Log);
 			string objC = format("elastic cuts/cut %i", cut) + format("/plot_after_cq%i", cut);
@@ -91,9 +83,11 @@ for (int ci : cuts.keys)
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#1"));
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#2"));
 			limits((-lim_x_high[idx], -lim_y_high[idx]), (-lim_x_low[idx], -lim_y_low[idx]), Crop);
+			*/
 
 			// ---------- discriminator distribution ----------
 
+			/*
 			string obj_name_par = format("elastic cuts/cut %i", cut) + format("/g_cut_parameters", cut);
 			RootObject obj_par = RootGetObject(f, obj_name_par);
 			real ax[] = {0}, ay[] = {0};
@@ -121,8 +115,9 @@ for (int ci : cuts.keys)
 			AddToLegend(format("<RMS = $%#.3f$", obj_h.rExec("GetRMS") * scale));
 			AddToLegend(format("<cut = $\pm%#.3f$", n_si * csi * scale));
 			AttachLegend();
+			*/
 		}
 	}
-
-	GShipout(format("cut_%i", cut));
 }
+
+GShipout(hSkip=0mm, vSkip=0mm);

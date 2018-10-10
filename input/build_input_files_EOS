@@ -1,0 +1,66 @@
+#!/bin/bash
+
+files_per_block="100"
+
+#----------------------------------------------------------------------------------------------------
+
+function FlushBuffer()
+{
+	local buffer="$1"
+	local block_idx="$2"
+
+	local dir="../$subdir/block${block_idx}"
+	mkdir -p "$dir"
+
+	echo "* $dir"
+	
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+			s|\$RUN|$run|;\
+		" > "$dir/input_files.h"
+
+	echo "#include \"../parameters.h\"" > "$dir/parameters.h"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	run="$1"
+	trigger="$2"
+	subdir="$3"
+	filter="$4"
+
+	buffer=""
+
+	for file in `eos ls $eos_dir/$subdir|grep run_${run}|grep $filter`
+	do
+		if [ -n "$buffer" ]
+		then
+			buffer="$buffer,\n"
+		fi
+		buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir/$subdir/$file\""
+	done
+
+	local dir="../DS-$run/$trigger"
+	mkdir -p "$dir"
+
+	echo "* $dir"
+	
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+			s|\$RUN|$run|;\
+		" > "$dir/input_files.h"
+
+	#echo "#include \"../parameters.h\"" > "$dir/parameters.h"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+eos_dir="/eos/totem/data/offline/2018/450GeV/test_2018_10_02/"
+
+for run in 323893 323899 323907 323919 323932 323933 323934
+do
+	MakeFiles "$run" "Totem1" "version1" "_reco.root"
+	MakeFiles "$run" "ZeroBias" "version1_ZeroBias" "_reco_ZeroBias.root"
+done

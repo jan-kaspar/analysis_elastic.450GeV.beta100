@@ -1,6 +1,6 @@
 void Analysis::BuildCuts()
 {
-	N_cuts = 8;
+	N_cuts = 10;
 
 	// cut structure:
 	//	| a*qa + b*qb + c| < n_si * si
@@ -10,7 +10,7 @@ void Analysis::BuildCuts()
 	ccb[1] = 1.;
 	ccc[1] = cut1_c;
 	csi[1] = cut1_si;
-	//cuts.push_back(1);
+	cuts.push_back(1);
 	
 	cqaN[2] = "#theta_{y}^{R}"; cqbN[2] = "#theta_{y}^{L}";
 	cca[2] = -cut2_a;
@@ -38,27 +38,42 @@ void Analysis::BuildCuts()
 	ccb[5] = 1.;
 	ccc[5] = cut5_c;
 	csi[5] = cut5_si;
-	//cuts.push_back(5);
+	cuts.push_back(5);
 	
 	cqaN[6] = "y^{L,2,F}"; cqbN[6] = "y^{L,2,F} - y^{L,1,F}";
 	cca[6] = -cut6_a;
 	ccb[6] = 1.;
 	ccc[6] = cut6_c;
 	csi[6] = cut6_si;
-	//cuts.push_back(6);
+	cuts.push_back(6);
 	
 	cqaN[7] = "#theta_{x}"; cqbN[7] = "vtx_{x}^{R} - vtx_{x}^{L}";
 	cca[7] = -cut7_a;
 	ccb[7] = 1.;
 	ccc[7] = cut7_c;
 	csi[7] = cut7_si;
-	//cuts.push_back(7);
+	cuts.push_back(7);
 	
 	cqaN[8] = "#theta_{y}"; cqbN[8] = "vtx_{y}^{R} - vtx_{y}^{L}";
 	cca[8] = -cut8_a;
 	ccb[8] = 1.;
 	ccc[8] = cut8_c;
 	csi[8] = cut8_si;
+	cuts.push_back(8);
+	
+	cqaN[9] = "x^{R,2,F}"; cqbN[9] = "x^{R,2,F} - x^{R,1,F}";
+	cca[9] = -cut9_a;
+	ccb[9] = 1.;
+	ccc[9] = cut9_c;
+	csi[9] = cut9_si;
+	cuts.push_back(9);
+	
+	cqaN[10] = "x^{L,2,F}"; cqbN[10] = "x^{L,2,F} - x^{L,1,F}";
+	cca[10] = -cut10_a;
+	ccb[10] = 1.;
+	ccc[10] = cut10_c;
+	csi[10] = cut10_si;
+	cuts.push_back(10);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -67,12 +82,18 @@ bool Analysis::EvaluateCuts(const HitData & h, const Kinematics &k, CutData &cd)
 {
 	cd.cqa[1] = k.th_x_R;	cd.cqb[1] = k.th_x_L;
 	cd.cqa[2] = k.th_y_R;	cd.cqb[2] = k.th_y_L;
+	
 	cd.cqa[3] = k.th_x_R;	cd.cqb[3] = h.R_2_F.x;
 	cd.cqa[4] = k.th_x_L;	cd.cqb[4] = h.L_2_F.x;
+
 	cd.cqa[5] = h.R_2_F.y;	cd.cqb[5] = h.R_2_F.y - h.R_1_F.y;
 	cd.cqa[6] = h.L_2_F.y;	cd.cqb[6] = h.L_2_F.y - h.L_1_F.y;
+
 	cd.cqa[7] = k.th_x;		cd.cqb[7] = k.vtx_x_R - k.vtx_x_L;
 	cd.cqa[8] = k.th_y;		cd.cqb[8] = k.vtx_y_R - k.vtx_y_L;
+
+	cd.cqa[9] =  h.R_2_F.x;	cd.cqb[9] =  h.R_2_F.x - h.R_1_F.x;
+	cd.cqa[10] = h.L_2_F.x;	cd.cqb[10] = h.L_2_F.x - h.L_1_F.x;
 
 	for (unsigned int ci = 1; ci <= N_cuts; ++ci)
 	{

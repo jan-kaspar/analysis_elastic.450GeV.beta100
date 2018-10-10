@@ -577,10 +577,10 @@ struct Kinematics
 
 struct CutData
 {
-	double cqa[9];	///< array of quantities qa
-	double cqb[9];	///< array of quantities qb
-	double cv[9];	///< array of cut quantities v = a*qa + b*qb + c
-	bool ct[9];		///< array of flags whether |v| < n_si * si
+	double cqa[11];	///< array of quantities qa
+	double cqb[11];	///< array of quantities qb
+	double cv[11];	///< array of cut quantities v = a*qa + b*qb + c
+	bool ct[11];	///< array of flags whether |v| < n_si * si
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -604,14 +604,16 @@ struct Analysis
 	double cut6_a, cut6_c, cut6_si;
 	double cut7_a, cut7_c, cut7_si;
 	double cut8_a, cut8_c, cut8_si;
+	double cut9_a, cut9_c, cut9_si;
+	double cut10_a, cut10_c, cut10_si;
 
 	unsigned int lumi_section_min = 0, lumi_section_max = 10000;
 
 	std::vector< std::pair<double, double> > timeIntervals;
 
 	unsigned int N_cuts;	// number of cuts - indexed from 1!
-	string cqaN[9], cqbN[9];
-	double cca[9], ccb[9], ccc[9], csi[9];
+	string cqaN[11], cqbN[11];
+	double cca[11], ccb[11], ccc[11], csi[11];
 	std::vector<unsigned int> cuts;	// list of active cuts
 
 	// analysis cuts (rad)
@@ -716,6 +718,8 @@ struct Analysis
 		printf("cut6_a=%E, cut6_c=%E, cut6_si=%E\n", cut6_a, cut6_c, cut6_si);
 		printf("cut7_a=%E, cut7_c=%E, cut7_si=%E\n", cut7_a, cut7_c, cut7_si);
 		printf("cut8_a=%E, cut8_c=%E, cut8_si=%E\n", cut8_a, cut8_c, cut8_si);
+		printf("cut9_a=%E, cut9_c=%E, cut9_si=%E\n", cut9_a, cut9_c, cut9_si);
+		printf("cut10_a=%E, cut10_c=%E, cut10_si=%E\n", cut10_a, cut10_c, cut10_si);
 
 		printf("\n");
 		printf("cut parameters:\n");
