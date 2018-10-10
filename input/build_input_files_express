@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	dataset="$1"
+
+	buffer=""
+	for subdir in ${eos_subdirs[@]}
+	do
+		for file in `eos ls $eos_dir_base/$subdir|grep .root`
+		do
+			if [ -n "$buffer" ]
+			then
+				buffer="$buffer,\n"
+			fi
+			buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir_base/$subdir/$file\""
+		done
+	done
+
+	local dir="../$dataset"
+	mkdir -p "$dir"
+
+	echo "* $dir"
+	
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+		" > "$dir/input_files.h"
+
+	if [ ! -f "$dir/parameters.h" ]
+	then
+		cp "parameters_template.h" "$dir/parameters.h"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+eos_dir_base="/store/express/Run2018D/ExpressPhysics/FEVT/Express-v1/000/"
+
+
+eos_subdirs=(
+	"323/880/00000"
+	"323/892/00000"
+)
+#MakeFiles "DS-test"
+

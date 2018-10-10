@@ -380,9 +380,6 @@ int main(int argc, char **argv)
 		const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
 		const unsigned int periodIdx = FillPeriod(ev_run, ev_timestamp);
 
-		if (ev_run != run)
-			continue;
-
 		// run analysis
 		map<unsigned int, RPFlags> flags;
 		EvaluateFlags(event, flags);

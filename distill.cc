@@ -110,9 +110,6 @@ int main(int argc, char **argv)
 		//ev.trigger_num = 0;
 		//ev.trigger_bits = 0;
 
-		if (ev.run_num != run)
-			continue;
-
 		// default output track data
 		ev.h.L_2_F.v = false; ev.h.L_2_F.x = 0.; ev.h.L_2_F.y = 0.;
 		ev.h.L_1_F.v = false; ev.h.L_1_F.x = 0.; ev.h.L_1_F.y = 0.;
