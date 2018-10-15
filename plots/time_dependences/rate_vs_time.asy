@@ -3,15 +3,9 @@ import pad_layout;
 include "../run_info.asy";
 
 string datasets[];
-//datasets.push("DS-323893/Totem1");
-//datasets.push("DS-323899/Totem1");
-datasets.push("DS-323907/Totem1");
-datasets.push("DS-323907-1/Totem1");
-datasets.push("DS-323907-2/Totem1");
-//datasets.push("DS-323919/Totem1");
-//datasets.push("DS-323932/Totem1");
-//datasets.push("DS-323933/Totem1");
-//datasets.push("DS-323934/Totem1");
+datasets.push("DS-fill7280");
+datasets.push("DS-fill7281");
+datasets.push("DS-fill7286");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };

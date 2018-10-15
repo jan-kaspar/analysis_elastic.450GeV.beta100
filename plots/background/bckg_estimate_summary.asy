@@ -2,15 +2,29 @@ import root;
 import pad_layout;
 
 string datasets[];
-datasets.push("DS-323893/Totem1");
-datasets.push("DS-323899/Totem1");
-datasets.push("DS-323907/Totem1");
-datasets.push("DS-323919/Totem1");
-datasets.push("DS-323932/Totem1");
-datasets.push("DS-323933/Totem1");
-datasets.push("DS-323934/Totem1");
+/*
+datasets.push("DS-fill7279");
+datasets.push("DS-fill7280");
+datasets.push("DS-fill7281");
+datasets.push("DS-fill7282");
+datasets.push("DS-fill7283");
+datasets.push("DS-fill7284");
+datasets.push("DS-fill7285");
+datasets.push("DS-fill7286");
+datasets.push("DS-fill7287");
+datasets.push("DS-fill7288");
+datasets.push("DS-fill7289");
+datasets.push("DS-fill7290");
+datasets.push("DS-fill7291");
+datasets.push("DS-fill7292");
+*/
 
-string diagonals[] = { "45b_56t", "45t_56b" };
+datasets.push("DS-fill7280");
+datasets.push("DS-fill7281");
+datasets.push("DS-fill7286");
+
+//string diagonals[] = { "45b_56t", "45t_56b" };
+string diagonals[] = { "45b_56t" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 string topDir = "../../";
@@ -40,14 +54,18 @@ void MakeComparison(string quantity, real xscale, string unit, string obj, real 
 
 	xlimits(-xlimit, +xlimit, Crop);
 	AttachLegend(quantity, NW, NE);
+
+	label("TOTEM preliminary", (0, 1));
 }
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 	
+/*
 NewPad(false);
 for (int dgi : diagonals.keys)
 	NewPadLabel(dgn_labels[dgi]);
+*/
 
 for (int dsi : datasets.keys)
 {
@@ -57,7 +75,7 @@ for (int dsi : datasets.keys)
 	
 	NewRow();
 
-	NewPadLabel(dataset);
+	//NewPadLabel(dataset);
 
 	for (int dgi : diagonals.keys)
 	{

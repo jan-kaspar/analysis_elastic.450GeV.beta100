@@ -7,7 +7,7 @@ function RunCompilation()
 {
 	cd ".."
 	./run distributions.cc -no-bckg -no-run "$dataset" || exit 1
-	./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
+	#./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
 	cd - > /dev/null
 }
 
@@ -40,11 +40,11 @@ function RunCutCombinationReconstructions()
 	
 		cd "$tag" || continue
 	
-		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
-		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
+		../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
+		../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
 
-		../../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
-		../../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
+		../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
+		../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
 	
 		cd ".."
 	done
@@ -83,13 +83,20 @@ function RunNSiReconstructions()
 #----------------------------------------------------------------------------------------------------
 
 datasets=(
-	"DS-323893/Totem1"
-	"DS-323899/Totem1"
-	"DS-323907/Totem1"
-	"DS-323919/Totem1"
-	"DS-323932/Totem1"
-	"DS-323933/Totem1"
-	"DS-323934/Totem1"
+	#"DS-fill7279"
+	#"DS-fill7280"
+	#"DS-fill7281"
+	#"DS-fill7282"
+	#"DS-fill7283"
+	#"DS-fill7284"
+	#"DS-fill7285"
+	#"DS-fill7286"
+	#"DS-fill7287"
+	"DS-fill7288"
+	"DS-fill7289"
+	"DS-fill7290"
+	"DS-fill7291"
+	"DS-fill7292"
 )
 
 for dataset in "${datasets[@]}"
