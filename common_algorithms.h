@@ -397,7 +397,7 @@ bool SkipRun(unsigned int /*run*/)
 
 //----------------------------------------------------------------------------------------------------
 
-// map: run number (8372) --> list of triggered bunches
+// map: run number --> list of bunches
 typedef std::map<unsigned int, std::vector<unsigned int> > BunchMap;
 
 bool keepAllBunches;
