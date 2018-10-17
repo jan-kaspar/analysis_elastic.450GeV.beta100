@@ -788,8 +788,7 @@ int main(int argc, char **argv)
 	double th_min = 1E100;
 	double th_y_L_min = +1E100, th_y_R_min = +1E100;
 
-	unsigned int N_anal=0, N_anal_zeroBias=0;
-	unsigned int N_zeroBias_el=0, N_zeroBias_el_RP_trig=0;
+	unsigned int N_anal=0;
 	unsigned int N_4outof4=0, N_el=0, N_el_RP_trig=0;
 	unsigned int N_el_T2trig=0, N_4outof4_T2trig=0;
 	unsigned int N_el_raw=0;
@@ -836,25 +835,9 @@ int main(int argc, char **argv)
 		if (ev.lumi_section < anal.lumi_section_min || ev.lumi_section > anal.lumi_section_max)
 			continue;
 
-		// diagonal cut
-		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
-
-		h_timestamp_input->Fill(ev.timestamp);
-
-		if (!allDiagonalRPs)
-			continue;
-
 		// select the elastic-trigger bunch(es) only
 		if (SkipBunch(ev.run_num, ev.bunch_num))
 			continue;
-
-		// zero bias event?
-		bool zero_bias_event = false;
-		//bool zero_bias_event = IsZeroBias(ev.trigger_bits, ev.run_num, ev.event_num);
-
-		N_anal++;
-		if (zero_bias_event)
-			N_anal_zeroBias++;
 
 		// apply fine alignment
 		HitData h_al = ev.h;
@@ -863,6 +846,24 @@ int main(int argc, char **argv)
 			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
+
+		// fill pre-selection histograms
+		h_y_L_2_F_vs_x_L_2_F_al_nosel->Fill(h_al.L_2_F.x, h_al.L_2_F.y);
+		h_y_L_1_F_vs_x_L_1_F_al_nosel->Fill(h_al.L_1_F.x, h_al.L_1_F.y);
+		h_y_R_1_F_vs_x_R_1_F_al_nosel->Fill(h_al.R_1_F.x, h_al.R_1_F.y);
+		h_y_R_2_F_vs_x_R_2_F_al_nosel->Fill(h_al.R_2_F.x, h_al.R_2_F.y);
+
+		g_bunch_num_vs_timestamp->SetPoint(g_bunch_num_vs_timestamp->GetN(), ev.timestamp, ev.bunch_num);
+
+		// diagonal cut
+		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
+
+		h_timestamp_input->Fill(ev.timestamp);
+
+		if (!allDiagonalRPs)
+			continue;
+
+		N_anal++;
 
 		// hit-map cuts
 		bool skip_due_to_y = false;
@@ -875,7 +876,6 @@ int main(int argc, char **argv)
 		if (skip_due_to_y)
 			continue;
 		
-		h_timestamp_dgn->Fill(ev.timestamp);
 		//g_timestamp_vs_ev_idx_dgn->SetPoint(g_timestamp_vs_ev_idx_dgn->GetN(), ev_idx, ev.timestamp);
 
 		/*
@@ -883,11 +883,7 @@ int main(int argc, char **argv)
 			continue;
 		*/
 
-		// fill pre-selection histograms
-		h_y_L_2_F_vs_x_L_2_F_al_nosel->Fill(h_al.L_2_F.x, h_al.L_2_F.y);
-		h_y_L_1_F_vs_x_L_1_F_al_nosel->Fill(h_al.L_1_F.x, h_al.L_1_F.y);
-		h_y_R_1_F_vs_x_R_1_F_al_nosel->Fill(h_al.R_1_F.x, h_al.R_1_F.y);
-		h_y_R_2_F_vs_x_R_2_F_al_nosel->Fill(h_al.R_2_F.x, h_al.R_2_F.y);
+		h_timestamp_dgn->Fill(ev.timestamp);
 
 		if (detailsLevel >= 2)
 		{
@@ -1095,7 +1091,6 @@ int main(int argc, char **argv)
 		if (detailsLevel >= 2)
 		{
 			g_timestamp_vs_ev_idx_sel->SetPoint(g_timestamp_vs_ev_idx_sel->GetN(), ev_idx, ev.timestamp);
-			g_bunch_num_vs_timestamp->SetPoint(g_bunch_num_vs_timestamp->GetN(), ev.timestamp, ev.bunch_num);
 		}
 		
 		for (unsigned int ci = 1; ci <= anal.N_cuts; ++ci)
@@ -1479,9 +1474,6 @@ int main(int argc, char **argv)
 
 	printf("\n");
 	printf("N_anal = %u\n", N_anal);
-	printf("N_anal_zeroBias = %u\n", N_anal_zeroBias);
-	printf("N_zeroBias_el = %u\n", N_zeroBias_el);
-	printf("N_zeroBias_el_RP_trig = %u\n", N_zeroBias_el_RP_trig);
 
 	printf("N_4outof4 = %u\n", N_4outof4);
 	printf("N_el = %u\n", N_el);
