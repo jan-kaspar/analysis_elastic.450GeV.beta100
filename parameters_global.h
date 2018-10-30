@@ -97,8 +97,8 @@ void Init_global()
 
 void Init_global_45b_56t()
 {
-	// crude alignment
 	/*
+	// crude alignment
 	AlignmentSource alSrc;
 	alSrc.SetAlignmentA(atConstant);
 	alSrc.SetAlignmentB(atConstant);
@@ -114,20 +114,20 @@ void Init_global_45b_56t()
 	*/
 
 	// analysis settings
-	anal.cut1_a = 1.; anal.cut1_c = -155E-6; anal.cut1_si = 40E-6;
-	anal.cut2_a = 1.; anal.cut2_c = -6E-6; anal.cut2_si = 8E-6;
+	anal.cut1_a = 1.; anal.cut1_c = -118E-6; anal.cut1_si = 40E-6;
+	anal.cut2_a = 1.; anal.cut2_c = -2.5E-6; anal.cut2_si = 8E-6;
 
 	//anal.cut3_c = 0.49; anal.cut3_si = 0.055;
 	//anal.cut4_c = -0.03; anal.cut4_si = 0.033;
 
-	anal.cut5_a = 0.105; anal.cut5_c = +0.867; anal.cut5_si = 0.08;
-	anal.cut6_a = 0.105; anal.cut6_c = -0.36; anal.cut6_si = 0.08;
+	anal.cut5_a = 0.105; anal.cut5_c = -0.18; anal.cut5_si = 0.08;
+	anal.cut6_a = 0.105; anal.cut6_c = -0.09; anal.cut6_si = 0.08;
 
-	anal.cut7_a = -1800.; anal.cut7_c = +4.5; anal.cut7_si = 0.5;
-	anal.cut8_a = 0.; anal.cut8_c = -32.; anal.cut8_si = 3.;
+	anal.cut7_a = -1800.; anal.cut7_c = +5.5; anal.cut7_si = 0.5;
+	anal.cut8_a = 0.; anal.cut8_c = 1.6; anal.cut8_si = 3.;
 
-	anal.cut9_a = -0.28; anal.cut9_c = -0.90; anal.cut9_si = 0.15;
-	anal.cut10_a = -0.29; anal.cut10_c = +0.28; anal.cut10_si = 0.15;
+	anal.cut9_a = -0.28; anal.cut9_c = -0.97; anal.cut9_si = 0.15;
+	anal.cut10_a = -0.29; anal.cut10_c = +0.46; anal.cut10_si = 0.15;
 
 	anal.th_y_lcut_L = 13.5E-6; anal.th_y_lcut_R = 14E-6; anal.th_y_lcut = 14.5E-6;
 	anal.th_y_hcut_L = 102E-6; anal.th_y_hcut_R = 102E-6; anal.th_y_hcut = 100E-6;
@@ -147,8 +147,8 @@ void Init_global_45b_56t()
 
 void Init_global_45t_56b()
 {
-	// crude alignment
 	/*
+	// crude alignment
 	AlignmentSource alSrc;
 	alSrc.SetAlignmentA(atConstant);
 	alSrc.SetAlignmentB(atConstant);
@@ -164,20 +164,20 @@ void Init_global_45t_56b()
 	*/
 
 	// analysis settings
-	anal.cut1_a = 1.; anal.cut1_c = -361E-6; anal.cut1_si = 40E-6;
-	anal.cut2_a = 1.; anal.cut2_c = +2E-6; anal.cut2_si = 8E-6;
+	anal.cut1_a = 1.; anal.cut1_c = -131E-6; anal.cut1_si = 40E-6;
+	anal.cut2_a = 1.; anal.cut2_c = +1.2E-6; anal.cut2_si = 8E-6;
 
 	//anal.cut3_c = 0.43; anal.cut3_si = 0.023;
 	//anal.cut4_c = -0.055; anal.cut4_si = 0.031;
 
-	anal.cut5_a = 0.105; anal.cut5_c = -0.86; anal.cut5_si = 0.08;
-	anal.cut6_a = 0.105; anal.cut6_c = +0.32; anal.cut6_si = 0.08;
+	anal.cut5_a = 0.105; anal.cut5_c = -0.17; anal.cut5_si = 0.08;
+	anal.cut6_a = 0.105; anal.cut6_c = -0.18; anal.cut6_si = 0.08;
 
-	anal.cut7_a = -1800.; anal.cut7_c = 1.76; anal.cut7_si = 0.5;
-	anal.cut8_a = 0.; anal.cut8_c = +31.; anal.cut8_si = 3.;
+	anal.cut7_a = -1800.; anal.cut7_c = 5.66; anal.cut7_si = 0.5;
+	anal.cut8_a = 0.; anal.cut8_c = +0.5; anal.cut8_si = 3.;
 
-	anal.cut9_a = -0.28; anal.cut9_c = -0.91; anal.cut9_si = 0.12;
-	anal.cut10_a = -0.29; anal.cut10_c = -0.47; anal.cut10_si = 0.12;
+	anal.cut9_a = -0.28; anal.cut9_c = -0.99; anal.cut9_si = 0.12;
+	anal.cut10_a = -0.29; anal.cut10_c = +0.47; anal.cut10_si = 0.12;
 
 	anal.th_y_lcut_L = 13.5E-6; anal.th_y_lcut_R = 13.5E-6; anal.th_y_lcut = 14.5E-6;
 	anal.th_y_hcut_L = 102E-6; anal.th_y_hcut_R = 102E-6; anal.th_y_hcut = 100E-6;
