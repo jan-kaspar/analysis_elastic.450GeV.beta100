@@ -8,6 +8,8 @@ void Init_base()
 	// load global settings
 	Init_global();
 
+	anal.alignment_t0 = timestamp_min;
+
 	//env.UseMatchedOptics();
 }
 
