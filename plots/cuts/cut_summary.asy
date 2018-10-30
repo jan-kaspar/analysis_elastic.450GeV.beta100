@@ -6,7 +6,7 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	"DS-fill7284",
+	"DS-fill7285/Totem1",
 };
 
 string dgns[] = {

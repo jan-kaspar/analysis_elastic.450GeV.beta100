@@ -7,12 +7,14 @@ string datasets[];
 //datasets.push("DS-323893/Totem1");
 //datasets.push("DS-323899/Totem1");
 //datasets.push("DS-323907/Totem1");
-datasets.push("DS-323907-1/Totem1");
-datasets.push("DS-323907-2/Totem1");
+//datasets.push("DS-323907-1/Totem1");
+//datasets.push("DS-323907-2/Totem1");
 //datasets.push("DS-323919/Totem1");
 //datasets.push("DS-323932/Totem1");
 //datasets.push("DS-323933/Totem1");
 //datasets.push("DS-323934/Totem1");
+
+datasets.push("DS-fill7289/EmptyBX");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
@@ -49,7 +51,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Linear, Log);
 
 		TH2_z_min = 1e0;
-		TH2_z_max = 1e2;
+		TH2_z_max = 1e3;
 
 		string tag;
 		if (selection == "before selection") tag = "_al_nosel";
