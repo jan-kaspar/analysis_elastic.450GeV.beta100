@@ -23,6 +23,30 @@ TGraph_errorBar = None;
 
 //----------------------------------------------------------------------------------------------------
 
+void Print(RootObject obj_tr, RootObject obj_all)
+{
+	int n = obj_tr.iExec("GetN");
+	for (int i = 0; i < n; ++i)
+	{
+		real ax[] = {0.};
+		real ay[] = {0.};
+
+		real prescale = 59;
+
+		obj_tr.vExec("GetPoint", i, ax, ay);
+		real t = ax[0]/3600, v_tr = ay[0] * 59;
+
+		obj_all.vExec("GetPoint", i, ax, ay);
+		real v_all = ay[0] * 59;
+
+		real t_w = obj_tr.rExec("GetErrorX", i) * 2. / 3600;
+
+		write(format("%.5f", t) + format(",%.5f", t_w) + format(",%.3f", v_tr) + format(",%.3f", v_all));
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
+
 void DrawOne(string name, string rps[], string rp_labels[])
 {
 	for (int dsi : datasets.keys)
@@ -49,6 +73,13 @@ void DrawOne(string name, string rps[], string rp_labels[])
 			ylimits(0, y_max, Crop);
 
 			AttachLegend(rp_labels[rpi]);
+
+			// print out
+			write("");
+			write("# fill " + fills[dsi] + ", RP " + rp_labels[rpi]);
+			RootObject obj_tr = RootGetObject(topDir + datasets[dsi] + "/pileup_combined.root", rps[rpi] + "/tr/rate");
+			RootObject obj_pat_suff = RootGetObject(topDir + datasets[dsi] + "/pileup_combined.root", rps[rpi] + "/pat_suff/rate");
+			Print(obj_tr, obj_pat_suff);
 		}
 	}
 

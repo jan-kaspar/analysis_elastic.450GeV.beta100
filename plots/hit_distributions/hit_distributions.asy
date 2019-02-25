@@ -14,10 +14,12 @@ string datasets[];
 //datasets.push("DS-323933/Totem1");
 //datasets.push("DS-323934/Totem1");
 
+datasets.push("DS-fill7284/EmptyBX");
 datasets.push("DS-fill7289/EmptyBX");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
+string unit_labels[] = { "XRPV.B6L5.B2", "XRPV.D6L5.B2", "XRPV.D6R5.B1", "XRPV.B6R5.B1" };
 
 drawGridDef = true;
 
@@ -51,7 +53,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Linear, Log);
 
 		TH2_z_min = 1e0;
-		TH2_z_max = 1e3;
+		TH2_z_max = 5e3;
 
 		string tag;
 		if (selection == "before selection") tag = "_al_nosel";

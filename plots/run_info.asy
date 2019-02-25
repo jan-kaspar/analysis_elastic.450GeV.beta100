@@ -65,6 +65,31 @@ real time_max = 5;
 
 //----------------------------------------------------------------------------------------------------
 
+void DrawFillBands(string ds_filter="", real y_min=0, real y_max=0, bool details=true)
+{
+	real x_min = 1e100, x_max = -1e100;
+
+	for (int i : runs.keys)
+	{
+		if (run_datasets[i] == ds_filter)
+		{
+			x_min = min(x_min, ts_from[i]/3600);
+			x_max = max(x_max, ts_to[i]/3600);
+		}
+	}
+
+	pen p = yellow+opacity(0.3);
+
+	filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
+
+	if (details)
+	{
+		label(ds_filter, ((x_min + x_max)/2, y_max), S);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
+
 void DrawRunBands(string ds_filter="", real y_min=0, real y_max=0, bool details=true)
 {
 	for (int i : runs.keys)
