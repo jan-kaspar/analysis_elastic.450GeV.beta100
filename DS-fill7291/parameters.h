@@ -9,6 +9,7 @@ void Init_base()
 	Init_global();
 
 	anal.alignment_t0 = timestamp_min;
+	anal.alignment_ts = (timestamp_max - timestamp_min) / 2.;
 
 	//env.UseMatchedOptics();
 }
