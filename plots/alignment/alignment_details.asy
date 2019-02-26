@@ -7,8 +7,8 @@ string topDir = "../../";
 
 string datasets[];
 string periods[];
-datasets.push("DS-fill7280/Totem1"); periods.push("0");
-datasets.push("DS-fill7291/Totem1"); periods.push("0");
+datasets.push("DS-fill7281/Totem1"); periods.push("0");
+//datasets.push("DS-fill7291/Totem1"); periods.push("0");
 
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
@@ -37,8 +37,11 @@ for (int dsi : datasets.keys)
 	{
 		NewPad("$y\ung{mm}$", "$\hbox{mean } x\ung{mm}$");
 	
-		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p"), "d0,eb", blue);
-		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p|ff"), "l", red+1pt);
+		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p"), "d0,eb", heavygreen);
+		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p|ff"), "l", magenta+1pt);
+
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile max/g_x_max_vs_y"), "p", blue);
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile max/g_x_max_vs_y|ff"), "l", red+1pt);
 		
 		limits((-30, -1.5), (+30, +1.5), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
@@ -69,7 +72,7 @@ for (int dsi : datasets.keys)
 	
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/g_max_diff"), "l,p", heavygreen, mCi+1pt+heavygreen);
 	
-		limits((-1.0, 0), (+1.0, 0.2), Crop);
+		limits((-1.0, 0), (+1.0, 0.1), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
 	}
 

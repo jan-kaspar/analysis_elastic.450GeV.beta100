@@ -21,7 +21,7 @@ datasets.push("DS-fill7291/Totem1"); fills.push("7291");
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
 units.push("L_1_F"); unit_labels.push("L-210-fr");
-units.push("R_1_F"); unit_labels.push("R-210-rf");
+units.push("R_1_F"); unit_labels.push("R-210-fr");
 units.push("R_2_F"); unit_labels.push("R-220-fr" );
 
 xSizeDef = 10cm;
@@ -30,7 +30,7 @@ drawGridDef = true;
 
 TGraph_errorBar = None;
 
-bool drawFit = false;
+bool drawFit = true;
 bool centreToFit = false;
 
 //----------------------------------------------------------------------------------------------------
@@ -51,37 +51,35 @@ for (int ui : units.keys)
 	label("{\SetFontSizesXX " + unit_labels[ui] + "}");
 }
 
-/*
-
 //----------------------------------------------------------------------------------------------------
 NewRow();
 
 for (int ui : units.keys)
 {
 	NewPad("time $\ung{h}$", "tilt $\ung{mrad}$", axesAbove=false);
-	currentpad.yTicks = RightTicks(2., 1.1);
+	currentpad.yTicks = RightTicks(5., 1.);
 
 	real y_cen = 0.;
-	if (centreToFit)
+	real y_min = y_cen - 20, y_max = y_cen + 20;
+
+	for (int dsi : datasets.keys)
 	{
-		RootObject fit = RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit");
-		y_cen = fit.rExec("Eval", 0.);
-	}
-		
-	real y_min = y_cen - 5, y_max = y_cen + 5;
+		string dataset = datasets[dsi];
 
-	DrawFillBands(fills[dsi], y_min, y_max);
+		DrawFillBands(fills[dsi], y_min, y_max);
 
-	draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a_p"), "p,eb", magenta, mCi+1pt+magenta);
-	draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
+		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a_pm"), "p,eb", magenta, mCi+1pt+magenta);
+		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
 	
-	//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a"), "p,eb", blue, mCi+1pt+blue);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a"), "p,eb", blue, mCi+1pt+blue);
+	}
 	
 	if (drawFit)
 	{
 		real unc = 2;
+		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/a_fit");
 		//draw(shift(0, +unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit"), "l", red+dashed);
-		draw(shift(0,    0)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit"), "l", red+2pt);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
 		//draw(shift(0, -unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit"), "l", red+dashed);
 	}
 
@@ -90,7 +88,6 @@ for (int ui : units.keys)
 
 	SetPadWidth();
 }
-*/
 
 //----------------------------------------------------------------------------------------------------
 NewRow();
@@ -98,28 +95,30 @@ NewRow();
 for (int ui : units.keys)
 {
 	NewPad("time $\ung{h}$", "horizontal position $\ung{\mu m}$", axesAbove=false);
-	currentpad.yTicks = RightTicks(50., 10.);
+	currentpad.yTicks = RightTicks(500., 100.);
 
 	real y_cen = 0;
-	real y_min = y_cen - 150, y_max = y_cen + 150;
+	real y_min = y_cen - 1000, y_max = y_cen + 1500;
 
 	for (int dsi : datasets.keys)
 	{
 		string dataset = datasets[dsi];
 		DrawFillBands(fills[dsi], y_min, y_max);
 
-		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b_p"), "p,eb", magenta, mCi+1pt+magenta);
-		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
+		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b_pm"), "p,eb", magenta, mCi+1pt+magenta);
+		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
 
-		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b"), "p,eb", blue+1pt, mCi+1pt+blue);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b"), "p,eb", blue+1pt, mCi+1pt+blue);
 	}
 	
 	if (drawFit)
 	{
-		real unc = 25;
-		//draw(shift(0, -unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/b_fit"), "l", red+dashed);
-		//draw(shift(0,    0)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/b_fit"), "l", red+2pt);
-		//draw(shift(0, +unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/b_fit"), "l", red+dashed);
+		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/b_fit");
+		real unc = 150;
+
+		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
+		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
@@ -154,10 +153,12 @@ for (int ui : units.keys)
 	
 	if (drawFit)
 	{
-		real unc = 100;
-		//draw(swToHours*shift(0, -unc), RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/c_fit"), "l", red+dashed);
-		//draw(swToHours*shift(0,    0), RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/c_fit"), "l", red+2pt);
-		//draw(swToHours*shift(0, +unc), RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/c_fit"), "l", red+dashed);
+		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/c_fit");
+		real unc = 150;
+
+		//draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
+		//draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
