@@ -4,18 +4,7 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[];
-//datasets.push("DS-323893/Totem1");
-//datasets.push("DS-323899/Totem1");
-//datasets.push("DS-323907/Totem1");
-//datasets.push("DS-323907-1/Totem1");
-//datasets.push("DS-323907-2/Totem1");
-//datasets.push("DS-323919/Totem1");
-//datasets.push("DS-323932/Totem1");
-//datasets.push("DS-323933/Totem1");
-//datasets.push("DS-323934/Totem1");
-
-datasets.push("DS-fill7284/EmptyBX");
-datasets.push("DS-fill7289/EmptyBX");
+datasets.push("DS-fill7281/Totem1");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
@@ -75,4 +64,4 @@ for (int dsi : datasets.keys)
 	}
 }
 
-GShipout(hSkip=1mm, vSkip=1mm);
+GShipout("hit_distributions", hSkip=1mm, vSkip=1mm);

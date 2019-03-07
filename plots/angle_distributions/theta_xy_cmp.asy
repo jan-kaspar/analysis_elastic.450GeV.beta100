@@ -4,13 +4,7 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	"DS-323893/Totem1",
-	"DS-323899/Totem1",
-	"DS-323907/Totem1",
-	"DS-323919/Totem1",
-	"DS-323932/Totem1",
-	"DS-323933/Totem1",
-	"DS-323934/Totem1",
+	"DS-fill7281/Totem1",
 };
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
@@ -44,4 +38,4 @@ for (int dsi : datasets.keys)
 	AttachLegend(datasets[dsi]);
 }
 
-GShipout(margin=1mm, hSkip=1mm);
+GShipout("theta_xy_cmp", margin=1mm, hSkip=1mm);

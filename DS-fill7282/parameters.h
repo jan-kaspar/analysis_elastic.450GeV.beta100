@@ -3,6 +3,8 @@
 unsigned int timestamp_min = 105700;
 unsigned int timestamp_max = 116740;
 
+string timberDir = "2018_10_12_fill7282";
+
 void Init_base()
 {
 	// load global settings
