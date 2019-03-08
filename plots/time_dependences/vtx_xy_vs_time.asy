@@ -45,7 +45,7 @@ for (int qi : quantities.keys)
 	{
 		string ft = topDir + f_datasets[fi] + "/process_timber.root";
 
-		DrawFillBands(fills[fi], 0., q_maxs[qi], true);
+		DrawBands(fills[fi], bands="run", labels="ds", 0., q_maxs[qi]);
 
 		for (int dgni : diagonals.keys)
 		{

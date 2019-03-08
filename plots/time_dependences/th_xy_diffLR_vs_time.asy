@@ -45,7 +45,7 @@ for (int qi : quantities.keys)
 	{
 		string ft = topDir + f_datasets[fi] + "/process_timber.root";
 
-		DrawFillBands(fills[fi], 0., q_maxs[qi], true);
+		DrawBands(fills[fi], bands="run", labels="ds", 0., q_maxs[qi]);
 
 		for (int dgni : diagonals.keys)
 		{
@@ -55,7 +55,7 @@ for (int qi : quantities.keys)
 		}
 
 		TGraph_reducePoints = 30;
-		draw(scale(1./3600, 1e6 * sqrt(2.)), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
+		draw(scale(1./3600, 1e6), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
 
 		ylimits(0., q_maxs[qi], Crop);
 	}
