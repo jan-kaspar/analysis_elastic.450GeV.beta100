@@ -5,7 +5,7 @@ string f = "../../reconstruction_formulae/test_formulae_graph.root";
 
 void DrawSet(string iq, real scale_x, string unit, string formulae[])
 {
-	string complementary = (iq == "x") ? "angle" : "vertex";
+	string complementary = (iq == "x" || iq == "y") ? "angle" : "vertex";
 
 	for (int fi : formulae.keys)
 	{

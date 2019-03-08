@@ -74,13 +74,13 @@ Kinematics theta_x_one_arm_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double D_x_L = - env.L_x_L_1_F * env.v_x_L_2_F + env.L_x_L_2_F * env.v_x_L_1_F;
+	const double D_x_L = - env.L_x_L_1_F * env.v_x_L_2_F + env.L_x_L_2_F * env.v_x_L_1_F;
 	k.th_x_L = (env.v_x_L_2_F * h.L_1_F.x - env.v_x_L_1_F * h.L_2_F.x) / D_x_L;
-	//k.vtx_x_L = (env.L_x_L_2_F * h.L_1_F.x - env.L_x_L_1_F * h.L_2_F.x) / D_x_L;
+	k.vtx_x_L = (env.L_x_L_2_F * h.L_1_F.x - env.L_x_L_1_F * h.L_2_F.x) / D_x_L;
 
-	double D_x_R = + env.L_x_R_1_F * env.v_x_R_2_F - env.L_x_R_2_F * env.v_x_R_1_F;
+	const double D_x_R = + env.L_x_R_1_F * env.v_x_R_2_F - env.L_x_R_2_F * env.v_x_R_1_F;
 	k.th_x_R = (env.v_x_R_2_F * h.R_1_F.x - env.v_x_R_1_F * h.R_2_F.x) / D_x_R;
-	//k.vtx_x_R = (-env.L_x_R_2_F * h.R_1_F.x + env.L_x_R_1_F * h.R_2_F.x) / D_x_R;
+	k.vtx_x_R = (-env.L_x_R_2_F * h.R_1_F.x + env.L_x_R_1_F * h.R_2_F.x) / D_x_R;
 
 	return k;
 }
@@ -133,13 +133,13 @@ Kinematics theta_x_two_arm_full_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double SLL = + env.L_x_L_2_F*env.L_x_L_2_F + env.L_x_L_1_F*env.L_x_L_1_F + env.L_x_R_1_F*env.L_x_R_1_F + env.L_x_R_2_F*env.L_x_R_2_F;
-	double SLv = - env.L_x_L_2_F*env.v_x_L_2_F - env.L_x_L_1_F*env.v_x_L_1_F + env.L_x_R_1_F*env.v_x_R_1_F + env.L_x_R_2_F*env.v_x_R_2_F;
-	double Svv = + env.v_x_L_2_F*env.v_x_L_2_F + env.v_x_L_1_F*env.v_x_L_1_F + env.v_x_R_1_F*env.v_x_R_1_F + env.v_x_R_2_F*env.v_x_R_2_F;
-	double D = (SLL * Svv - SLv * SLv);
+	const double SLL = + env.L_x_L_2_F*env.L_x_L_2_F + env.L_x_L_1_F*env.L_x_L_1_F + env.L_x_R_1_F*env.L_x_R_1_F + env.L_x_R_2_F*env.L_x_R_2_F;
+	const double SLv = - env.L_x_L_2_F*env.v_x_L_2_F - env.L_x_L_1_F*env.v_x_L_1_F + env.L_x_R_1_F*env.v_x_R_1_F + env.L_x_R_2_F*env.v_x_R_2_F;
+	const double Svv = + env.v_x_L_2_F*env.v_x_L_2_F + env.v_x_L_1_F*env.v_x_L_1_F + env.v_x_R_1_F*env.v_x_R_1_F + env.v_x_R_2_F*env.v_x_R_2_F;
+	const double D = (SLL * Svv - SLv * SLv);
 	
-	double SLx = - env.L_x_L_2_F*h.L_2_F.x - env.L_x_L_1_F*h.L_1_F.x + env.L_x_R_1_F*h.R_1_F.x + env.L_x_R_2_F*h.R_2_F.x;
-	double Svx = + env.v_x_L_2_F*h.L_2_F.x + env.v_x_L_1_F*h.L_1_F.x + env.v_x_R_1_F*h.R_1_F.x + env.v_x_R_2_F*h.R_2_F.x;
+	const double SLx = - env.L_x_L_2_F*h.L_2_F.x - env.L_x_L_1_F*h.L_1_F.x + env.L_x_R_1_F*h.R_1_F.x + env.L_x_R_2_F*h.R_2_F.x;
+	const double Svx = + env.v_x_L_2_F*h.L_2_F.x + env.v_x_L_1_F*h.L_1_F.x + env.v_x_R_1_F*h.R_1_F.x + env.v_x_R_2_F*h.R_2_F.x;
 		
 	k.th_x = (Svv * SLx - SLv * Svx) / D;
 	k.vtx_x = (-SLv * SLx + SLL * Svx) / D;
@@ -156,11 +156,11 @@ Kinematics vtx_x_one_arm_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double D_x_L = - env.L_x_L_1_F * env.v_x_L_2_F + env.L_x_L_2_F * env.v_x_L_1_F;
+	const double D_x_L = - env.L_x_L_1_F * env.v_x_L_2_F + env.L_x_L_2_F * env.v_x_L_1_F;
 	k.th_x_L = (env.v_x_L_2_F * h.L_1_F.x - env.v_x_L_1_F * h.L_2_F.x) / D_x_L;
 	k.vtx_x_L = (env.L_x_L_2_F * h.L_1_F.x - env.L_x_L_1_F * h.L_2_F.x) / D_x_L;
 
-	double D_x_R = + env.L_x_R_1_F * env.v_x_R_2_F - env.L_x_R_2_F * env.v_x_R_1_F;
+	const double D_x_R = + env.L_x_R_1_F * env.v_x_R_2_F - env.L_x_R_2_F * env.v_x_R_1_F;
 	k.th_x_R = (env.v_x_R_2_F * h.R_1_F.x - env.v_x_R_1_F * h.R_2_F.x) / D_x_R;
 	k.vtx_x_R = (-env.L_x_R_2_F * h.R_1_F.x + env.L_x_R_1_F * h.R_2_F.x) / D_x_R;
 
@@ -186,13 +186,13 @@ Kinematics vtx_x_two_arm_full_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double SLL = + env.L_x_L_2_F*env.L_x_L_2_F + env.L_x_L_1_F*env.L_x_L_1_F + env.L_x_R_1_F*env.L_x_R_1_F + env.L_x_R_2_F*env.L_x_R_2_F;
-	double SLv = - env.L_x_L_2_F*env.v_x_L_2_F - env.L_x_L_1_F*env.v_x_L_1_F + env.L_x_R_1_F*env.v_x_R_1_F + env.L_x_R_2_F*env.v_x_R_2_F;
-	double Svv = + env.v_x_L_2_F*env.v_x_L_2_F + env.v_x_L_1_F*env.v_x_L_1_F + env.v_x_R_1_F*env.v_x_R_1_F + env.v_x_R_2_F*env.v_x_R_2_F;
-	double D = (SLL * Svv - SLv * SLv);
+	const double SLL = + env.L_x_L_2_F*env.L_x_L_2_F + env.L_x_L_1_F*env.L_x_L_1_F + env.L_x_R_1_F*env.L_x_R_1_F + env.L_x_R_2_F*env.L_x_R_2_F;
+	const double SLv = - env.L_x_L_2_F*env.v_x_L_2_F - env.L_x_L_1_F*env.v_x_L_1_F + env.L_x_R_1_F*env.v_x_R_1_F + env.L_x_R_2_F*env.v_x_R_2_F;
+	const double Svv = + env.v_x_L_2_F*env.v_x_L_2_F + env.v_x_L_1_F*env.v_x_L_1_F + env.v_x_R_1_F*env.v_x_R_1_F + env.v_x_R_2_F*env.v_x_R_2_F;
+	const double D = (SLL * Svv - SLv * SLv);
 	
-	double SLx = - env.L_x_L_2_F*h.L_2_F.x - env.L_x_L_1_F*h.L_1_F.x + env.L_x_R_1_F*h.R_1_F.x + env.L_x_R_2_F*h.R_2_F.x;
-	double Svx = + env.v_x_L_2_F*h.L_2_F.x + env.v_x_L_1_F*h.L_1_F.x + env.v_x_R_1_F*h.R_1_F.x + env.v_x_R_2_F*h.R_2_F.x;
+	const double SLx = - env.L_x_L_2_F*h.L_2_F.x - env.L_x_L_1_F*h.L_1_F.x + env.L_x_R_1_F*h.R_1_F.x + env.L_x_R_2_F*h.R_2_F.x;
+	const double Svx = + env.v_x_L_2_F*h.L_2_F.x + env.v_x_L_1_F*h.L_1_F.x + env.v_x_R_1_F*h.R_1_F.x + env.v_x_R_2_F*h.R_2_F.x;
 		
 	k.th_x = (Svv * SLx - SLv * Svx) / D;
 	k.vtx_x = (-SLv * SLx + SLL * Svx) / D;
@@ -275,8 +275,15 @@ Kinematics theta_y_one_arm_angle(const HitData &h, const Environment &env)
 Kinematics theta_y_one_arm_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
-	k.th_y_R = + (env.L_y_R_2_F*h.R_2_F.y + env.L_y_R_1_F*h.R_1_F.y) / (env.L_y_R_2_F*env.L_y_R_2_F + env.L_y_R_1_F*env.L_y_R_1_F);
-	k.th_y_L = - (env.L_y_L_2_F*h.L_2_F.y + env.L_y_L_1_F*h.L_1_F.y) / (env.L_y_L_2_F*env.L_y_L_2_F + env.L_y_L_1_F*env.L_y_L_1_F);
+
+	const double D_y_L = - env.L_y_L_1_F * env.v_y_L_2_F + env.L_y_L_2_F * env.v_y_L_1_F;
+	k.th_y_L = (env.v_y_L_2_F * h.L_1_F.y - env.v_y_L_1_F * h.L_2_F.y) / D_y_L;
+	k.vtx_y_L = (env.L_y_L_2_F * h.L_1_F.y - env.L_y_L_1_F * h.L_2_F.y) / D_y_L;
+
+	const double D_y_R = + env.L_y_R_1_F * env.v_y_R_2_F - env.L_y_R_2_F * env.v_y_R_1_F;
+	k.th_y_R = (env.v_y_R_2_F * h.R_1_F.y - env.v_y_R_1_F * h.R_2_F.y) / D_y_R;
+	k.vtx_y_R = (-env.L_y_R_2_F * h.R_1_F.y + env.L_y_R_1_F * h.R_2_F.y) / D_y_R;
+
 	return k;
 }
 
@@ -328,8 +335,8 @@ Kinematics theta_y_two_arm_simple_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double SLL = env.L_y_L_2_F*env.L_y_L_2_F + env.L_y_L_1_F*env.L_y_L_1_F + env.L_y_R_1_F*env.L_y_R_1_F + env.L_y_R_2_F*env.L_y_R_2_F;
-	double SLy =  - env.L_y_L_2_F*h.L_2_F.y - env.L_y_L_1_F*h.L_1_F.y + env.L_y_R_1_F*h.R_1_F.y + env.L_y_R_2_F*h.R_2_F.y;
+	const double SLL = env.L_y_L_2_F*env.L_y_L_2_F + env.L_y_L_1_F*env.L_y_L_1_F + env.L_y_R_1_F*env.L_y_R_1_F + env.L_y_R_2_F*env.L_y_R_2_F;
+	const double SLy =  - env.L_y_L_2_F*h.L_2_F.y - env.L_y_L_1_F*h.L_1_F.y + env.L_y_R_1_F*h.R_1_F.y + env.L_y_R_2_F*h.R_2_F.y;
 
 	k.th_y = SLy / SLL;
 
@@ -345,11 +352,11 @@ Kinematics vtx_y_one_arm_regr(const HitData &h, const Environment &env)
 {
 	Kinematics k;
 
-	double D_y_L = - env.L_y_L_1_F * env.v_y_L_2_F + env.L_y_L_2_F * env.v_y_L_1_F;
+	const double D_y_L = - env.L_y_L_1_F * env.v_y_L_2_F + env.L_y_L_2_F * env.v_y_L_1_F;
 	k.th_y_L = (env.v_y_L_2_F * h.L_1_F.y - env.v_y_L_1_F * h.L_2_F.y) / D_y_L;
 	k.vtx_y_L = (env.L_y_L_2_F * h.L_1_F.y - env.L_y_L_1_F * h.L_2_F.y) / D_y_L;
 
-	double D_y_R = + env.L_y_R_1_F * env.v_y_R_2_F - env.L_y_R_2_F * env.v_y_R_1_F;
+	const double D_y_R = + env.L_y_R_1_F * env.v_y_R_2_F - env.L_y_R_2_F * env.v_y_R_1_F;
 	k.th_y_R = (env.v_y_R_2_F * h.R_1_F.y - env.v_y_R_1_F * h.R_2_F.y) / D_y_R;
 	k.vtx_y_R = (-env.L_y_R_2_F * h.R_1_F.y + env.L_y_R_1_F * h.R_2_F.y) / D_y_R;
 

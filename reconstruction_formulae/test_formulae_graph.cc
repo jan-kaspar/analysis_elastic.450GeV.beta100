@@ -46,6 +46,7 @@ void TestOnePoint(RecoQuantity q, Func f_reco, unsigned int b, const Kinematics 
 	if (q >= rqTh_x) { unit = "urad"; scale = 1E6; }
 	if (q >= rqVtx_x) { unit = "um"; scale = 1E3; }
 	if (q >= rqTh_y) { unit = "urad"; scale = 1E6; }
+	if (q >= rqVtx_y) { unit = "um"; scale = 1E3; }
 
 	mean = h_eff->GetMean() * scale;
 	stddev = h_eff->GetRMS() * scale;
@@ -69,7 +70,7 @@ void TestOneMode(RecoQuantity q, Func f_reco, unsigned int b)
 	if (q >= rqTh_x) { independentQuantity = 1; iq_min = -20E-6, iq_max = 100E-6, iq_step = 4.*5E-6; }	// rad
 	if (q >= rqVtx_x) { independentQuantity = 2; iq_min = -0.30, iq_max = 0.300, iq_step = 4.*0.015; }	// mm
 	if (q >= rqTh_y) { independentQuantity = 3; iq_min = -20E-6, iq_max = 100E-6, iq_step = 4.*5E-6; }	// rad
-
+	if (q >= rqVtx_y) { independentQuantity = 4; iq_min = -0.30, iq_max = 0.300, iq_step = 4.*0.015; }	// mm
 
 	for (double iq = iq_min; iq <= iq_max; iq += iq_step)
 	{
@@ -82,9 +83,11 @@ void TestOneMode(RecoQuantity q, Func f_reco, unsigned int b)
 		if (independentQuantity == 1)
 			k_cv.th_x = k_cv.th_x_L = k_cv.th_x_R = iq;
 		if (independentQuantity == 2)
-			k_cv.vtx_x = k_cv.vtx_y = iq;
+			k_cv.vtx_x = iq;
 		if (independentQuantity == 3)
 			k_cv.th_y = k_cv.th_y_L = k_cv.th_y_R = iq;
+		if (independentQuantity == 4)
+			k_cv.vtx_y = iq;
 
 		double mean=0., stddev=0.;
 
