@@ -5,18 +5,23 @@ include "../run_info.asy";
 
 string topDir = "../../";
 
-string datasets[];
-//datasets.push("DS-323893/ZeroBias");
-datasets.push("DS-323899/ZeroBias");
+string fills[], f_datasets[];
 /*
-datasets.push("DS-323907/ZeroBias");
-datasets.push("DS-323919/ZeroBias");
-datasets.push("DS-323932/ZeroBias");
-datasets.push("DS-323933/ZeroBias");
-datasets.push("DS-323934/ZeroBias");
+f_datasets.push("DS-fill7280/ZeroBias"); fills.push("7280");
+f_datasets.push("DS-fill7281/ZeroBias"); fills.push("7281");
+f_datasets.push("DS-fill7282/ZeroBias"); fills.push("7282");
+f_datasets.push("DS-fill7283/ZeroBias"); fills.push("7283");
+f_datasets.push("DS-fill7284/ZeroBias"); fills.push("7284");
+f_datasets.push("DS-fill7285/ZeroBias"); fills.push("7285");
+f_datasets.push("DS-fill7286/ZeroBias"); fills.push("7286");
+f_datasets.push("DS-fill7287/ZeroBias"); fills.push("7287");
+f_datasets.push("DS-fill7288/ZeroBias"); fills.push("7288");
+f_datasets.push("DS-fill7289/ZeroBias"); fills.push("7289");
 */
+f_datasets.push("DS-fill7290/ZeroBias"); fills.push("7290");
+f_datasets.push("DS-fill7291/ZeroBias"); fills.push("7291");
 
-string diagonals[] = { "45b", "45t" };
+string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
 
 string elements[][] = {
@@ -37,9 +42,9 @@ xSizeDef = 15cm;
 
 TGraph_errorBar = None;
 
-for (int dsi : datasets.keys)
+for (int dsi : f_datasets.keys)
 {
-	string f = topDir + datasets[dsi]+"/pileup_combined.root";
+	string f = topDir + f_datasets[dsi]+"/pileup_combined.root";
 
 	for (int di : diagonals.keys)
 	{
@@ -48,7 +53,7 @@ for (int dsi : datasets.keys)
 		NewPage();
 
 		NewPad(false, -1, -1);
-		label("\vbox{\SetFontSizesXX\hbox{"+datasets[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
+		label("\vbox{\SetFontSizesXX\hbox{"+f_datasets[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
 	
 		for (int ri : row_captions.keys)
 		{
@@ -72,10 +77,10 @@ for (int dsi : datasets.keys)
 				if (template == "")
 					continue;
 
-				real y_max = 0.5;
+				real y_max = 0.2;
 		
 				NewPad("time$\ung{h}$", "destructive pile-up probability", c, r);
-				DrawRunBands(datasets[dsi], 0, y_max);
+				DrawBands(fills[dsi], bands="run", labels="ds", 0., y_max);
 		
 				for (int ci : criteria.keys)
 				{
@@ -100,4 +105,4 @@ for (int dsi : datasets.keys)
 	}
 }
 
-GShipout(hSkip=1mm, vSkip=0mm);
+GShipout("pileup_details", hSkip=1mm, vSkip=0mm);

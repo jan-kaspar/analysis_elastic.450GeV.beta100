@@ -9,7 +9,6 @@ TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[], ds_labels[];
 datasets.push("DS-fill7280/Totem1"); ds_labels.push("7280");
-/*
 datasets.push("DS-fill7281/Totem1"); ds_labels.push("7281");
 datasets.push("DS-fill7282/Totem1"); ds_labels.push("7282");
 datasets.push("DS-fill7283/Totem1"); ds_labels.push("7283");
@@ -21,7 +20,6 @@ datasets.push("DS-fill7288/Totem1"); ds_labels.push("7288");
 datasets.push("DS-fill7289/Totem1"); ds_labels.push("7289");
 datasets.push("DS-fill7290/Totem1"); ds_labels.push("7290");
 datasets.push("DS-fill7291/Totem1"); ds_labels.push("7291");
-*/
 
 string rows[];
 rows.push("top");
@@ -55,14 +53,14 @@ void PlotRate(RootObject obj, pen p, string label)
 		real l = 2. * x_unc;
 		real r = y / l;
 		real r_unc = y_unc / l;
-		
+
 		real sc = 1./3600;
 
 		draw(((x-x_unc)*sc, r)--((x+x_unc)*sc, r), p);
 		draw((x*sc, r-r_unc)--(x*sc, r+r_unc), p);
 		draw((x*sc, r), mCi+2pt+p);
 
-		write(format("%#.3f", (x-x_unc)*sc) + format(" %#.3f", (x+x_unc)*sc) + format(" %#.3E", r));
+		//write(format("%#.3f", (x-x_unc)*sc) + format(" %#.3f", (x+x_unc)*sc) + format(" %#.3E", r));
 	}
 
 	AddToLegend(label, p, mCi+2pt+p);
@@ -83,7 +81,7 @@ for (int dsi : datasets.keys)
 
 	NewPadLabel(ds_labels[dsi] + ":");
 
-	string f = topDir + datasets[dsi] + "/block0/pileup_combined.root";
+	string f = topDir + datasets[dsi] + "/pileup_combined.root";
 
 	for (int ri : rows.keys)
 	{
@@ -91,13 +89,14 @@ for (int dsi : datasets.keys)
 
 		NewPad(false);
 		NewPadLabel(rows[ri]);
-		
+
 		for (int rpi : rps.keys)
 		{
 			NewPad("time $\ung{h}$", "prescaled rate$\ung{Hz}$");
 			scale(Linear, Linear(true));
 
-			//DrawRunBands(ds_labels[dsi], 0., 1., true);
+			real y_max = 500;
+			DrawBands(ds_labels[dsi], bands="run", labels="ds", 0., y_max);
 
 			string row = rows[ri];
 			string rp = rps[rpi];
@@ -106,19 +105,18 @@ for (int dsi : datasets.keys)
 			bool arm56 = (find(rp, "R") == 0);
 
 			string diagonal = "";
-			if ((arm45 && row == "bottom") || (arm56 && row == "top")) diagonal = "45b";
-			if ((arm45 && row == "top") || (arm56 && row == "bottom")) diagonal = "45t";
+			if ((arm45 && row == "bottom") || (arm56 && row == "top")) diagonal = "45b_56t";
+			if ((arm45 && row == "top") || (arm56 && row == "bottom")) diagonal = "45t_56b";
 
 			//write(row + ", " + rp + " -> " + diagonal);
 
-			write();
+			write("");
 			write("* " + ds_labels[dsi] + ", " + rp_lhc_labels[rpi] + ", " + row);
 
 			PlotRate(RootGetObject(f, diagonal + "/" + rps[rpi] + "/tr/val"), blue, "single track");
 			PlotRate(RootGetObject(f, diagonal + "/" + rps[rpi] + "/pat_suff/val"), red, "track(s) + showers");
 
-			// TODO
-			//ylimits(0, 1., Crop);
+			ylimits(0, y_max, Crop);
 		}
 	}
 

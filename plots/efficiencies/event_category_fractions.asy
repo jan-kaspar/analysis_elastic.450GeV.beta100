@@ -7,18 +7,27 @@ string topDir = "../../";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
-string datasets[];
-datasets.push("DS-323893/Totem1");
-datasets.push("DS-323899/Totem1");
-datasets.push("DS-323907/Totem1");
-datasets.push("DS-323919/Totem1");
-datasets.push("DS-323932/Totem1");
-datasets.push("DS-323933/Totem1");
-datasets.push("DS-323934/Totem1");
+string fills[], f_datasets[];
+/*
+f_datasets.push("DS-fill7280/Totem1"); fills.push("7280");
+f_datasets.push("DS-fill7281/Totem1"); fills.push("7281");
+f_datasets.push("DS-fill7282/Totem1"); fills.push("7282");
+f_datasets.push("DS-fill7283/Totem1"); fills.push("7283");
+f_datasets.push("DS-fill7284/Totem1"); fills.push("7284");
+f_datasets.push("DS-fill7285/Totem1"); fills.push("7285");
+f_datasets.push("DS-fill7286/Totem1"); fills.push("7286");
+f_datasets.push("DS-fill7287/Totem1"); fills.push("7287");
+f_datasets.push("DS-fill7288/Totem1"); fills.push("7288");
+f_datasets.push("DS-fill7289/Totem1"); fills.push("7289");
+*/
+f_datasets.push("DS-fill7290/Totem1"); fills.push("7290");
+f_datasets.push("DS-fill7290/ZeroBias"); fills.push("7290");
+f_datasets.push("DS-fill7291/Totem1"); fills.push("7291");
+f_datasets.push("DS-fill7291/ZeroBias"); fills.push("7291");
 
 string diagonals[], dgn_labels[];
-diagonals.push("45b"); dgn_labels.push("45 bot -- 56 top");
-diagonals.push("45t"); dgn_labels.push("45 top -- 56 bot");
+diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");
+diagonals.push("45t_56b"); dgn_labels.push("45 top -- 56 bot");
 
 string rps[], rp_labels[];
 rps.push("L_2_F"); rp_labels.push("45-220-fr");
@@ -40,13 +49,13 @@ for (int rpi : rps.keys)
 	NewPadLabel(rp_labels[rpi]);
 }
 
-for (int dsi : datasets.keys)
+for (int dsi : f_datasets.keys)
 {
 	NewRow();
 
-	NewPadLabel(datasets[dsi] + ":");
+	NewPadLabel(f_datasets[dsi] + ":");
 
-	string f = topDir + datasets[dsi] + "/pileup_combined.root";
+	string f = topDir + f_datasets[dsi] + "/pileup_combined.root";
 
 	for (int dgni : diagonals.keys)
 	{
@@ -59,7 +68,7 @@ for (int dsi : datasets.keys)
 		{
 			NewPad("time $\ung{h}$", "event fraction");
 
-			DrawRunBands(datasets[dsi], 0., 1., true);
+			DrawBands(fills[dsi], bands="run", labels="ds", 0., 1.);
 
 			draw(scale(1./3600, 1.), RootGetObject(f, diagonals[dgni] + "/" + rps[rpi] + "/pl_suff/rel"), "p", cyan+1pt, mCi+2pt+cyan, "pl\_suff");
 			draw(scale(1./3600, 1.), RootGetObject(f, diagonals[dgni] + "/" + rps[rpi] + "/pat_suff/rel"), "p", blue+1pt, mCi+2pt+blue, "pat\_suff");
@@ -78,4 +87,4 @@ for (int dsi : datasets.keys)
 	attach(f_legend);
 }
 
-GShipout(vSkip=1mm);
+GShipout("event_category_fractions", vSkip=1mm);
