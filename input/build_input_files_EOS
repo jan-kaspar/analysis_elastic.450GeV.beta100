@@ -46,7 +46,8 @@ function MakeFiles()
 	local run_sel="$2"
 
 	MakeFilesOne "../DS-fill${fill}/Totem1" "$eos_dir_base/Totem1/version3" "$run_sel"
-	#MakeFilesOne "../DS-fill${fill}/EmptyBX" "$eos_dir_base/EmptyBX/version1" "$run_sel"
+	MakeFilesOne "../DS-fill${fill}/ZeroBias" "$eos_dir_base/ZeroBias/version1" "$run_sel"
+	MakeFilesOne "../DS-fill${fill}/EmptyBX" "$eos_dir_base/EmptyBX/version1" "$run_sel"
 }
 
 #----------------------------------------------------------------------------------------------------
