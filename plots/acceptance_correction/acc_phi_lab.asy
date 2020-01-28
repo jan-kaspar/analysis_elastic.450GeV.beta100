@@ -3,20 +3,17 @@ import pad_layout;
 
 string top_dir = "../../";
 
-string datasets[] = {
-	//"DS-fill7281/Totem1",
-	"DS-fill7291/Totem1",
-};
+string dataSets[] = { "DS-fill5317" };
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 //----------------------------------------------------------------------------------------------------
 
-real cut_th_x_low_top = -1000, cut_th_x_high_top = 1000;
-real cut_th_y_low_top = 40, cut_th_y_high_top = +130;
+real cut_th_x_low_top = -250, cut_th_x_high_top = 250;
+real cut_th_y_low_top = 4, cut_th_y_high_top = +100;
 
-real cut_th_x_low_bot = -1000, cut_th_x_high_bot = 1000;
-real cut_th_y_low_bot = -40, cut_th_y_high_bot = -130;
+real cut_th_x_low_bot = -250, cut_th_x_high_bot = 250;
+real cut_th_y_low_bot = -4, cut_th_y_high_bot = -100;
 
 void DrawAcceptedArcs(real th)
 {
@@ -59,12 +56,11 @@ void DrawFullArc(real th)
 
 //----------------------------------------------------------------------------------------------------
 
-for (int dsi : datasets.keys)
+for (int dsi : dataSets.keys)
 {
 	real ySize = 6cm;
 
-	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/150*150, ySize);
-	currentpad.xTicks = LeftTicks(200., 100.);
+	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/200*200, ySize);
 	scale(Linear, Linear, Log);
 	//TH2_zLabel = "(corrected) events per bin";
 	TH2_paletteBarWidth = 0.05;
@@ -73,26 +69,23 @@ for (int dsi : datasets.keys)
 	DrawFullArc(50);
 	DrawFullArc(100);
 	DrawFullArc(150);
-	DrawFullArc(200);
-	DrawFullArc(250);
-	DrawFullArc(300);
-	label(rotate(-90)*Label("\SmallerFonts $\rm\mu rad$"), (380, 0), (0., 0), Fill(white+opacity(0.8)));
+	label(rotate(-90)*Label("\SmallerFonts $\rm\mu rad$"), (165, 0), 0.5E, Fill(white+opacity(0.8)));
 
 	// z scale
 	//TH2_z_min = 5.5;
 	//TH2_z_max = 3.75;
 
 	// 45 bottom - 56 top
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root", "acceptance correction/h_th_y_vs_th_x_after"), "def");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45b_56t.root", "acceptance correction/h_th_y_vs_th_x_after"), "def");
 	
 	// 45 top - 56 bottom
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root", "acceptance correction/h_th_y_vs_th_x_after"), "p");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45t_56b.root", "acceptance correction/h_th_y_vs_th_x_after"), "p");
 	
-	draw((-800, cut_th_y_low_top)--(+800, cut_th_y_low_top), magenta+1pt);
-	draw((-800, cut_th_y_low_bot)--(+800, cut_th_y_low_bot), magenta+1pt);
+	draw((-350, cut_th_y_low_top)--(+350, cut_th_y_low_top), magenta+1pt);
+	draw((-350, cut_th_y_low_bot)--(+350, cut_th_y_low_bot), magenta+1pt);
 	
-	draw((-800, cut_th_y_high_top)--(+800, cut_th_y_high_top), red+1pt);
-	draw((-800, cut_th_y_high_bot)--(+800, cut_th_y_high_bot), red+1pt);
+	draw((-350, cut_th_y_high_top)--(+350, cut_th_y_high_top), red+1pt);
+	draw((-350, cut_th_y_high_bot)--(+350, cut_th_y_high_bot), red+1pt);
 
 	/*
 	draw((cut_th_x_low_top , 0)--(cut_th_x_low_top , +200), magenta+1pt);
@@ -104,12 +97,23 @@ for (int dsi : datasets.keys)
 	DrawAcceptedArcs(50);
 	DrawAcceptedArcs(100);
 	DrawAcceptedArcs(150);
-	DrawAcceptedArcs(200);
-	DrawAcceptedArcs(250);
-	DrawAcceptedArcs(300);
 
-	limits((-400, -400), (400, 400), Crop);
-	AttachLegend(datasets[dsi]);
+	label("\vbox{\hbox{detector}\hbox{edges}}", (-160, -130), SE, magenta, Fill(white));
+	draw((-120, -135)--(-130, cut_th_y_low_bot), magenta, EndArrow());
+	draw((-120, -135)--(-110, cut_th_y_low_top), magenta, EndArrow());
+
+	label("\vbox{\hbox{LHC}\hbox{appertures}}", (-140, 190), S, red, Fill(white));
+	draw((-160, 130)--(-140, cut_th_y_high_top), red, EndArrow);
+	draw((-160, 130)--(-190, cut_th_y_high_bot), red, EndArrow);
+
+	/*
+	label("\vbox{\hbox{horiz.}\hbox{RPs}}", (200, -150), W, magenta, Fill(white));
+	draw((130, -150)--(cut_th_x_high_bot, -140), magenta, EndArrow);
+	draw((130, -150)--(cut_th_x_low_bot, -160), magenta, EndArrow);
+	*/
+	
+	limits((-200, -200), (200, 200), Crop);
+	AttachLegend(dataSets[dsi]);
 }
 
-GShipout(margin=1mm, hSkip=1mm);
+GShipout(margin=0mm);
