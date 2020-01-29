@@ -4,10 +4,9 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	"DS-fill5313",
-	"DS-fill5314",
-	"DS-fill5317",
-	"DS-fill5321",
+	//"DS-fill7281/Totem1",
+	//"DS-fill7289/Totem1",
+	"DS-fill7291/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
@@ -35,22 +34,22 @@ for (int dsi : datasets.keys)
 	{
 		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
-		TH2_x_min = -50e-6;
-		TH2_x_max = +50e-6;
+		TH2_x_min = -450e-6;
+		TH2_x_max = +450e-6;
 
 		if (diagonals[dgni] == "45b_56t")
 		{
-			TH2_y_min = 3e-6;
-			TH2_y_max = +9e-6;
+			TH2_y_min = +30e-6;
+			TH2_y_max = +150e-6;
 		} else {
-			TH2_y_min = -9e-6;
-			TH2_y_max = -3e-6;
+			TH2_y_min = -150e-6;
+			TH2_y_max = -30e-6;
 		}
 
-		yTicksDef = RightTicks(1., 0.5);
+		//yTicksDef = RightTicks(1., 0.5);
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$");
-		currentpad.xTicks = LeftTicks(50., 10.);
+		currentpad.xTicks = LeftTicks(100., 50.);
 
 		for (int ci : cuts.keys)
 		{

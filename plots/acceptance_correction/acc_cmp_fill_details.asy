@@ -57,7 +57,7 @@ for (int dsi : datasets.keys)
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L_h"), "l", magenta+1pt);
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
-		AttachLegend("left arm");
+		AttachLegend(BuildLegend("left arm", S), N);
 
 		// ----- right arm -----
 
@@ -69,7 +69,7 @@ for (int dsi : datasets.keys)
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R_h"), "l", magenta+2pt);
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
-		AttachLegend("right arm");
+		AttachLegend(BuildLegend("right arm", S), N);
 
 		// ----- both arms -----
 
@@ -81,7 +81,7 @@ for (int dsi : datasets.keys)
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G_h"), "l", magenta+2pt);
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
-		AttachLegend("two-arm");
+		AttachLegend(BuildLegend("two-arm", S), N);
 	}
 }
 
