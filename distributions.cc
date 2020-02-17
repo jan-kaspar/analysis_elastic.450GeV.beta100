@@ -108,7 +108,7 @@ TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
-	vector<double> th_x_values = { fc.th_x_m - 300E-6, fc.th_x_m, fc.th_x_p, fc.th_x_p + 400E-6 };
+	vector<double> th_x_values = { fc.th_x_m - 400E-6, fc.th_x_m, fc.th_x_p, fc.th_x_p + 400E-6 };
 
 	for (const double &th_x : th_x_values)
 	{
@@ -1520,8 +1520,8 @@ int main(int argc, char **argv)
 	// fit histograms
 	//double th_y_low_bound = (diagonal == d45b_56t) ? (anal.th_y_lcut_L+anal.th_y_lcut_R)/2. + 5E-6 : -((anal.th_y_hcut_L+anal.th_y_hcut_R)/2. - 5E-6);
 	//double th_y_high_bound = (diagonal == d45b_56t) ? (anal.th_y_hcut_L+anal.th_y_hcut_R)/2. - 5E-6 : -((anal.th_y_lcut_L+anal.th_y_lcut_R)/2. + 5E-6);
-	double th_y_low_bound = (diagonal == d45b_56t) ? 50E-6 : -120E-6;
-	double th_y_high_bound = (diagonal == d45b_56t) ? 120E-6 : -50E-6;
+	const double th_y_low_bound = (diagonal == d45b_56t) ? 50E-6 : -120E-6;
+	const double th_y_high_bound = (diagonal == d45b_56t) ? 120E-6 : -50E-6;
 
 	printf("\n* th_y fit bounds: from %E to %E\n", th_y_low_bound, th_y_high_bound);
 
