@@ -5,10 +5,18 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string datasets[], dataset_fills[];
-datasets.push("DS-fill5313"); dataset_fills.push("5313");
-datasets.push("DS-fill5314"); dataset_fills.push("5314");
-datasets.push("DS-fill5317"); dataset_fills.push("5317");
-datasets.push("DS-fill5321"); dataset_fills.push("5321");
+//datasets.push("DS-fill7280/Totem1"); dataset_fills.push("7280");
+datasets.push("DS-fill7281/Totem1"); dataset_fills.push("7281");
+//datasets.push("DS-fill7282/Totem1"); dataset_fills.push("7282");
+//datasets.push("DS-fill7283/Totem1"); dataset_fills.push("7283");
+//datasets.push("DS-fill7284/Totem1"); dataset_fills.push("7284");
+//datasets.push("DS-fill7285/Totem1"); dataset_fills.push("7285");
+//datasets.push("DS-fill7286/Totem1"); dataset_fills.push("7286");
+//datasets.push("DS-fill7287/Totem1"); dataset_fills.push("7287");
+//datasets.push("DS-fill7288/Totem1"); dataset_fills.push("7288");
+datasets.push("DS-fill7289/Totem1"); dataset_fills.push("7289");
+//datasets.push("DS-fill7290/Totem1"); dataset_fills.push("7290");
+datasets.push("DS-fill7291/Totem1"); dataset_fills.push("7291");
 
 string diagonals[], diagonal_labels[];
 pen diagonal_pens[];
@@ -50,8 +58,8 @@ for (int ai : arms.keys)
 	{
 		NewPad("time $\ung{h}$", "mean of $\th_x^*\ung{\mu rad}$");
 
-		currentpad.yTicks = RightTicks(0.5, 0.1);
-		real y_min = -2, y_max = +2;
+		currentpad.yTicks = RightTicks(10., 5.);
+		real y_min = -50, y_max = +50;
 
 		DrawRunBands(dataset_fills[dsi], y_min, y_max);
 

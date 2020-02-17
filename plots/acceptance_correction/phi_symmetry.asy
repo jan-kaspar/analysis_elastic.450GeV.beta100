@@ -11,10 +11,11 @@ string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 
-//TH2_palette = new pen[] { paleblue, blue, cyan, heavygreen, yellow, orange, red, magenta, black };
-TH2_palette = Gradient(blue, heavygreen, yellow, red);
+TH2_palette = new pen[] { paleblue, blue, cyan, heavygreen, yellow, orange, red, magenta, black };
+//TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
-//TH2_z_max = log10(3e3);
+TH2_z_min = 1e2;
+TH2_z_max = 1e3;
 
 for (int di : datasets.keys)
 {

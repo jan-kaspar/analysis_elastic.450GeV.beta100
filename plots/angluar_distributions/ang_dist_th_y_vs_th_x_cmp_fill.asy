@@ -5,6 +5,8 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7281/Totem1",
+	"DS-fill7289/Totem1",
+	"DS-fill7291/Totem1",
 };
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
@@ -38,4 +40,4 @@ for (int dsi : datasets.keys)
 	AttachLegend(datasets[dsi]);
 }
 
-GShipout("theta_xy_cmp", margin=1mm, hSkip=1mm);
+GShipout(margin=1mm, hSkip=1mm);
