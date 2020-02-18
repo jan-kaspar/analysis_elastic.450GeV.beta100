@@ -2,30 +2,38 @@ import root;
 import pad_layout;
 
 string datasets[];
-//datasets.push("DS-fill5313");
-//datasets.push("DS-fill5314");
-datasets.push("DS-fill5317");
-//datasets.push("DS-fill5321");
+datasets.push("DS-fill7280/Totem1");
+datasets.push("DS-fill7281/Totem1");
+//datasets.push("DS-fill7282/Totem1");
+//datasets.push("DS-fill7283/Totem1");
+//datasets.push("DS-fill7284/Totem1");
+//datasets.push("DS-fill7285/Totem1");
+datasets.push("DS-fill7286/Totem1");
+//datasets.push("DS-fill7287/Totem1");
+//datasets.push("DS-fill7288/Totem1");
+//datasets.push("DS-fill7289/Totem1");
+//datasets.push("DS-fill7290/Totem1");
+//datasets.push("DS-fill7291/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 string topDir = "../../";
 
-string histogram = "acceptance correction/ob-3-5-0.05/h_t_after";
-string histogram_Nev = "acceptance correction/ob-3-5-0.05/h_t_Nev_after_no_corr";
+string histogram = "acceptance correction/eb/h_t_after";
+string histogram_Nev = "acceptance correction/eb/h_t_Nev_after_no_corr";
 
 string combinations[];
 pen comb_pens[];
 
 combinations.push("no_cuts"); comb_pens.push(gray);
 combinations.push("cuts:1"); comb_pens.push(black);
-combinations.push("cuts:1,2"); comb_pens.push(red);
-combinations.push("cuts:1,2,7"); comb_pens.push(blue);
-combinations.push("cuts:1,2,7,5"); comb_pens.push(heavygreen);
-combinations.push("cuts:1,2,7,5,6"); comb_pens.push(magenta);
+combinations.push("cuts:1,2"); comb_pens.push(magenta);
+combinations.push("cuts:1,2,5,6"); comb_pens.push(blue);
+combinations.push("cuts:1,2,5,6,7,8"); comb_pens.push(heavygreen);
+combinations.push("cuts:1,2,5,6,7,8,9,10"); comb_pens.push(red+1pt);
 
-string ref_comb = "cuts:1,2,7,5,6";
+string ref_comb = "cuts:1,2,5,6,7,8,9,10";
 
 xSizeDef = 10cm;
 
@@ -86,7 +94,7 @@ for (int dsi : datasets.keys)
 		//--------------------
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t\ung{mb/GeV^2}$");
-		currentpad.xTicks = LeftTicks(0.1, 0.05);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		scale(Linear, Log);
 		for (int ci : combinations.keys)
 		{
@@ -94,12 +102,12 @@ for (int dsi : datasets.keys)
 			draw(RootGetObject(f, histogram), "eb", comb_pens[ci]);
 		}
 		
-		limits((0, 1e3), (1.0, 1e8), Crop);
+		limits((0, 1e5), (0.04, 1e8), Crop);
 
 		//--------------------
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t\ung{mb/GeV^2}$");
-		currentpad.xTicks = LeftTicks(0.05, 0.01);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		scale(Linear, Log);
 		for (int ci : combinations.keys)
 		{
@@ -113,7 +121,7 @@ for (int dsi : datasets.keys)
 		
 		frame fLegend = BuildLegend();
 		
-		limits((0, 1e4), (0.2, 1e9), Crop);
+		limits((0, 1e6), (0.04, 1e9), Crop);
 
 		//--------------------
 		
@@ -130,7 +138,7 @@ for (int dsi : datasets.keys)
 		//--------------------
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t$: (test - ref) / ref$\ung{\%}$");
-		currentpad.xTicks = LeftTicks(0.1, 0.05);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		for (int ci : combinations.keys)
 		{
 			string f = topDir+"/background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
@@ -138,12 +146,12 @@ for (int dsi : datasets.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -2), (1.0, 10), Crop);
+		limits((0, -2), (0.04, 10), Crop);
 		
 		//--------------------
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t$: (test - ref) / ref$\ung{\%}$");
-		currentpad.xTicks = LeftTicks(0.05, 0.01);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		for (int ci : combinations.keys)
 		{
 			string f = topDir+"/background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
@@ -151,7 +159,7 @@ for (int dsi : datasets.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -1), (0.2, 3), Crop);
+		limits((0, -1), (0.04, 3), Crop);
 		
 		//--------------------
 		

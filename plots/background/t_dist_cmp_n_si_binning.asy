@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string dataset = "DS-fill5317";
+string dataset = "DS-fill7280/Totem1";
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
@@ -9,9 +9,8 @@ string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 string topDir = "../../";
 
 string binnings[] = {
-	"ob-1-20-0.05",
-	"ob-2-10-0.05",
-	"ob-3-5-0.05",
+	"ub",
+	"eb",
 };
 
 string histogram = "acceptance correction/<binning>/h_t_after";
@@ -88,13 +87,13 @@ for (int bi : binnings.keys)
 		
 		frame fLegend = BuildLegend();
 		
-		limits((0, 1e3), (1.0, 1e8), Crop);
+		limits((0, 1e6), (0.04, 1e8), Crop);
 
 		//--------------------
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t\ung{mb/GeV^2}$");
 		scale(Linear, Log);
-		currentpad.xTicks = LeftTicks(0.05, 0.01);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 
 		for (int ci : combinations.keys)
 		{
@@ -108,7 +107,7 @@ for (int bi : binnings.keys)
 		
 		frame fLegend = BuildLegend();
 		
-		limits((0, 1e5), (0.3, 1e8), Crop);
+		limits((0, 1e6), (0.04, 1e8), Crop);
 
 		//--------------------
 		
@@ -133,7 +132,7 @@ for (int bi : binnings.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -10), (1.0, 10), Crop);
+		limits((0, -10), (0.04, 10), Crop);
 		
 		//--------------------
 
@@ -148,6 +147,6 @@ for (int bi : binnings.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -1), (0.3, 3), Crop);
+		limits((0, -1), (0.04, 3), Crop);
 	}
 }

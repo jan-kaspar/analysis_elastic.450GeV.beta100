@@ -15,7 +15,7 @@ string datasets[] = {
 	//"DS-fill7286/Totem1",
 	//"DS-fill7287/Totem1",
 	//"DS-fill7288/Totem1",
-	//"DS-fill7289/Totem1",
+	"DS-fill7289/Totem1",
 	//"DS-fill7290/Totem1",
 	"DS-fill7291/Totem1",
 };
@@ -26,7 +26,7 @@ string dgns[] = {
 };
 
 int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
-int cuts[] = { 9, 10 };
+//int cuts[] = { 9, 10 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1, 1 };
 real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1, 1 };
