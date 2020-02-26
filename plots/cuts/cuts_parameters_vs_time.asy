@@ -5,12 +5,12 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string fills[], datasets[];
-//fills.push("7280"); datasets.push("DS-fill7280/Totem1");
+fills.push("7280"); datasets.push("DS-fill7280/Totem1");
 fills.push("7281"); datasets.push("DS-fill7281/Totem1");
-//fills.push("7282"); datasets.push("DS-fill7282/Totem1");
-//fills.push("7283"); datasets.push("DS-fill7283/Totem1");
-//fills.push("7284"); datasets.push("DS-fill7284/Totem1");
-//fills.push("7285"); datasets.push("DS-fill7285/Totem1");
+fills.push("7282"); datasets.push("DS-fill7282/Totem1");
+fills.push("7283"); datasets.push("DS-fill7283/Totem1");
+fills.push("7284"); datasets.push("DS-fill7284/Totem1");
+fills.push("7285"); datasets.push("DS-fill7285/Totem1");
 //fills.push("7286"); datasets.push("DS-fill7286/Totem1");
 //fills.push("7287"); datasets.push("DS-fill7287/Totem1");
 //fills.push("7288"); datasets.push("DS-fill7288/Totem1");
@@ -25,18 +25,17 @@ pen dgn_pens[] = { blue, red };
 string cuts[], c_units[];
 real c_scales[];
 real c_rms_min[], c_rms_max[];
-real c_sigmas_45b[], c_sigmas_45t[];
-cuts.push("1"); c_units.push("\mu rad"); c_scales.push(1e6); c_sigmas_45b.push(40.); c_sigmas_45t.push(40.); c_rms_min.push(20.); c_rms_max.push(60.);
-cuts.push("2"); c_units.push("\mu rad"); c_scales.push(1e6); c_sigmas_45b.push(9); c_sigmas_45t.push(9); c_rms_min.push(5); c_rms_max.push(12);
+cuts.push("1"); c_units.push("\mu rad"); c_scales.push(1e6); c_rms_min.push(20.); c_rms_max.push(60.);
+cuts.push("2"); c_units.push("\mu rad"); c_scales.push(1e6); c_rms_min.push(5); c_rms_max.push(12);
 
-cuts.push("5"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(0.08); c_sigmas_45t.push(0.08); c_rms_min.push(0.05); c_rms_max.push(0.12);
-cuts.push("6"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(0.08); c_sigmas_45t.push(0.08); c_rms_min.push(0.05); c_rms_max.push(0.12);
+cuts.push("5"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.05); c_rms_max.push(0.10);
+cuts.push("6"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.05); c_rms_max.push(0.10);
 
-cuts.push("7"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(0.5); c_sigmas_45t.push(0.5); c_rms_min.push(0.3); c_rms_max.push(0.7);
-cuts.push("8"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(3.); c_sigmas_45t.push(3.); c_rms_min.push(1.5); c_rms_max.push(4.5);
+cuts.push("7"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.4); c_rms_max.push(0.7);
+cuts.push("8"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(2.0); c_rms_max.push(3.5);
 
-cuts.push("9"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(0.15); c_sigmas_45t.push(0.15); c_rms_min.push(0.10); c_rms_max.push(0.20);
-cuts.push("10"); c_units.push("mm"); c_scales.push(1); c_sigmas_45b.push(0.15); c_sigmas_45t.push(0.15); c_rms_min.push(0.10); c_rms_max.push(0.20);
+cuts.push("9"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.10); c_rms_max.push(0.20);
+cuts.push("10"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.10); c_rms_max.push(0.20);
 
 string quantities[], q_options[], q_labels[];
 //quantities.push("p_cq_time"); q_options.push("eb,d0"); q_labels.push("mean vs.~time");
@@ -84,18 +83,27 @@ for (int ci : cuts.keys)
 		
 			for (int dgni : diagonals.keys)
 			{
-				RootObject obj = RootGetObject(topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root",
-					"elastic cuts/cut " + cuts[ci] + "/" + quantities[qi] + cuts[ci]);
+				string f = topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root";
+
+				RootObject obj = RootGetObject(f, "elastic cuts/cut " + cuts[ci] + "/" + quantities[qi] + cuts[ci]);
 
 				if (obj.InheritsFrom("TGraph"))
 					draw(swToHours*scale(1, c_scales[ci]), obj, q_options[qi], dgn_pens[dgni], mCi+2pt+dgn_pens[dgni], dgn_labels[dgni]);
 				else
 					draw(swToHours*scale(1, c_scales[ci]), obj, q_options[qi], dgn_pens[dgni], dgn_labels[dgni]);
+
+				string obj_name_par = "elastic cuts/cut " + cuts[ci] + "/g_cut_parameters";
+				RootObject obj_par = RootGetObject(f, obj_name_par);
+				real ax[] = {0}, ay[] = {0};
+				obj_par.vExec("GetPoint", 0, ax, ay); real cca = ay[0];
+				obj_par.vExec("GetPoint", 1, ax, ay); real ccb = ay[0];
+				obj_par.vExec("GetPoint", 2, ax, ay); real ccc = ay[0];
+				obj_par.vExec("GetPoint", 3, ax, ay); real csi = ay[0];
+				obj_par.vExec("GetPoint", 4, ax, ay); real n_si = ay[0];
 		
 				if (quantities[qi] == "g_cq_RMS")
 				{
-					real sigma = (diagonals[dgni] == "45b_56t") ? c_sigmas_45b[ci] : c_sigmas_45t[ci];
-					xaxis(YEquals(sigma, false), dgn_pens[dgni]+1pt+dashed);
+					xaxis(YEquals(csi * c_scales[ci], false), dgn_pens[dgni]+1pt+dashed);
 				}
 			}
 

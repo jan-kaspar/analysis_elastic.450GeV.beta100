@@ -110,17 +110,17 @@ void Init_global()
 void Init_global_45b_56t()
 {
 	// analysis settings
-	anal.cut1_a = 1.; anal.cut1_c = +25E-6; anal.cut1_si = 40E-6;
-	anal.cut2_a = 1.; anal.cut2_c = -2.5E-6; anal.cut2_si = 9E-6;
+	anal.cut1_a = 1.; anal.cut1_c = -4E-6; anal.cut1_si = 35E-6;
+	anal.cut2_a = 1.; anal.cut2_c = -1.5E-6; anal.cut2_si = 8E-6;
 
 	anal.cut5_a = 0.105; anal.cut5_c = +0.01; anal.cut5_si = 0.08;
 	anal.cut6_a = 0.105; anal.cut6_c = +0.04; anal.cut6_si = 0.08;
 
-	anal.cut7_a = -1800.; anal.cut7_c = -0.20; anal.cut7_si = 0.5;
-	anal.cut8_a = 0.; anal.cut8_c = -0.03; anal.cut8_si = 3.;
+	anal.cut7_a = 0.; anal.cut7_c = -0.20; anal.cut7_si = 0.55;
+	anal.cut8_a = 0.; anal.cut8_c = -0.43; anal.cut8_si = 2.8;
 
-	anal.cut9_a = -0.28; anal.cut9_c = +0.10; anal.cut9_si = 0.15;
-	anal.cut10_a = -0.29; anal.cut10_c = +0.03; anal.cut10_si = 0.15;
+	anal.cut9_a = -0.28; anal.cut9_c = +0.03; anal.cut9_si = 0.14;
+	anal.cut10_a = -0.29; anal.cut10_c = -0.02; anal.cut10_si = 0.14;
 
 	anal.fc_L_l = FiducialCut( 35E-6, -330E-6, -1.05,  +75E-6, +0.15);
 	anal.fc_L_h = FiducialCut(135E-6, -250E-6, +0.56, +305E-6, -0.75);
@@ -145,17 +145,17 @@ void Init_global_45b_56t()
 void Init_global_45t_56b()
 {
 	// analysis settings
-	anal.cut1_a = 1.; anal.cut1_c = +27E-6; anal.cut1_si = 40E-6;
-	anal.cut2_a = 1.; anal.cut2_c = +1.2E-6; anal.cut2_si = 9E-6;
+	anal.cut1_a = 1.; anal.cut1_c = +0.8E-6; anal.cut1_si = 33E-6;
+	anal.cut2_a = 1.; anal.cut2_c = +0.5E-6; anal.cut2_si = 8E-6;
 
 	anal.cut5_a = 0.105; anal.cut5_c = +0.03; anal.cut5_si = 0.08;
 	anal.cut6_a = 0.105; anal.cut6_c = -0.04; anal.cut6_si = 0.08;
 
-	anal.cut7_a = -1800.; anal.cut7_c = +0.15; anal.cut7_si = 0.5;
-	anal.cut8_a = 0.; anal.cut8_c = -1.1; anal.cut8_si = 3.;
+	anal.cut7_a = 0.; anal.cut7_c = +0.15; anal.cut7_si = 0.55;
+	anal.cut8_a = 0.; anal.cut8_c = -0.9; anal.cut8_si = 2.8;
 
-	anal.cut9_a = -0.28; anal.cut9_c = +0.04; anal.cut9_si = 0.12;
-	anal.cut10_a = -0.29; anal.cut10_c = +0.07; anal.cut10_si = 0.12;
+	anal.cut9_a = -0.28; anal.cut9_c = -0.01; anal.cut9_si = 0.14;
+	anal.cut10_a = -0.29; anal.cut10_c = +0.02; anal.cut10_si = 0.14;
 
 	anal.fc_L_l = FiducialCut( 35E-6,  -75E-6, -0.20, +330E-6, +0.50);
 	anal.fc_L_h = FiducialCut(142E-6, -250E-6, +0.50, +250E-6, -0.56);
