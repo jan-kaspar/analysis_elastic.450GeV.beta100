@@ -17,12 +17,12 @@ void Environment::InitNominal()
 	// pitch-induced error (mm), later adjusted by parameters.h
 	si_de_P_L = si_de_P_R = 12E-3;
 
-	// optics
-	v_x_R_1_F = -2.330; L_x_R_1_F = 32.7E3; v_y_R_1_F = -0.218; L_y_R_1_F = 160E3;
-	v_x_R_2_F = -2.004; L_x_R_2_F = 25.1E3; v_y_R_2_F = -0.288; L_y_R_2_F = 179E3;
+	// optics (nominal, sent by Frici on 26 Feb 2020)
+	v_x_R_1_F = -2.29251110442821; L_x_R_1_F = 35.1828162653735E3; v_y_R_1_F = 0.126220649033512; L_y_R_1_F = 171.911207102938E3;
+	v_x_R_2_F = -1.97644302902099; L_x_R_2_F = 27.2787476702851E3; v_y_R_2_F = 0.100459146707445; L_y_R_2_F = 192.282747401847E3;
 
-	v_x_L_1_F = -2.330; L_x_L_1_F = 32.7E3; v_y_L_1_F = -0.218; L_y_L_1_F = 160E3;
-	v_x_L_2_F = -2.004; L_x_L_2_F = 25.1E3; v_y_L_2_F = -0.288; L_y_L_2_F = 179E3;
+	v_x_L_1_F = -2.24947329593445; L_x_L_1_F = 35.8475945504415E3; v_y_L_1_F = 0.124161170232800; L_y_L_1_F = 173.630053228259E3;
+	v_x_L_2_F = -1.93196310652978; L_x_L_2_F = 27.6759142870506E3; v_y_L_2_F = 0.098769215019425; L_y_L_2_F = 194.499649253117E3;
 
 	// optics: x-y coupling
 	/*
