@@ -123,7 +123,7 @@ void Test(const string &label, RecoQuantity q, Func f)
 	TestOneMode(q, f, bComplementary);
 	TestOneMode(q, f, sbPitch | sbBeamDivergence | bComplementary);
 	//TestOneMode(q, f, sbMisalignment);
-	TestOneMode(q, f, sbOptics);
+	//TestOneMode(q, f, sbOptics);
 	//TestOneMode(q, f, bComplementary | sbOptics);
 	//TestOneMode(q, f, sbPitch | sbBeamDivergence | bComplementary | sbOptics);
 	
