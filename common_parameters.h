@@ -6,13 +6,13 @@ void Environment::InitNominal()
 	// momentum uncertainty
 	si_de_p = 1E-3 * p;
 
-	// beam divergence (rad)
-	si_th_x_L = si_th_x_R = 6.2E-6;	// beta*_x = 70 m
-	si_th_y_L = si_th_y_R = 5.2E-6; // beta*_y = 100 m
+	// beam divergence (rad, for simulation)
+	si_th_x_L = si_th_x_R = 6.7E-6;	// beta*_x = 70 m
+	si_th_y_L = si_th_y_R = 5.6E-6; // beta*_y = 100 m
 
-	// vertex smearing (mm)
-	si_vtx_x = 300E-3;
-	si_vtx_y = 360E-3;
+	// vertex smearing (mm, for simulation)
+	si_vtx_x = 330E-3;
+	si_vtx_y = 395E-3;
 
 	// pitch-induced error (mm), later adjusted by parameters.h
 	si_de_P_L = si_de_P_R = 12E-3;
