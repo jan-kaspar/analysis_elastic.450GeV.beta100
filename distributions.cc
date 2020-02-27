@@ -231,7 +231,7 @@ int main(int argc, char **argv)
 		return rcIncompatibleDiagonal;
 
 	// default parameters
-	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
+	unsigned int detailsLevel = 2; 	// 0: no details, 1: some details, >= 2 all details
 	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
 	string cutSelectionString;
 	string outputDir = ".";
@@ -864,6 +864,8 @@ int main(int argc, char **argv)
 	unsigned int N_el_T2trig=0, N_4outof4_T2trig=0;
 	unsigned int N_el_raw=0;
 
+	map<unsigned int, unsigned int> bunchCounter_el;
+
 	map<unsigned int, pair<unsigned int, unsigned int> > runTimestampBoundaries;
 	map<pair<unsigned int, unsigned int>, pair<unsigned int, unsigned int> > lumiSectionBoundaries;
 
@@ -917,7 +919,7 @@ int main(int argc, char **argv)
 		if (ev.lumi_section < anal.lumi_section_min || ev.lumi_section > anal.lumi_section_max)
 			continue;
 
-		// select the elastic-trigger bunch(es) only
+		// select bunch(es)
 		if (SkipBunch(ev.run_num, ev.bunch_num))
 			continue;
 
@@ -1072,6 +1074,8 @@ int main(int argc, char **argv)
 		*/
 
 		g_selected_bunch_num_vs_timestamp->SetPoint(g_selected_bunch_num_vs_timestamp->GetN(), ev.timestamp, ev.bunch_num);
+
+		bunchCounter_el[ev.bunch_num]++;
 
 		N_el++;
 
@@ -1479,6 +1483,10 @@ int main(int argc, char **argv)
 	printf("N_el_RP_trig = %u\n", N_el_RP_trig);
 	printf("N_el_T2trig = %u\n", N_el_T2trig);
 	printf("N_4outof4_T2trig = %u\n", N_4outof4_T2trig);
+
+	printf("\nbunchCounter_el:\n");
+	for (const auto &p : bunchCounter_el)
+		printf("  bunch %u: %u\n", p.first, p.second);
 
 	// derived plots
 	TGraphErrors *th_y_sigmaLR_vs_th_y = new TGraphErrors();
