@@ -29,7 +29,7 @@
 
 
 %----------------------------------------------------------------------------------------------------
-\chapter{Datasets}
+\chapter[datasets]{Datasets}
 
 \> LHC fills (Oct 2018)
 \>> 7280: standard collimation, good quality
@@ -45,7 +45,9 @@
 \>> 7290: standard collimation, bad quality
 \>> 7291: crystal collimation, excellent quality
 
-\> see e.g.~\plot{time_dependences/rate_vs_time.pdf}
+\> data quality can be judged from the following plots
+\>> \plot{time_dependences/rate_vs_time.pdf}: good quality if rate in red (4-RP coincidence) is close to rate in blue (after all offline cuts)
+\>> \plot{time_dependences/event_category_rates.pdf}: good quality if rate in red (track(s) + showers) stays close to rate in blue (single tracks)
 
 \> trigger streams
 \>> for main analysis: Totem1
@@ -54,7 +56,7 @@
 
 
 %----------------------------------------------------------------------------------------------------
-\chapter{Ntuples}
+\chapter[ntuples]{Ntuples}
 
 \> current: /eos/totem/data/offline/2018/450GeV/beta100/Totem1/version3
 
@@ -63,59 +65,55 @@
 %----------------------------------------------------------------------------------------------------
 \chapter[beam-cond]{Beam conditions}
 
-\section[beam-cond-bunches]{Bunches}
+\> beam energy $E = 450\un{GeV}$, Lorenz $\ga \approx 479.7$
 
-\> TODO: add list of bunches used in different fills
+\> $\be^*_x = 70\un{m}$, $\be^*_y = 100\un{m}$
 
-\section[beam-cond-emittance]{Beam emittances}
+\> \plot{time_dependences/emittance.pdf}: normalised beam emittance as measured by BSRTs
+\>> typical value: $\ep_N = 1.5\un{\mu m}$
 
-\> \plot{time_dependences/emittance.pdf}: beam emittance as measured by BSRTs
+\> single beam properties can be derived from normalised emittance $\ep_N$:
+\eqref{
+\si(\th^*_{x,\rm bd}) = \sqrt{\ep_N\over\ga \be^*_x}\ ,\qquad \si(x^*_{\rm sb}) = \sqrt{\ep_N \be^*_x\over \ga}
+}{si be prop}
+and likewise for $y$
+\>> $\si(\th^*_{x,\rm bd})$ refers to angular fluctuations, i.e.~beam divergence
+\>>> typical values: $6.7\un{\mu rad}$ (x), $5.6\un{\mu rad}$ (y)
+\>> $\si(x^*_{\rm sb})$ corresponds to single-beam width
+\>>> typical values: $470\un{\mu m}$ (x), $560\un{\mu m}$ (y)
 
-\section[beam-cond-rates]{Rates}
+\> the size of the beam spot (RMS of the 2-beam interaction vertex) can be related to the single-beam size:
+\eqref{
+\si(x^*) = \si(x^*_{\rm sb}) / \sqrt 2
+}{vertex size}
+and likewise for $y$
+\>> typical values: $330\un{\mu m}$ (x), $395\un{\mu m}$ (y)
 
-\> plots of rates vs.~time
-\>> \plot{time_dependences/event_category_rates.pdf}: rates of different event categories, per RP
+\> see Section \sref{resolution} for comparison of
+\>> beam divergence estimated here to angular-reconstruction resolution
+\>> vertex size estimated here to reconstructed vertex RMS
 
+\> optical functions are give in Section \sref{optics}
 
-
-%----------------------------------------------------------------------------------------------------
-\chapter{Reconstruction formulae}
-
-
-\> \plot{reconstruction_formulae/plot_formulae_graphs.pdf} : study of performance of various reconstruction formulae
-\>> formulae
-\>>> using different RPs as input
-\>>> combining the input in various ways
-\>> studying the impact of various effects: beam divergence, vertex, pitch, ...
-
-\> the above study summarised in the following plots:
-\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_th_x.pdf}: horizontal scattering angle
-\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_th_y.pdf}: vertical scattering angle
-\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_vtx_x.pdf}: horizontal vertex
-\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_vtx_y.pdf}: vertical vertex
-
-\iffalse
-\> \plot{reconstruction_formulae/plot_formulae_correlation.pdf} : study of left-right correlations of angle reconstruction errors
-\>> significant in $x$ due to neglecting $x^*$
-\fi
-
-\> formulae used
-\>> horizontal plane
-\>>> single pot: $\displaystyle \th_x^{*} = \mp {x\over L_x}$
-\>>> single arm: $\displaystyle {v_x^F x^N - v_x^N x^F\over v_x^F L_x^N - v_x^N L_x^F}$
-\>>> double arm: average of single arm, $\th_x^* = (\th_x^{*,R} + \th_x^{*,L}) / 2$
-\>> vertical plane
-\>>> single pot: $\displaystyle \th_y^{*} = \mp {y\over L_y}$
-\>>> single arm: $\displaystyle \th_y^{*} = (\th_y^{*,F} + \th_y^{*,N}) / 2$
-\>>> double arm: average of single arm, $\th_y^* = (\th_y^{*,R} + \th_y^{*,L}) / 2$
-
+\> bunches available
+\>> 7280: 11, 520, 1019, 1541, 2067, 2555
+\>> 7281: 11, 520, 1019, 1541, 2067, 2555
+\>> 7282: 11, 520, 1019, 1541, 2067, 2555
+\>> 7283: 11, 520, 1019, 1541, 2067, 2555
+\>> 7284: 11, 1019, 1541, 2067, 2555
+\>> 7285: 11, 520, 1019, 1541, 2067, 2555
+\>> 7286: 11, 520, 1019, 1541, 2067, 2555
+\>> 7287: 11, 520, 1019, 1541, 2067, 2555
+\>> 7288: 11, 520, 1019, 1541, 2067, 2555
+\>> 7289: 11, 520, 1019, 1541, 2067
+\>> 7290: 11, 520, 1019, 1541, 2067, 2555
+\>> 7291: 11, 520, 1019, 1541, 2067, 2555
 
 
 
 %----------------------------------------------------------------------------------------------------
 \chapter[alignment]{Alignment}
 
-\iffalse
 
 \section[alignment-det]{Determination}
 
@@ -123,6 +121,8 @@
 \>> beam-based alignment: before data-taking
 \>> track-based alignment: relative alignment between RP sensors
 \>> alignment with elastics: absolute alignment wrt.~LHC beam
+
+\iffalse
 
 \> uncertainty of track-based alignment
 \>> horizontal shift: $5\un{\mu m}$
@@ -161,28 +161,28 @@
 
 \fi
 
+\> validation plots are discussed in Section \sref{reco-checks}
+
+
 
 %----------------------------------------------------------------------------------------------------
 \chapter[optics]{Optics}
 
-\iffalse
+\> currently, the nominal optics is used (confirmed to be OK by Frici on 26 Feb 2020)
 
-\> by default matched optics is used.
-
-\section[optics-matched]{Matched optics}
-
-\> optics sent by Frici on 18 July 2017:
+\> optical functions (sent by Frici on 26 Feb 2020)
 
 \centerline{\vbox{\halign{#\quad\hfil & $#$\quad\hfil & $#$\quad\hfil & $#$\quad & $#$\quad\hfil\cr\ln
 unit & v_x & L_x\unp{m} & v_y & L_y\unp{m} \cr\ln
-56-210-far & -0.624480890678214 & 71.6313352966373 & +0.0256382652163028 & 249.560912271120\cr
-56-220-far & -0.532035445567328 & 49.8325814100747 & +0.0016551137486863 & 288.785773998112\cr
-45-210-far & -0.634471991166059 & 73.0465736552453 & +0.0087825192548474 & 244.675106371203\cr
-45-220-far & -0.539640116704832 & 51.0992887566237 & -0.0184435346429805 & 282.962119245175\cr
+56-210-far & -2.29251110442821 & 35.1828162653735 & 0.126220649033512 & 171.911207102938\cr
+56-220-far & -1.97644302902099 & 27.2787476702851 & 0.100459146707445 & 192.282747401847\cr
+45-210-far & -2.24947329593445 & 35.8475945504415 & 0.124161170232800 & 173.630053228259\cr
+45-220-far & -1.93196310652978 & 27.6759142870506 & 0.098769215019425 & 194.499649253117\cr
 \ln
 }}}
 
-\> uncertainties sent by Frici on 13 Oct 2017
+\> uncertainties -- not yet available
+\iffalse
 \>> 3 leading eigen modes reproduce the matrix sufficiently well
 \>> propagated to relative uncertainties of scattering angles by program "reconstruction\_formulae/print\_optics\_uncertainties"
 \>>> left-arm reconstruction: $\si(\de\th^*_x) = 0.00173$, $\si(\de\th^*_y) = 0.00152$
@@ -194,50 +194,67 @@ unit & v_x & L_x\unp{m} & v_y & L_y\unp{m} \cr\ln
 \>>> mode 1: -1.608E-03, +1.473E-03, -1.630E-03, +1.477E-03
 \>>> mode 2: -5.157E-04, +2.541E-05, +5.566E-04, +2.746E-05
 \>>> mode 3: +3.617E-04, +3.625E-04, +3.006E-04, +3.641E-04
-
-
-\section[optics-validation]{Validation}
-
-\> \plot{optics/optics_test_summary.pdf}: left-right differences in reconstructed scattering angles plotted as a function of the scattering angle
-\>> shifts (fit extrapolated to 0): due to misalignments
-\>> tilts (slope): due to optics
-
 \fi
 
 
-
-%----------------------------------------------------------------------------------------------------
-\chapter[reco-checks]{Reconstruction checks}
-
-\> method
-\>> elastic events should have symmetries which can be checked in the data
-\>> reconstruction from subsets of the RPs should give compatible results
-\>> in particular, reconstructed scattering angles and vertex should be
-\>>> compatible between arms
-\>>> compatible between near and far RPs
-
-\> interpretation of deviations
-\>> deviations proportional to scattering angle are likely to be due to optics
-\>> deviations independent of scattering angle are likely to be due to alignment
-
-\> in case deviations are present: hopefully they are not time dependent
-
-\> \plot{angular_distributions/ang_dist_diff_vs_angle_2D.pdf}: angular deltas as function of scattering angle, 2D histogram representation
-\> \plot{angular_distributions/ang_dist_diff_vs_angle_prof.pdf}: angular deltas as function of scattering angle, profile representation
-
-\> \plot{angular_distributions/ang_dist_mean_diff_vs_time.pdf}: angular deltas as function of time
-
-\> \plot{angular_distributions/ang_dist_mean_th_x_vs_time.pdf}: mean value of horizontal scattering angle (maximum within RP acceptance) as function of time
-
-\> \plot{angular_distributions/ang_dist_th_y_vs_th_x_cmp_fill.pdf}: vertical vs.~horizontal scattering angles, 2D histogram
-
-\> \plot{angular_distributions/ang_dist_mean_th_x_vs_th_y.pdf}: mean horizontal scattering angle vs.~vertical scattering angle
-
+\> validation plots are discussed in Section \sref{reco-checks}
 
 
 
 %----------------------------------------------------------------------------------------------------
-\chapter{Cuts/elastic tagging}
+\chapter[hit-dist]{Hit distributions}
+
+\> \plot{hit_distributions/hit_distributions.pdf}: hit distribution prior to elastic event selection
+
+\> \plot{hit_distributions/hit_distributions_sel_cmp.pdf}: hit distribution with and without elastic event selection from Section \sref{cuts}
+
+
+
+%----------------------------------------------------------------------------------------------------
+\chapter[reco-form]{Reconstruction formulae}
+
+\> method: MC simulation using parameters from Section \sref{beam-cond}
+
+\> \plot{reconstruction_formulae/plot_formulae_graphs.pdf} : study of performance of various kinematics reconstruction formulae
+\>> formulae
+\>>> using different RPs as input
+\>>> combining the input in various ways
+\>> studying the impact of various effects: beam divergence, vertex, pitch, ...
+
+\> the above study summarised in the following plots:
+\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_th_x.pdf}: horizontal scattering angle
+\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_th_y.pdf}: vertical scattering angle
+\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_vtx_x.pdf}: horizontal vertex
+\>> \plot{reconstruction_formulae/plot_formulae_graphs_desc_vtx_y.pdf}: vertical vertex
+
+\iffalse
+\> \plot{reconstruction_formulae/plot_formulae_correlation.pdf} : study of left-right correlations of angle reconstruction errors
+\>> significant in $x$ due to neglecting $x^*$
+\fi
+
+\> angular formulae selected for analysis
+\>> horizontal plane
+\>>> single pot: $\displaystyle \th_x^{*} = \mp {x\over L_x}$
+\>>> single arm: $\displaystyle {v_x^F x^N - v_x^N x^F\over v_x^F L_x^N - v_x^N L_x^F}$, resolution: $\approx 9\un{\mu rad}$ (beam divergence + pitch)
+\>>> double arm: average of single arm, $\th_x^* = (\th_x^{*,R} + \th_x^{*,L}) / 2$
+\>> vertical plane
+\>>> single pot: $\displaystyle \th_y^{*} = \mp {y\over L_y}$
+\>>> single arm: $\displaystyle \th_y^{*} = (\th_y^{*,F} + \th_y^{*,N}) / 2$, resolution: $\approx 5.6\un{\mu rad}$ (beam divergence)
+\>>> double arm: average of single arm, $\th_y^* = (\th_y^{*,R} + \th_y^{*,L}) / 2$
+
+\> vertex formulae selected for analysis
+\>> horizontal plane
+\>>> single arm: $\displaystyle {x^N L_x^F - x^F L_x^N\over v_x^N L_x^F - v^F L_x^N}$, resolution: $\approx 78\un{\mu m}$ (pitch)
+\>>> double arm: L-R average, resolution: $\approx 55\un{\mu rad}$ (pitch)
+\>> vertical plane
+\>>> single arm: $\displaystyle {y^N L_y^F - y^F L_y^N\over v_y^N L_y^F - v^F L_y^N}$, resolution: $\approx 450\un{\mu m}$ (pitch)
+\>>> double arm: L-R average, resolution: $\approx 320\un{\mu rad}$ (pitch)
+
+
+
+
+%----------------------------------------------------------------------------------------------------
+\chapter[cuts]{Cuts/elastic tagging}
 
 \> event selection
 \>> apply bunch selection
@@ -264,16 +281,7 @@ unit & v_x & L_x\unp{m} & v_y & L_y\unp{m} \cr\ln
 
 
 %----------------------------------------------------------------------------------------------------
-\chapter{Hit distributions}
-
-\> \plot{hit_distributions/hit_distributions.pdf}: hit distribution prior to elastic event selection
-
-\> \plot{hit_distributions/hit_distributions_sel_cmp.pdf}: hit distribution with and without elastic event selection
-
-
-
-%----------------------------------------------------------------------------------------------------
-\chapter{Efficiency and purity of cuts, background}
+\chapter[cut-eff-bckg]{Efficiency and purity of cuts, background}
 
 \section{Background studies}
 
@@ -336,6 +344,35 @@ unit & v_x & L_x\unp{m} & v_y & L_y\unp{m} \cr\ln
 
 
 %----------------------------------------------------------------------------------------------------
+\chapter[reco-checks]{Reconstruction checks}
+
+\> method
+\>> elastic events should have symmetries which can be checked in the data
+\>> reconstruction from subsets of the RPs should give compatible results
+\>> in particular, reconstructed scattering angles and vertex should be
+\>>> compatible between arms
+\>>> compatible between near and far RPs
+
+\> interpretation of deviations
+\>> deviations proportional to scattering angle are likely to be due to optics
+\>> deviations independent of scattering angle are likely to be due to alignment
+
+\> in case deviations are present: hopefully they are not time dependent
+
+\> \plot{angular_distributions/ang_dist_diff_vs_angle_2D.pdf}: angular deltas as function of scattering angle, 2D histogram representation
+\> \plot{angular_distributions/ang_dist_diff_vs_angle_prof.pdf}: angular deltas as function of scattering angle, profile representation
+
+\> \plot{angular_distributions/ang_dist_mean_diff_vs_time.pdf}: angular deltas as function of time
+
+\> \plot{angular_distributions/ang_dist_mean_th_x_vs_time.pdf}: mean value of horizontal scattering angle (maximum within RP acceptance) as function of time
+
+\> \plot{angular_distributions/ang_dist_th_y_vs_th_x_cmp_fill.pdf}: vertical vs.~horizontal scattering angles, 2D histogram
+
+\> \plot{angular_distributions/ang_dist_mean_th_x_vs_th_y.pdf}: mean horizontal scattering angle vs.~vertical scattering angle
+
+
+
+%----------------------------------------------------------------------------------------------------
 \chapter[resolution]{Resolution}
 
 \> resolution is typically studied by comparing kinematics of the elastic protons reconstructed in the left and right arm
@@ -344,12 +381,26 @@ unit & v_x & L_x\unp{m} & v_y & L_y\unp{m} \cr\ln
 \> in addition, the empirical resolution results can be compared to the prediction based on the measured emittance, see Section \sref{beam-cond} -- this prediction is drawn in black in the plots below
 
 \> \plot{resolution/th_x_diffLR_vs_time.pdf}: time dependence of $\th^*_x$ resolution
-\> \plot{resolution/th_y_diffLR_vs_time.pdf}:  time dependence of $\th^*_y$ resolution
+\>>> black gives beam divergence component only
+\>>> black significantly better than the observed resolution
 
-\> \plot{resolution/vtx_x_diffLR_vs_time.pdf}:  time dependence of $x^*$ resolution
+\> \plot{resolution/th_y_diffLR_vs_time.pdf}: time dependence of $\th^*_y$ resolution
+\>>> black gives beam divergence component only
+\>>> black roughly as the observed resolution
+
+\> \plot{resolution/vtx_x_diffLR_vs_time.pdf}: time dependence of $x^*$ resolution
+\>> typical value $\si[\De^{R-L} x^*] \approx 500\un{\mu m}$
+\>> according to Section \sref{reco-form}, it should be $\approx 110\un{\mu m}$, thus much better
+
+\> \plot{resolution/vtx_y_diffLR_vs_time.pdf}: time dependence of $y^*$ resolution
+\>> typical value $\si[\De^{R-L} y^*] \approx 2500\un{\mu m}$
+\>> according to Section \sref{reco-form}, it should be $\approx 640\un{\mu m}$, thus much better
 
 \> \plot{resolution/vtx_x_vs_time.pdf}: time dependence of reconstructed $x^*$ RMS (without subtracting the resolution)
-\> \plot{resolution/vtx_y_vs_time.pdf}: time dependence of reconstructed $x^*$ RMS (without subtracting the resolution)
+\>> typical value $450\un{\mu m}$, after subtracting resolution ($250\un{\mu m}$) gives vertex size of $370\un{\mu m}$ which corresponds roughly to the black line and Section \sref{beam-cond}
+
+\> \plot{resolution/vtx_y_vs_time.pdf}: time dependence of reconstructed $y^*$ RMS (without subtracting the resolution)
+\>> typical value $1300\un{\mu m}$, after subtracting resolution ($1250\un{\mu m}$) gives vertex size of $360\un{\mu m}$ which corresponds roughly to the black line and Section \sref{beam-cond}
 
 \> \plot{resolution/resolution_fits.pdf}: fits of the resolution time dependence as used in the acceptance correction, see Section \sref{acc-corr}
 

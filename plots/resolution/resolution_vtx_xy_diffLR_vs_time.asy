@@ -26,6 +26,7 @@ diagonals.push("45t_56b"); d_labels.push("45t -- 56b"); d_pens.push(blue);
 string quantities[], q_timber[], q_labels[];
 real q_maxs[];
 quantities.push("vtx_x"); q_labels.push("x^*"); q_maxs.push(1000.);
+quantities.push("vtx_y"); q_labels.push("y^*"); q_maxs.push(5000.);
 
 xSizeDef = 40cm;
 ySizeDef = 6cm;
