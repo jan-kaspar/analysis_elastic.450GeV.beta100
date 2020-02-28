@@ -11,6 +11,10 @@ string datasets[] = {
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
+transform xyswitch = (0, 0, 0, 1, 1, 0);
+
+TGraph_errorBar = None;
+
 //----------------------------------------------------------------------------------------------------
 
 for (int dsi : datasets.keys)
@@ -31,12 +35,16 @@ for (int dsi : datasets.keys)
 	//TH2_z_max = 3.75;
 
 	// 45 bottom - 56 top
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root", "selected - angles/h2_th_y_vs_th_x"), "def");
+	string f = top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root";
+	draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_vs_th_x"), "def");
+	draw(scale(1e6, 1e6) * xyswitch, RootGetObject(f, "selected - angles/g_mode_th_x_vs_th_y"), "p");
 	
 	// 45 top - 56 bottom
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root", "selected - angles/h2_th_y_vs_th_x"), "p");
+	string f = top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root";
+	draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_vs_th_x"), "p");
+	draw(scale(1e6, 1e6) * xyswitch, RootGetObject(f, "selected - angles/g_mode_th_x_vs_th_y"), "p");
 	
-	limits((-600, -250), (600, 250), Crop);
+	limits((-500, -200), (500, 200), Crop);
 	AttachLegend(datasets[dsi]);
 }
 

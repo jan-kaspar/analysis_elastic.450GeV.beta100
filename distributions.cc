@@ -218,6 +218,49 @@ struct OpticsMatchingInput
 };
 
 //----------------------------------------------------------------------------------------------------
+
+void AnalyzeMode(TH2D *h2_input, const string &name)
+{
+	TF1 *f_gauss = new TF1("f_gauss", "[0] * exp(- (x-[1])*(x-[1]) / 2 / [2]/[2])");
+
+	TGraphErrors *g_mode_th_x_vs_th_y = new TGraphErrors();
+
+	for (int byi = 1; byi <= h2_input->GetNbinsY(); ++byi)
+	{
+		const double th_y = h2_input->GetYaxis()->GetBinCenter(byi);
+
+		if (fabs(th_y) > 80E-6)
+			continue;
+
+		TH1D *slice = h2_input->ProjectionX("", byi, byi);
+
+		if (slice->GetEntries() < 100)
+			continue;
+
+		f_gauss->SetParameters(100, 0E-6, 20E-6);
+		slice->Fit(f_gauss, "Q", "", -50E-6, +50E-6);
+
+		//slice->Write("slice");
+
+		if (fabs(f_gauss->GetParameter(1)) > 20E-6)
+			continue;
+
+		if (f_gauss->GetParError(1) > 30E-6)
+			continue;
+
+		int idx = g_mode_th_x_vs_th_y->GetN();
+		g_mode_th_x_vs_th_y->SetPoint(idx, th_y, f_gauss->GetParameter(1));
+		g_mode_th_x_vs_th_y->SetPointError(idx, 0., f_gauss->GetParError(1));
+	}
+
+	delete f_gauss;
+
+	g_mode_th_x_vs_th_y->Fit("pol1", "Q");
+
+	g_mode_th_x_vs_th_y->Write(name.c_str());
+}
+
+//----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
 int main(int argc, char **argv)
@@ -1850,8 +1893,11 @@ int main(int argc, char **argv)
 	p_th_x_R_vs_th_y_R->Write();
 
 	h2_th_y_L_vs_th_x_L->Write();
+	AnalyzeMode(h2_th_y_L_vs_th_x_L, "g_mode_th_x_L_vs_th_y_L");
 	h2_th_y_R_vs_th_x_R->Write();
+	AnalyzeMode(h2_th_y_R_vs_th_x_R, "g_mode_th_x_R_vs_th_y_R");
 	h2_th_y_vs_th_x->Write();
+	AnalyzeMode(h2_th_y_vs_th_x, "g_mode_th_x_vs_th_y");
 
 	g_th_y_L_vs_th_x_L->Write();
 	g_th_y_R_vs_th_x_R->Write();
