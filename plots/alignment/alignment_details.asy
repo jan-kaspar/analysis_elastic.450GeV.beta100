@@ -58,7 +58,7 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/y_hist|y_hist"), "d0,vl", blue);
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/y_hist|y_hist_range"), "d0,vl", red+1pt);
 	
-		limits((-30, 1), (+30, 1e3), Crop);
+		limits((-30, 1e2), (+30, 1e3), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
 	}
 	

@@ -76,11 +76,12 @@ for (int ui : units.keys)
 	
 	if (drawFit)
 	{
-		real unc = 2;
 		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/a_fit");
-		//draw(shift(0, +unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit"), "l", red+dashed);
+		real unc = 5;
+
+		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
 		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
-		//draw(shift(0, -unc)*swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", ""+units[ui]+"/a_fit"), "l", red+dashed);
+		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
@@ -154,11 +155,11 @@ for (int ui : units.keys)
 	if (drawFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/c_fit");
-		real unc = 150;
+		real unc = 300;
 
-		//draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
+		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
 		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
-		//draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
+		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);

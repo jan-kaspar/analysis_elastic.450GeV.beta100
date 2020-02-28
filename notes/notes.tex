@@ -117,24 +117,38 @@ and likewise for $y$
 
 \section[alignment-det]{Determination}
 
-\> method: standard procedure
+\> strategy: standard procedure
 \>> beam-based alignment: before data-taking
 \>> track-based alignment: relative alignment between RP sensors
 \>> alignment with elastics: absolute alignment wrt.~LHC beam
 
-\iffalse
+\> track-based alignment
+\>> method: minimise track-hit residuals
+\>> external analysis repository
+\>> uncertainties
+\>>> horizontal shift: $TODO\un{\mu m}$
+\>>> vertical shift: $TODO\un{\mu m}$
+\>>> rotation about $z$: $TODO\un{mrad}$
 
-\> uncertainty of track-based alignment
-\>> horizontal shift: $5\un{\mu m}$
-\>> vertical shift: $5\un{\mu m}$
-\>> rotation about $z$: $1\un{mrad}$
+\> alignment with elastics
+\>> method: illustrated in \plot{alignment/alignment_method.pdf}
 
-\> uncertainty of elastic alignment
-\>> horizontal shift: $25\un{\mu m}$
-\>> vertical shift: $100\un{\mu m}$
-\>> rotation about $z$: $2\un{mrad}$
+\>> \plot{alignment/alignment_details.pdf}: detailed examples of the alignment extraction
+
+\>> \plot{alignment/alignment_horizontal_overview.pdf}: details of horizontal-alignment fits for several fills and periods
+
+\>> \plot{alignment/alignment.pdf}: result summary for all fills
+
+\>> uncertainties
+\>>> horizontal shift: $150\un{\mu m}$
+\>>> vertical shift: $300\un{\mu m}$
+\>>> rotation about $z$: $5\un{mrad}$
+
+\> TODO: fine tuning with reco-check plots (also add to the strategy overview on top of this section)
 
 \> induced uncertainties
+\>> TODO
+\iffalse
 \>> shift in $\th_x^*$: $0.50\un{\mu rad}$ (single arm), $0.35\un{\mu rad}$ (double arm)
 \>> shift in $\th_y^*$ (correlated top-bottom): $0.35\un{\mu rad}$ (single arm), $0.25\un{\mu rad}$ (double arm)
 \>> shift in $\th_y^*$ (uncorrelated top-bottom): $0.017\un{\mu rad}$ (single arm), $0.012\un{\mu rad}$ (double arm)
