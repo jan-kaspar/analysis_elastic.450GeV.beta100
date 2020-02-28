@@ -51,7 +51,7 @@ for (int dsi : datasets.keys)
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
 		scale(Linear, Linear, Log);
-		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_L_vs_th_x_L"), "def");
+		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_L_vs_th_x_L"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L_l"), "l", black+1pt);
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L_h"), "l", magenta+1pt);
@@ -63,7 +63,7 @@ for (int dsi : datasets.keys)
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
 		scale(Linear, Linear, Log);
-		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_R_vs_th_x_R"), "def");
+		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_R_vs_th_x_R"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R_l"), "l", black+2pt);
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R_h"), "l", magenta+2pt);
@@ -75,7 +75,7 @@ for (int dsi : datasets.keys)
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
 		scale(Linear, Linear, Log);
-		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_vs_th_x"), "def");
+		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_vs_th_x"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G_l"), "l", black+2pt);
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G_h"), "l", magenta+2pt);

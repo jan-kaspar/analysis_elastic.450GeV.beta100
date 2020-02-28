@@ -78,10 +78,10 @@ for (int dsi : dataSets.keys)
 	//TH2_z_max = 3.75;
 
 	// 45 bottom - 56 top
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45b_56t.root", "acceptance correction/h_th_y_vs_th_x_after"), "def");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45b_56t.root", "acceptance correction/h2_th_y_vs_th_x_after"), "def");
 	
 	// 45 top - 56 bottom
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45t_56b.root", "acceptance correction/h_th_y_vs_th_x_after"), "p");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+dataSets[dsi]+"/distributions_45t_56b.root", "acceptance correction/h2_th_y_vs_th_x_after"), "p");
 	
 	draw((-350, cut_th_y_low_top)--(+350, cut_th_y_low_top), magenta+1pt);
 	draw((-350, cut_th_y_low_bot)--(+350, cut_th_y_low_bot), magenta+1pt);
