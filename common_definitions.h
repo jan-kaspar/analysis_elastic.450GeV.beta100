@@ -630,10 +630,10 @@ struct Kinematics
 
 struct CutData
 {
-	double cqa[11];	///< array of quantities qa
-	double cqb[11];	///< array of quantities qb
-	double cv[11];	///< array of cut quantities v = a*qa + b*qb + c
-	bool ct[11];	///< array of flags whether |v| < n_si * si
+	double cqa[12];	///< array of quantities qa
+	double cqb[12];	///< array of quantities qb
+	double cv[12];	///< array of cut quantities v = a*qa + b*qb + c
+	bool ct[12];	///< array of flags whether |v| < n_si * si
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -755,8 +755,8 @@ struct Analysis
 	std::vector< std::pair<double, double> > timeIntervals;
 
 	unsigned int N_cuts;	// number of cuts - indexed from 1!
-	string cqaN[11], cqbN[11];
-	double cca[11], ccb[11], ccc[11], csi[11];
+	string cqaN[12], cqbN[12];
+	double cca[12], ccb[12], ccc[12], csi[12];
 	std::vector<unsigned int> cuts;	// list of active cuts
 
 	// fiducial cuts

@@ -566,6 +566,8 @@ int main(int argc, char **argv)
 		if (i == 9) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 		if (i == 10) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 
+		if (i == 11) { x_min = -2.5; x_max = +2.5; y_min = -150E-6; y_max = +150E-6; q_max = 150E-6; }
+
 		if ((i == 2 || i == 5 || i == 6) && diagonal == d45t_56b)
 		{
 			swap(x_min, x_max);
