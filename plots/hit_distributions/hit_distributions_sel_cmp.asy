@@ -27,7 +27,7 @@ scale(Linear, Linear, Log);
 
 TH2_z_max = 5e2;
 
-draw(RootGetObject(f, "hit distributions/vertical, aligned, before selection/h_y_"+rp+"_vs_x_"+rp+"_al_nosel"), "p,bar");
+draw(RootGetObject(f, "hit distributions/vertical, aligned, before selection/h2_y_"+rp+"_vs_x_"+rp+"_al_nosel"), "p,bar");
 
 limits((-15, -30), (+15, +30), Crop);
 AttachLegend("before cuts", S, N);
@@ -37,9 +37,9 @@ AttachLegend("before cuts", S, N);
 NewPad("$x\ung{mm}$", "$y\ung{mm}$");
 scale(Linear, Linear, Log);
 
-TH2_z_max = 2e3;
+TH2_z_max = 5e2;
 
-draw(RootGetObject(f, "hit distributions/vertical, aligned, after selection/h_y_"+rp+"_vs_x_"+rp+"_al_sel"), "p,bar");
+draw(RootGetObject(f, "hit distributions/vertical, aligned, after selection/h2_y_"+rp+"_vs_x_"+rp+"_al_sel"), "p,bar");
 
 limits((-15, -30), (+15, +30), Crop);
 AttachLegend("after cuts", S, N);

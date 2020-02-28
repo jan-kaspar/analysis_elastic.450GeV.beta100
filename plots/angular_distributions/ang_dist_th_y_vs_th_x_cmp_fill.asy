@@ -20,8 +20,8 @@ for (int dsi : datasets.keys)
 
 	real ySize = 6cm;
 
-	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/150*150, ySize);
-	//currentpad.xTicks = LeftTicks(50., 10.);
+	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/150*150, ySize, axesAbove=true);
+	currentpad.xTicks = LeftTicks(200., 100.);
 	scale(Linear, Linear, Log);
 	//TH2_zLabel = "(corrected) events per bin";
 	TH2_paletteBarWidth = 0.05;
@@ -31,10 +31,10 @@ for (int dsi : datasets.keys)
 	//TH2_z_max = 3.75;
 
 	// 45 bottom - 56 top
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root", "selected - angles/h_th_y_vs_th_x"), "def");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root", "selected - angles/h2_th_y_vs_th_x"), "def");
 	
 	// 45 top - 56 bottom
-	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root", "selected - angles/h_th_y_vs_th_x"), "p");
+	draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root", "selected - angles/h2_th_y_vs_th_x"), "p");
 	
 	limits((-600, -250), (600, 250), Crop);
 	AttachLegend(datasets[dsi]);
