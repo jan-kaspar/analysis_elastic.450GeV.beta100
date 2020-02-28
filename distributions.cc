@@ -831,34 +831,6 @@ int main(int argc, char **argv)
 
 	TGraph *g_norm_corr_vs_div_corr = new TGraph(); g_norm_corr_vs_div_corr->SetName("g_norm_corr_vs_div_corr"); g_norm_corr_vs_div_corr->SetTitle(";div_corr;norm_corr");
 
-	// book background histograms
-	map<unsigned int, TH1D *> hb_cq;
-	for (unsigned int ci = 1; ci <= anal.N_cuts; ++ci)
-	{
-		char name[100], title[100];
-		sprintf(name, "hb_cq%i", ci); sprintf(title, ";cq%i", ci); hb_cq[ci] = new TH1D(name, title, 6000, -1000, +1000); 
-	}
-
-	TH1D *hb_th_x_L = new TH1D("hb_th_x_L", ";-#theta_{x}^{L}", 100, 0, 0); hb_th_x_L->Sumw2();
-	TH1D *hb_th_x_R = new TH1D("hb_th_x_R", ";#theta_{x}^{R}", 100, 0, 0); hb_th_x_R->Sumw2();
-	TH1D *hb_th_y_L = new TH1D("hb_th_y_L", ";#theta_{y}^{L}", 100, 0, 0); hb_th_y_L->Sumw2();
-	TH1D *hb_th_y_R = new TH1D("hb_th_y_R", ";#theta_{y}^{R}", 100, 0, 0); hb_th_y_R->Sumw2();
-
-	TH2D *h2b_th_y_L_vs_th_x_L = new TH2D("h2b_th_y_L_vs_th_x_L", ";-#theta_{x}^{L};#theta_{y}^{L}", 100, -2E-3, +2E-3, 200, -120E-6, 120E-6);
-	TH2D *h2b_th_y_R_vs_th_x_R = new TH2D("h2b_th_y_R_vs_th_x_R", ";#theta_{x}^{R};#theta_{y}^{R}", 100, -2E-3, +2E-3, 200, -120E-6, 120E-6);
-
-	TH1D *hb_th_y_diffLR = new TH1D("hb_th_y_diffLR", ";#theta_{y}^{R} - #theta_{y}^{L}", 500, 0, 0);
-	TH1D *hb_th_x_diffLR = new TH1D("hb_th_x_diffLR", ";#theta_{x}^{R} - #theta_{x}^{L}", 500, 0, 0);
-
-	TH2D *h2b_th_y_diffLR_vs_th_y = new TH2D("h2b_th_y_diffLR_vs_th_y", ";#theta_{y};#theta_{y}^{R} - #theta_{y}^{L}", 100, 0, 0, 100, 0, 0);
-	TH2D *h2b_th_x_diffLR_vs_th_y = new TH2D("h2b_th_x_diffLR_vs_th_y", ";#theta_{y};#theta_{x}^{R} - #theta_{x}^{L}", 100, 0, 0, 100, 0, 0);
-
-	TH2D *h2b_th_y_L_vs_th_y_R = new TH2D("h2b_th_y_L_vs_th_y_R", ";-#theta_{y}^{R};#theta_{y}^{L}", 100, 0, 0, 100, 0, 0);
-	TH2D *h2b_th_x_L_vs_th_x_R = new TH2D("h2b_th_x_L_vs_th_x_R", ";-#theta_{x}^{R};#theta_{x}^{L}", 100, 0, 0, 100, 0, 0);
-
-	TH1D *hb_th_y_6cut = new TH1D("hb_th_y_6cut", ";|#theta_{y}|", 200, 0, 100E-6); hb_th_y_6cut->Sumw2();
-	TH1D *hb_th_y_6cut_cut7fail = new TH1D("hb_th_y_6cut_cut7fail", ";|#theta_{y}|", 100, 0, 100E-6); hb_th_y_6cut_cut7fail->Sumw2();
-
 	// zero counters
 	unsigned long n_ev_full = 0;
 	map<unsigned int, unsigned long> n_ev_cut;
@@ -981,27 +953,9 @@ int main(int argc, char **argv)
 		printf("R_2_F: x / L_x = %E\n", h_al.R_2_F.x / env.L_x_R_2_F);
 		*/
 
-		// alternative theta_x reconstruction
-		/*
-		// this is used in the old 90m analysis (for the PRL publication)
-		double ta_x = (h_al.x_R_F - h_al.x_R_N - h_al.x_L_F + h_al.x_L_N) / (env.L_x_R_F - env.L_x_R_N) / 2.;
-		*/
-
-		// alternative theta_y reconstruction
-		/*
-		double D_y_L = - env.L_y_L_N * env.v_y_L_F + env.L_y_L_F * env.v_y_L_N;
-		double ta_y_L = (env.v_y_L_F * h_al.y_L_N - env.v_y_L_N * h_al.y_L_F) / D_y_L;
-
-		double D_y_R = env.L_y_R_N * env.v_y_R_F - env.L_y_R_F * env.v_y_R_N;
-		double ta_y_R = (env.v_y_R_F * h_al.y_R_N - env.v_y_R_N * h_al.y_R_F) / D_y_R;
-
-		double ta_y = (ta_y_L + ta_y_R) / 2.;
-		*/
-
 		// cut evaluation
 		CutData cd;
 		bool select = anal.EvaluateCuts(h_al, k, cd);
-		//bool bckg = !select;
 
 		// increment counters
 		n_ev_full++;
@@ -1011,62 +965,12 @@ int main(int argc, char **argv)
 				n_ev_cut[ci]++;
 		}
 
-		// fill background distributions
-		for (unsigned int qi = 1; qi <= anal.N_cuts; ++qi)
-		{
-			bool reduced_select = true;
-			for (unsigned int i = 0; i < anal.cuts.size(); i++)
-			{
-				unsigned int ci = anal.cuts[i];
-				if (ci != qi)
-					reduced_select &= cd.ct[ci];
-			}
-
-			if (reduced_select) {
-				hb_cq[qi]->Fill(cd.cv[qi] / anal.csi[qi]);
-			}
-		}
-
-		/*
-		if (bckg) {
-			hb_th_y_L->Fill(th_y_L);
-			hb_th_y_R->Fill(th_y_R);
-			hb_th_x_L->Fill(-th_x_L);
-			hb_th_x_R->Fill(th_x_R);
-
-			h2b_th_y_L_vs_th_x_L->Fill(-th_x_L, th_y_L);
-			h2b_th_y_R_vs_th_x_R->Fill(th_x_R, th_y_R);
-
-			hb_th_y_diffLR->Fill(th_y_R - th_y_L);
-			hb_th_x_diffLR->Fill(th_x_R - th_x_L);
-
-			h2b_th_y_diffLR_vs_th_y->Fill(th_y, th_y_R - th_y_L);
-			h2b_th_x_diffLR_vs_th_y->Fill(th_y, th_x_R - th_x_L);
-
-			h2b_th_y_L_vs_th_y_R->Fill(th_y_R, th_y_L);
-			h2b_th_x_L_vs_th_x_R->Fill(th_x_R, th_x_L);
-		}
-		*/
-
 		// fill no-cut histograms
 		for (unsigned int ci = 1; ci <= anal.N_cuts; ++ci)
 		{
 			//h2_cq_full[ci]->Fill(ccb[ci]*cqa[ci] - cca[ci]*cqb[ci], cca[ci]*cqa[ci] + ccb[ci]*cqb[ci] + ccc[ci]);
 			h2_cq_full[ci]->Fill(cd.cqa[ci], cd.cqb[ci]);
 		}
-
-		/*
-		bool select_6cut = true;
-		for (unsigned int i = 0; i < cuts.size(); i++)
-			if (cuts[i] != 7)
-				select_6cut &= ct[cuts[i]];
-
-		if (select_6cut)
-			hb_th_y_6cut->Fill(fabs(th_y));
-
-		if (select_6cut && !ct[7])
-			hb_th_y_6cut_cut7fail->Fill(fabs(th_y));
-		*/
 
 		N_4outof4++;
 
@@ -1529,11 +1433,6 @@ int main(int argc, char **argv)
 	}
 
 	h2_th_y_vs_th_x_normalized->Scale(1., "width");
-
-	hb_th_x_L->Scale(1., "width");
-	hb_th_x_R->Scale(1., "width");
-	hb_th_y_L->Scale(1., "width");
-	hb_th_y_R->Scale(1., "width");
 
 	th_y_diffLR->Scale(1., "width");
 	th_x_diffLR->Scale(1., "width");
@@ -2213,56 +2112,6 @@ int main(int argc, char **argv)
 
 		bh_t_normalized_unsmeared[bi]->Write();
 		bh_t_normalized_unsmeared_rel_diff[bi]->Write();
-	}
-
-	gDirectory = outF->mkdir("background");
-	for (map<unsigned int, TH1D *>::iterator it = hb_cq.begin(); it != hb_cq.end(); ++it)
-		it->second->Write();
-
-	if (detailsLevel >= 2)
-	{
-		hb_th_y_L->SetLineColor(2);
-		hb_th_y_R->SetLineColor(4);
-
-		hb_th_y_L->Write();
-		hb_th_y_R->Write();
-
-		c = new TCanvas("th_y LR cmp");
-		c->SetLogy(1);
-		hb_th_y_L->Draw("");
-		hb_th_y_R->Draw("same");
-		c->Write();
-
-		hb_th_x_L->SetLineColor(2);
-		hb_th_x_R->SetLineColor(4);
-
-		hb_th_x_L->Write();
-		hb_th_x_R->Write();
-
-		c = new TCanvas("th_x LR cmp");
-		c->SetLogy(1);
-		hb_th_x_L->Draw("");
-		hb_th_x_R->Draw("same");
-		c->Write();
-
-		h2b_th_y_L_vs_th_x_L->Write();
-		h2b_th_y_R_vs_th_x_R->Write();
-
-		hb_th_y_diffLR->Write();
-		hb_th_x_diffLR->Write();
-
-		h2b_th_y_diffLR_vs_th_y->Write();
-		h2b_th_x_diffLR_vs_th_y->Write();
-
-		h2b_th_y_L_vs_th_y_R->Write();
-		h2b_th_x_L_vs_th_x_R->Write();
-
-		hb_th_y_6cut->Write();
-		hb_th_y_6cut_cut7fail->Write();
-		TH1D *hb_th_y_6cut_cut7failRatio = new TH1D(*hb_th_y_6cut_cut7fail);
-		hb_th_y_6cut_cut7failRatio->SetName("hb_th_y_6cut_cut7failRatio");
-		hb_th_y_6cut_cut7failRatio->Divide(hb_th_y_6cut);
-		hb_th_y_6cut_cut7failRatio->Write();
 	}
 
 	// print counters
