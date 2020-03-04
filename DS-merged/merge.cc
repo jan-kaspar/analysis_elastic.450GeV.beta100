@@ -93,8 +93,17 @@ struct Entry
 int main()
 {
 	vector<Entry> entries;
+	entries.push_back(Entry("DS-fill7280/Totem1", 1., "DS-fill7280", true));
+
 	entries.push_back(Entry("DS-fill7281/Totem1", 1., "DS-fill7281", true));
+
+	entries.push_back(Entry("DS-fill7282/Totem1", 1., "DS-fill7282", true));
+	entries.push_back(Entry("DS-fill7283/Totem1", 1., "DS-fill7283", true));
+	entries.push_back(Entry("DS-fill7284/Totem1", 1., "DS-fill7284", true));
+	entries.push_back(Entry("DS-fill7285/Totem1", 1., "DS-fill7285", true));
+
 	entries.push_back(Entry("DS-fill7289/Totem1", 1., "DS-fill7289", true));
+
 	entries.push_back(Entry("DS-fill7291/Totem1", 1., "DS-fill7291", true));
 
 	//entries.push_back(Entry("DS-firstParts", 1., "DS-firstParts", false));
