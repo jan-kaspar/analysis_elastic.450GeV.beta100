@@ -121,14 +121,14 @@ void Init_global_45b_56t()
 	anal.cut9_a = -0.28; anal.cut9_c = +0.02; anal.cut9_si = 0.14;
 	anal.cut10_a = -0.29; anal.cut10_c = +0.02; anal.cut10_si = 0.14;
 
-	anal.fc_L_l = FiducialCut( 35E-6, -330E-6, -1.05,  +75E-6, +0.15);
-	anal.fc_L_h = FiducialCut(135E-6, -250E-6, +0.56, +305E-6, -0.75);
+	anal.fc_L_l = FiducialCut( 32E-6, -330E-6, -1.05,  +75E-6, +0.15);
+	anal.fc_L_h = FiducialCut(125E-6, -250E-6, +0.50, +250E-6, -0.60);
 
-	anal.fc_R_l = FiducialCut( 35E-6, -330E-6, -1.05,  +75E-6, +0.15);
-	anal.fc_R_h = FiducialCut(135E-6, -250E-6, +0.56, +305E-6, -0.75);
+	anal.fc_R_l = FiducialCut( 32E-6, -330E-6, -1.05,  +75E-6, +0.15);
+	anal.fc_R_h = FiducialCut(125E-6, -250E-6, +0.50, +250E-6, -0.60);
 
-	anal.fc_G_l = FiducialCut( 37E-6, -325E-6, -1.10,  +70E-6, +0.15);
-	anal.fc_G_h = FiducialCut(130E-6, -245E-6, +0.56, +300E-6, -0.65);
+	anal.fc_G_l = FiducialCut( 34E-6, -325E-6, -1.10,  +70E-6, +0.15);
+	anal.fc_G_h = FiducialCut(120E-6, -245E-6, +0.50, +245E-6, -0.60);
 
 	// TODO
 	//unsmearing_file = "unfolding_fit_45b_56t_old.root";
@@ -156,14 +156,14 @@ void Init_global_45t_56b()
 	anal.cut9_a = -0.28; anal.cut9_c = +0.00; anal.cut9_si = 0.14;
 	anal.cut10_a = -0.29; anal.cut10_c = -0.02; anal.cut10_si = 0.14;
 
-	anal.fc_L_l = FiducialCut( 35E-6,  -75E-6, -0.20, +330E-6, +0.50);
-	anal.fc_L_h = FiducialCut(142E-6, -250E-6, +0.50, +250E-6, -0.56);
+	anal.fc_L_l = FiducialCut( 32E-6,  -75E-6, -0.20, +330E-6, +0.50);
+	anal.fc_L_h = FiducialCut(132E-6, -250E-6, +0.50, +250E-6, -0.50);
 
-	anal.fc_R_l = FiducialCut( 35E-6,  -75E-6, -0.20, +330E-6, +0.50);
-	anal.fc_R_h = FiducialCut(142E-6, -250E-6, +0.50, +250E-6, -0.56);
+	anal.fc_R_l = FiducialCut( 32E-6,  -75E-6, -0.20, +330E-6, +0.50);
+	anal.fc_R_h = FiducialCut(132E-6, -250E-6, +0.50, +250E-6, -0.50);
 
-	anal.fc_G_l = FiducialCut( 37E-6,  -70E-6, -0.20, +325E-6, +0.50);
-	anal.fc_G_h = FiducialCut(140E-6, -245E-6, +0.50, +245E-6, -0.56);
+	anal.fc_G_l = FiducialCut( 34E-6,  -70E-6, -0.20, +325E-6, +0.50);
+	anal.fc_G_h = FiducialCut(130E-6, -245E-6, +0.50, +245E-6, -0.50);
 
 	// TODO
 	//unsmearing_file = "unfolding_fit_45b_56t_old.root";
