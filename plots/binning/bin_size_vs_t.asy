@@ -20,19 +20,26 @@ string binnings[] = {
 //----------------------------------------------------------------------------------------------------
 
 NewPad("$|t|\ung{GeV^2}$", "$t$ bin size$\ung{GeV^2}$");
+scale(Linear, Log);
+
 currentpad.xTicks = LeftTicks(0.01, 0.005);
-currentpad.yTicks = RightTicks(0.005, 0.001);
+//currentpad.yTicks = RightTicks(0.005, 0.001);
 
 AddToLegend("<{\it resolution considerations:}");
+/*
 draw(scale(1, 1), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), red+longdashed, "1 smearing sigma");
 draw(scale(1, 2), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), blue+longdashed, "2 smearing sigma");
 draw(scale(1, 3), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), heavygreen+longdashed, "3 smearing sigma");
+*/
+draw(shift(0, log10(1)), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), red+longdashed, "1 smearing sigma");
+draw(shift(0, log10(2)), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), blue+longdashed, "2 smearing sigma");
+draw(shift(0, log10(3)), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), heavygreen+longdashed, "3 smearing sigma");
 
 AddToLegend("<{\it fixed statistical uncertainty, " + dataset + ":}");
 
-draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_30"), red+dashed, "$30\un{\%}$");
-draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_20"), blue+dashed, "$20\un{\%}$");
-draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_10"), heavygreen+dashed, "$10\un{\%}$");
+draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.020"), red+dashed, "$2\un{\%}$");
+draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.010"), blue+dashed, "$1\un{\%}$");
+draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.005"), heavygreen+dashed, "$0.5\un{\%}$");
 
 AddToLegend("<{\it binnings in analysis:}");
 
@@ -42,15 +49,7 @@ for (int bi : binnings.keys)
 	draw(RootGetObject(topDir + dataset + "/distributions_45b_56t.root", "binning/g_binning_"+binnings[bi]), "p,l,d0", p+0.2pt, mCi+0.8pt+p, binnings[bi]);
 }
 
-limits((0, 0), (0.04, 0.01), Crop);
-
-/*
-for (real x = 0; x <= 2.0; x += 0.3)
-	yaxis(XEquals(x, false), dotted);
-
-for (real y = 0; y <= 0.12; y += 0.01)
-	xaxis(YEquals(y, false), dotted);
-*/
+limits((0, 1e-4), (0.04, 0.01), Crop);
 
 frame f_legend = BuildLegend();
 
