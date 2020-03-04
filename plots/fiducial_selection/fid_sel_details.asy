@@ -4,7 +4,7 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	//"DS-fill7281/Totem1",
+	"DS-fill7281/Totem1",
 	//"DS-fill7289/Totem1",
 	"DS-fill7291/Totem1",
 };
@@ -37,11 +37,11 @@ for (int dsi : datasets.keys)
 
 		if (diagonals[dgni] == "45b_56t")
 		{
-			TH2_y_min = +30e-6;
+			TH2_y_min = +20e-6;
 			TH2_y_max = +150e-6;
 		} else {
 			TH2_y_min = -150e-6;
-			TH2_y_max = -30e-6;
+			TH2_y_max = -20e-6;
 		}
 
 		//yTicksDef = RightTicks(1., 0.5);
