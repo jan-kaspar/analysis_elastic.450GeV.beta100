@@ -21,6 +21,24 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
+string replace(const string &orig, const string &w, const string &r)
+{
+	string text = orig;
+
+	size_t pos = 0;
+	pos = text.find(w, pos);
+	while (pos != string::npos)
+	{
+		text.replace(pos, w.size(), r);
+
+		pos = text.find(w, pos+1);
+	}
+
+	return text;
+}
+
+//----------------------------------------------------------------------------------------------------
+
 void ProfileToRMSGraph(TProfile *p, TGraphErrors *g)
 {
 	for (int bi = 1; bi <= p->GetNbinsX(); ++bi)
@@ -523,15 +541,28 @@ int main(int argc, char **argv)
 	// get unsmearing correction
 	printf("\n>> unsmearing_file = %s\n", unsmearing_file.c_str());
 	printf(">> unsmearing_object = %s\n", unsmearing_object.c_str());
-	TF1 *unsmearing_correction_fit = NULL;
+
+	map<unsigned int, TH1D *> map_unsmearing_correction;
+
 	TFile *unsmearing_correction_file = TFile::Open(unsmearing_file.c_str());
 	if (!unsmearing_correction_file)
 	{
 		printf("ERROR: unfolding file `%s' can not be opened.\n", unsmearing_file.c_str());
 	} else {
-		unsmearing_correction_fit = (TF1 *) unsmearing_correction_file->Get(unsmearing_object.c_str());
-		if (!unsmearing_correction_fit)
-			printf("ERROR: unsmearing correction object `%s' cannot be loaded.\n", unsmearing_object.c_str());
+		for (unsigned int bi = 0; bi < binnings.size(); bi++)
+		{
+			string path = replace(unsmearing_object, "<binning>", binnings[bi]);
+			TH1D *obj = (TH1D *) unsmearing_correction_file->Get(path.c_str());
+
+			if (!obj)
+				printf("ERROR: unsmearing correction object `%s' cannot be loaded.\n", path.c_str());
+
+			map_unsmearing_correction[bi] = obj;
+		}
+
+		printf(">> loaded unsmearing corrections:\n");
+		for (map<unsigned int, TH1D *>::iterator it = map_unsmearing_correction.begin(); it != map_unsmearing_correction.end(); ++it)
+			printf("\tbinning %s: %p\n", binnings[it->first].c_str(), it->second);
 	}
 
 	// book metadata histograms
@@ -1578,13 +1609,16 @@ int main(int argc, char **argv)
 		bh_t_normalized_unsmeared[bi] = new TH1D(* bh_t_normalized[bi]);
 		bh_t_normalized_unsmeared[bi]->SetName("h_t_normalized_unsmeared");
 
+		map<unsigned int, TH1D *>::iterator it = map_unsmearing_correction.find(bi);
+		TH1D *h_corr = (it == map_unsmearing_correction.end()) ? NULL : it->second;
+
 		for (int bin = 1; bin <= bh_t_normalized_unsmeared[bi]->GetNbinsX(); ++bin)
 		{
-			double c = bh_t_normalized_unsmeared[bi]->GetBinCenter(bin);
+			//double c = bh_t_normalized_unsmeared[bi]->GetBinCenter(bin);
 			double v = bh_t_normalized_unsmeared[bi]->GetBinContent(bin);
 			double v_u = bh_t_normalized_unsmeared[bi]->GetBinError(bin);
 
-			double corr = (unsmearing_correction_fit == NULL) ? 0. : unsmearing_correction_fit->Eval(c);
+			double corr = (h_corr == NULL) ? 0. : h_corr->GetBinContent(bin);
 
 			bh_t_normalized_unsmeared[bi]->SetBinContent(bin, v * corr);
 			bh_t_normalized_unsmeared[bi]->SetBinError(bin, v_u * corr);
