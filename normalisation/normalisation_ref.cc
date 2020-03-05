@@ -17,7 +17,7 @@ void ProcessOne(TH1D *h)
 	// settings
 	const double t_min_goal = 0.005, t_max_goal = 0.010;
 
-	const double dsi_dt_ref = 220.;
+	const double dsi_dt_ref = 200.;
 
 	// determine limits
 	const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
