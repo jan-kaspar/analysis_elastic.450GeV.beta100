@@ -349,6 +349,7 @@ struct Environment
 	double v_y_L_1_F, v_y_L_2_F, v_y_R_1_F, v_y_R_2_F;	// 1
 	double L_x_L_1_F, L_x_L_2_F, L_x_R_1_F, L_x_R_2_F;	// mm
 	double L_y_L_1_F, L_y_L_2_F, L_y_R_1_F, L_y_R_2_F;	// mm
+	double D_x_L_1_F, D_x_L_2_F, D_x_R_1_F, D_x_R_2_F;	// mm
 
 	// optics: x-y coupling (x = L_x * th_x + v_x * x^* + la_x * th_y)
 	/*
