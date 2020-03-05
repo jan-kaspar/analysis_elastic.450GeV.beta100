@@ -4,7 +4,7 @@ import pad_layout;
 string topDir = "../../";
 
 string binnings[] = {
-	"ub",
+	//"ub",
 	"eb",
 };
 
@@ -28,11 +28,11 @@ for (int bi : binnings.keys)
 
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{mb/GeV^2}$");
 	scale(Linear, Log);
-	currentpad.xTicks = LeftTicks(0.2, 0.1);
+	currentpad.xTicks = LeftTicks(0.005, 0.001);
 
 	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
 
-	//limits((0, 1e-3), (1, 1e3), Crop);
+	limits((0, 4e1), (0.03, 1e4), Crop);
 	
 	// ----------
 

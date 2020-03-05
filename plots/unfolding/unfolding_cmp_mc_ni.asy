@@ -51,6 +51,7 @@ for (string dataset : datasets)
 		// ----- low |t| zoom -----
 
 		NewPad("$|t|\ung{GeV^2}$", "mutiplicative correction");
+		currentpad.xTicks = LeftTicks(1e-3, 5e-4);
 
 		draw(RootGetObject(f_mc, model + "/" + binning + "/h_corr"), "eb", blue, "Monte Carlo");
 

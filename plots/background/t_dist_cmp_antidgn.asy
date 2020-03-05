@@ -48,7 +48,7 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(f, "acceptance correction/" + binning + "/h_t_before"), "vl,eb", StdPen(dgni+1), dgn_labels[dgni]);
 	}
 
-	limits((0, 1e4), (0.04, 1e9), Crop);
+	limits((0, 1e4), (0.03, 1e9), Crop);
 	AttachLegend("before acceptance correction");
 
 	//--------------------
@@ -62,6 +62,6 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(f, "acceptance correction/" + binning + "/h_t_after"), "vl,eb", StdPen(dgni+1), dgn_labels[dgni]);
 	}
 
-	limits((0, 1e4), (0.04, 1e9), Crop);
+	limits((0, 1e4), (0.03, 1e9), Crop);
 	AttachLegend("after acceptance correction");
 }

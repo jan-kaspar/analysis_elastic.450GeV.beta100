@@ -24,14 +24,14 @@ diagonals.push("45b_56t"); d_labels.push("45b -- 56t"); d_pens.push(red);
 diagonals.push("45t_56b"); d_labels.push("45t -- 56b"); d_pens.push(blue);
 
 string quantities[], q_timber[], q_labels[];
-real q_maxs[];
-quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_maxs.push(50.);
-quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_maxs.push(20.);
+real q_maxs[], q_Ticks[], q_ticks[];
+quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_maxs.push(50.); q_Ticks.push(5.); q_ticks.push(1.);
+quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_maxs.push(20.); q_Ticks.push(2.); q_ticks.push(1.);
 
 xSizeDef = 40cm;
 ySizeDef = 6cm;
 
-//xTicksDef = LeftTicks(1., 0.5);
+xTicksDef = LeftTicks(5., 1.);
 
 TGraph_errorBar = None;
 
@@ -40,6 +40,7 @@ TGraph_errorBar = None;
 for (int qi : quantities.keys)
 {
 	NewPad("time$\ung{h}$", "$\si[\De^{R-L}" + q_labels[qi] + "]\ung{\mu rad}$");
+	currentpad.yTicks = RightTicks(q_Ticks[qi], q_ticks[qi]);
 
 	for (int fi : fills.keys)
 	{

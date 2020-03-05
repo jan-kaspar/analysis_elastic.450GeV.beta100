@@ -672,8 +672,6 @@ $$I_{2RP} = (3 \pm 1)\un{\%}$$
 %----------------------------------------------------------------------------------------------------
 \chapter[unfolding]{Unfolding of resolution effects}
 
-\iffalse
-
 \> method
 \>> take a fit of data with model including both Coulomb and hadronic contributions
 \>> this fits serves as an input (truth) to simulation with and without smearing effects
@@ -685,10 +683,10 @@ where the numerator comes from \Eq{sm model th corr} and therefore this correcti
 \> there are two evaluations of \Eq{unfold corr}
 \>> numerical integration: fast, accurate
 \>> Monte Carlo: very simple implementation, needs long computing time for reasonable accuracy
-\>> \plot{unfolding/cmp_mc_num_int.pdf} : comparison of the two methods -- very good agreement
+\>> \plot{unfolding/unfolding_cmp_mc_ni.pdf} : comparison of the two methods -- very good agreement
 
-\> \plot{unfolding/num_int_model_cmp.pdf} : dependence on the initial data fit
-\>> differences only at high $|t|$, always below $0.1\un{\%}$
+\> \plot{unfolding/unfolding_ni_model_cmp.pdf} : dependence on the initial data fit
+\>> TODO: check when more models available
 
 \> results -- as expected
 \>> effects in general small -- very small beam divergence
@@ -696,13 +694,16 @@ where the numerator comes from \Eq{sm model th corr} and therefore this correcti
 
 \> uncertainties
 \>> values of $\si(m_x)$ and $\si(m_y)$ taken from Section~\sref{resolution}, end of bullet on $m_{x,y}$
-\>> model dependence: negligible for $|t| \ls 0.2\un{GeV^2}$, see \plot{unfolding/num_int_model_cmp.pdf}
-
-\fi
+\>>> TODO
+\>> model dependence: TODO: comment, see \plot{unfolding/unfolding_ni_model_cmp.pdf}
 
 
 %----------------------------------------------------------------------------------------------------
 \chapter[normalisation]{Normalisation}
+
+Temporarily, the datasets are normalised such that
+$${\int_{t_{\rm min}}^{t_{\rm max}} \d\si/\d t\over t_{\rm max} - t_{\rm min} } = \left.{\d\si\over \d t}\right|_{\rm ref} \equiv 200 \un{mb/GeV^2}$$
+where $|t|_{\rm min} = 0.005\un{GeV^2}$ and $|t|_{\rm min} = 0.010\un{GeV^2}$.
 
 \iffalse
 
@@ -729,11 +730,11 @@ where the numerator comes from \Eq{sm model th corr} and therefore this correcti
 \>> ob-1-20-0.05
 \>> ob-2-10-0.05
 \>> ob-3-5-0.05
-
-\> \plot{binning/bin_size_vs_t.pdf} : visualisation of binning determinants vs.~several binnings used in
-the analysis
-
 \fi
+
+\> \plot{binning/bin_size_vs_t.pdf} : visualisation of binning determinants vs.~several binnings used in the analysis
+
+\> temporarily a very fine binning ``eb'' is used -- to spot potential local problems
 
 
 
@@ -774,17 +775,14 @@ the analysis
 
 \> \plot{t_distributions/t_dist_fill_cmp.pdf} : comparison of $t$-distributions from different fills and diagonals
 
+\> \plot{t_distributions/t_dist_merged_cmp_dgn.pdf} : merged $t$-distribution, per diagonal
+
+\> \plot{t_distributions/t_dist_merged_cmp_binning.pdf} : merged and combined $t$-distribution in several binnings
+
 \iffalse
-
-
 \> \plot{t_distributions/t_dist_cmp_bunch.pdf} : comparison of $t$-distributions from different bunches (fill 5317)
 
-\> \plot{t_distributions/t_dist_merged_cmp_dgn.pdf} : full and low-$|t|$ plots of the merged $t$-distribution, per diagonal
-
-\> \plot{t_distributions/t_dist_merged_cmp_binning.pdf} : merged and combined $t$-distribution in several binnings, full and low-$|t|$ view
-
 \> \plot{t_distributions/t_dist_rel.pdf} : merged $t$-distribution in a relative reference frame
-
 \fi
 
 
