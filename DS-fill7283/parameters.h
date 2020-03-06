@@ -23,7 +23,7 @@ void Init_45b_56t()
 	Init_global_45b_56t();
 
 	// normalisation settings
-	anal.L_int = 2.2173E+04;
+	anal.L_int = 2.1638E+04;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -33,5 +33,5 @@ void Init_45t_56b()
 	Init_global_45t_56b();
 
 	// normalisation settings
-	anal.L_int = 2.3839E+04;
+	anal.L_int = 2.3092E+04;
 }
