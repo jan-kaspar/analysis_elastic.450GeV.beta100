@@ -21,8 +21,15 @@ void Init_global()
 	// list of (sub-)directories with distilled ntuples
 	distilledNtuples.push_back(".");
 
-	// selection of bunches
-	keepAllBunches = true;
+	// input selection
+	anal.excl_runs.push_back(324467);
+
+	anal.excl_lsIntervals[324462] = { {94, 338} };
+	anal.excl_lsIntervals[324532] = { {399, 520} };
+	anal.excl_lsIntervals[324536] = { {360, 509} };
+
+	anal.excl_timeIntervals.push_back({112100, 112400});
+	anal.excl_timeIntervals.push_back({115000, 117000});
 
 	// environment settings
 	env.InitNominal();
