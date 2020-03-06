@@ -13,9 +13,9 @@ datasets.push("DS-fill7281/Totem1"); fills.push("7281");
 //datasets.push("DS-fill7286/Totem1"); fills.push("7286");
 //datasets.push("DS-fill7287/Totem1"); fills.push("7287");
 //datasets.push("DS-fill7288/Totem1"); fills.push("7288");
-//datasets.push("DS-fill7289/Totem1"); fills.push("7289");
+datasets.push("DS-fill7289/Totem1"); fills.push("7289");
 //datasets.push("DS-fill7290/Totem1"); fills.push("7290");
-//datasets.push("DS-fill7291/Totem1"); fills.push("7291");
+datasets.push("DS-fill7291/Totem1"); fills.push("7291");
 
 string diagonals[];
 diagonals.push("45b_56t");

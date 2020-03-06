@@ -17,7 +17,7 @@ string binning = "eb";
 
 //----------------------------------------------------------------------------------------------------
 
-NewPad("$|t|\ung{GeV^2}$", "$\d N/\d t\ung{mb/GeV^2}$", 12cm, 9cm);
+NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{mb/GeV^2}$", 12cm, 9cm);
 scale(Linear, Log);
 	currentpad.xTicks = LeftTicks(0.005, 0.001);
 
