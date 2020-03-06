@@ -126,14 +126,48 @@ TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
-	vector<double> th_x_values = { fc.th_x_m - 400E-6, fc.th_x_m, fc.th_x_p, fc.th_x_p + 400E-6 };
+	for (const auto &p : fc.points)
+		g->SetPoint(g->GetN(), p.x, p.y * th_y_sign);
 
-	for (const double &th_x : th_x_values)
-	{
-		g->SetPoint(g->GetN(), th_x, th_y_sign * fc.GetThYLimit(th_x));
-	}
+	if (!fc.points.empty())
+		g->SetPoint(g->GetN(), fc.points[0].x, fc.points[0].y * th_y_sign);
 
 	return g;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void PlotFiductialArcs(const FiducialCut &fc, double th_y_sign)
+{
+	for (double th : { 50E-6, 100E-6, 150E-6, 200E-6, 250E-6, 300E-6, 350E-6 })
+	{
+		const auto &segments = fc.GetIntersectionPhis(th);
+
+		const double target_de_phi = M_PI / 100;
+
+		unsigned int s_idx = 0;
+		for (const auto &s : segments)
+		{
+			const double de_phi = (s.y - s.x) / ceil((s.y - s.x) / target_de_phi);
+
+			TGraph *g = new TGraph();
+			char buf[100];
+			sprintf(buf, "arc_%.0f_%u", th*1E6, s_idx);
+			g->SetName(buf);
+
+			for (double phi = s.x; phi <= s.y * 1.0001; phi += de_phi)
+			{
+				const double x = th * cos(phi);
+				const double y = th * sin(phi);
+
+				g->SetPoint(g->GetN(), x, y * th_y_sign);
+			}
+
+			g->Write();
+
+			s_idx++;
+		}
+	}
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -447,7 +481,6 @@ int main(int argc, char **argv)
 	printf("\n\n");
 
 	// binnings
-	// TODO
 	vector<string> binnings;
 	binnings.push_back("ub");
 	binnings.push_back("eb");
@@ -1253,8 +1286,11 @@ int main(int argc, char **argv)
 		p_th_y_L_diffNF_vs_th_y_L->Fill(k.th_y_L, k.th_y_L_2_F - k.th_y_L_1_F);
 		p_th_y_R_diffNF_vs_th_y_R->Fill(k.th_y_R, k.th_y_R_2_F - k.th_y_R_1_F);
 
-		const double safe_th_y_min = anal.fc_G_l.th_y_0 + 10E-6;
-		const double safe_th_y_max = anal.fc_G_h.th_y_0 - 10E-6;
+		double safe_th_y_min, safe_th_y_max;
+		anal.fc_G.GetThYRange(0E-6, safe_th_y_min, safe_th_y_max);
+		safe_th_y_min += 10E-6;
+		safe_th_y_max -= 10E-6;
+
 		const bool safe = fabs(k.th_y) > safe_th_y_min && fabs(k.th_y) < safe_th_y_max;
 
 		if (safe)
@@ -2128,12 +2164,11 @@ int main(int argc, char **argv)
 
 	TDirectory *fidCutDir = outF->mkdir("fiducial cuts");
 	gDirectory = fidCutDir;
-	PlotFiductialCut(anal.fc_L_l, th_y_sign)->Write("fc_L_l");
-	PlotFiductialCut(anal.fc_L_h, th_y_sign)->Write("fc_L_h");
-	PlotFiductialCut(anal.fc_R_l, th_y_sign)->Write("fc_R_l");
-	PlotFiductialCut(anal.fc_R_h, th_y_sign)->Write("fc_R_h");
-	PlotFiductialCut(anal.fc_G_l, th_y_sign)->Write("fc_G_l");
-	PlotFiductialCut(anal.fc_G_h, th_y_sign)->Write("fc_G_h");
+	PlotFiductialCut(anal.fc_L, th_y_sign)->Write("fc_L");
+	PlotFiductialCut(anal.fc_R, th_y_sign)->Write("fc_R");
+	PlotFiductialCut(anal.fc_G, th_y_sign)->Write("fc_G");
+
+	PlotFiductialArcs(anal.fc_G, th_y_sign);
 
 	TDirectory *accDir = outF->mkdir("acceptance correction");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)

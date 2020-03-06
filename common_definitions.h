@@ -642,89 +642,141 @@ struct CutData
 
 struct FiducialCut
 {
-	double th_y_0;			// rad
-	double th_x_m, th_x_p;	// rad
-	double al_m, al_p; 		// slope th_y vs. th_x, 1
-
-	FiducialCut(double _ty0=0., double _txm=0., double _alm=0., double _txp=0., double _alp=0.) :
-		th_y_0(_ty0), th_x_m(_txm), th_x_p(_txp), al_m(_alm), al_p(_alp)
+	struct Point
 	{
-	}
+		double x, y;
+	};
 
-	double GetThYLimit(double th_x) const
+	vector<Point> points;
+
+	static constexpr double mi_inf = -10.;
+	static constexpr double pl_inf = +10.;
+
+	static constexpr bool debug = false;
+
+	FiducialCut() {}
+
+	FiducialCut(const vector<Point> & _points) : points(_points)
 	{
-		if (th_x < th_x_m)
-			return th_y_0 + al_m * (th_x - th_x_m);
-
-		if (th_x > th_x_p)
-			return th_y_0 + al_p * (th_x - th_x_p);
-
-		return th_y_0;
 	}
 
 	void Print() const
 	{
-		printf("th_y_0=%E, th_x_m=%E, th_x_p=%E, al_m=%E, al_p=%E\n", th_y_0, th_x_m, th_x_p, al_m, al_p);
+		for (const auto &p : points)
+			printf("(%.3E, %.3E)-", p.x, p.y);
+		printf("\n");
 	}
 
-	vector<double> GetIntersectionPhis(double th) const
+	bool Satisfied(double th_x, double th_y) const
 	{
-		vector<double> phis;
+		unsigned int n_le = 0, n_gr = 0;
 
-		double A, B, C, D, p, phi;
-
-		// th_x > th_x_p
-		A = 1. + al_p * al_p;
-		B = 2. * th_x_p + 2. * th_y_0 * al_p;
-		C = th_x_p * th_x_p + th_y_0 * th_y_0 - th * th;
-		D = B*B - 4.*A*C;
-		if (D > 0.)
+		for (unsigned int i = 0; i < points.size(); i++)
 		{
-			p = (-B + sqrt(D)) / 2. / A;
-			phi = atan2(th_y_0 + al_p * p, th_x_p + p);
-			if (p > 0.)
-				phis.push_back(phi);
+			const unsigned int j = (i + 1) % points.size();
 
-			p = (-B - sqrt(D)) / 2. / A;
-			phi = atan2(th_y_0 + al_p * p, th_x_p + p);
-			if (p > 0.)
-				phis.push_back(phi);
+			const bool hasIntersection = (points[i].x < points[j].x) ? (points[i].x <= th_x && th_x < points[j].x) : (points[j].x <= th_x && th_x < points[i].x);
+			if (!hasIntersection)
+				continue;
+
+			const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
+			const double th_y_int = points[j].y + a * (th_x - points[j].x);
+
+			if (th_y_int < th_y)
+				n_le++;
+			if (th_y_int > th_y)
+				n_gr++;
 		}
 
-		// th_x_m < th_x < th_x_p
+		if (debug)
+			printf("n_le = %u, n_gr = %u\n", n_le, n_gr);
+
+		return ((n_gr % 2) == 1);
+	}
+
+	void GetThYRange(double th_x, double &th_y_min, double &th_y_max) const
+	{
+		th_y_min = pl_inf;
+		th_y_max = mi_inf;
+
+		for (unsigned int i = 0; i < points.size(); i++)
 		{
-			double phi0 = asin(th_y_0 / th);
+			const unsigned int j = (i + 1) % points.size();
 
-			double phi = phi0;
-			double th_x = th * cos(phi);
-			if (th_x_m < th_x && th_x < th_x_p)
-				phis.push_back(phi);
+			const bool hasIntersection = (points[i].x < points[j].x) ? (points[i].x <= th_x && th_x <= points[j].x) : (points[j].x <= th_x && th_x <= points[i].x);
+			if (!hasIntersection)
+				continue;
 
-			phi = M_PI - phi0;
-			th_x = th * cos(phi);
-			if (th_x_m < th_x && th_x < th_x_p)
-				phis.push_back(phi);
+			const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
+			const double th_y_int = points[j].y + a * (th_x - points[j].x);
+
+			th_y_min = min(th_y_int, th_y_min);
+			th_y_max = max(th_y_int, th_y_max);
+		}
+	}
+
+	vector<Point> GetIntersectionPhis(double th) const
+	{
+		set<double> phis;
+
+		if (debug)
+			printf("GetIntersectionPhis(%.1f)\n", th*1e6);
+
+		for (unsigned int i = 0; i < points.size(); i++)
+		{
+			const unsigned int j = (i + 1) % points.size();
+
+			const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
+			const double b = points[j].y - a * points[j].x;
+
+			const double A = 1. + a*a;
+			const double B = 2. * a * b;
+			const double C = b*b - th*th;
+
+			const double D = B*B - 4.*A*C;
+
+			if (D < 0.)
+				continue;
+
+			const double x1 = (-B + sqrt(D)) / 2. / A;
+			const double x2 = (-B - sqrt(D)) / 2. / A;
+
+			for (const double &x : {x1, x2})
+			{
+				if (points[i].x <= points[j].x && (x < points[i].x || x >= points[j].x))
+					continue;
+
+				if (points[j].x <= points[i].x && (x < points[j].x || x >= points[i].x))
+					continue;
+
+				const double y = a*x + b;
+				const double phi = atan2(y, x);
+
+				phis.insert(phi);
+
+				if (debug)
+					printf("    add phi: i=%i (x=%.1f), j=%i (x=%.1f), D=%.1E, x=%.1f | phi=%.4f\n", i, points[i].x*1e6, j, points[j].x*1e6, D, x*1e6, phi);
+			}
 		}
 
-		// th_x < th_x_m
-		A = 1. + al_m * al_m;
-		B = 2. * th_x_m + 2. * th_y_0 * al_m;
-		C = th_x_m * th_x_m + th_y_0 * th_y_0 - th * th;
-		D = B*B - 4.*A*C;
-		if (D > 0.)
-		{
-			p = (-B + sqrt(D)) / 2. / A;
-			phi = atan2(th_y_0 + al_m * p, th_x_m + p);
-			if (p < 0.)
-				phis.push_back(phi);
+		vector<Point> segments; // x = start phi, y = end phi
 
-			p = (-B - sqrt(D)) / 2. / A;
-			phi = atan2(th_y_0 + al_m * p, th_x_m + p);
-			if (p < 0.)
-				phis.push_back(phi);
+		if ((phis.size() % 2) != 0)
+		{
+			printf("ERROR in FiducialCut::GetIntersectionPhis > even number of phis.\n");
+			return segments;
 		}
 
-		return phis;
+		for (set<double>::iterator it = phis.begin(); it != phis.end(); ++it)
+		{
+			Point p;
+			p.x = *it;
+			++it;
+			p.y = *it;
+			segments.push_back(p);
+		}
+
+		return segments;
 	}
 };
 
@@ -761,9 +813,7 @@ struct Analysis
 	std::vector<unsigned int> cuts;	// list of active cuts
 
 	// fiducial cuts
-	FiducialCut fc_L_l, fc_L_h;
-	FiducialCut fc_R_l, fc_R_h;
-	FiducialCut fc_G_l, fc_G_h;
+	FiducialCut fc_L, fc_R, fc_G;
 
 	// (un)-smearing parameters
 	double si_th_x_1arm_L;
@@ -883,12 +933,9 @@ struct Analysis
 
 		printf("\n");
 		printf("fiducial cuts:\n");
-		printf("fc_L_l: "); fc_L_l.Print();
-		printf("fc_L_h: "); fc_L_h.Print();
-		printf("fc_R_l: "); fc_R_l.Print();
-		printf("fc_R_h: "); fc_R_h.Print();
-		printf("fc_G_l: "); fc_G_l.Print();
-		printf("fc_G_h: "); fc_G_h.Print();
+		printf("fc_L: "); fc_L.Print();
+		printf("fc_R: "); fc_R.Print();
+		printf("fc_G: "); fc_G.Print();
 
 		printf("\n");
 		printf("smearing parameters:\n");

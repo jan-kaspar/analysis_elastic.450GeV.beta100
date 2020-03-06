@@ -42,9 +42,8 @@ void Init_global()
 	alignmentSources.push_back(alSrc);
 
 	// binning
-	// TODO
-	anal.t_min = 0.; anal.t_max = 0.05;
-	anal.t_min_full = 0.; anal.t_max_full = 0.09;
+	anal.t_min = 0.; anal.t_max = 0.03;
+	anal.t_min_full = 0.; anal.t_max_full = 0.045;
 
 	// approximate (time independent) resolutions
 	anal.si_th_y_1arm = 6E-6;
@@ -111,21 +110,14 @@ void Init_global_45b_56t()
 	anal.cut9_a = -0.28; anal.cut9_c = +0.02; anal.cut9_si = 0.14;
 	anal.cut10_a = -0.29; anal.cut10_c = +0.02; anal.cut10_si = 0.14;
 
-	anal.fc_L_l = FiducialCut( 32E-6, -330E-6, -1.05,  +75E-6, +0.15);
-	anal.fc_L_h = FiducialCut(125E-6, -250E-6, +0.50, +250E-6, -0.60);
-
-	anal.fc_R_l = FiducialCut( 32E-6, -330E-6, -1.05,  +75E-6, +0.15);
-	anal.fc_R_h = FiducialCut(125E-6, -250E-6, +0.50, +250E-6, -0.60);
-
-	anal.fc_G_l = FiducialCut( 34E-6, -325E-6, -1.10,  +70E-6, +0.15);
-	anal.fc_G_h = FiducialCut(120E-6, -245E-6, +0.50, +245E-6, -0.60);
+	anal.fc_L = FiducialCut({{-350E-6, 31E-6}, {50E-6, 31E-6}, {250E-6, 40E-6}, {390E-6, 80E-6}, {270E-6, 126E-6}, {-280E-6, 131E-6}, {-390E-6, 60E-6}});
+	anal.fc_R = FiducialCut({{-350E-6, 31E-6}, {50E-6, 31E-6}, {250E-6, 40E-6}, {390E-6, 80E-6}, {270E-6, 126E-6}, {-280E-6, 131E-6}, {-390E-6, 60E-6}});
+	anal.fc_G = FiducialCut({{-338E-6, 32E-6}, {50E-6, 32E-6}, {250E-6, 42E-6}, {385E-6, 80E-6}, {270E-6, 124E-6}, {-280E-6, 129E-6}, {-385E-6, 60E-6}});
 
 	unsmearing_file = "unfolding_cf_ni_45b_56t.root";
 
 	anal.inefficiency_3outof4 = 0.0; // TODO
 	anal.inefficiency_pile_up = 0.0; // TODO
-
-	anal.L_int = 1.;	// TODO	
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -145,19 +137,12 @@ void Init_global_45t_56b()
 	anal.cut9_a = -0.28; anal.cut9_c = +0.00; anal.cut9_si = 0.14;
 	anal.cut10_a = -0.29; anal.cut10_c = -0.02; anal.cut10_si = 0.14;
 
-	anal.fc_L_l = FiducialCut( 32E-6,  -75E-6, -0.20, +330E-6, +0.50);
-	anal.fc_L_h = FiducialCut(132E-6, -250E-6, +0.50, +250E-6, -0.50);
-
-	anal.fc_R_l = FiducialCut( 32E-6,  -75E-6, -0.20, +330E-6, +0.50);
-	anal.fc_R_h = FiducialCut(132E-6, -250E-6, +0.50, +250E-6, -0.50);
-
-	anal.fc_G_l = FiducialCut( 34E-6,  -70E-6, -0.20, +325E-6, +0.50);
-	anal.fc_G_h = FiducialCut(130E-6, -245E-6, +0.50, +245E-6, -0.50);
+	anal.fc_L = FiducialCut({{-50E-6, 31E-6}, {-250E-6, 40E-6}, {-370E-6, 80E-6}, {-270E-6, 132E-6}, {250E-6, 134E-6}, {360E-6, 95E-6}, {380E-6, 42E-6}, {330E-6, 31E-6}});
+	anal.fc_R = FiducialCut({{-50E-6, 31E-6}, {-250E-6, 40E-6}, {-370E-6, 80E-6}, {-270E-6, 132E-6}, {250E-6, 134E-6}, {360E-6, 95E-6}, {380E-6, 42E-6}, {330E-6, 31E-6}});
+	anal.fc_G = FiducialCut({{-50E-6, 32E-6}, {-250E-6, 42E-6}, {-365E-6, 80E-6}, {-265E-6, 130E-6}, {250E-6, 132E-6}, {355E-6, 95E-6}, {375E-6, 43E-6}, {330E-6, 32E-6}});
 
 	unsmearing_file = "unfolding_cf_ni_45t_56b.root";
 
 	anal.inefficiency_3outof4 = 0.0; // TODO
 	anal.inefficiency_pile_up = 0.0; // TODO
-
-	anal.L_int = 1.;	// TODO	
 }
