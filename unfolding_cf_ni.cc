@@ -130,37 +130,17 @@ double dist_t_sm(double t)
 {
 	double th = sqrt(t) / env.p;
 
-	// get all intersections of const-th circle with acceptance boundaries
-	set<double> phis;
-
-	for (const auto &phi : anal.fc_G_l.GetIntersectionPhis(th))
-		phis.insert(phi);
-
-	for (const auto &phi : anal.fc_G_h.GetIntersectionPhis(th))
-		phis.insert(phi);
-
-	// the number of intersections must be even
-	if ((phis.size() % 2) == 1)
-	{
-		printf("ERROR: odd number of intersections in acceptance calculation\n");
-	}
-
-	// no intersection => no acceptances
-	if (phis.size() == 0)
-		return 0.;
-
-	// calculate integrals over phi sections
+	// calculate integrals over phi segments
 	double param[] = { th };
 	const double rel_precision = 1E-3;
 
 	double phiSum = 0.;
 	double integralSum = 0.;
 
-	for (set<double>::iterator it = phis.begin(); it != phis.end(); ++it)
+	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th))
 	{
-		double phi_start = *it;
-		++it;
-		double phi_end = *it;
+		const double phi_start = segment.x;
+		const double phi_end = segment.y;
 
 		phiSum += phi_end - phi_start;
 
@@ -170,7 +150,7 @@ double dist_t_sm(double t)
 			integralSum += RealIntegrate(IntegOverPhi, param, NULL, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 	}
 
-	return integralSum / phiSum;
+	return (phiSum > 0.) ? integralSum / phiSum : 0.;
 }
 
 //----------------------------------------------------------------------------------------------------
