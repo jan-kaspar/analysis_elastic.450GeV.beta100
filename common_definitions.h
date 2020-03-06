@@ -6,6 +6,7 @@
 #include <set>
 #include <map>
 #include <cmath>
+#include <algorithm>
 
 #include "TGraph.h"
 #include "TFile.h"
@@ -784,6 +785,12 @@ struct FiducialCut
 
 struct Analysis
 {
+	// input selection
+	std::vector<std::pair<unsigned int, unsigned int>> excl_timeIntervals;
+	std::vector<unsigned int> excl_bunches;
+	std::vector<unsigned int> excl_runs;
+	std::map<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> excl_lsIntervals;
+
 	// binning, |t| in GeV^2
 	double t_min, t_max;
 	double t_min_full, t_max_full;
@@ -802,10 +809,6 @@ struct Analysis
 	double cut8_a, cut8_c, cut8_si;
 	double cut9_a, cut9_c, cut9_si;
 	double cut10_a, cut10_c, cut10_si;
-
-	unsigned int lumi_section_min = 0, lumi_section_max = 10000;
-
-	std::vector< std::pair<double, double> > timeIntervals;
 
 	unsigned int N_cuts;	// number of cuts - indexed from 1!
 	string cqaN[12], cqbN[12];
@@ -869,22 +872,31 @@ struct Analysis
 	void BuildCuts();
 	bool EvaluateCuts(const HitData &, const Kinematics &, CutData &) const;
 
-	bool SkipTime(unsigned int timestamp) const
+	bool SkipEvent(unsigned int run, unsigned int ls, unsigned int timestamp, unsigned int bunch) const
 	{
-		if (timeIntervals.size() == 0)
-			return false;
+		if (find(excl_runs.begin(), excl_runs.end(), run) != excl_runs.end())
+			return true;
 
-		bool selected = false;
-		for (unsigned int i = 0; i < timeIntervals.size(); i++)
+		for (const auto &interval : excl_timeIntervals)
 		{
-			if (timestamp >= timeIntervals[i].first && timestamp <= timeIntervals[i].second)
+			if (interval.first <= timestamp && timestamp <= interval.second)
+				return true;
+		}
+
+		const auto rit = excl_lsIntervals.find(run);
+		if (rit != excl_lsIntervals.end())
+		{
+			for (const auto &interval : rit->second)
 			{
-				selected = true;
-				break;
+				if (interval.first <= ls && ls <= interval.second)
+					return true;
 			}
 		}
 
-		return !selected;
+		if (find(excl_bunches.begin(), excl_bunches.end(), bunch) != excl_bunches.end())
+			return true;
+
+		return false;
 	}
 
 
@@ -894,12 +906,29 @@ struct Analysis
 		printf("t_min_fit=%E\n", t_min_fit);
 
 		printf("\n");
-		printf("lumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
-
+		printf("%lu excluded runs: ", excl_runs.size());
+		for (const auto &run : excl_runs)
+			printf("%u, ", run);
 		printf("\n");
-		printf("%lu time intervals:\n", timeIntervals.size());
-		for (std::vector< std::pair<double, double> >::const_iterator it = timeIntervals.begin(); it != timeIntervals.end(); ++it)
-			printf("\tfrom %.1f to %.1f\n", it->first, it->second);
+
+		printf("%lu time intervals: ", excl_timeIntervals.size());
+		for (const auto &interval : excl_timeIntervals)
+			printf("(%u to %u), ", interval.first, interval.second);
+		printf("\n");
+
+		printf("exluded LS:\n");
+		for (const auto &rp : excl_lsIntervals)
+		{
+			printf("    run %u: ", rp.first);
+			for (const auto &interval : rp.second)
+				printf("(%u to %u), ", interval.first, interval.second);
+			printf("\n");
+		}
+
+		printf("%lu excluded bunches: ", excl_bunches.size());
+		for (const auto &bunch : excl_bunches)
+			printf("%u, ", bunch);
+		printf("\n");
 
 		printf("\n");
 		printf("n_si=%E\n", n_si);

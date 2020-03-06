@@ -979,10 +979,6 @@ int main(int argc, char **argv)
 			lsbit->second.second = max(lsbit->second.second, ev.timestamp);
 		}
 
-		// remove troublesome runs
-		if (SkipRun(ev.run_num))
-			continue;
-
 		// update timestamp run boundaries
 		auto rtbit = runTimestampBoundaries.find(ev.run_num);
 		if (rtbit == runTimestampBoundaries.end())
@@ -993,8 +989,8 @@ int main(int argc, char **argv)
 			rtbit->second.second = max(rtbit->second.second, ev.timestamp);
 		}
 
-		// check time - selected?
-		if (anal.SkipTime(ev.timestamp))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev.run_num, ev.lumi_section, ev.timestamp, ev.bunch_num))
 			continue;
 
 		if (time_group_divisor != 0)
@@ -1004,14 +1000,6 @@ int main(int argc, char **argv)
 			if ( (time_group % time_group_divisor) != time_group_remainder)
 				continue;
 		}
-
-		// check lumi section - selected?
-		if (ev.lumi_section < anal.lumi_section_min || ev.lumi_section > anal.lumi_section_max)
-			continue;
-
-		// select bunch(es)
-		if (SkipBunch(ev.run_num, ev.bunch_num))
-			continue;
 
 		// apply fine alignment
 		HitData h_al = ev.h;

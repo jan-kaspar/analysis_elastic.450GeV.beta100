@@ -150,65 +150,6 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 
 //----------------------------------------------------------------------------------------------------
 
-bool SkipRun(unsigned int /*run*/)
-{
-	return false;
-}
-
-//----------------------------------------------------------------------------------------------------
-
-// map: run number --> list of bunches
-typedef std::map<unsigned int, std::vector<unsigned int> > BunchMap;
-
-bool keepAllBunches;
-BunchMap bunchMap;
-
-bool SkipBunch(unsigned int run, unsigned bunch)
-{
-	if (keepAllBunches)
-		return false;
-
-	const std::vector<unsigned int> &bunches = bunchMap[run];
-
-	return (find(bunches.begin(), bunches.end(), bunch) == bunches.end());
-}
-
-//----------------------------------------------------------------------------------------------------
-
-// returns the beam for which the bunch is non-colliding
-// for colliding bunches returns zero
-unsigned int NonCollidingBunch(unsigned int /*run*/, unsigned /*bunch*/)
-{
-	/*
-	if (run == 8318) {
-		if (bunch == 994)
-			return 1;
-		if (bunch == 991)
-			return 2;
-	}
-
-	if (run >= 8333 && run <= 8341)
-	{
-		if (bunch == 900)
-			return 1;
-		if (bunch == 991)
-			return 2;
-	}
-
-	if (run >= 8367 && run <= 8372)
-	{
-		if (bunch == 3104 || bunch == 3130 || bunch == 3156 || bunch == 3078)
-			return 1;
-		if (bunch == 3143 || bunch == 3169 || bunch == 3195 || bunch == 3117)
-			return 2;
-	}
-	*/
-
-	return 0;
-}
-
-//----------------------------------------------------------------------------------------------------
-
 HitData ProtonTransport(const Kinematics & k, const Environment & env)
 {
 	HitData h;
