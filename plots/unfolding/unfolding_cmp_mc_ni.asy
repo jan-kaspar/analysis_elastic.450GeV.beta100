@@ -20,6 +20,9 @@ string binning = "eb";
 
 real y_min = 0.90, y_max = 1.30;
 
+TGraph_x_min = t_min;
+TH1_x_min = t_min;
+
 //----------------------------------------------------------------------------------------------------
 
 for (string dataset : datasets)
@@ -53,7 +56,7 @@ for (string dataset : datasets)
 		NewPad("$|t|\ung{GeV^2}$", "mutiplicative correction");
 		currentpad.xTicks = LeftTicks(1e-3, 5e-4);
 
-		draw(RootGetObject(f_mc, model + "/" + binning + "/h_corr"), "eb", blue, "Monte Carlo");
+		draw(RootGetObject(f_mc, model + "/" + binning + "/h_corr"), "eb,vl", blue, "Monte Carlo");
 
 		draw(RootGetObject(f_ni, model + "/g_t_corr"), red, "numerical integration");
 

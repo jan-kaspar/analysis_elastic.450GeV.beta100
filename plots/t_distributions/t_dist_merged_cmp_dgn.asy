@@ -1,6 +1,8 @@
 import root;
 import pad_layout;
 
+include "../common.asy";
+
 string topDir = "../../";
 
 string diagonals[], diagLabels[];
@@ -9,7 +11,7 @@ diagonals.push("45t_56b"); diagLabels.push("45 top -- 56 bot");
 
 drawGridDef = true;
 
-TH1_x_min = 2e-4;
+TH1_x_min = t_min;
 
 string binning = "eb";
 

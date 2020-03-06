@@ -1,1 +1,1 @@
-real t_min = 2e-4;
+real t_min = 2.1e-4;
