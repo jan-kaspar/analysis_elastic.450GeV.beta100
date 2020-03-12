@@ -712,18 +712,9 @@ where the numerator comes from \Eq{sm model th corr} and therefore this correcti
 %----------------------------------------------------------------------------------------------------
 \chapter[normalisation]{Normalisation}
 
-Temporarily, the datasets are normalised such that
-$${\int_{t_{\rm min}}^{t_{\rm max}} \d\si/\d t\over t_{\rm max} - t_{\rm min} } = \left.{\d\si\over \d t}\right|_{\rm ref} \equiv 200 \un{mb/GeV^2}$$
-where $|t|_{\rm min} = 0.005\un{GeV^2}$ and $|t|_{\rm min} = 0.010\un{GeV^2}$.
-
-\iffalse
-
-\> method
-\>> normalise $\d\si/\d t$ such that $I + S = 31.0\un{mb}$ (this value should be approved in a meeting on 23 Oct 2017)
-\>> $I$ stands for $\d\si/\d t$ fit over $0.01 < |t| < 0.05\un{GeV^2}$, integrated over $0 < |t| < 0.01\un{GeV^2}$
-\>> $S$ stands for histogram integral of bins $0.01 < |t| < 0.5\un{GeV^2}$
-
-\fi
+The datasets are normalised such that
+$$\int_{t_{\rm min}}^{t_{\rm max}} {\d\si^{\rm dataset}\over \d t} = \int_{t_{\rm min}}^{t_{\rm max}} {\d\si^{\rm Coulomb}\over \d t}$$
+where $|t|_{\rm min} \approx 2\cdot10^{-4}\un{GeV^2}$ and $|t|_{\rm min} = 8\cdot10^{-4}\un{GeV^2}$. In this $t$-range, the about $10\un{\%}$ of the complete cross-section is expected not to come from the Coulomb interaction.
 
 
 
