@@ -90,11 +90,11 @@ double AcceptanceCalculator::dist_d_y(double d_y) const
 
 double AcceptanceCalculator::Condition(double th_x_p, double d_x, double th_y_p, double d_y) const
 {
-	double th_x_p_R = th_x_p + d_x/2.;
-	double th_x_p_L = th_x_p - d_x/2.;
+	const double th_x_p_R = th_x_p + d_x/2.;
+	const double th_x_p_L = th_x_p - d_x/2.;
 
-	double th_y_p_R = th_y_p + d_y/2.;
-	double th_y_p_L = th_y_p - d_y/2.;
+	const double th_y_p_R = th_y_p + d_y/2.;
+	const double th_y_p_L = th_y_p - d_y/2.;
 
 	if (anal.fc_L.Satisfied(th_x_p_L, th_y_p_L) && anal.fc_R.Satisfied(th_x_p_R, th_y_p_R))
 		return 1.;

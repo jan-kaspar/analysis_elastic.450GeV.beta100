@@ -92,7 +92,7 @@ for (int dsi : datasets.keys)
 
 		for (int rpi : rps.keys)
 		{
-			NewPad("time from 11 Oct 2018 $\ung{h}$", "prescaled rate$\ung{Hz}$");
+			NewPad("time from 11 Oct 2018$\ung{h}$", "prescaled rate$\ung{Hz}$");
 			scale(Linear, Linear(true));
 
 			real y_max = 500;

@@ -79,5 +79,4 @@ for (int dsi : datasets.keys)
 	//--------------------
 	
 	GShipout("alignment_details");
-	//GShipout("alignment_details_" + dataset);
 }

@@ -8,7 +8,7 @@ datasets.push("DS-fill7281/Totem1");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
-string unit_labels[] = { "XRPV.B6L5.B2", "XRPV.D6L5.B2", "XRPV.D6R5.B1", "XRPV.B6R5.B1" };
+//string unit_labels[] = { "XRPV.B6L5.B2", "XRPV.D6L5.B2", "XRPV.D6R5.B1", "XRPV.B6R5.B1" };
 
 drawGridDef = true;
 
@@ -64,4 +64,4 @@ for (int dsi : datasets.keys)
 	}
 }
 
-GShipout("hit_distributions", hSkip=1mm, vSkip=1mm);
+GShipout(hSkip=1mm, vSkip=1mm);

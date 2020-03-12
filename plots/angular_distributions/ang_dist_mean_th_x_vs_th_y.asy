@@ -65,7 +65,7 @@ for (int dsi : datasets.keys)
 			string f = topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root";
 
 			string base = "selected - angles/g_mode_th_x"+arms[ai]+"_vs_th_y"+arms[ai];
-			
+
 			draw(scale(1e6, 1e6), RootGetObject(f, base), "p", p, mCi+2pt+p, diagonal_labels[dgni]);
 			draw(scale(1e6, 1e6), RootGetObject(f, base + "|pol1"), p + dashed);
 		}

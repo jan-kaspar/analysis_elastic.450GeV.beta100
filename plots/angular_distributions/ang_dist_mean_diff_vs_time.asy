@@ -42,7 +42,7 @@ label("\vbox{\SetFontSizesXX\hbox{$\th_x^*$}\hbox{220-210 difference}\hbox{left 
 
 for (int dsi : datasets.keys)
 {
-	NewPad("time $\ung{h}$", "$\De^{220-210} \th_y^{*L}\ung{\mu rad}$");
+	NewPad("time $\ung{h}$", "$\De^{220-210} \th_x^{*L}\ung{\mu rad}$");
 	real y_min = -5., y_max = +5.;
 
 	DrawRunBands(dataset_fills[dsi], y_min, y_max);
@@ -67,7 +67,7 @@ label("\vbox{\SetFontSizesXX\hbox{$\th_x^*$}\hbox{220-210 difference}\hbox{right
 
 for (int dsi : datasets.keys)
 {
-	NewPad("time $\ung{h}$", "$\De^{220-210} \th_y^{*R}\ung{\mu rad}$");
+	NewPad("time $\ung{h}$", "$\De^{220-210} \th_x^{*R}\ung{\mu rad}$");
 	real y_min = -5., y_max = +5.;
 
 	DrawRunBands(dataset_fills[dsi], y_min, y_max);
@@ -164,7 +164,7 @@ label("\vbox{\SetFontSizesXX\hbox{$\th_y^*$}\hbox{right -- left difference}}");
 
 for (int dsi : datasets.keys)
 {
-	NewPad("time $\ung{h}$", "$\De^{R-L} \th_x^{*}\ung{\mu rad}$");
+	NewPad("time $\ung{h}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$");
 	real y_min = -5, y_max = +5;
 
 	DrawRunBands(dataset_fills[dsi], y_min, y_max);

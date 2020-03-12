@@ -35,14 +35,12 @@ draw(shift(0, log10(1)), RootGetObject(topDir+"binning/generators.root", "g_rms_
 draw(shift(0, log10(2)), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), blue+longdashed, "2 smearing sigma");
 draw(shift(0, log10(3)), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), heavygreen+longdashed, "3 smearing sigma");
 
-AddToLegend("<{\it fixed statistical uncertainty, " + dataset + ":}");
-
+AddToLegend("<{\it fixed statistical uncertainty:}");
 draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.020"), red+dashed, "$2\un{\%}$");
 draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.010"), blue+dashed, "$1\un{\%}$");
 draw(RootGetObject(topDir+"binning/generators.root", "g_bs_stat_unc_0.005"), heavygreen+dashed, "$0.5\un{\%}$");
 
 AddToLegend("<{\it binnings in analysis:}");
-
 for (int bi : binnings.keys)
 {
 	pen p = StdPen(bi);

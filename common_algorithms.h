@@ -22,10 +22,10 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
   	k.th_x_R_2_F = + h.R_2_F.x / env.L_x_R_2_F;
 
 	k.th_y_L_1_F = - h.L_1_F.y / env.L_y_L_1_F;
-  	k.th_y_L_2_F = - h.L_2_F.y / env.L_y_L_2_F;
+	k.th_y_L_2_F = - h.L_2_F.y / env.L_y_L_2_F;
 
 	k.th_y_R_1_F = + h.R_1_F.y / env.L_y_R_1_F;
-  	k.th_y_R_2_F = + h.R_2_F.y / env.L_y_R_2_F;
+	k.th_y_R_2_F = + h.R_2_F.y / env.L_y_R_2_F;
 
 	// ----- single-arm kinematics reconstruction -----
 
