@@ -2,22 +2,18 @@ import root;
 import pad_layout;
 include "../../common.asy";
 
-string topDir = "../../../acceptance/";
+string topDir = "../../../acceptance_tests/";
 
 string rows[] = {
-//	"simulations/0.08,1E9,uncorr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/0.08,1E9,uncorr,new,flat/seed1/validation_with_mc.root",
-	"simulations/0.08,1E9,uncorr,new,curved/seed1/validation_with_mc.root",
-
-//	"simulations/0.08,1E9,corr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/0.08,1E9,corr,new,flat/seed1/validation_with_mc.root",
-	"simulations/0.08,1E9,corr,new,curved/seed1/validation_with_mc.root",
+	"simulations/0.045,1E8,uncorr/seed1/validation_with_mc.root",
+	"simulations/0.045,1E8,corr/seed1/validation_with_mc.root",
 };
 
 string th_x_ranges[] = {
-	"-3.1E-05_-3.0E-05",
 	"-5.0E-07_+5.0E-07", 
-	"+3.0E-05_+3.1E-05", 
+	"+1.0E-04_+1.0E-04", 
+	"+2.0E-04_+2.0E-04", 
+	"+3.0E-04_+3.0E-04", 
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -47,7 +43,7 @@ for (string row : rows)
 		draw(scale(1e6, 1), RootGetObject(f, dir + "h_th_ratio_cut_over_no_cut"), "eb", magenta);
 		draw(scale(1e6, 1), RootGetObject(f, dir + "g_acc_smear_vs_th_y"), "l", black);
 		
-		limits((4, 0.4), (6, 1.1), Crop);
+		limits((30, 0.4), (80, 1.1), Crop);
 	}
 	
 	//yaxis(XEquals(t_min, false), dashed);

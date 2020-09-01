@@ -4,20 +4,13 @@ include "../../common.asy";
 
 string topDir = "../../../";
 
-string baseDir = topDir + "acceptance/";
-
 string rows[] = {
-//	"simulations/<t_max>,1E9,uncorr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/<t_max>,1E9,uncorr,new,flat/seed1/validation_with_mc.root",
-	"simulations/<t_max>,1E9,uncorr,new,curved/seed1/validation_with_mc.root",
-
-//	"simulations/<t_max>,1E9,corr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/<t_max>,1E9,corr,new,flat/seed1/validation_with_mc.root",
-	"simulations/<t_max>,1E9,corr,new,curved/seed1/validation_with_mc.root",
+	"simulations/<t_max>,1E8,uncorr/seed1/validation_with_mc.root",
+	"simulations/<t_max>,1E8,corr/seed1/validation_with_mc.root",
 };
 
-string ref_file = topDir + "DS-fill5313/unfolding_cf_ni_45b_56t.root";
-string ref_obj = "fit2-2/g_t_corr";
+string ref_file = topDir + "DS-fill7291/Totem1/unfolding_cf_ni_45b_56t.root";
+string ref_obj = "fit-1/g_t_corr";
 TGraph_x_min = t_min;
 
 //----------------------------------------------------------------------------------------------------
@@ -43,25 +36,13 @@ for (string row : rows)
 
 	//--------------------
 	
-	string f = baseDir + replace(row, "<t_max>", "1.1");
-	string binning = "ob-3-5-0.05";
+	string f = topDir + "acceptance_tests/" + replace(row, "<t_max>", "0.045");
+	string binning = "eb";
 	
 	NewPad("$|t|\ung{GeV^2}$", "unsmearing correction (multiplicative)");
-	currentpad.yTicks = RightTicks(0.002, 0.001);
+	//currentpad.yTicks = RightTicks(0.002, 0.001);
 	PlotAll(f, binning);	
-	limits((0, 0.995), (1.0, 1.005), Crop);
+	limits((0, 0.90), (0.04, 1.10), Crop);
 
-	//--------------------
-	
-	string f = baseDir + replace(row, "<t_max>", "0.006");
-	string binning = "ob-1-20-0.05";
-	
-	NewPad("$|t|\ung{GeV^2}$", "unsmearing correction (multiplicative)");
-	currentpad.yTicks = RightTicks(0.002, 0.001);
-	PlotAll(f, binning);	
-	limits((0, 0.995), (0.005, 1.005), Crop);
-	
-	yaxis(XEquals(t_min, false), dashed);
-	
 	AttachLegend(NW, NE);
 }

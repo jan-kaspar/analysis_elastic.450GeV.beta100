@@ -80,7 +80,7 @@ for (int dsi : datasets.keys)
 		MakeComparison("$\De^{\rm R-L} x^*$", 1e0, "mm", "cut 7/h_cq7", xlimit=5, sigma=0.5, xStep=1., xstep=0.2, combinations, comb_pens);
 		
 		//--------------------
-		
+
 		string combinations[];
 		pen comb_pens[];
 		

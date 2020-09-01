@@ -2,16 +2,11 @@ import root;
 import pad_layout;
 include "../../common.asy";
 
-string topDir = "../../../acceptance/";
+string topDir = "../../../acceptance_tests/";
 
 string rows[] = {
-//	"simulations/<t_max>,1E9,uncorr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/<t_max>,1E9,uncorr,new,flat/seed1/validation_with_mc.root",
-	"simulations/<t_max>,1E9,uncorr,new,curved/seed1/validation_with_mc.root",
-
-//	"simulations/<t_max>,1E9,corr,old,flat/seed1/validation_with_mc.root",
-//	"simulations/<t_max>,1E9,corr,new,flat/seed1/validation_with_mc.root",
-	"simulations/<t_max>,1E9,corr,new,curved/seed1/validation_with_mc.root",
+	"simulations/<t_max>,1E8,uncorr/seed1/validation_with_mc.root",
+	"simulations/<t_max>,1E8,corr/seed1/validation_with_mc.root",
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -37,37 +32,19 @@ for (string row : rows)
 
 	//--------------------
 
-	string f = topDir + replace(row, "<t_max>", "1.1");
-	string binning = "ob-1-20-0.05";
+	string f = topDir + replace(row, "<t_max>", "0.045");
+	string binning = "eb";
 	
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{a.u.}$");
 	scale(Linear, Log);
-	//currentpad.yTicks = RightTicks(100., 20.);
 	PlotAll(f, binning);
-	limits((0, 1e-2), (1.0, 1e4), Crop);
+	limits((0, 1e8), (0.04, 1e11), Crop);
 
-	//--------------------
-
-	string f = topDir + replace(row, "<t_max>", "0.08");
-	string binning = "ob-1-20-0.05";
 	
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{a.u.}$");
 	scale(Linear, Log);
-	//currentpad.yTicks = RightTicks(100., 20.);
 	PlotAll(f, binning);
-	limits((0, 1e2), (0.075, 1e3), Crop);
-	
-	//--------------------
-	
-	string f = topDir + replace(row, "<t_max>", "0.006");
-	string binning = "ob-1-20-0.05";
-	
-	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{a.u.}$");
-	currentpad.yTicks = RightTicks(100., 20.);
-	PlotAll(f, binning);
-	limits((0, 5e2), (0.004, 1e3), Crop);
-	
-	yaxis(XEquals(t_min, false), dashed);
-	
+	limits((0, 1e8), (0.003, 1e11), Crop);
+
 	AttachLegend(NW, NE);
 }
