@@ -389,11 +389,41 @@ bool operator< (entry &e1, entry &e2)
 
 //----------------------------------------------------------------------------------------------------
 
+void DoVerticalAlignmentFit(TH1D *y_hist, map<string, map<signed int, result> > &results, signed int period)
+{
+	TF1 *ff = new TF1("f", "[n1]*exp(-(x-[cen])*(x-[cen])/2./[si1]/[si1]) + [n2]*exp(-(x-[cen])*(x-[cen])/2./[si2]/[si2])");
+
+	const double n1 = y_hist->GetBinContent(y_hist->FindBin(10.));
+
+	ff->SetParameter("cen", 0.);
+	ff->SetParameter("n1", n1);
+	ff->SetParameter("si1", 20.);
+	ff->SetParameter("n2", 10. * n1);
+	ff->SetParameter("si2", 5.);
+
+	// TODO: in principle, all fit parameters except "cen" can be made fixed to decrease fluctuations between datasets
+
+	// TODO: make it quite
+	y_hist->Fit(ff);
+
+	y_hist->Write("y_hist");
+
+	// fill results
+	results["c_fit"][period] = ff->GetParameter("cen");
+
+	// clean up
+	delete ff;
+}
+
+//----------------------------------------------------------------------------------------------------
+
 void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	const Analysis::AlignmentYRange &r, double c_exp,
 	map<string, map<signed int, result> > &results, signed int period)
 {
 	printf(">> DoVerticalAlignment\n");
+
+	TDirectory *d_top = gDirectory;
 
 	// rely on user cuts
 	double bs_y_cut = 0.;	// TODO: 3 * si_th_y * L_y_F = 3 * 1.9E-6 * 270m = 1.5 mm
@@ -443,7 +473,6 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 		sample_b.push_back(entry(-y, wa[i]));
 	}
 
-
 	// determine ranges
 	printf("\tbefore cuts\n");
 	printf("\t\ty_min_b = %.3f mm, y_min_t = %.3f mm\n", y_min_b, y_min_t);
@@ -468,8 +497,7 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 		if (entry.v > y_min_b && entry.v < y_max_b)
 			y_hist_range->Fill(-entry.v);
 
-
-	// save and free histograms
+	// save histograms
 	TCanvas *c = new TCanvas();
 	c->SetName("y_hist");
 	c->SetLogy(1);
@@ -477,18 +505,23 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	y_hist_range->Draw("same");
 	c->Write();
 
+	// run fit method
+	gDirectory = d_top->mkdir("fit");
+	DoVerticalAlignmentFit(y_hist_range, results, period);
+
+	// clean up
 	delete c;
 	delete y_hist;
 	delete y_hist_range;
+
+	// continue with shift method
+	gDirectory = d_top->mkdir("shift");
 
 	//printf("\t\t\t - sorting\n");
 	//sort(sample_t.begin(), sample_t.end());
 	//sort(sample_b.begin(), sample_b.end());
 
 	// determine shift range
-	//double s_min = -2.0, s_max = 2.0;
-	//double s_step = 0.2;
-	
 	double s_exp = 2. * c_exp - (y_min_t - y_min_b);
 	double s_min = s_exp - 2.5, s_max = s_exp + 2.5;
 	double s_step = 0.1;
@@ -843,6 +876,8 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	results["c_prob"][period] = result(-de_y_prob*1E3, 0.);
 	results["c_mean_diff_sq"][period] = result(-de_y_mean_diff_sq*1E3, de_y_unc_mean_diff_sq*1E3);
 	results["c_hist_chi_sq"][period] = result(-de_y_hist_chi_sq*1E3, de_y_unc_hist_chi_sq*1E3);
+
+	gDirectory = d_top;
 }
 
 //----------------------------------------------------------------------------------------------------
