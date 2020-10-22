@@ -7,11 +7,11 @@
 #include <map>
 #include <cstdio>
 
-#include "common_definitions.h"
-#include "common_algorithms.h"
-#include "parameters.h"
-#include "common.h"
-#include "AcceptanceCalculator.h"
+#include "common_definitions.hh"
+#include "common_algorithms.hh"
+#include "parameters.hh"
+#include "common.hh"
+#include "AcceptanceCalculator.hh"
 
 using namespace std;
 

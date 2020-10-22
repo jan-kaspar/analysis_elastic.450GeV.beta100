@@ -1,8 +1,8 @@
-#include "common_definitions.h"
-#include "common_algorithms.h"
-#include "AcceptanceCalculator.h"
-#include "parameters.h"
-#include "common.h"
+#include "common_definitions.hh"
+#include "common_algorithms.hh"
+#include "AcceptanceCalculator.hh"
+#include "parameters.hh"
+#include "common.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"

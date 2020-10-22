@@ -1,9 +1,9 @@
-#include "input_files.h"
+#include "input_files.hh"
 
-#include "common_definitions.h"
-#include "common_algorithms.h"
-#include "parameters.h"
-#include "common.h"
+#include "common_definitions.hh"
+#include "common_algorithms.hh"
+#include "parameters.hh"
+#include "common.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"

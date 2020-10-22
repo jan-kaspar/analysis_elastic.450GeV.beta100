@@ -9,12 +9,12 @@
 #include <map>
 #include <cstdio>
 
-#include "common_definitions.h"
-#include "common_algorithms.h"
-#include "parameters.h"
-#include "common.h"
+#include "common_definitions.hh"
+#include "common_algorithms.hh"
+#include "parameters.hh"
+#include "common.hh"
 
-#include "NumericalIntegration.h"
+#include "NumericalIntegration.hh"
 
 using namespace std;
 
