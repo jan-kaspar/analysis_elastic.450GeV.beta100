@@ -1,8 +1,7 @@
 import root;
 import pad_layout;
 include "../run_info.asy";
-
-string topDir = "../../";
+include "../common.asy";
 
 string datasets[], fills[];
 datasets.push("DS-fill7280/Totem1"); fills.push("7280");
@@ -144,10 +143,15 @@ for (int ui : units.keys)
 		string dataset = datasets[dsi];
 		DrawFillBands(fills[dsi], y_min, y_max);
 
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c"), "p,eb", cyan, mCi+1pt+blue);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_shift"), "p,eb", cyan, mCi+1pt+red);
+
+		/*
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_min_diff"), "p,eb", cyan, mCi+1pt+cyan);
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_prob"), "p,eb", blue, mCi+1pt+blue);
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_mean_diff_sq"), "p,eb", magenta, mCi+1pt+magenta);
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_hist_chi_sq"), "p,eb", heavygreen, mCi+1pt+heavygreen);
+		*/
 			
 		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c"), "p,l,eb", blue+1pt, mCi+1pt+blue);
 	}

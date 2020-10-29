@@ -1,9 +1,7 @@
 import root;
 import pad_layout;
 include "../run_info.asy";
-
-string topDir = "../../";
-
+include "../common.asy";
 
 string datasets[];
 string periods[][];

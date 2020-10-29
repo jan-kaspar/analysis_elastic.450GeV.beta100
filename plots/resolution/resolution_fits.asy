@@ -1,6 +1,7 @@
 import root;
 import pad_layout;
 include "../run_info.asy";
+include "../common.asy";
 
 string datasets[], dataset_fills[];
 datasets.push("DS-fill7280/Totem1"); dataset_fills.push("7280");
@@ -16,8 +17,6 @@ datasets.push("DS-fill7291/Totem1"); dataset_fills.push("7291");
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 pen dgn_pens[] = { blue, red };
-
-string topDir = "../../";
 
 xSizeDef = 10cm;
 ySizeDef = 6cm;
