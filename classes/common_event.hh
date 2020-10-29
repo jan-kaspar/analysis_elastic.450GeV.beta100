@@ -1,7 +1,10 @@
 #ifndef _common_event_hh_
 #define _common_event_hh_
 
+#include "common_alignment.hh"
+
 // TODO: clean
+/*
 #include <string>
 #include <vector>
 #include <set>
@@ -15,6 +18,7 @@
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 #include "TRandom2.h"
+*/
 
 using namespace std;
 

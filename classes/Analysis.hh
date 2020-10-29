@@ -1,11 +1,17 @@
 #ifndef _Analysis_hh_
 #define _Analysis_hh_
 
-// TODO: clean
-#include <string>
+#include "common_event.hh"
+#include "Kinematics.hh"
+#include "FiducialCut.hh"
+
 #include <vector>
-#include <set>
 #include <map>
+#include <string>
+
+// TODO: clean
+/*
+#include <set>
 #include <cmath>
 #include <algorithm>
 
@@ -15,8 +21,19 @@
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 #include "TRandom2.h"
+*/
 
 using namespace std;
+
+//----------------------------------------------------------------------------------------------------
+
+struct CutData
+{
+	double cqa[12];	///< array of quantities qa
+	double cqb[12];	///< array of quantities qb
+	double cv[12];	///< array of cut quantities v = a*qa + b*qb + c
+	bool ct[12];	///< array of flags whether |v| < n_si * si
+};
 
 //----------------------------------------------------------------------------------------------------
 
@@ -109,6 +126,7 @@ struct Analysis
 	map<std::string, AlignmentYRange> alignmentYRanges;
 
 	void BuildCuts();
+
 	bool EvaluateCuts(const HitData &, const Kinematics &, CutData &) const;
 
 	bool SkipEvent(unsigned int run, unsigned int ls, unsigned int timestamp, unsigned int bunch) const

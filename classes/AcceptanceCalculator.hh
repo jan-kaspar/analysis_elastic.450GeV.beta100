@@ -1,6 +1,7 @@
 #ifndef _AcceptanceCalculator_hh_
 #define _AcceptanceCalculator_hh_
 
+#include "Analysis.hh"
 #include "numerical_integration.hh"
 
 //----------------------------------------------------------------------------------------------------

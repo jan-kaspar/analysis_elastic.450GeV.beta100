@@ -1,11 +1,14 @@
 #ifndef _common_algorithms_h_
 #define _common_algorithms_h_
 
+#include "common_event.hh"
+#include "Environment.hh"
+#include "Kinematics.hh"
+#include "Analysis.hh"
+
 #include "TMath.h"
 
 #include <deque>
-
-#include "common_definitions.hh"
 
 //----------------------------------------------------------------------------------------------------
 

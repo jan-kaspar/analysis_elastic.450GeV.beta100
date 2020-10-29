@@ -1,7 +1,13 @@
 #ifndef _Environment_hh_
 #define _Environment_hh_
 
+#include "TVectorD.h"
+#include "TMatrixD.h"
+#include "TMatrixDSymEigen.h"
+#include "TRandom3.h"
+
 // TODO: clean
+/*
 #include <string>
 #include <vector>
 #include <set>
@@ -11,10 +17,7 @@
 
 #include "TGraph.h"
 #include "TFile.h"
-#include "TMatrixD.h"
-#include "TVectorD.h"
-#include "TMatrixDSymEigen.h"
-#include "TRandom2.h"
+*/
 
 using namespace std;
 

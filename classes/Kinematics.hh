@@ -1,7 +1,10 @@
 #ifndef _Kinematics_hh_
 #define _Kinematics_hh_
 
+#include "Environment.hh"
+
 // TODO: clean
+/*
 #include <string>
 #include <vector>
 #include <set>
@@ -15,6 +18,7 @@
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 #include "TRandom2.h"
+*/
 
 using namespace std;
 

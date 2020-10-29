@@ -1,20 +1,25 @@
 #ifndef _common_alignment_hh_
 #define _common_alignment_hh_
 
-// TODO: clean
+#include "TFile.h"
+#include "TGraph.h"
+
 #include <string>
+
+// TODO: clean
+/*
 #include <vector>
 #include <set>
 #include <map>
 #include <cmath>
 #include <algorithm>
 
-#include "TGraph.h"
 #include "TFile.h"
 #include "TMatrixD.h"
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 #include "TRandom2.h"
+*/
 
 using namespace std;
 

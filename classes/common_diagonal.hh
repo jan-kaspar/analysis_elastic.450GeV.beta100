@@ -1,8 +1,10 @@
 #ifndef _common_diagonal_hh_
 #define _common_diagonal_hh_
 
-// TODO: clean
 #include <string>
+
+// TODO: clean
+/*
 #include <vector>
 #include <set>
 #include <map>
@@ -15,6 +17,7 @@
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 #include "TRandom2.h"
+*/
 
 using namespace std;
 
