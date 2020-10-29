@@ -1,5 +1,5 @@
-#ifndef _command_line_tools_h_
-#define _command_line_tools_h_
+#ifndef _command_line_tools_hh_
+#define _command_line_tools_hh_
 
 #include <cstring>
 #include <string>

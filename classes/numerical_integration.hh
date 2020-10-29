@@ -1,5 +1,5 @@
-#ifndef _numerical_integration_h_
-#define _numerical_integration_h_
+#ifndef _numerical_integration_hh_
+#define _numerical_integration_hh_
 
 #include "TComplex.h"
 

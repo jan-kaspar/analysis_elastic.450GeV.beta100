@@ -1,5 +1,32 @@
-#ifndef _common_h_
-#define _common_h_
+#ifndef _common_diagonal_hh_
+#define _common_diagonal_hh_
+
+// TODO: clean
+#include <string>
+#include <vector>
+#include <set>
+#include <map>
+#include <cmath>
+#include <algorithm>
+
+#include "TGraph.h"
+#include "TFile.h"
+#include "TMatrixD.h"
+#include "TVectorD.h"
+#include "TMatrixDSymEigen.h"
+#include "TRandom2.h"
+
+using namespace std;
+
+//----------------------------------------------------------------------------------------------------
+
+enum DiagonalType { dUnknown, d45b_56t, d45t_56b, dCombined, ad45b_56b, ad45t_56t };
+
+DiagonalType diagonal = dUnknown;
+
+double th_y_sign = 0.;
+
+//----------------------------------------------------------------------------------------------------
 
 int rcIncompatibleDiagonal = 123;
 
