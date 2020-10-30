@@ -1,6 +1,8 @@
 #ifndef _Analysis_hh_
 #define _Analysis_hh_
 
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 #include "common_event.hh"
 #include "Kinematics.hh"
 #include "FiducialCut.hh"
@@ -8,20 +10,6 @@
 #include <vector>
 #include <map>
 #include <string>
-
-// TODO: clean
-/*
-#include <set>
-#include <cmath>
-#include <algorithm>
-
-#include "TGraph.h"
-#include "TFile.h"
-#include "TMatrixD.h"
-#include "TVectorD.h"
-#include "TMatrixDSymEigen.h"
-#include "TRandom2.h"
-*/
 
 using namespace std;
 
@@ -125,131 +113,118 @@ struct Analysis
 	};
 	map<std::string, AlignmentYRange> alignmentYRanges;
 
+	void Print() const;
+
+	void Load(const edm::ParameterSet &ps);
+
 	void BuildCuts();
 
 	bool EvaluateCuts(const HitData &, const Kinematics &, CutData &) const;
 
-	bool SkipEvent(unsigned int run, unsigned int ls, unsigned int timestamp, unsigned int bunch) const
+	bool SkipEvent(unsigned int run, unsigned int ls, unsigned int timestamp, unsigned int bunch) const;
+};
+
+//----------------------------------------------------------------------------------------------------
+
+void Analysis::Load(const edm::ParameterSet &ps)
+{
+	L_int = ps.getParameter<double>("L_int");
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void Analysis::Print() const
+{
+	printf("t_min=%E, t_max=%E, t_min_full=%E, t_max_full=%E\n", t_min, t_max, t_min_full, t_max_full);
+	printf("t_min_fit=%E\n", t_min_fit);
+
+	printf("\n");
+	printf("%lu excluded runs: ", excl_runs.size());
+	for (const auto &run : excl_runs)
+		printf("%u, ", run);
+	printf("\n");
+
+	printf("%lu time intervals: ", excl_timeIntervals.size());
+	for (const auto &interval : excl_timeIntervals)
+		printf("(%u to %u), ", interval.first, interval.second);
+	printf("\n");
+
+	printf("exluded LS:\n");
+	for (const auto &rp : excl_lsIntervals)
 	{
-		if (find(excl_runs.begin(), excl_runs.end(), run) != excl_runs.end())
-			return true;
-
-		for (const auto &interval : excl_timeIntervals)
-		{
-			if (interval.first <= timestamp && timestamp <= interval.second)
-				return true;
-		}
-
-		const auto rit = excl_lsIntervals.find(run);
-		if (rit != excl_lsIntervals.end())
-		{
-			for (const auto &interval : rit->second)
-			{
-				if (interval.first <= ls && ls <= interval.second)
-					return true;
-			}
-		}
-
-		if (find(excl_bunches.begin(), excl_bunches.end(), bunch) != excl_bunches.end())
-			return true;
-
-		return false;
-	}
-
-
-	void Print() const
-	{
-		printf("t_min=%E, t_max=%E, t_min_full=%E, t_max_full=%E\n", t_min, t_max, t_min_full, t_max_full);
-		printf("t_min_fit=%E\n", t_min_fit);
-
-		printf("\n");
-		printf("%lu excluded runs: ", excl_runs.size());
-		for (const auto &run : excl_runs)
-			printf("%u, ", run);
-		printf("\n");
-
-		printf("%lu time intervals: ", excl_timeIntervals.size());
-		for (const auto &interval : excl_timeIntervals)
+		printf("    run %u: ", rp.first);
+		for (const auto &interval : rp.second)
 			printf("(%u to %u), ", interval.first, interval.second);
 		printf("\n");
-
-		printf("exluded LS:\n");
-		for (const auto &rp : excl_lsIntervals)
-		{
-			printf("    run %u: ", rp.first);
-			for (const auto &interval : rp.second)
-				printf("(%u to %u), ", interval.first, interval.second);
-			printf("\n");
-		}
-
-		printf("%lu excluded bunches: ", excl_bunches.size());
-		for (const auto &bunch : excl_bunches)
-			printf("%u, ", bunch);
-		printf("\n");
-
-		printf("\n");
-		printf("n_si=%E\n", n_si);
-
-		printf("\n");
-		printf("cut1_a=%E, cut1_c=%E, cut1_si=%E\n", cut1_a, cut1_c, cut1_si);
-		printf("cut2_a=%E, cut2_c=%E, cut2_si=%E\n", cut2_a, cut2_c, cut2_si);
-		printf("cut3_a=%E, cut3_c=%E, cut3_si=%E\n", cut3_a, cut3_c, cut3_si);
-		printf("cut4_a=%E, cut4_c=%E, cut4_si=%E\n", cut4_a, cut4_c, cut4_si);
-		printf("cut5_a=%E, cut5_c=%E, cut5_si=%E\n", cut5_a, cut5_c, cut5_si);
-		printf("cut6_a=%E, cut6_c=%E, cut6_si=%E\n", cut6_a, cut6_c, cut6_si);
-		printf("cut7_a=%E, cut7_c=%E, cut7_si=%E\n", cut7_a, cut7_c, cut7_si);
-		printf("cut8_a=%E, cut8_c=%E, cut8_si=%E\n", cut8_a, cut8_c, cut8_si);
-		printf("cut9_a=%E, cut9_c=%E, cut9_si=%E\n", cut9_a, cut9_c, cut9_si);
-		printf("cut10_a=%E, cut10_c=%E, cut10_si=%E\n", cut10_a, cut10_c, cut10_si);
-
-		printf("\n");
-		printf("cut parameters:\n");
-		for (unsigned int i = 1; i <= N_cuts; i++)
-		{
-			printf("%u| cqaN=%s, cqbN=%s | cca=%E, ccb=%E, ccc=%E, csi=%E\n", i,
-				cqaN[i].c_str(), cqbN[i].c_str(), cca[i], ccb[i], ccc[i], csi[i]);
-		}
-
-		printf("\n");
-		printf("%lu enabled cuts: ", cuts.size());
-		for (unsigned int i = 0; i < cuts.size(); i++)
-			printf((i == 0) ? "%i" : ", %i", cuts[i]);
-
-		printf("\n");
-
-		printf("\n");
-		printf("fiducial cuts:\n");
-		printf("fc_L: "); fc_L.Print();
-		printf("fc_R: "); fc_R.Print();
-		printf("fc_G: "); fc_G.Print();
-		printf("vtx_x: min = %.3E, max = %.3E\n", vtx_x_min, vtx_x_max);
-		printf("vtx_y: min = %.3E, max = %.3E\n", vtx_y_min, vtx_y_max);
-
-		printf("\n");
-		printf("smearing parameters:\n");
-		printf("si_th_x_1arm_L=%E, si_th_x_1arm_R=%E, si_th_x_1arm_unc=%E\n", si_th_x_1arm_L, si_th_x_1arm_R, si_th_x_1arm_unc);
-		printf("si_th_x_2arm=%E, si_th_x_2arm_unc=%E\n", si_th_x_2arm, si_th_x_2arm_unc);
-		printf("si_th_x_LRDiff=%E, si_th_x_LRdiff_unc=%E\n", si_th_x_LRdiff, si_th_x_LRdiff_unc);
-		printf("si_th_y_1arm=%E, si_th_y_1arm_unc=%E\n", si_th_y_1arm, si_th_y_1arm_unc);
-		printf("si_th_y_2arm=%E, si_th_y_2arm_unc=%E\n", si_th_y_2arm, si_th_y_2arm_unc);
-		printf("si_th_y_LRDiff=%E, si_th_y_LRdiff_unc=%E\n", si_th_y_LRdiff, si_th_y_LRdiff_unc);
-		printf("use_resolution_fits = %i\n", use_resolution_fits);
-
-		printf("\n");
-		printf("normalisation parameters:\n");
-		printf("use_3outof4_efficiency_fits = %i\n", use_3outof4_efficiency_fits);
-		printf("use_pileup_efficiency_fits= %i\n", use_pileup_efficiency_fits);
-		printf("inefficiency_3outof4 = %.3f\n", inefficiency_3outof4);
-		printf("inefficiency_shower_near = %.3f\n", inefficiency_shower_near);
-		printf("inefficiency_pile_up = %.3f\n", inefficiency_pile_up);
-		printf("inefficiency_trigger = %.3f\n", inefficiency_trigger);
-		printf("inefficiency_DAQ = %.3f\n", inefficiency_DAQ);
-		printf("bckg_corr = %.3f\n", bckg_corr);
-		printf("L_int=%E\n", L_int);
-		printf("eff_3outof4_fixed_point=%E, eff_3outof4_slope=%E, eff_3outof4_slope_unc=%E\n", eff_3outof4_fixed_point, eff_3outof4_slope, eff_3outof4_slope_unc);
-		printf("norm_corr=%E, norm_corr_unc=%E\n", norm_corr, norm_corr_unc);
 	}
-};
+
+	printf("%lu excluded bunches: ", excl_bunches.size());
+	for (const auto &bunch : excl_bunches)
+		printf("%u, ", bunch);
+	printf("\n");
+
+	printf("\n");
+	printf("n_si=%E\n", n_si);
+
+	printf("\n");
+	printf("cut1_a=%E, cut1_c=%E, cut1_si=%E\n", cut1_a, cut1_c, cut1_si);
+	printf("cut2_a=%E, cut2_c=%E, cut2_si=%E\n", cut2_a, cut2_c, cut2_si);
+	printf("cut3_a=%E, cut3_c=%E, cut3_si=%E\n", cut3_a, cut3_c, cut3_si);
+	printf("cut4_a=%E, cut4_c=%E, cut4_si=%E\n", cut4_a, cut4_c, cut4_si);
+	printf("cut5_a=%E, cut5_c=%E, cut5_si=%E\n", cut5_a, cut5_c, cut5_si);
+	printf("cut6_a=%E, cut6_c=%E, cut6_si=%E\n", cut6_a, cut6_c, cut6_si);
+	printf("cut7_a=%E, cut7_c=%E, cut7_si=%E\n", cut7_a, cut7_c, cut7_si);
+	printf("cut8_a=%E, cut8_c=%E, cut8_si=%E\n", cut8_a, cut8_c, cut8_si);
+	printf("cut9_a=%E, cut9_c=%E, cut9_si=%E\n", cut9_a, cut9_c, cut9_si);
+	printf("cut10_a=%E, cut10_c=%E, cut10_si=%E\n", cut10_a, cut10_c, cut10_si);
+
+	printf("\n");
+	printf("cut parameters:\n");
+	for (unsigned int i = 1; i <= N_cuts; i++)
+	{
+		printf("%u| cqaN=%s, cqbN=%s | cca=%E, ccb=%E, ccc=%E, csi=%E\n", i,
+			cqaN[i].c_str(), cqbN[i].c_str(), cca[i], ccb[i], ccc[i], csi[i]);
+	}
+
+	printf("\n");
+	printf("%lu enabled cuts: ", cuts.size());
+	for (unsigned int i = 0; i < cuts.size(); i++)
+		printf((i == 0) ? "%i" : ", %i", cuts[i]);
+
+	printf("\n");
+
+	printf("\n");
+	printf("fiducial cuts:\n");
+	printf("fc_L: "); fc_L.Print();
+	printf("fc_R: "); fc_R.Print();
+	printf("fc_G: "); fc_G.Print();
+	printf("vtx_x: min = %.3E, max = %.3E\n", vtx_x_min, vtx_x_max);
+	printf("vtx_y: min = %.3E, max = %.3E\n", vtx_y_min, vtx_y_max);
+
+	printf("\n");
+	printf("smearing parameters:\n");
+	printf("si_th_x_1arm_L=%E, si_th_x_1arm_R=%E, si_th_x_1arm_unc=%E\n", si_th_x_1arm_L, si_th_x_1arm_R, si_th_x_1arm_unc);
+	printf("si_th_x_2arm=%E, si_th_x_2arm_unc=%E\n", si_th_x_2arm, si_th_x_2arm_unc);
+	printf("si_th_x_LRDiff=%E, si_th_x_LRdiff_unc=%E\n", si_th_x_LRdiff, si_th_x_LRdiff_unc);
+	printf("si_th_y_1arm=%E, si_th_y_1arm_unc=%E\n", si_th_y_1arm, si_th_y_1arm_unc);
+	printf("si_th_y_2arm=%E, si_th_y_2arm_unc=%E\n", si_th_y_2arm, si_th_y_2arm_unc);
+	printf("si_th_y_LRDiff=%E, si_th_y_LRdiff_unc=%E\n", si_th_y_LRdiff, si_th_y_LRdiff_unc);
+	printf("use_resolution_fits = %i\n", use_resolution_fits);
+
+	printf("\n");
+	printf("normalisation parameters:\n");
+	printf("use_3outof4_efficiency_fits = %i\n", use_3outof4_efficiency_fits);
+	printf("use_pileup_efficiency_fits= %i\n", use_pileup_efficiency_fits);
+	printf("inefficiency_3outof4 = %.3f\n", inefficiency_3outof4);
+	printf("inefficiency_shower_near = %.3f\n", inefficiency_shower_near);
+	printf("inefficiency_pile_up = %.3f\n", inefficiency_pile_up);
+	printf("inefficiency_trigger = %.3f\n", inefficiency_trigger);
+	printf("inefficiency_DAQ = %.3f\n", inefficiency_DAQ);
+	printf("bckg_corr = %.3f\n", bckg_corr);
+	printf("L_int=%E\n", L_int);
+	printf("eff_3outof4_fixed_point=%E, eff_3outof4_slope=%E, eff_3outof4_slope_unc=%E\n", eff_3outof4_fixed_point, eff_3outof4_slope, eff_3outof4_slope_unc);
+	printf("norm_corr=%E, norm_corr_unc=%E\n", norm_corr, norm_corr_unc);
+}
 
 //----------------------------------------------------------------------------------------------------
 
@@ -374,6 +349,35 @@ bool Analysis::EvaluateCuts(const HitData & h, const Kinematics &k, CutData &cd)
 	}
 
 	return select;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+bool Analysis::SkipEvent(unsigned int run, unsigned int ls, unsigned int timestamp, unsigned int bunch) const
+{
+	if (find(excl_runs.begin(), excl_runs.end(), run) != excl_runs.end())
+		return true;
+
+	for (const auto &interval : excl_timeIntervals)
+	{
+		if (interval.first <= timestamp && timestamp <= interval.second)
+			return true;
+	}
+
+	const auto rit = excl_lsIntervals.find(run);
+	if (rit != excl_lsIntervals.end())
+	{
+		for (const auto &interval : rit->second)
+		{
+			if (interval.first <= ls && ls <= interval.second)
+				return true;
+		}
+	}
+
+	if (find(excl_bunches.begin(), excl_bunches.end(), bunch) != excl_bunches.end())
+		return true;
+
+	return false;
 }
 
 #endif

@@ -1,4 +1,4 @@
-#include "classes/Config.hh"
+#include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 
 #include <string>
@@ -21,7 +21,7 @@ int main(int argc, const char **argv)
 {
 	// defaults
 	string cfg_file = "config.py";
-	string diagonal = "";
+	string diagonal_input = "";
 
 	// parse command line
 	// TODO: update
@@ -34,7 +34,7 @@ int main(int argc, const char **argv)
 		}
 
 		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
-		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
 
 		printf("ERROR: unknown option '%s'.\n", argv[argi]);
 		cl_error = 1;
@@ -46,8 +46,9 @@ int main(int argc, const char **argv)
 		return 1;
 	}
 
-	// load configuration
-	LoadConfig(cfg_file, "cfg_" + diagonal);
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
 
 	return 0;
 }

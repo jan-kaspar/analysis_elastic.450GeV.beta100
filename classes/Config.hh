@@ -2,10 +2,6 @@
 #define _config_hh_
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/ParameterSetReader/interface/ParameterSetReader.h"
-
-#include "Environment.hh"
-#include "Analysis.hh"
 
 #include <vector>
 #include <string>
@@ -15,11 +11,17 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
+enum DiagonalType { dUnknown, d45b_56t, d45t_56b, dCombined, ad45b_56b, ad45t_56t };
+
+//----------------------------------------------------------------------------------------------------
+
 struct Config
 {
-	string diagonal;
+	DiagonalType diagonal = dUnknown;
+	string diagonal_str;
+	string python_object;
 
-	double L_int;
+	double th_y_sign = 0.;
 
 	void Load(const edm::ParameterSet &ps);
 
@@ -28,41 +30,14 @@ struct Config
 
 //----------------------------------------------------------------------------------------------------
 
-void Config::Load(const edm::ParameterSet &ps)
+void Config::Load(const edm::ParameterSet & /*ps*/)
 {
-	L_int = ps.getParameter<double>("L_int");
 }
 
 //----------------------------------------------------------------------------------------------------
 
 void Config::Print() const
 {
-	printf("L_int = %.3f\n", L_int);
-}
-
-//----------------------------------------------------------------------------------------------------
-
-Config cfg;
-Environment env;
-Analysis anal;
-
-//----------------------------------------------------------------------------------------------------
-
-int LoadConfig(const string &file, const string &obj)
-{
-	const edm::ParameterSet &config = edm::readPSetsFrom(file)->getParameter<edm::ParameterSet>(obj);
-
-	// TODO: uncomment
-	/*
-	const edm::ParameterSet &ps_env = config.getParameterSet("env");
-	env.Load(ps_env);
-
-	// TODO: uncomment
-	//const edm::ParameterSet &ps_anal = config.getParameterSet("anal");
-	//anal.Load(ps_anal);
-	*/
-
-	return 0;
 }
 
 #endif
