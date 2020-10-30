@@ -58,12 +58,21 @@ int Init(const string &cfg_file, const string &diagonal_input)
 
 	if (cfg.diagonal == dUnknown)
 	{
-		printf("ERROR: in Init > unrecognised diagonal %s\n", cfg.diagonal_str.c_str());
+		printf("ERROR in Init: unrecognised diagonal %s\n", cfg.diagonal_str.c_str());
 		return 1;
 	}
 
 	// load python config
-	const edm::ParameterSet &config = edm::readPSetsFrom(cfg_file)->getParameter<edm::ParameterSet>(cfg.python_object);
+	edm::ParameterSet config;
+	
+	try {
+		config = edm::readPSetsFrom(cfg_file)->getParameter<edm::ParameterSet>(cfg.python_object);
+	}
+	catch (...)
+	{
+		printf("ERROR in Init: cannot load object '%s' from file '%s'.\n", cfg.python_object.c_str(), cfg_file.c_str());
+		return 2;
+	}
 
 	cfg.Load(config);
 

@@ -1,9 +1,10 @@
 *.swp
 *.swo
 *.root
-*.log*
+*.log
 *.pdf
 *.out
+*.pyc
 .*
 
 !.gitignore

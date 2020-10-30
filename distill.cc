@@ -1,15 +1,8 @@
-#include "input_files.hh"
-
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
-#include "TCanvas.h"
-#include "TGraph.h"
-#include "TChain.h"
-#include "TH1D.h"
+#include "TTree.h"
 
 #include "DataFormats/FWLite/interface/Handle.h"
 #include "DataFormats/FWLite/interface/ChainEvent.h"
@@ -21,44 +14,80 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>");
+	printf("OPTIONS:");
+	printf("    -cfg <file>       config file");
+	printf("    -dgn <string>     diagonal");
+}
 
-	Init(argv[1]);
-	if (diagonal == dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	// TODO: update
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
 
-	// prepare input
-	InitInputFiles();
-	printf("* input files: \n");
-	for (unsigned int i = 0; i < input_files.size(); i++)
-		printf("    %s\n", input_files[i].c_str());
+	// print settings
+	cfg.Print();
 
-	fwlite::ChainEvent event(input_files);
+	// prepare input
+	fwlite::ChainEvent event(cfg.input_files);
 
 	printf("* events in input chain: %llu\n", event.size());
 
 	// define RP ids
 	unsigned int rpId_L_2_F = 0, rpId_L_1_F = 0, rpId_R_1_F = 0, rpId_R_2_F = 0;
 
-	if (diagonal == ad45b_56b)
+	if (cfg.diagonal == ad45b_56b)
 	{
 		rpId_L_2_F = 25; rpId_L_1_F = 5; rpId_R_1_F = 105; rpId_R_2_F = 125;
 	}
 
-	if (diagonal == d45b_56t)
+	if (cfg.diagonal == d45b_56t)
 	{
 		rpId_L_2_F = 25; rpId_L_1_F = 5; rpId_R_1_F = 104; rpId_R_2_F = 124;
 	}
 
-	if (diagonal == d45t_56b)
+	if (cfg.diagonal == d45t_56b)
 	{
 		rpId_L_2_F = 24; rpId_L_1_F = 4; rpId_R_1_F = 105; rpId_R_2_F = 125;
 	}
 
-	if (diagonal == ad45t_56t)
+	if (cfg.diagonal == ad45t_56t)
 	{
 		rpId_L_2_F = 24; rpId_L_1_F = 4; rpId_R_1_F = 104; rpId_R_2_F = 124;
 	}
@@ -70,7 +99,7 @@ int main(int argc, char **argv)
 	printf("    rpId_R_2_F = %u\n", rpId_R_2_F);
 
 	// prepare ouput file
-	TFile *f_out = new TFile((string("distill_") + argv[1] + ".root").c_str(), "recreate");
+	TFile *f_out = new TFile((string("distill_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// set up output tree
 	EventRed ev;
@@ -103,7 +132,7 @@ int main(int argc, char **argv)
 
 		// fill meta data
 		ev.lumi_section = event.id().luminosityBlock();
-		ev.timestamp = event.time().unixTime() - timestamp0;
+		ev.timestamp = event.time().unixTime() - cfg.timestamp0;
 		ev.run_num = event.id().run();
 		ev.bunch_num = event.bunchCrossing();
 		ev.event_num = event.id().event();
