@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# compile everything
+make -C .. || exit 1
+
+# prepare datasets
+mkdir "temp"
+cd "temp"
+../../input/build_input_files_EOS
+cd ..
+rm -r "temp"
+
+# run basic analysis
+ds="fill7291/Totem1"
+cp ../config_base.py .
+cd ..
+./run -no-bckg "distill.cc" "test/data/$ds"
+
+# make comparison to reference
+# TODO
