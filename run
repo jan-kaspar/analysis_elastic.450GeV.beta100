@@ -5,17 +5,14 @@
 function PrintUsage()
 {
 	echo -e "USAGE: $0 <option> <src file> <option> <dir> <dir> ..."
-#	echo -e "OPTIONS"
-#
-#	echo -e "	-h, --help		print this help and exit"
-#	echo -e "	-no-run, -dno		do not run the program for any diagonal, just compile"
-#	echo -e "	-d45b_56t, -d45b	run the program for diagonal 45b-56t"
-#	echo -e "	-d45t_56b, -d45t	run the program for diagonal 45t-56b"
-#	echo -e "	-dboth			run the program for both diagonals"
-#	echo -e "	-dc, -dcomb		run the program in combined diagonals"
-#	echo -e "	-danti			run the program in anti-diagonals"
-#	echo -e "	-O <option>		pass the option to the program"
-#	echo -e "	-no-bckg		do no run compilation and programs in background"
+	echo -e "OPTIONS"
+
+	echo -e "	-h, --help		print this help and exit"
+	echo -e "	-d <string>		select diagonals"
+	echo -e "	-dcomb			select 'combined' diagonal"
+	echo -e "	-danti			select anti-diagonals"
+	echo -e "	-O <option>		pass the option to the program"
+	echo -e "	-no-bckg		do no run programs in background"
 #	echo -e "	-batch			prepare job for LXBATCH instead of executing locally"
 #	echo -e "	-submit			submit job to LXBATCH, implies -lxbatch option"
 }
@@ -171,5 +168,10 @@ binDir=`pwd -P`
 
 for dir in ${directories[*]}
 do
-	RunOneDirectory &
+	if [ "$runInBackground" == "y" ]
+	then
+		RunOneDirectory &
+	else
+		RunOneDirectory
+	fi
 done
