@@ -1,25 +1,12 @@
 #ifndef _common_alignment_hh_
 #define _common_alignment_hh_
 
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 #include "TFile.h"
 #include "TGraph.h"
 
 #include <string>
-
-// TODO: clean
-/*
-#include <vector>
-#include <set>
-#include <map>
-#include <cmath>
-#include <algorithm>
-
-#include "TFile.h"
-#include "TMatrixD.h"
-#include "TVectorD.h"
-#include "TMatrixDSymEigen.h"
-#include "TRandom2.h"
-*/
 
 using namespace std;
 
@@ -44,29 +31,13 @@ struct AlignmentData
 		a_R_1_F = b_R_1_F = c_R_1_F = 0.;
 		a_R_2_F = b_R_2_F = c_R_2_F = 0.;
 	}
-
-	/*
-	AlignmentData Interpolate(double s_N, double s_F, double s_NH, double s_FH) const
-	{
-		AlignmentData r;
-
-		r.a_L_F = a_L_N + (a_L_F - a_L_N)/(s_F - s_N) * (s_FH - s_N); r.a_L_N = a_L_N + (a_L_F - a_L_N)/(s_F - s_N) * (s_NH - s_N);
-		r.a_R_F = a_R_N + (a_R_F - a_R_N)/(s_F - s_N) * (s_FH - s_N); r.a_R_N = a_R_N + (a_R_F - a_R_N)/(s_F - s_N) * (s_NH - s_N);
-
-		r.b_L_F = b_L_N + (b_L_F - b_L_N)/(s_F - s_N) * (s_FH - s_N); r.b_L_N = b_L_N + (b_L_F - b_L_N)/(s_F - s_N) * (s_NH - s_N);
-		r.b_R_F = b_R_N + (b_R_F - b_R_N)/(s_F - s_N) * (s_FH - s_N); r.b_R_N = b_R_N + (b_R_F - b_R_N)/(s_F - s_N) * (s_NH - s_N);
-
-		r.c_L_F = c_L_N + (c_L_F - c_L_N)/(s_F - s_N) * (s_FH - s_N); r.c_L_N = c_L_N + (c_L_F - c_L_N)/(s_F - s_N) * (s_NH - s_N);
-		r.c_R_F = c_R_N + (c_R_F - c_R_N)/(s_F - s_N) * (s_FH - s_N); r.c_R_N = c_R_N + (c_R_F - c_R_N)/(s_F - s_N) * (s_NH - s_N);
-
-		return r;
-	}
-	*/
 };
 
 //----------------------------------------------------------------------------------------------------
 
 enum AlignmentType { atNone, atConstant, atTimeDependent };
+
+//----------------------------------------------------------------------------------------------------
 
 struct AlignmentSource
 {
@@ -103,6 +74,26 @@ struct AlignmentSource
 	{
 		type_c = t;
 		src_c = fn;
+	}
+
+	void Load(const vector<edm::ParameterSet> &v)
+	{
+		SetAlignmentA(atConstant);
+		SetAlignmentB(atConstant);
+		SetAlignmentC(atConstant);
+
+		for (const auto &p : v)
+		{
+			const auto &unit = p.getParameter<string>("unit");
+			const double a = p.getParameter<double>("a");
+			const double b = p.getParameter<double>("b");
+			const double c = p.getParameter<double>("c");
+
+			if (unit == "L_2_F") { cnst.a_L_2_F = a; cnst.b_L_2_F = b; cnst.c_L_2_F = c; }
+			if (unit == "L_1_F") { cnst.a_L_1_F = a; cnst.b_L_1_F = b; cnst.c_L_1_F = c; }
+			if (unit == "R_1_F") { cnst.a_R_1_F = a; cnst.b_R_1_F = b; cnst.c_R_1_F = c; }
+			if (unit == "R_2_F") { cnst.a_R_2_F = a; cnst.b_R_2_F = b; cnst.c_R_2_F = c; }
+		}
 	}
 
 	void InitOne(const string label, AlignmentType t, const string &fn, GraphSet &gs, const string &obj)

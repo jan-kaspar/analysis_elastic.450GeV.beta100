@@ -1,23 +1,10 @@
 #ifndef _FiducialCut_hh_
 #define _FiducialCut_hh_
 
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 #include <vector>
 #include <set>
-
-// TODO: clean
-/*
-#include <string>
-#include <map>
-#include <cmath>
-#include <algorithm>
-
-#include "TGraph.h"
-#include "TFile.h"
-#include "TMatrixD.h"
-#include "TVectorD.h"
-#include "TMatrixDSymEigen.h"
-#include "TRandom2.h"
-*/
 
 using namespace std;
 
@@ -41,6 +28,13 @@ struct FiducialCut
 
 	FiducialCut(const vector<Point> & _points) : points(_points)
 	{
+	}
+
+	void Init(const std::vector<edm::ParameterSet> &input)
+	{
+		points.clear();
+		for (const auto &p : input)
+			points.emplace_back(Point{p.getParameter<double>("x"), p.getParameter<double>("y")});
 	}
 
 	void Print() const

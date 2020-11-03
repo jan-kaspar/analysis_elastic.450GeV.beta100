@@ -6,6 +6,7 @@
 #include "common_event.hh"
 #include "Kinematics.hh"
 #include "FiducialCut.hh"
+#include "common_alignment.hh"
 
 #include <vector>
 #include <map>
@@ -33,6 +34,9 @@ struct Analysis
 	std::vector<unsigned int> excl_runs;
 	std::map<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> excl_lsIntervals;
 
+	// alignment corrections
+	vector<AlignmentSource> alignment_sources;
+
 	// binning, |t| in GeV^2
 	double t_min, t_max;
 	double t_min_full, t_max_full;
@@ -51,11 +55,6 @@ struct Analysis
 	double cut8_a, cut8_c, cut8_si;
 	double cut9_a, cut9_c, cut9_si;
 	double cut10_a, cut10_c, cut10_si;
-
-	unsigned int N_cuts;	// number of cuts - indexed from 1!
-	string cqaN[12], cqbN[12];
-	double cca[12], ccb[12], ccc[12], csi[12];
-	std::vector<unsigned int> cuts;	// list of active cuts
 
 	// fiducial cuts
 	FiducialCut fc_L, fc_R, fc_G;
@@ -104,6 +103,11 @@ struct Analysis
 	double alignment_t0;	// beginning of the first time-slice
 	double alignment_ts;	// time-slice in s
 
+	vector<string> binnings;	// default list of binnings
+
+	string unsmearing_file;		// file with unsmearing corrections
+	string unsmearing_object;	// specification of the unsmearing correction
+
 	// y ranges for alignment
 	struct AlignmentYRange
 	{
@@ -117,6 +121,10 @@ struct Analysis
 
 	void Load(const edm::ParameterSet &ps);
 
+	unsigned int N_cuts;	// number of cuts - indexed from 1!
+	string cqaN[12], cqbN[12];
+	double cca[12], ccb[12], ccc[12], csi[12];
+	std::vector<unsigned int> cuts;	// list of active cuts
 	void BuildCuts();
 
 	bool EvaluateCuts(const HitData &, const Kinematics &, CutData &) const;
@@ -128,7 +136,117 @@ struct Analysis
 
 void Analysis::Load(const edm::ParameterSet &ps)
 {
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("exclu_timeIntervals"))
+		excl_timeIntervals.emplace_back(p.getParameter<unsigned int>("first"), p.getParameter<unsigned int>("second"));
+
+	excl_bunches = ps.getParameter<std::vector<unsigned int>>("excl_bunches");
+
+	excl_runs = ps.getParameter<std::vector<unsigned int>>("excl_runs");
+
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("exclu_lsIntervals"))
+	{
+		excl_lsIntervals[p.getParameter<unsigned int>("run")].push_back(pair<unsigned int, unsigned int>(p.getParameter<unsigned int>("ls_first"),
+			p.getParameter<unsigned int>("ls_second")));
+	}
+
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("alignment_sources"))
+	{
+		AlignmentSource src;
+		src.Load(p.getParameter<vector<edm::ParameterSet>>("data"));
+		alignment_sources.push_back(src);
+	}
+
+	t_min = ps.getParameter<double>("t_min");
+	t_max = ps.getParameter<double>("t_max");
+	t_min_full = ps.getParameter<double>("t_min_full");
+	t_max_full = ps.getParameter<double>("t_max_full");
+	t_min_fit = ps.getParameter<double>("t_min_fit");
+
+	n_si = ps.getParameter<double>("n_si");
+
+	cut1_a = ps.getParameter<double>("cut1_a");
+	cut1_c = ps.getParameter<double>("cut1_c");
+	cut1_si = ps.getParameter<double>("cut1_si");
+	cut2_a = ps.getParameter<double>("cut2_a");
+	cut2_c = ps.getParameter<double>("cut2_c");
+	cut2_si = ps.getParameter<double>("cut2_si");
+	cut3_a = ps.getParameter<double>("cut3_a");
+	cut3_c = ps.getParameter<double>("cut3_c");
+	cut3_si = ps.getParameter<double>("cut3_si");
+	cut4_a = ps.getParameter<double>("cut4_a");
+	cut4_c = ps.getParameter<double>("cut4_c");
+	cut4_si = ps.getParameter<double>("cut4_si");
+	cut5_a = ps.getParameter<double>("cut5_a");
+	cut5_c = ps.getParameter<double>("cut5_c");
+	cut5_si = ps.getParameter<double>("cut5_si");
+	cut6_a = ps.getParameter<double>("cut6_a");
+	cut6_c = ps.getParameter<double>("cut6_c");
+	cut6_si = ps.getParameter<double>("cut6_si");
+	cut7_a = ps.getParameter<double>("cut7_a");
+	cut7_c = ps.getParameter<double>("cut7_c");
+	cut7_si = ps.getParameter<double>("cut7_si");
+	cut8_a = ps.getParameter<double>("cut8_a");
+	cut8_c = ps.getParameter<double>("cut8_c");
+	cut8_si = ps.getParameter<double>("cut8_si");
+	cut9_a = ps.getParameter<double>("cut9_a");
+	cut9_c = ps.getParameter<double>("cut9_c");
+	cut9_si = ps.getParameter<double>("cut9_si");
+	cut10_a = ps.getParameter<double>("cut10_a");
+	cut10_c = ps.getParameter<double>("cut10_c");
+	cut10_si = ps.getParameter<double>("cut10_si");
+
+	fc_L.Init(ps.getParameter<vector<edm::ParameterSet>>("fc_L"));
+	fc_R.Init(ps.getParameter<vector<edm::ParameterSet>>("fc_R"));
+	fc_G.Init(ps.getParameter<vector<edm::ParameterSet>>("fc_G"));
+
+	vtx_x_min = ps.getParameter<double>("vtx_x_min");
+	vtx_x_max = ps.getParameter<double>("vtx_x_max");
+	vtx_y_min = ps.getParameter<double>("vtx_y_min");
+	vtx_y_max = ps.getParameter<double>("vtx_y_max");
+
+	si_th_x_1arm_L = ps.getParameter<double>("si_th_x_1arm_L");
+	si_th_x_1arm_R = ps.getParameter<double>("si_th_x_1arm_R");
+	si_th_x_1arm_unc = ps.getParameter<double>("si_th_x_1arm_unc");
+	si_th_x_2arm = ps.getParameter<double>("si_th_x_2arm");
+	si_th_x_2arm_unc = ps.getParameter<double>("si_th_x_2arm_unc");
+	si_th_x_LRdiff = ps.getParameter<double>("si_th_x_LRdiff");
+	si_th_x_LRdiff_unc = ps.getParameter<double>("si_th_x_LRdiff_unc");
+
+	si_th_y_1arm = ps.getParameter<double>("si_th_y_1arm");
+	si_th_y_1arm_unc = ps.getParameter<double>("si_th_y_1arm_unc");
+	si_th_y_2arm = ps.getParameter<double>("si_th_y_2arm");
+	si_th_y_2arm_unc = ps.getParameter<double>("si_th_y_2arm_unc");
+	si_th_y_LRdiff = ps.getParameter<double>("si_th_y_LRdiff");
+	si_th_y_LRdiff_unc = ps.getParameter<double>("si_th_y_LRdiff_unc");
+
+	use_resolution_fits = ps.getParameter<bool>("use_resolution_fits");
+	use_3outof4_efficiency_fits = ps.getParameter<bool>("use_3outof4_efficiency_fits");
+	use_pileup_efficiency_fits = ps.getParameter<bool>("use_pileup_efficiency_fits");
+
+	inefficiency_3outof4 = ps.getParameter<double>("inefficiency_3outof4");
+	inefficiency_shower_near = ps.getParameter<double>("inefficiency_shower_near");
+	inefficiency_pile_up = ps.getParameter<double>("inefficiency_pile_up");
+	inefficiency_trigger = ps.getParameter<double>("inefficiency_trigger");
+	inefficiency_DAQ = ps.getParameter<double>("inefficiency_DAQ");
+
+	bckg_corr = ps.getParameter<double>("bckg_corr");
+
 	L_int = ps.getParameter<double>("L_int");
+
+	eff_3outof4_fixed_point = ps.getParameter<double>("eff_3outof4_fixed_point");
+	eff_3outof4_slope = ps.getParameter<double>("eff_3outof4_slope");
+	eff_3outof4_slope_unc = ps.getParameter<double>("eff_3outof4_slope_unc");
+
+	norm_corr = ps.getParameter<double>("norm_corr");
+	norm_corr_unc = ps.getParameter<double>("norm_corr_unc");
+
+	alignment_t0 = ps.getParameter<double>("alignment_t0");
+	alignment_ts = ps.getParameter<double>("alignment_ts");
+
+	binnings = ps.getParameter<vector<string>>("binnings");
+
+	unsmearing_file = ps.getParameter<string>("unsmearing_file");
+	unsmearing_object = ps.getParameter<string>("unsmearing_object");
 }
 
 //----------------------------------------------------------------------------------------------------

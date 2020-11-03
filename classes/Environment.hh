@@ -24,12 +24,13 @@ struct Environment
 	double si_th_x_L, si_th_y_L;		// rad
 	double si_th_x_R, si_th_y_R;		// rad
 
-	double si_th_y_RL_assym_unc;		// uncertainty of the L-R assymetry
+	// TODO: used ?
+	//double si_th_y_RL_assym_unc;		// uncertainty of the L-R assymetry
 
 	// vertex smearing
 	double si_vtx_x, si_vtx_y; 		// mm
 
-	// pitch-induced error
+	// pitch-induced error (i.e. spatial resolution)
 	double si_de_P_L, si_de_P_R;	// mm
 
 	// optics
@@ -51,13 +52,17 @@ struct Environment
 	TMatrixD opt_per_gen;
 
 	// alignment uncertainties
-	double si_de_x, si_de_y_R, si_de_y_D, si_tilt;
+	// TODO: used ?
+	//double si_de_x, si_de_y_R, si_de_y_D, si_tilt;
 
 	// misalignments (mm)
+	// TODO: used ?
+	/*
 	double de_x_L_N, de_y_L_N, tilt_L_N;
 	double de_x_L_F, de_y_L_F, tilt_L_F;
 	double de_x_R_N, de_y_R_N, tilt_R_N;
 	double de_x_R_F, de_y_R_F, tilt_R_F;
+	*/
 
 	Environment() : opt_cov(16), opt_per_gen(16, 16)
 	{
@@ -103,7 +108,7 @@ void Environment::InitNominal()
 	si_vtx_x = 330E-3;
 	si_vtx_y = 395E-3;
 
-	// pitch-induced error (mm), later adjusted by parameters.h
+	// pitch-induced error (mm)
 	si_de_P_L = si_de_P_R = 12E-3;
 
 	// optics (nominal, sent by Frici on 26 Feb 2020)
@@ -113,7 +118,7 @@ void Environment::InitNominal()
 	v_x_L_1_F = -2.24947329593445; L_x_L_1_F = 35.8475945504415E3; v_y_L_1_F = 0.124161170232800; L_y_L_1_F = 173.630053228259E3; D_x_L_1_F = +0.0855111365318488E3;
 	v_x_L_2_F = -1.93196310652978; L_x_L_2_F = 27.6759142870506E3; v_y_L_2_F = 0.098769215019425; L_y_L_2_F = 194.499649253117E3; D_x_L_2_F = +0.0672035864182922E3;
 
-	// optics imperfections
+	// optics imperfections, real numbers not yet available
 	/*
 	double opt_cov_data[] = {
 		1.66491785322919E-5,	7.89369350809322E-4,	-6.32104648991575E-5,	-2.59256651347955E-3,	1.32082198894547E-5,	6.74825862436010E-4,	-7.05099468507492E-5,	-2.90814857624182E-3,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,
@@ -146,14 +151,16 @@ void Environment::InitNominal()
 
 	// alignment uncertainties
 	// TODO: check if used, move to python?
+	/*
 	si_de_x = 0E-3;
 	si_de_y_R = 0E-3;
 	si_de_y_D = 0E-3;
 	si_tilt = 0E-3;
+	*/
 
 	// other uncertainties
 	// TODO: check if used, move to python?
-	si_th_y_RL_assym_unc = 0.;
+	//si_th_y_RL_assym_unc = 0.;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -194,6 +201,8 @@ void Environment::Print() const
 	printf("L_x_R_1_F = %E, v_x_R_1_F = %E, L_y_R_1_F = %E, v_y_R_1_F = %E\n", L_x_R_1_F, v_x_R_1_F, L_y_R_1_F, v_y_R_1_F);
 	printf("L_x_R_2_F = %E, v_x_R_2_F = %E, L_y_R_2_F = %E, v_y_R_2_F = %E\n", L_x_R_2_F, v_x_R_2_F, L_y_R_2_F, v_y_R_2_F);
 
+	// TODO
+	/*
 	printf("\n");
 	printf("si_de_x=%E, si_de_y_R=%E, si_de_y_D=%E, si_tilt=%E\n", si_de_x, si_de_y_R, si_de_y_D, si_tilt);
 	printf("\n");
@@ -203,6 +212,7 @@ void Environment::Print() const
 	printf("de_x_R_F=%E, de_y_R_F=%E, tilt_R_F=%E\n", de_x_R_F, de_y_R_F, tilt_R_F);
 	printf("\n");
 	printf("si_th_y_RL_assym_unc=%E\n", si_th_y_RL_assym_unc);
+	*/
 
 	printf("optics uncertainties: left arm\n");
 	printf("\tv_x_N: %.4f\n", sqrt(opt_cov(0, 0)));
@@ -227,44 +237,41 @@ void Environment::Print() const
 
 //----------------------------------------------------------------------------------------------------
 
-void Environment::ApplyRandomOpticsPerturbations(TVectorD & /*de*/)
+void Environment::ApplyRandomOpticsPerturbations(TVectorD & de)
 {
 	printf("Environment::ApplyRandomOpticsPerturbations: not yet implemented\n");
 
-	/*
 	TVectorD r(16);
 
 	for (unsigned int i = 0; i < 16; i++)
 		r(i) = gRandom->Gaus();
 	de = opt_per_gen * r;
 
-	v_x_L_N += de(0) * 1E0;
-	L_x_L_N += de(1) * 1E3;
-	v_y_L_N += de(2) * 1E0;
-	L_y_L_N += de(3) * 1E3;
-	v_x_L_F += de(4) * 1E0;
-	L_x_L_F += de(5) * 1E3;
-	v_y_L_F += de(6) * 1E0;
-	L_y_L_F += de(7) * 1E3;
+	v_x_L_1_F += de(0) * 1E0;
+	L_x_L_1_F += de(1) * 1E3;
+	v_y_L_1_F += de(2) * 1E0;
+	L_y_L_1_F += de(3) * 1E3;
+	v_x_L_2_F += de(4) * 1E0;
+	L_x_L_2_F += de(5) * 1E3;
+	v_y_L_2_F += de(6) * 1E0;
+	L_y_L_2_F += de(7) * 1E3;
 
-	v_x_R_N += de(8) * 1E0;
-	L_x_R_N += de(9) * 1E3;
-	v_y_R_N += de(10) * 1E0;
-	L_y_R_N += de(11) * 1E3;
-	v_x_R_F += de(12) * 1E0;
-	L_x_R_F += de(13) * 1E3;
-	v_y_R_F += de(14) * 1E0;
-	L_y_R_F += de(15) * 1E3;
-	*/
+	v_x_R_1_F += de(8) * 1E0;
+	L_x_R_1_F += de(9) * 1E3;
+	v_y_R_1_F += de(10) * 1E0;
+	L_y_R_1_F += de(11) * 1E3;
+	v_x_R_2_F += de(12) * 1E0;
+	L_x_R_2_F += de(13) * 1E3;
+	v_y_R_2_F += de(14) * 1E0;
+	L_y_R_2_F += de(15) * 1E3;
 }
 
 //----------------------------------------------------------------------------------------------------
 
-void Environment::ApplyOpticsPerturbationMode(int /*mode*/, double /*coef*/)
+void Environment::ApplyOpticsPerturbationMode(int mode, double coef)
 {
 	printf("Environment::ApplyOpticsPerturbationMode: not yet implemented\n");
 
-	/*
 	printf(">> Environment::ApplyOpticsPerturbationMode\n");
 
 	// prepare correlation matrix
@@ -295,34 +302,29 @@ void Environment::ApplyOpticsPerturbationMode(int /*mode*/, double /*coef*/)
 	printf("\tleft arm: mode %u, coefficient %+.3f\n", mode, coef);
 	vm.Print();
 
-	v_x_L_N += vm(0) * 1E0;
-	L_x_L_N += vm(1) * 1E3;
-	v_y_L_N += vm(2) * 1E0;
-	L_y_L_N += vm(3) * 1E3;
-	v_x_L_F += vm(4) * 1E0;
-	L_x_L_F += vm(5) * 1E3;
-	v_y_L_F += vm(6) * 1E0;
-	L_y_L_F += vm(7) * 1E3;
+	v_x_L_1_F += vm(0) * 1E0;
+	L_x_L_1_F += vm(1) * 1E3;
+	v_y_L_1_F += vm(2) * 1E0;
+	L_y_L_1_F += vm(3) * 1E3;
+	v_x_L_2_F += vm(4) * 1E0;
+	L_x_L_2_F += vm(5) * 1E3;
+	v_y_L_2_F += vm(6) * 1E0;
+	L_y_L_2_F += vm(7) * 1E3;
 
-	v_x_R_N += vm(8) * 1E0;
-	L_x_R_N += vm(9) * 1E3;
-	v_y_R_N += vm(10) * 1E0;
-	L_y_R_N += vm(11) * 1E3;
-	v_x_R_F += vm(12) * 1E0;
-	L_x_R_F += vm(13) * 1E3;
-	v_y_R_F += vm(14) * 1E0;
-	L_y_R_F += vm(15) * 1E3;
-	*/
+	v_x_R_1_F += vm(8) * 1E0;
+	L_x_R_1_F += vm(9) * 1E3;
+	v_y_R_1_F += vm(10) * 1E0;
+	L_y_R_1_F += vm(11) * 1E3;
+	v_x_R_2_F += vm(12) * 1E0;
+	L_x_R_2_F += vm(13) * 1E3;
+	v_y_R_2_F += vm(14) * 1E0;
+	L_y_R_2_F += vm(15) * 1E3;
 }
 
 //----------------------------------------------------------------------------------------------------
 
-void Environment::ApplyEffectiveLengthPerturbationMode(int /*mode*/, double /*coef*/)
+void Environment::ApplyEffectiveLengthPerturbationMode(int mode, double coef)
 {
-	printf("Environment::ApplyEffectiveLengthPerturbationMode: not yet implemented\n");
-
-	/*
-
 	printf(">> Environment::ApplyEffectiveLengthPerturbationMode\n");
 
 	// prepare reduced covariance matrix
@@ -349,16 +351,15 @@ void Environment::ApplyEffectiveLengthPerturbationMode(int /*mode*/, double /*co
 	printf("\tmode %u, coefficient %+.3f\n", mode, coef);
 	//vm.Print();
 
-	L_x_L_N += vm(0) * 1E3;
-	L_y_L_N += vm(1) * 1E3;
-	L_x_L_F += vm(2) * 1E3;
-	L_y_L_F += vm(3) * 1E3;
-	L_x_R_N += vm(4) * 1E3;
-	L_y_R_N += vm(5) * 1E3;
-	L_x_R_F += vm(6) * 1E3;
-	L_y_R_F += vm(7) * 1E3;
+	L_x_L_1_F += vm(0) * 1E3;
+	L_y_L_1_F += vm(1) * 1E3;
+	L_x_L_2_F += vm(2) * 1E3;
+	L_y_L_2_F += vm(3) * 1E3;
 
-	*/
+	L_x_R_1_F += vm(4) * 1E3;
+	L_y_R_1_F += vm(5) * 1E3;
+	L_x_R_2_F += vm(6) * 1E3;
+	L_y_R_2_F += vm(7) * 1E3;
 }
 
 #endif
