@@ -16,10 +16,10 @@ using namespace std;
 
 void PrintUsage()
 {
-	printf("USAGE: program <option> <option>");
-	printf("OPTIONS:");
-	printf("    -cfg <file>       config file");
-	printf("    -dgn <string>     diagonal");
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -31,7 +31,6 @@ int main(int argc, const char **argv)
 	string diagonal_input = "";
 
 	// parse command line
-	// TODO: update
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
 		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
