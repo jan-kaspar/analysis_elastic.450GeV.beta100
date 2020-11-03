@@ -375,7 +375,7 @@ int main(int argc, const char **argv)
 		return 1;
 	}
 
-	printf("* command-line parameters:");
+	printf("* command-line parameters:\n");
 	printf("    detailsLevel = %u\n", detailsLevel);
 	printf("    outputDir = %s\n", outputDir.c_str());
 	printf("    inputDir = %s\n", inputDir.c_str());

@@ -136,14 +136,14 @@ struct Analysis
 
 void Analysis::Load(const edm::ParameterSet &ps)
 {
-	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("exclu_timeIntervals"))
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("excl_timeIntervals"))
 		excl_timeIntervals.emplace_back(p.getParameter<unsigned int>("first"), p.getParameter<unsigned int>("second"));
 
 	excl_bunches = ps.getParameter<std::vector<unsigned int>>("excl_bunches");
 
 	excl_runs = ps.getParameter<std::vector<unsigned int>>("excl_runs");
 
-	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("exclu_lsIntervals"))
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("excl_lsIntervals"))
 	{
 		excl_lsIntervals[p.getParameter<unsigned int>("run")].push_back(pair<unsigned int, unsigned int>(p.getParameter<unsigned int>("ls_first"),
 			p.getParameter<unsigned int>("ls_second")));
