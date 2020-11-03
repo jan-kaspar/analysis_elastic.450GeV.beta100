@@ -337,6 +337,7 @@ int main(int argc, const char **argv)
 	unsigned int time_group_remainder = 0;
 	unsigned int event_group_divisor = 0;
 	unsigned int event_group_index = 0;
+	bool bootstrap = false;
 	
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
@@ -364,6 +365,7 @@ int main(int argc, const char **argv)
 		if (TestUIntParameter(argc, argv, argi, "-eg-divisor", event_group_divisor)) continue;
 		if (TestUIntParameter(argc, argv, argi, "-eg-index", event_group_index)) continue;
 
+		if (TestBoolParameter(argc, argv, argi, "-bootstrap", bootstrap)) continue;
 
 		printf("ERROR: unknown option '%s'.\n", argv[argi]);
 		cl_error = 1;
@@ -426,6 +428,13 @@ int main(int argc, const char **argv)
 				pch = strtok (NULL, ",");
 			}
 		}
+	}
+
+	if (bootstrap)
+	{
+		anal.use_resolution_fits = false;
+		anal.use_3outof4_efficiency_fits = false;
+		anal.use_pileup_efficiency_fits = false;
 	}
 
 	// print info
