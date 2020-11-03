@@ -1,5 +1,6 @@
 all: \
-	.distill
+	.distill \
+	.distributions
 
 # default rule
 .% : %.cc classes/AcceptanceCalculator.hh classes/Analysis.hh classes/command_line_tools.hh classes/common_algorithms.hh\

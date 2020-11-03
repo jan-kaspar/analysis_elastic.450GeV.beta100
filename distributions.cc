@@ -1,21 +1,17 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "AcceptanceCalculator.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
+#include "classes/AcceptanceCalculator.hh"
+#include "classes/common_algorithms.hh"
 
 #include "TFile.h"
-#include "TCanvas.h"
+#include "TH1D.h"
+#include "TProfile.h"
+#include "TH2D.h"
 #include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TChain.h"
-#include "TH2D.h"
-#include "TProfile.h"
-#include "TMath.h"
 #include "TF1.h"
-#include "TTree.h"
-
-#include <cmath>
+#include "TCanvas.h"
 
 using namespace std;
 
@@ -315,124 +311,93 @@ void AnalyzeMode(TH2D *h2_input, const string &name)
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc < 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+	// FIXME: continue
+}
 
-	// init diagonal settings
-	Init(argv[1]);
-	if (diagonal == dCombined || diagonal == ad45b_56b || diagonal == ad45t_56t)
-		return rcIncompatibleDiagonal;
+//----------------------------------------------------------------------------------------------------
 
+int main(int argc, const char **argv)
+{
 	// default parameters
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
 	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
-	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
-	string cutSelectionString;
+	string cutSelectionString = "default";
 	string outputDir = ".";
 	string inputDir = ".";
 	double input_n_si = 4.0;
-	int time_group_divisor = 0;
-	int time_group_remainder = 0;
-	int event_group_divisor = 0;
-	int event_group_index = 0;
-
-	// parse command line arguments, starting from index 2
-	for (int i = 2; i < argc; i++)
+	unsigned int time_group_divisor = 0;
+	unsigned int time_group_remainder = 0;
+	unsigned int event_group_divisor = 0;
+	unsigned int event_group_index = 0;
+	
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
-		//printf("%u => %s\n", i, argv[i]);
-
-		if (strcmp(argv[i], "-no-details") == 0)
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
 		{
-			detailsLevel = 0;
+			cl_error = 1;
 			continue;
 		}
 
-		if (strcmp(argv[i], "-details") == 0)
-		{
-			if (argc-1 > i)
-				detailsLevel = atoi(argv[++i]);
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
 
-		if (strcmp(argv[i], "-cuts") == 0)
-		{
-			if (argc-1 > i)
-			{
-				cutSelectionString = argv[++i];
-				overrideCutSelection = true;
-			}
-			continue;
-		}
+		if (TestUIntParameter(argc, argv, argi, "-details", detailsLevel)) continue;
 
-		if (strcmp(argv[i], "-output-dir") == 0)
-		{
-			if (argc-1 > i)
-				outputDir = argv[++i];
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-cuts", cutSelectionString)) continue;
 
-		if (strcmp(argv[i], "-input-dir") == 0)
-		{
-			if (argc-1 > i)
-				inputDir = argv[++i];
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-input-dir", inputDir)) continue;
+		if (TestStringParameter(argc, argv, argi, "-output-dir", outputDir)) continue;
 
-		if (strcmp(argv[i], "-n-si") == 0)
-		{
-			if (argc-1 > i)
-				input_n_si = atof(argv[++i]);
-			continue;
-		}
+		if (TestDoubleParameter(argc, argv, argi, "-n-si", input_n_si)) continue;
 
-		if (strcmp(argv[i], "-tg-divisor") == 0)
-		{
-			if (argc-1 > i)
-				time_group_divisor = atoi(argv[++i]);
-			continue;
-		}
-
-		if (strcmp(argv[i], "-tg-remainder") == 0)
-		{
-			if (argc-1 > i)
-				time_group_remainder = atoi(argv[++i]);
-			continue;
-		}
-
-		if (strcmp(argv[i], "-eg-divisor") == 0)
-		{
-			if (argc-1 > i)
-				event_group_divisor = (int) atof(argv[++i]);
-			continue;
-		}
+		if (TestUIntParameter(argc, argv, argi, "-tg-divisor", time_group_divisor)) continue;
+		if (TestUIntParameter(argc, argv, argi, "-tg-remainder", time_group_remainder)) continue;
+		if (TestUIntParameter(argc, argv, argi, "-eg-divisor", event_group_divisor)) continue;
+		if (TestUIntParameter(argc, argv, argi, "-eg-index", event_group_index)) continue;
 
 
-		if (strcmp(argv[i], "-eg-index") == 0)
-		{
-			if (argc-1 > i)
-				event_group_index = (int) atof(argv[++i]);
-			continue;
-		}
-
-		printf("ERROR: unknown parameter `%s'.\n", argv[i]);
-		return 3;
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
 	}
 
-	printf("* detailsLevel = %u\n", detailsLevel);
-	printf("* outputDir = %s\n", outputDir.c_str());
-	printf("* inputDir = %s\n", inputDir.c_str());
-	printf("* input n_si = %.3f\n", input_n_si);
-	printf("* time_group_divisor = %i\n", time_group_divisor);
-	printf("* time_group_remainder = %i\n", time_group_remainder);
-	printf("* event_group_divisor = %i\n", event_group_divisor);
-	printf("* event_group_index = %i\n", event_group_index);
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	printf("* command-line parameters:");
+	printf("    detailsLevel = %u\n", detailsLevel);
+	printf("    outputDir = %s\n", outputDir.c_str());
+	printf("    inputDir = %s\n", inputDir.c_str());
+	printf("    input n_si = %.3f\n", input_n_si);
+	printf("    time_group_divisor = %i\n", time_group_divisor);
+	printf("    time_group_remainder = %i\n", time_group_remainder);
+	printf("    event_group_divisor = %i\n", event_group_divisor);
+	printf("    event_group_index = %i\n", event_group_index);
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal == dCombined || cfg.diagonal == ad45b_56b || cfg.diagonal == ad45t_56t)
+		return rcIncompatibleDiagonal;
 
 	// select cuts
 	anal.BuildCuts(); 
 	anal.n_si = input_n_si;
 
-	if (overrideCutSelection)
+	if (cutSelectionString != "default")
 	{
 		anal.cuts.clear();
 		char buf[100];
@@ -465,6 +430,9 @@ int main(int argc, char **argv)
 
 	// print info
 	printf("\n");
+	printf("------------------------------ configuration ------------------------------\n");
+	cfg.Print();
+	printf("\n");
 	printf("------------------------------ environment ------------------------------\n");
 	env.Print();
 	printf("\n");
@@ -473,37 +441,35 @@ int main(int argc, char **argv)
 	printf("\n");
 
 	// alignment init
-	for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 	{
 		printf("\n---------- alignment source %u ----------\n", i);
-		alignmentSources[i].Init();
+		anal.alignment_sources[i].Init();
 	}
 	printf("\n\n");
 
 	// binnings
-	vector<string> binnings;
-	binnings.push_back("ub");
-	binnings.push_back("eb");
+	vector<string> binnings = anal.binnings;
 
 	// initialise acceptance calculation
 	AcceptanceCalculator accCalc;
-	accCalc.Init(th_y_sign, anal);
+	accCalc.Init(cfg.th_y_sign, anal);
 
 	// get input
 	TChain *ch_in = new TChain("distilled");
 	printf(">> input chain\n");
-	for (const auto &ntupleDir : distilledNtuples)
+	for (const auto &ntupleDir : cfg.distilled_files)
 	{
-		string f = inputDir + "/" + ntupleDir + "/distill_" + argv[1] + ".root";
+		string f = inputDir + "/" + ntupleDir + "/distill_" + cfg.diagonal_str + ".root";
 		printf("    %s\n", f.c_str());
 		ch_in->Add(f.c_str());
 	}
 	printf("%llu entries\n", ch_in->GetEntries());
 
 	// init output file
-	TFile *outF = new TFile((outputDir+"/distributions_" + argv[1] + ".root").c_str(), "recreate");
+	TFile *f_out = new TFile((outputDir+"/distributions_" + cfg.diagonal_str + ".root").c_str(), "recreate");
 
-	//FILE *f_out_cand = fopen((outputDir+"/candidates_" + argv[1] + ".txt").c_str(), "w");
+	//FILE *f_out_cand = fopen((outputDir+"/candidates_" + cfg.diagonal_str + ".txt").c_str(), "w");
 
 	// get input data
 	EventRed ev;
@@ -527,9 +493,9 @@ int main(int argc, char **argv)
 		TFile *puF = TFile::Open(path.c_str());
 		if (!puF)
 			printf("ERROR: pile-up correction file `%s' cannot be opened.\n", path.c_str());
-		if (diagonal == d45b_56t)
+		if (cfg.diagonal == d45b_56t)
 			corrg_pileup = (TGraph *) puF->Get("45b_56t/dgn");
-		if (diagonal == d45t_56b)
+		if (cfg.diagonal == d45t_56b)
 			corrg_pileup = (TGraph *) puF->Get("45t_56b/dgn");
 	}
 
@@ -538,7 +504,7 @@ int main(int argc, char **argv)
 	TGraph *g_d_y_RMS = NULL;
 	if (anal.use_resolution_fits)
 	{
-		string path = inputDir + "/resolution_fit_" + argv[1] + ".root";
+		string path = inputDir + "/resolution_fit_" + cfg.diagonal_str + ".root";
 		TFile *resFile = TFile::Open(path.c_str());
 		if (!resFile)
 			printf("ERROR: resolution file `%s' cannot be opened.\n", path.c_str());
@@ -556,35 +522,35 @@ int main(int argc, char **argv)
 	TF1 *f_3outof4_efficiency_R_F = NULL;
 	if (anal.use_3outof4_efficiency_fits)
 	{
+		// TODO: this doesn't seem good
 		string path = inputDir + "/eff3outof4_details_fit_old.root";
 		TFile *effFile = TFile::Open(path.c_str());
 		if (!effFile)
 			printf("ERROR: 3-out-of-4 efficiency file `%s' cannot be opened.\n", path.c_str());
 
-		string diagonal = argv[1];
-		f_3outof4_efficiency_L_F = (TF1 *) effFile->Get( (diagonal + "/L_F/fit").c_str() );
-		f_3outof4_efficiency_L_N = (TF1 *) effFile->Get( (diagonal + "/L_N/fit").c_str() );
-		f_3outof4_efficiency_R_N = (TF1 *) effFile->Get( (diagonal + "/R_N/fit").c_str() );
-		f_3outof4_efficiency_R_F = (TF1 *) effFile->Get( (diagonal + "/R_F/fit").c_str() );
+		f_3outof4_efficiency_L_F = (TF1 *) effFile->Get( (cfg.diagonal_str + "/L_F/fit").c_str() );
+		f_3outof4_efficiency_L_N = (TF1 *) effFile->Get( (cfg.diagonal_str + "/L_N/fit").c_str() );
+		f_3outof4_efficiency_R_N = (TF1 *) effFile->Get( (cfg.diagonal_str + "/R_N/fit").c_str() );
+		f_3outof4_efficiency_R_F = (TF1 *) effFile->Get( (cfg.diagonal_str + "/R_F/fit").c_str() );
 
 		printf("\n>> using 3-out-of-4 fits: %p, %p, %p, %p\n",
 			f_3outof4_efficiency_L_F, f_3outof4_efficiency_L_N, f_3outof4_efficiency_R_N, f_3outof4_efficiency_R_F);
 	}
 
 	// get unsmearing correction
-	printf("\n>> unsmearing_file = %s\n", unsmearing_file.c_str());
-	printf(">> unsmearing_object = %s\n", unsmearing_object.c_str());
+	printf("\n>> unsmearing_file = %s\n", anal.unsmearing_file.c_str());
+	printf(">> unsmearing_object = %s\n", anal.unsmearing_object.c_str());
 
 	map<unsigned int, TH1D *> map_unsmearing_correction;
 
-	TFile *unsmearing_correction_file = TFile::Open(unsmearing_file.c_str());
+	TFile *unsmearing_correction_file = TFile::Open(anal.unsmearing_file.c_str());
 	if (!unsmearing_correction_file)
 	{
-		printf("ERROR: unfolding file `%s' can not be opened.\n", unsmearing_file.c_str());
+		printf("ERROR: unfolding file `%s' can not be opened.\n", anal.unsmearing_file.c_str());
 	} else {
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{
-			string path = replace(unsmearing_object, "<binning>", binnings[bi]);
+			string path = replace(anal.unsmearing_object, "<binning>", binnings[bi]);
 			TH1D *obj = (TH1D *) unsmearing_correction_file->Get(path.c_str());
 
 			if (!obj)
@@ -599,12 +565,12 @@ int main(int argc, char **argv)
 	}
 
 	// book metadata histograms
-	unsigned int timestamp_bins = timestamp_max - timestamp_min + 1;
+	unsigned int timestamp_bins = cfg.timestamp_max - cfg.timestamp_min + 1;
 
-	TH1D *h_timestamp_input = new TH1D("h_timestamp_input", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
-	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
-	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
-	TH1D *h_timestamp_sel = new TH1D("h_timestamp_sel", ";timestamp;rate   (Hz)", timestamp_bins, timestamp_min-0.5, timestamp_max+0.5);
+	TH1D *h_timestamp_input = new TH1D("h_timestamp_input", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
+	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
+	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
+	TH1D *h_timestamp_sel = new TH1D("h_timestamp_sel", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
 
 	TGraph *g_run_vs_timestamp = new TGraph(); g_run_vs_timestamp->SetName("g_run_vs_timestamp"); g_run_vs_timestamp->SetTitle(";timestamp;run");
 	TGraph *g_ev_num_vs_timestamp = new TGraph(); g_ev_num_vs_timestamp->SetName("g_ev_num_vs_timestamp"); g_ev_num_vs_timestamp->SetTitle(";timestamp;ev_num");
@@ -612,8 +578,8 @@ int main(int argc, char **argv)
 	TGraph *g_bunch_num_vs_timestamp = new TGraph(); g_bunch_num_vs_timestamp->SetName("g_bunch_num_vs_timestamp"); g_bunch_num_vs_timestamp->SetTitle(";timestamp;bunch");
 	TGraph *g_selected_bunch_num_vs_timestamp = new TGraph(); g_selected_bunch_num_vs_timestamp->SetName("g_selected_bunch_num_vs_timestamp"); g_selected_bunch_num_vs_timestamp->SetTitle(";timestamp;selected_bunch");
 
-	TGraph *g_timestamp_vs_ev_idx_dgn = new TGraph(); g_timestamp_vs_ev_idx_dgn->SetName("g_timestamp_vs_ev_idx_dgn"); g_timestamp_vs_ev_idx_dgn->SetTitle(";event index in distilled TTree;timestamp");
-	TGraph *g_timestamp_vs_ev_idx_sel = new TGraph(); g_timestamp_vs_ev_idx_sel->SetName("g_timestamp_vs_ev_idx_sel"); g_timestamp_vs_ev_idx_sel->SetTitle(";event index in distilled TTree;timestamp");
+	TGraph *g_timestamp_vs_ev_idx_dgn = new TGraph(); g_timestamp_vs_ev_idx_dgn->SetName("g_timestamp_vs_ev_idx_dgn"); g_timestamp_vs_ev_idx_dgn->SetTitle(";event index in distilled tree;timestamp");
+	TGraph *g_timestamp_vs_ev_idx_sel = new TGraph(); g_timestamp_vs_ev_idx_sel->SetName("g_timestamp_vs_ev_idx_sel"); g_timestamp_vs_ev_idx_sel->SetTitle(";event index in distilled tree;timestamp");
 
 	// book hit-distribution histograms
 	TH2D *h2_y_L_2_F_vs_x_L_2_F_noal_sel = new TH2D("h2_y_L_2_F_vs_x_L_2_F_noal_sel", ";x^{L,1,F};y^{L,1,F}", 150, -15., 15., 800, -80., +80.);
@@ -675,7 +641,7 @@ int main(int argc, char **argv)
 
 		if (i == 11) { x_min = -2.5; x_max = +2.5; y_min = -150E-6; y_max = +150E-6; q_max = 150E-6; }
 
-		if ((i == 2 || i == 5 || i == 6) && diagonal == d45t_56b)
+		if ((i == 2 || i == 5 || i == 6) && cfg.diagonal == d45t_56b)
 		{
 			swap(x_min, x_max);
 			swap(y_min, y_max);
@@ -695,7 +661,7 @@ int main(int argc, char **argv)
 
 		sprintf(name, "g_cq%i", i); sprintf(title, ";%s;%s", anal.cqaN[i].c_str(), anal.cqbN[i].c_str()); g_cq[i] = new TGraph(); g_cq[i]->SetName(name); g_cq[i]->SetTitle(title);
 		sprintf(name, "p_cq%i", i); sprintf(title, ";%s;%s", anal.cqaN[i].c_str(), anal.cqbN[i].c_str()); p_cq[i] = new TProfile(name, title, 300, x_min, x_max);
-		sprintf(name, "p_cq_time%i", i); sprintf(title, ";time   (s);mean of cq%i", i); p_cq_time[i] = new TProfile(name, title, 31, timestamp_min, timestamp_max);
+		sprintf(name, "p_cq_time%i", i); sprintf(title, ";time   (s);mean of cq%i", i); p_cq_time[i] = new TProfile(name, title, 31, cfg.timestamp_min, cfg.timestamp_max);
 	}
 
 	// book histograms for selected hits
@@ -851,49 +817,49 @@ int main(int argc, char **argv)
 	OpticsMatchingInput opticsMatchingIntput_full;
 
 	// time-dependence histograms
-	TProfile *p_diffLR_th_x_vs_time = new TProfile("p_diffLR_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffLR_th_x_vs_time = new TProfile("p_diffLR_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffLR_th_x_vs_time = new TGraphErrors; gRMS_diffLR_th_x_vs_time->SetName("gRMS_diffLR_th_x_vs_time"); gRMS_diffLR_th_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}#theta_{x}");
 
-	TProfile *p_diffNF_th_x_L_vs_time = new TProfile("p_diffNF_th_x_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{L}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffNF_th_x_L_vs_time = new TProfile("p_diffNF_th_x_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffNF_th_x_L_vs_time = new TGraphErrors; gRMS_diffNF_th_x_L_vs_time->SetName("gRMS_diffNF_th_x_L_vs_time"); gRMS_diffNF_th_x_L_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{x}^{L}");
 
-	TProfile *p_diffNF_th_x_R_vs_time = new TProfile("p_diffNF_th_x_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffNF_th_x_R_vs_time = new TProfile("p_diffNF_th_x_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffNF_th_x_R_vs_time = new TGraphErrors; gRMS_diffNF_th_x_R_vs_time->SetName("gRMS_diffNF_th_x_R_vs_time"); gRMS_diffNF_th_x_R_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{x}^{R}");
 
-	TProfile *p_diffLR_th_y_vs_time = new TProfile("p_diffLR_th_y_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{y}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffLR_th_y_vs_time = new TProfile("p_diffLR_th_y_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{y}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffLR_th_y_vs_time = new TGraphErrors; gRMS_diffLR_th_y_vs_time->SetName("gRMS_diffLR_th_y_vs_time"); gRMS_diffLR_th_y_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}#theta_{y}");
 
-	TProfile *p_diffNF_th_y_L_vs_time = new TProfile("p_diffNF_th_y_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{L}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffNF_th_y_L_vs_time = new TProfile("p_diffNF_th_y_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffNF_th_y_L_vs_time = new TGraphErrors; gRMS_diffNF_th_y_L_vs_time->SetName("gRMS_diffNF_th_y_L_vs_time"); gRMS_diffNF_th_y_L_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{y}^{L}");
 
-	TProfile *p_diffNF_th_y_R_vs_time = new TProfile("p_diffNF_th_y_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{R}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffNF_th_y_R_vs_time = new TProfile("p_diffNF_th_y_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffNF_th_y_R_vs_time = new TGraphErrors; gRMS_diffNF_th_y_R_vs_time->SetName("gRMS_diffNF_th_y_R_vs_time"); gRMS_diffNF_th_y_R_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{y}^{R}");
 
-	TProfile *p_vtx_x_vs_time = new TProfile("p_vtx_x_vs_time", ";timestamp;mean of x^{*}", 31, timestamp_min, timestamp_max);
+	TProfile *p_vtx_x_vs_time = new TProfile("p_vtx_x_vs_time", ";timestamp;mean of x^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_vtx_x_vs_time = new TGraphErrors; gRMS_vtx_x_vs_time->SetName("gRMS_vtx_x_vs_time"); gRMS_vtx_x_vs_time->SetTitle(";timestamp;RMS of x^{*}");
 
-	TProfile *p_vtx_y_vs_time = new TProfile("p_vtx_y_vs_time", ";timestamp;mean of y^{*}", 31, timestamp_min, timestamp_max);
+	TProfile *p_vtx_y_vs_time = new TProfile("p_vtx_y_vs_time", ";timestamp;mean of y^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_vtx_y_vs_time = new TGraphErrors; gRMS_vtx_y_vs_time->SetName("gRMS_vtx_y_vs_time"); gRMS_vtx_y_vs_time->SetTitle(";timestamp;RMS of y^{*}");
 
-	TProfile *p_diffLR_vtx_x_vs_time = new TProfile("p_diffLR_vtx_x_vs_time", ";timestamp;mean of #Delta^{R-L}x^{*}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffLR_vtx_x_vs_time = new TProfile("p_diffLR_vtx_x_vs_time", ";timestamp;mean of #Delta^{R-L}x^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffLR_vtx_x_vs_time = new TGraphErrors; gRMS_diffLR_vtx_x_vs_time->SetName("gRMS_diffLR_vtx_x_vs_time"); gRMS_diffLR_vtx_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}x^{*}");
 
-	TProfile *p_diffLR_vtx_y_vs_time = new TProfile("p_diffLR_vtx_y_vs_time", ";timestamp;mean of #Delta^{R-L}y^{*}", 31, timestamp_min, timestamp_max);
+	TProfile *p_diffLR_vtx_y_vs_time = new TProfile("p_diffLR_vtx_y_vs_time", ";timestamp;mean of #Delta^{R-L}y^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffLR_vtx_y_vs_time = new TGraphErrors; gRMS_diffLR_vtx_y_vs_time->SetName("gRMS_diffLR_vtx_y_vs_time"); gRMS_diffLR_vtx_y_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}y^{*}");
 
-	TProfile *p_th_x_vs_time = new TProfile("p_th_x_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_R_vs_time = new TProfile("p_th_x_R_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_L_vs_time = new TProfile("p_th_x_L_vs_time", ";timestamp;#theta_{x}^{L}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_R1F_vs_time = new TProfile("p_th_x_R1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_R2F_vs_time = new TProfile("p_th_x_R2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_L1F_vs_time = new TProfile("p_th_x_L1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_x_L2F_vs_time = new TProfile("p_th_x_L2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, timestamp_min, timestamp_max);
+	TProfile *p_th_x_vs_time = new TProfile("p_th_x_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R_vs_time = new TProfile("p_th_x_R_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L_vs_time = new TProfile("p_th_x_L_vs_time", ";timestamp;#theta_{x}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R1F_vs_time = new TProfile("p_th_x_R1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R2F_vs_time = new TProfile("p_th_x_R2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L1F_vs_time = new TProfile("p_th_x_L1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L2F_vs_time = new TProfile("p_th_x_L2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
 
-	TProfile *p_th_y_R_vs_time = new TProfile("p_th_y_R_vs_time", ";timestamp;#theta_{y}^{R}", 31, timestamp_min, timestamp_max);
-	TProfile *p_th_y_L_vs_time = new TProfile("p_th_y_L_vs_time", ";timestamp;#theta_{y}^{L}", 31, timestamp_min, timestamp_max);
+	TProfile *p_th_y_R_vs_time = new TProfile("p_th_y_R_vs_time", ";timestamp;#theta_{y}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_y_L_vs_time = new TProfile("p_th_y_L_vs_time", ";timestamp;#theta_{y}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
 
-	TProfile *p_input_beam_div_x_vs_time = new TProfile("p_input_beam_div_x_vs_time", ";timestamp", 31, timestamp_min, timestamp_max);
-	TProfile *p_input_beam_div_y_vs_time = new TProfile("p_input_beam_div_y_vs_time", ";timestamp", 31, timestamp_min, timestamp_max);
+	TProfile *p_input_beam_div_x_vs_time = new TProfile("p_input_beam_div_x_vs_time", ";timestamp", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_input_beam_div_y_vs_time = new TProfile("p_input_beam_div_y_vs_time", ";timestamp", 31, cfg.timestamp_min, cfg.timestamp_max);
 
 	// book acceptance-correction histograms
 	TProfile *p_t_ub_div_corr = new TProfile("p_t_ub_div_corr", ";t_ub_{y}", 2000., 0., 0.2);
@@ -949,10 +915,7 @@ int main(int argc, char **argv)
 	double th_min = 1E100;
 	double th_y_L_min = +1E100, th_y_R_min = +1E100;
 
-	unsigned int N_anal=0;
-	unsigned int N_4outof4=0, N_el=0, N_el_RP_trig=0;
-	unsigned int N_el_T2trig=0, N_4outof4_T2trig=0;
-	unsigned int N_el_raw=0;
+	unsigned int N_anal=0, N_4outof4=0, N_el=0;
 
 	map<unsigned int, unsigned int> bunchCounter_el;
 
@@ -1003,9 +966,9 @@ int main(int argc, char **argv)
 
 		// apply fine alignment
 		HitData h_al = ev.h;
-		for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+		for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 		{
-			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
+			const AlignmentData &alData = anal.alignment_sources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
 
@@ -1098,7 +1061,7 @@ int main(int argc, char **argv)
 		// check event group
 		if (event_group_divisor > 0)
 		{
-			int event_group = (N_el_raw-1) / event_group_divisor;
+			unsigned int event_group = (N_el-1) / event_group_divisor;
 			if (event_group < event_group_index)
 				continue;
 			if (event_group > event_group_index)
@@ -1506,12 +1469,8 @@ int main(int argc, char **argv)
 
 	printf("\n");
 	printf("N_anal = %u\n", N_anal);
-
 	printf("N_4outof4 = %u\n", N_4outof4);
 	printf("N_el = %u\n", N_el);
-	printf("N_el_RP_trig = %u\n", N_el_RP_trig);
-	printf("N_el_T2trig = %u\n", N_el_T2trig);
-	printf("N_4outof4_T2trig = %u\n", N_4outof4_T2trig);
 
 	printf("\nbunchCounter_el:\n");
 	for (const auto &p : bunchCounter_el)
@@ -1552,8 +1511,8 @@ int main(int argc, char **argv)
 	// fit histograms
 	//double th_y_low_bound = (diagonal == d45b_56t) ? (anal.th_y_lcut_L+anal.th_y_lcut_R)/2. + 5E-6 : -((anal.th_y_hcut_L+anal.th_y_hcut_R)/2. - 5E-6);
 	//double th_y_high_bound = (diagonal == d45b_56t) ? (anal.th_y_hcut_L+anal.th_y_hcut_R)/2. - 5E-6 : -((anal.th_y_lcut_L+anal.th_y_lcut_R)/2. + 5E-6);
-	const double th_y_low_bound = (diagonal == d45b_56t) ? 50E-6 : -120E-6;
-	const double th_y_high_bound = (diagonal == d45b_56t) ? 120E-6 : -50E-6;
+	const double th_y_low_bound = (cfg.diagonal == d45b_56t) ? 50E-6 : -120E-6;
+	const double th_y_high_bound = (cfg.diagonal == d45b_56t) ? 120E-6 : -50E-6;
 
 	printf("\n* th_y fit bounds: from %E to %E\n", th_y_low_bound, th_y_high_bound);
 
@@ -1668,7 +1627,7 @@ int main(int argc, char **argv)
 	// save histograms
 	TCanvas *c;
 
-	gDirectory = outF->mkdir("metadata");
+	gDirectory = f_out->mkdir("metadata");
 	if (detailsLevel >= 2)
 	{
 		h_timestamp_input->SetLineColor(1);
@@ -1699,7 +1658,7 @@ int main(int argc, char **argv)
 		g_selected_bunch_num_vs_timestamp->Write();
 	}
 
-	TDirectory *hitDistDir = outF->mkdir("hit distributions");
+	TDirectory *hitDistDir = f_out->mkdir("hit distributions");
 	gDirectory = hitDistDir->mkdir("vertical, aligned, before selection");
 	h2_y_L_2_F_vs_x_L_2_F_al_nosel->Write();
 	h2_y_L_1_F_vs_x_L_1_F_al_nosel->Write();
@@ -1723,7 +1682,7 @@ int main(int argc, char **argv)
 	g_y_R_1_F_vs_x_R_1_F_al_sel->Write();
 	g_y_R_2_F_vs_x_R_2_F_al_sel->Write();
 
-	TDirectory *alDir = outF->mkdir("alignment");
+	TDirectory *alDir = f_out->mkdir("alignment");
 
 	TF1 *ff = new TF1("ff", "[0] + [1]*x");
 
@@ -1814,7 +1773,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	TDirectory *cutDir = outF->mkdir("elastic cuts");
+	TDirectory *cutDir = f_out->mkdir("elastic cuts");
 	for (unsigned int ci = 1; ci <= anal.N_cuts; ++ci)
 	{
 		char buf[100];
@@ -1879,7 +1838,7 @@ int main(int argc, char **argv)
 		g_cut_parameters->Write("g_cut_parameters");
 	}
 
-	gDirectory = outF->mkdir("selected - hits");
+	gDirectory = f_out->mkdir("selected - hits");
 	/*
 	p_x_vs_y_L_F->Write();
 	p_x_vs_y_L_N->Write();
@@ -1907,7 +1866,7 @@ int main(int argc, char **argv)
 	h2_y_R_ratioFN_vs_y_R_N->Write();
 	*/
 
-	gDirectory = outF->mkdir("selected - angles");
+	gDirectory = f_out->mkdir("selected - angles");
 	th_x_diffLR->Write();
 	th_y_diffLR->Write();
 
@@ -1988,7 +1947,7 @@ int main(int argc, char **argv)
 	h_th_y_L->Write();
 	h_th_y_R->Write();
 
-	gDirectory = outF->mkdir("selected - vertex");
+	gDirectory = f_out->mkdir("selected - vertex");
 	h_vtx_x->Write();
 	h_vtx_x_L->Write();
 	h_vtx_x_R->Write();
@@ -2044,13 +2003,13 @@ int main(int argc, char **argv)
 	*/
 
 
-	TDirectory *opticsDir = outF->mkdir("optics");
+	TDirectory *opticsDir = f_out->mkdir("optics");
 
 	gDirectory = opticsDir->mkdir("matching input, full");
 	opticsMatchingIntput_full.Write();
 
 
-	gDirectory = outF->mkdir("binning");
+	gDirectory = f_out->mkdir("binning");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
 	{
 		TGraph *g = new TGraph();
@@ -2064,7 +2023,7 @@ int main(int argc, char **argv)
 		g->Write();
 	}
 
-	gDirectory = outF->mkdir("time dependences");
+	gDirectory = f_out->mkdir("time dependences");
 
 	TGraph *g_run_boundaries = new TGraph();
 	g_run_boundaries->SetName("g_run_boundaries");
@@ -2156,15 +2115,15 @@ int main(int argc, char **argv)
 	g_L_L_F_vs_time->Write();
 	g_L_R_F_vs_time->Write();
 
-	TDirectory *fidCutDir = outF->mkdir("fiducial cuts");
+	TDirectory *fidCutDir = f_out->mkdir("fiducial cuts");
 	gDirectory = fidCutDir;
-	PlotFiductialCut(anal.fc_L, th_y_sign)->Write("fc_L");
-	PlotFiductialCut(anal.fc_R, th_y_sign)->Write("fc_R");
-	PlotFiductialCut(anal.fc_G, th_y_sign)->Write("fc_G");
+	PlotFiductialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
+	PlotFiductialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
+	PlotFiductialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
 
-	PlotFiductialArcs(anal.fc_G, th_y_sign);
+	PlotFiductialArcs(anal.fc_G, cfg.th_y_sign);
 
-	TDirectory *accDir = outF->mkdir("acceptance correction");
+	TDirectory *accDir = f_out->mkdir("acceptance correction");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
 	{
 		gDirectory = accDir->mkdir(binnings[bi].c_str());
@@ -2195,7 +2154,7 @@ int main(int argc, char **argv)
 
 	g_th_y_vs_th_x_acc->Write();
 
-	TDirectory *normDir = outF->mkdir("normalization");
+	TDirectory *normDir = f_out->mkdir("normalization");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
 	{
 		gDirectory = normDir->mkdir(binnings[bi].c_str());
@@ -2216,7 +2175,7 @@ int main(int argc, char **argv)
 
 	g_norm_corr_vs_div_corr->Write();
 
-	TDirectory *normUnfDir = outF->mkdir("normalization+unfolding");
+	TDirectory *normUnfDir = f_out->mkdir("normalization+unfolding");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
 	{
 		gDirectory = normUnfDir->mkdir(binnings[bi].c_str());
@@ -2230,7 +2189,7 @@ int main(int argc, char **argv)
 		printf("\tcut %u: %lu\n", it->first, it->second);
 
 	// clean up
-	delete outF;
+	delete f_out;
 
 	//fclose(f_out_cand);
 
