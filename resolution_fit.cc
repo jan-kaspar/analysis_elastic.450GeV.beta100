@@ -1,7 +1,5 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
 #include "TGraphErrors.h"
@@ -94,18 +92,57 @@ void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, const TGraphEr
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal == dCombined || diagonal == ad45b_56b || diagonal == ad45t_56t)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != d45b_56t && cfg.diagonal != d45t_56b)
 		return rcIncompatibleDiagonal;
 
+	// print settings
+	cfg.Print();
+
 	// get input
-	TFile *f_in = new TFile((string("distributions_") + argv[1] + ".root").c_str());
+	TFile *f_in = new TFile((string("distributions_") + cfg.diagonal_str + ".root").c_str());
 
 	TGraph *g_run_boundaries = (TGraph *) f_in->Get("time dependences/g_run_boundaries");
 	
@@ -122,7 +159,7 @@ int main(int argc, char **argv)
 	}
 	
 	// prepare output
-	TFile *f_out = new TFile((string("resolution_fit_") + argv[1] + ".root").c_str(), "recreate");
+	TFile *f_out = new TFile((string("resolution_fit_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// do fits
 	printf("\n\n---------- d_x ----------\n");
