@@ -1,10 +1,7 @@
-#include "input_files.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
-
+// TODO: clean
 #include "TFile.h"
 #include "TCanvas.h"
 #include "TGraph.h"
@@ -369,33 +366,62 @@ TH2D* MakeSimpleRatio(TH2D *num, TH2D *den)
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 	
 	// alignment init
-	for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 	{
 		printf("\n---------- alignment source %u ----------\n", i);
-		alignmentSources[i].Init();
+		anal.alignment_sources[i].Init();
 	}
 	printf("\n\n");
 
 	// get input
-	InitInputFiles();
-
-	printf("* input files: \n");
-	for (unsigned int i = 0; i < input_files.size(); i++)
-		printf("    %s\n", input_files[i].c_str());
-
-	fwlite::ChainEvent event(input_files);
-
+	fwlite::ChainEvent event(cfg.input_files);
 	printf("* events in input chain: %llu\n", event.size());
 	
 	// prepare output
@@ -416,7 +442,7 @@ int main(int argc, char **argv)
 
 		const unsigned int ev_run_num = event.id().run();
 		const unsigned int ev_lumi_section = event.id().luminosityBlock();
-		const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
+		const unsigned int ev_timestamp = event.time().unixTime() - cfg.timestamp0;
 		const unsigned int ev_bunch_num = event.bunchCrossing();
 
 		// check whether the event is to be skipped
@@ -429,8 +455,8 @@ int main(int argc, char **argv)
 
 		// get fine alignment
 		vector<AlignmentData> alignmentData;
-		for (const auto &src : alignmentSources)
-			alignmentData.push_back(src.Eval(event.time().unixTime() - timestamp0));
+		for (const auto &src : anal.alignment_sources)
+			alignmentData.push_back(src.Eval(event.time().unixTime() - cfg.timestamp0));
 
 		// run analysis
 		AnalyzeDiagonal(25, 5, 104, 124, flags, alignmentData, counters["45b_56t"]);

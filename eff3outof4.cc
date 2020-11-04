@@ -1,20 +1,13 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
+#include "classes/common_algorithms.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"
-#include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TChain.h"
 #include "TH2D.h"
-#include "TProfile.h"
-#include "TMath.h"
 #include "TF1.h"
-#include "TTree.h"
-
-#include <cmath>
 
 using namespace std;
 
@@ -184,28 +177,64 @@ TH2D* MakeSimpleRatio(TH2D *num, TH2D *den)
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal settings
-	Init(argv[1]);
-	if (diagonal == dCombined || diagonal == ad45b_56b || diagonal == ad45t_56t)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal == dCombined || cfg.diagonal == ad45b_56b || cfg.diagonal == ad45t_56t)
 		return rcIncompatibleDiagonal;
 	
 	// alignment init
-	for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 	{
 		printf("\n---------- alignment source %u ----------\n", i);
-		alignmentSources[i].Init();
+		anal.alignment_sources[i].Init();
 	}
 	printf("\n\n");
 
 	// get input
 	TChain *ch_in = new TChain("distilled");
 	printf(">> input chain\n");
-	for (const auto &ntupleDir : distilledNtuples)
+	for (const auto &ntupleDir : cfg.distilled_files)
 	{
 		string f = ntupleDir + "/distill_" + argv[1] + ".root";
 		printf("    %s\n", f.c_str());
@@ -257,24 +286,16 @@ int main(int argc, char **argv)
 	for (int ev_idx = 0; ev_idx < ch_in->GetEntries(); ++ev_idx)
 	{
 		ch_in->GetEntry(ev_idx);
-		
-		// remove troublesome runs
-		if (SkipRun(ev.run_num))
-			continue;
 
-		// select the elastic-trigger bunch(es) only
-		if (SkipBunch(ev.run_num, ev.bunch_num))
-			continue;
-
-		// check time - selected?
-		if (anal.SkipTime(ev.timestamp))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev.run_num, ev.lumi_section, ev.timestamp, ev.bunch_num))
 			continue;
 
 		// apply fine alignment
 		HitData h_al = ev.h;
-		for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+		for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 		{
-			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
+			const AlignmentData &alData = anal.alignment_sources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
 

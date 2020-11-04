@@ -1,7 +1,5 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
 #include "TH1D.h"
@@ -14,16 +12,55 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
-	
+
+	// print settings
+	cfg.Print();
+
 	// prepare output
 	TFile *f_out = new TFile("eff3outof4_fit.root", "recreate");
 
@@ -46,8 +83,9 @@ int main(int argc, char **argv)
 	{
 		printf("\n\n------------------------------ %s ------------------------------\n", diagonals[dgni].c_str());
 	
+		// TODO: this is left after migration
 		// diagonal settings
-		Init(diagonals[dgni]);
+		//Init(diagonals[dgni]);
 		
 		//double th_y_min = max(anal.th_y_lcut_L, anal.th_y_lcut_R) + 5E-6;
 		//double th_y_max = min(anal.th_y_hcut_L, anal.th_y_hcut_R) - 3E-6;

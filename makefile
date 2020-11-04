@@ -2,6 +2,9 @@ all: \
 	.alignment \
 	.alignment_final \
 	.alignment_fit \
+	.eff3outof4 \
+	.eff3outof4_details \
+	.eff3outof4_fit \
 	.distill \
 	.distributions \
 	.process_timber \
