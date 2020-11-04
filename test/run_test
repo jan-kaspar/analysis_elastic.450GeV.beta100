@@ -44,6 +44,8 @@ ds="fill7291/Totem1"
 #./run -no-bckg "unfolding_cf_mc.cc" "data/$ds" || exit 27
 ./run -no-bckg "unfolding_cf_ni.cc" "data/$ds" || exit 28
 
+./run -no-bckg "distributions_anti.cc" "data/$ds" || exit 29
+
 ./run -no-bckg "distributions.cc" "data/$ds" || exit 30
 
 ./run -no-bckg "alignment_final.cc" "data/$ds" || exit 31

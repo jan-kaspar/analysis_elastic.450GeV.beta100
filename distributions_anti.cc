@@ -1,109 +1,96 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "AcceptanceCalculator.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
+#include "classes/AcceptanceCalculator.hh"
+#include "classes/common_algorithms.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"
 #include "TGraph.h"
-#include "TGraphErrors.h"
 #include "TChain.h"
 #include "TH2D.h"
 #include "TProfile.h"
-#include "TMath.h"
-#include "TF1.h"
-#include "TTree.h"
-
-#include <cmath>
 
 using namespace std;
 
-
-//----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc < 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+	printf("    -details <int>         level of details to be produced/stored\n");
+	printf("    -cuts <string>         comma-separated list of cut numbers\n");
+	printf("    -input-dir <string>    input directory\n");
+	printf("    -output-dir <string>   output directory\n");
+	printf("    -n-si <float>          number of sigmas for elastic tagging\n");
+}
 
-	// init diagonal settings
-	Init(argv[1]);
-	if (diagonal != ad45b_56b && diagonal != ad45t_56t)
-		return rcIncompatibleDiagonal;
+//----------------------------------------------------------------------------------------------------
 
+int main(int argc, const char **argv)
+{
 	// default parameters
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
 	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
-	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
-	string cutSelectionString;
+	string cutSelectionString = "default";
 	string outputDir = ".";
 	string inputDir = ".";
 	double input_n_si = 4.0;
 
-	// parse command line arguments, starting from index 2
-	for (int i = 2; i < argc; i++)
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
-		//printf("%u => %s\n", i, argv[i]);
-
-		if (strcmp(argv[i], "-no-details") == 0)
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
 		{
-			detailsLevel = 0;
+			cl_error = 1;
 			continue;
 		}
 
-		if (strcmp(argv[i], "-details") == 0)
-		{
-			if (argc-1 > i)
-				detailsLevel = atoi(argv[++i]);
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
 
-		if (strcmp(argv[i], "-cuts") == 0)
-		{
-			if (argc-1 > i)
-			{
-				cutSelectionString = argv[++i];
-				overrideCutSelection = true;
-			}
-			continue;
-		}
-		
-		if (strcmp(argv[i], "-output-dir") == 0)
-		{
-			if (argc-1 > i)
-				outputDir = argv[++i];
-			continue;
-		}
+		if (TestUIntParameter(argc, argv, argi, "-details", detailsLevel)) continue;
 
-		if (strcmp(argv[i], "-input-dir") == 0)
-		{
-			if (argc-1 > i)
-				inputDir = argv[++i];
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-cuts", cutSelectionString)) continue;
 
-		if (strcmp(argv[i], "-n-si") == 0)
-		{
-			if (argc-1 > i)
-				input_n_si = atof(argv[++i]);
-			continue;
-		}
+		if (TestStringParameter(argc, argv, argi, "-input-dir", inputDir)) continue;
+		if (TestStringParameter(argc, argv, argi, "-output-dir", outputDir)) continue;
 
-		printf("ERROR: unknown parameter `%s'.\n", argv[i]);
-		return 3;
+		if (TestDoubleParameter(argc, argv, argi, "-n-si", input_n_si)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
 	}
-	
-	printf("* detailsLevel = %u\n", detailsLevel);
-	printf("* outputDir = %s\n", outputDir.c_str());
-	printf("* inputDir = %s\n", inputDir.c_str());
-	printf("* input n_si = %.3f\n", input_n_si);
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	printf("* command-line parameters:\n");
+	printf("    detailsLevel = %u\n", detailsLevel);
+	printf("    outputDir = %s\n", outputDir.c_str());
+	printf("    inputDir = %s\n", inputDir.c_str());
+	printf("    input n_si = %.3f\n", input_n_si);
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != ad45b_56b && cfg.diagonal != ad45t_56t)
+		return rcIncompatibleDiagonal;
 	
 	// select cuts
 	anal.BuildCuts(); 
 	anal.n_si = input_n_si;
 
-	if (overrideCutSelection)
+	if (cutSelectionString != "default")
 	{
 		anal.cuts.clear();
 		char buf[100];
@@ -144,28 +131,26 @@ int main(int argc, char **argv)
 	printf("\n");
 
 	// alignment init
-	for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 	{
 		printf("\n---------- alignment source %u ----------\n", i);
-		alignmentSources[i].Init();
+		anal.alignment_sources[i].Init();
 	}
 	printf("\n\n");
 	
 	// binnings
-	vector<string> binnings;
-	binnings.push_back("ub");
-	binnings.push_back("eb");
+	vector<string> binnings = anal.binnings;
 
 	// initialise acceptance calculation
 	AcceptanceCalculator accCalc;
-	accCalc.Init(th_y_sign, anal);
+	accCalc.Init(cfg.th_y_sign, anal);
 
 	// get input
 	TChain *ch_in = new TChain("distilled");
 	printf(">> input chain\n");
-	for (const auto &ntupleDir : distilledNtuples)
+	for (const auto &ntupleDir : cfg.distilled_files)
 	{
-		string f = inputDir + "/" + ntupleDir + "/distill_" + argv[1] + ".root";
+		string f = inputDir + "/" + ntupleDir + "/distill_" + cfg.diagonal_str + ".root";
 		printf("    %s\n", f.c_str());
 		ch_in->Add(f.c_str());
 	}
@@ -235,7 +220,7 @@ int main(int argc, char **argv)
 		if (i == 9) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 		if (i == 10) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 
-		if ((i == 2 || i == 5 || i == 6) && diagonal == d45t_56b)
+		if ((i == 2 || i == 5 || i == 6) && cfg.diagonal == d45t_56b)
 		{
 			swap(x_min, x_max);
 			swap(y_min, y_max);
@@ -346,9 +331,9 @@ int main(int argc, char **argv)
 
 		// apply fine alignment
 		HitData h_al = ev.h;
-		for (unsigned int i = 0; i < alignmentSources.size(); ++i)
+		for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)
 		{
-			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
+			const AlignmentData &alData = anal.alignment_sources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
 

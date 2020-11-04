@@ -7,6 +7,7 @@ all: \
 	.eff3outof4_fit \
 	.distill \
 	.distributions \
+	.distributions_anti \
 	.pileup \
 	.process_timber \
 	.resolution_fit \
