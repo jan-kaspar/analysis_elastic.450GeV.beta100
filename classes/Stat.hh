@@ -1,14 +1,15 @@
-#ifndef _stat_h_
-#define _stat_h_
+#ifndef _Stat_hh_
+#define _Stat_hh_
+
+#include "TMatrixDSym.h"
 
 #include <vector>
 #include <string>
 #include <cmath>
 
-#include "TVectorD.h"
-
 using namespace std;
 
+//----------------------------------------------------------------------------------------------------
 
 struct Stat
 {
