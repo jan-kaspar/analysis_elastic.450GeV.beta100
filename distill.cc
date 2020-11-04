@@ -61,7 +61,7 @@ int main(int argc, const char **argv)
 		return rcIncompatibleDiagonal;
 
 	// print settings
-	cfg.Print();
+	PrintConfiguration();
 
 	// prepare input
 	fwlite::ChainEvent event(cfg.input_files);

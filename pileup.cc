@@ -400,8 +400,8 @@ int main(int argc, const char **argv)
 	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
-	// print config
-	cfg.Print();
+	// print settings
+	PrintConfiguration();
 
 	// prepare input
 	fwlite::ChainEvent event(cfg.input_files);

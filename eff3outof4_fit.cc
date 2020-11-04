@@ -59,7 +59,7 @@ int main(int argc, const char **argv)
 		return rcIncompatibleDiagonal;
 
 	// print settings
-	cfg.Print();
+	PrintConfiguration();
 
 	// prepare output
 	TFile *f_out = new TFile("eff3outof4_fit.root", "recreate");

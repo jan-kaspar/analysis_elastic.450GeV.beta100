@@ -148,7 +148,7 @@ int main(int argc, const char **argv)
 		return rcIncompatibleDiagonal;
 
 	// print settings
-	cfg.Print();
+	PrintConfiguration();
 
 	// get input data
 	TFile *f_in = TFile::Open(("/afs/cern.ch/exp/totem/scratch/data/RP/" + cfg.timber_dir + "/conditions/emittance.root").c_str());

@@ -446,17 +446,8 @@ int main(int argc, const char **argv)
 		anal.use_pileup_efficiency_fits = false;
 	}
 
-	// print info
-	printf("\n");
-	printf("------------------------------ configuration ------------------------------\n");
-	cfg.Print();
-	printf("\n");
-	printf("------------------------------ environment ------------------------------\n");
-	env.Print();
-	printf("\n");
-	printf("------------------------------- analysis --------------------------------\n");
-	anal.Print();
-	printf("\n");
+	// print settings
+	PrintConfiguration();
 
 	// alignment init
 	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)

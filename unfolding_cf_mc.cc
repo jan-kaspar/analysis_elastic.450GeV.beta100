@@ -127,6 +127,9 @@ int main(int argc, const char **argv)
 	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
 
+	// print info
+	PrintConfiguration();
+
 	// apply settings
 	gRandom->SetSeed(seed);
 	
@@ -138,9 +141,6 @@ int main(int argc, const char **argv)
 	vector<Model> models = {
 		{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
 	};
-
-	// print info
-	PrintConfiguration();
 
 	printf("\n");
 	printf("N_ev = %u = %.1E\n", N_ev, (double) N_ev);

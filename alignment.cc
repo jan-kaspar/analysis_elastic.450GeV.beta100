@@ -1,7 +1,6 @@
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 
-// TODO: clean
 #include "TFile.h"
 #include "TCanvas.h"
 #include "TGraph.h"
@@ -18,7 +17,6 @@
 #include <map>
 #include <cmath>
 #include <algorithm>
-#include <cassert>
 
 using namespace std;
 
@@ -928,7 +926,7 @@ int main(int argc, const char **argv)
 		return rcIncompatibleDiagonal;
 
 	// print settings
-	cfg.Print();
+	PrintConfiguration();
 
 	// input files
 	TFile *inF_45b = new TFile("distributions_45b_56t.root");

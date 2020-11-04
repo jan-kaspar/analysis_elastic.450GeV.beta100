@@ -222,6 +222,9 @@ int main(int argc, const char **argv)
 	// compatibility check
 	if (cfg.diagonal == dCombined || cfg.diagonal == ad45b_56b || cfg.diagonal == ad45t_56t)
 		return rcIncompatibleDiagonal;
+
+	// print settings
+	PrintConfiguration();
 	
 	// alignment init
 	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)

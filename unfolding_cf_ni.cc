@@ -297,6 +297,9 @@ int main(int argc, const char **argv)
 	// compatibility check
 	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
+
+	// print info
+	PrintConfiguration();
 	
 	// binnings
 	vector<string> binnings = anal.binnings;
@@ -306,9 +309,6 @@ int main(int argc, const char **argv)
 	vector<Model> models = {
 		{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
 	};
-
-	// print info
-	PrintConfiguration();
 
 	// smearing sigmas
 	n_sm_si = 5;

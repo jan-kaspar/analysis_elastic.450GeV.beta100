@@ -411,6 +411,9 @@ int main(int argc, const char **argv)
 	// compatibility check
 	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
+
+	// print settings
+	PrintConfiguration();
 	
 	// alignment init
 	for (unsigned int i = 0; i < anal.alignment_sources.size(); ++i)

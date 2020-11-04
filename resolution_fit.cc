@@ -139,7 +139,7 @@ int main(int argc, const char **argv)
 		return rcIncompatibleDiagonal;
 
 	// print settings
-	cfg.Print();
+	PrintConfiguration();
 
 	// get input
 	TFile *f_in = new TFile((string("distributions_") + cfg.diagonal_str + ".root").c_str());

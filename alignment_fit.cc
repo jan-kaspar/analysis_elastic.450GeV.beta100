@@ -149,6 +149,9 @@ int main(int argc, const char **argv)
 	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
+	// print settings
+	PrintConfiguration();
+
 	// files
 	TFile *inF = new TFile("alignment.root");
 	TFile *outF = new TFile("alignment_fit.root", "recreate");

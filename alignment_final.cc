@@ -249,6 +249,9 @@ int main(int argc, const char **argv)
 	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
+	// print settings
+	PrintConfiguration();
+
 	// get input data
 	TFile *inF_45b = new TFile("distributions_45b_56t.root");
 	TH2D *h_45b = (TH2D *) inF_45b->Get("normalization/h_th_y_vs_th_x_normalized");
