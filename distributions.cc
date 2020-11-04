@@ -315,9 +315,18 @@ void PrintUsage()
 {
 	printf("USAGE: program <option> <option>\n");
 	printf("OPTIONS:\n");
-	printf("    -cfg <file>       config file\n");
-	printf("    -dgn <string>     diagonal\n");
-	// FIXME: continue
+	printf("    -cfg <file>            config file\n");
+	printf("    -dgn <string>          diagonal\n");
+	printf("    -details <int>         level of details to be produced/stored\n");
+	printf("    -cuts <string>         comma-separated list of cut numbers\n");
+	printf("    -input-dir <string>    input directory\n");
+	printf("    -output-dir <string>   output directory\n");
+	printf("    -n-si <float>          number of sigmas for elastic tagging\n");
+	printf("    -tg-divisor <int>      time group divisor\n");
+	printf("    -tg-remainder <int>    time group remainder\n");
+	printf("    -eg-divisor <int>      event group divisor\n");
+	printf("    -eg-index <int>        event group index\n");
+	printf("    -bootstram <bool>      if activated, will run without auxiliary input\n");
 }
 
 //----------------------------------------------------------------------------------------------------

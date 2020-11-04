@@ -42,17 +42,6 @@ cfg = cms.PSet(
       cms.PSet(run=cms.uint32(324536), ls_first=cms.uint32(360), ls_second=cms.uint32(509))
     ),
 
-    # FIXME: alignment sources
-#	AlignmentSource alSrc;
-#	alSrc.SetAlignmentA(atConstant);
-#	alSrc.SetAlignmentB(atConstant);
-#	alSrc.SetAlignmentC(atConstant);
-#
-#	alSrc.cnst.a_L_2_F = -7.0E-3; alSrc.cnst.b_L_2_F =    0E-3 - 25E-3; alSrc.cnst.c_L_2_F = +170E-3; // first number: read from alignment.pdf, second number: correction reco-check plots
-#	alSrc.cnst.a_L_1_F = -8.5E-3; alSrc.cnst.b_L_1_F = +400E-3 + 25E-3; alSrc.cnst.c_L_1_F =  +30E-3;
-#
-#	alSrc.cnst.a_R_1_F = +5.0E-3; alSrc.cnst.b_R_1_F = +100E-3 + 25E-3; alSrc.cnst.c_R_1_F = -180E-3;
-#	alSrc.cnst.a_R_2_F = +3.5E-3; alSrc.cnst.b_R_2_F = +900E-3 - 25E-3; alSrc.cnst.c_R_2_F =  -20E-3;
     alignment_sources = cms.VPSet(
       cms.PSet(
         # first number: read from alignment.pdf, second number: correction reco-check plots
@@ -136,13 +125,14 @@ cfg = cms.PSet(
     binnings = cms.vstring("ub", "eb"),
 
     unsmearing_file = cms.string(""),
-    unsmearing_object = cms.string("fit-1/<binning>")
+    unsmearing_object = cms.string("fit-1/<binning>"),
 
-    # FIXME:
-	#anal.alignmentYRanges["L_2_F"] = Analysis::AlignmentYRange(-24.0, -6.9, 7.4, +25.5);
-	#anal.alignmentYRanges["L_1_F"] = Analysis::AlignmentYRange(-21.5, -6.3, 6.6, +22.3);
-	#anal.alignmentYRanges["R_1_F"] = Analysis::AlignmentYRange(-23.0, -6.6, 6.6, +21.5);
-	#anal.alignmentYRanges["R_2_F"] = Analysis::AlignmentYRange(-25.2, -7.0, 7.3, +24.0);
+    alignmentYRanges = cms.VPSet(
+	  cms.PSet(unit=cms.string("L_2_F"), bot_min=cms.double(-24.0), bot_max=cms.double(-6.9), top_min=cms.double(7.4), top_max=cms.double(+25.5)),
+	  cms.PSet(unit=cms.string("L_1_F"), bot_min=cms.double(-21.5), bot_max=cms.double(-6.3), top_min=cms.double(6.6), top_max=cms.double(+22.3)),
+	  cms.PSet(unit=cms.string("R_1_F"), bot_min=cms.double(-23.0), bot_max=cms.double(-6.6), top_min=cms.double(6.6), top_max=cms.double(+21.5)),
+	  cms.PSet(unit=cms.string("R_2_F"), bot_min=cms.double(-25.2), bot_max=cms.double(-7.0), top_min=cms.double(7.3), top_max=cms.double(+24.0))
+    )
   )
 )
 
