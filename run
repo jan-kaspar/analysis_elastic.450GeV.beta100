@@ -24,7 +24,7 @@ function RunOneDiagonal()
 	local optionsStr=""
 	if [ ! "$run_options" == "" ]
 	then
-		optionsStr=" ($options)"
+		optionsStr=" ($run_options)"
 	fi
 
 	label="$tag @ $dir:$diag"
@@ -45,6 +45,7 @@ function RunOneDiagonal()
 		*)
 			echo "$label > run error ($errCode)"
 			tail -n 5 "$log"
+			return 1
 			;;
 	esac
 }
@@ -66,7 +67,7 @@ function RunOneDirectory()
 			then
 				RunOneDiagonal &
 			else
-				RunOneDiagonal
+				RunOneDiagonal || exit 10
 			fi
 		done
 

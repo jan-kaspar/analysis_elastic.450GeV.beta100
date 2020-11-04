@@ -3,7 +3,7 @@
 source environment || exit 1
 
 # check for FIXME
-output=`grep -RlI "FIXME" . 2> /dev/null`
+output=`grep -RlI "FIXME" . 2> /dev/null  | grep -v .git | grep -v test/run_test`
 if [ -n "$output" ]
 then
 	echo "There are FIXMEs in the code."
@@ -22,8 +22,12 @@ do
 done
 
 # run basic analysis
+echo "-------------------- RUNNING ANALYSIS --------------------"
 ds="fill7291/Totem1"
-./run -no-bckg "distill.cc" "data/$ds"
+./run -no-bckg "distill.cc" "data/$ds" || exit 10
+./run -no-bckg "distributions.cc" "data/$ds" -O "-bootstrap 1" || exit 11
+./run -no-bckg "resolution_fit.cc" "data/$ds" || exit 12
+./run -no-bckg "distributions.cc" "data/$ds" || exit 13
 
 # make comparison to reference
 # TODO

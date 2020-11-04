@@ -326,7 +326,7 @@ void PrintUsage()
 	printf("    -tg-remainder <int>    time group remainder\n");
 	printf("    -eg-divisor <int>      event group divisor\n");
 	printf("    -eg-index <int>        event group index\n");
-	printf("    -bootstram <bool>      if activated, will run without auxiliary input\n");
+	printf("    -bootstrap <bool>      if activated, will run without auxiliary input\n");
 }
 
 //----------------------------------------------------------------------------------------------------
