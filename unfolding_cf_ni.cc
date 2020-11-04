@@ -1,3 +1,8 @@
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
+#include "classes/numerical_integration.hh"
+#include "classes/common_algorithms.hh"
+
 #include "TGraph.h"
 #include "TFile.h"
 #include "TMath.h"
@@ -7,14 +12,7 @@
 
 #include <string>
 #include <map>
-#include <cstdio>
 
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
-
-#include "NumericalIntegration.hh"
 
 using namespace std;
 
@@ -144,7 +142,7 @@ double dist_t_sm(double t)
 
 		phiSum += phi_end - phi_start;
 
-		if (th_y_sign == +1)
+		if (cfg.th_y_sign == +1)
 			integralSum += RealIntegrate(IntegOverPhi, param, NULL, phi_start, phi_end, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 		else
 			integralSum += RealIntegrate(IntegOverPhi, param, NULL, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
@@ -254,23 +252,54 @@ struct Model
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
+void PrintUsage()
+{
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
+
+//----------------------------------------------------------------------------------------------------
+
 int main(int argc, const char **argv)
 {
-	if (argc < 2)
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
-		printf("ERROR: Wrong number of parameters.\n");
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
 		return 1;
 	}
 
-	// init diagonal settings
-	Init(argv[1]);
-	if (diagonal == dCombined)
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
 	
 	// binnings
-	vector<string> binnings;
-	binnings.push_back("eb");
-	//binnings.push_back("ob-1-20-0.05");
+	vector<string> binnings = anal.binnings;
 
 	// models
 	vector<Model> models = {

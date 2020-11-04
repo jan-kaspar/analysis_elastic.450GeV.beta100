@@ -1,9 +1,5 @@
-#include "input_files.hh"
-
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"
@@ -358,32 +354,61 @@ void SigIntHandler(int)
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
+	// print config
+	cfg.Print();
+
 	// prepare input
-	InitInputFiles();
-
-	// TODO: remove
-	//input_files.resize(10);
-
-	printf("* input files: \n");
-	for (unsigned int i = 0; i < input_files.size(); i++)
-		printf("    %s\n", input_files[i].c_str());
-
-	fwlite::ChainEvent event(input_files);
-
+	fwlite::ChainEvent event(cfg.input_files);
 	printf("* events in input chain: %llu\n", event.size());
 	
 	// prepare output
-	TFile *outF = new TFile((string("pileup_") + argv[1] + ".root").c_str(), "recreate");
+	TFile *outF = new TFile((string("pileup_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// prepare counters and histograms
 	map<string, CounterMap> counters;	// map: diagonal label -> CounterMap
@@ -402,12 +427,13 @@ int main(int argc, char **argv)
 		//	break;
 
 		const unsigned int ev_run = event.id().run();
+		const unsigned int ev_lumi_section = event.id().luminosityBlock();
 		const unsigned int ev_bunch = event.bunchCrossing();
-		const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
+		const unsigned int ev_timestamp = event.time().unixTime() - cfg.timestamp0;
 		const unsigned int periodIdx = FillPeriod(ev_run, ev_timestamp);
 
-		// select bunches
-		if (SkipBunch(ev_run, ev_bunch))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev_run, ev_lumi_section, ev_timestamp, ev_bunch))
 			continue;
 
 		// run analysis

@@ -1,3 +1,8 @@
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
+#include "classes/common_algorithms.hh"
+#include "classes/AcceptanceCalculator.hh"
+
 #include "TGraph.h"
 #include "TFile.h"
 #include "TH1D.h"
@@ -5,13 +10,6 @@
 
 #include <string>
 #include <map>
-#include <cstdio>
-
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
-#include "AcceptanceCalculator.hh"
 
 using namespace std;
 
@@ -79,17 +77,50 @@ struct PlotGroup
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
+void PrintUsage()
+{
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
+
+//----------------------------------------------------------------------------------------------------
+
 int main(int argc, const char **argv)
 {
-	if (argc < 2)
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
-		printf("ERROR: Wrong number of parameters.\n");
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
 		return 1;
 	}
 
-	// init diagonal settings
-	Init(argv[1]);
-	if (diagonal == dCombined)
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
 
 	// settings
@@ -99,8 +130,7 @@ int main(int argc, const char **argv)
 	gRandom->SetSeed(seed);
 	
 	// binnings
-	vector<string> binnings;
-	binnings.push_back("eb");
+	vector<string> binnings = anal.binnings;
 
 	// models
 	vector<Model> models = {
@@ -121,7 +151,7 @@ int main(int argc, const char **argv)
 
 	// initialize acceptance calculator
 	AcceptanceCalculator accCalc;
-	accCalc.Init(th_y_sign, anal);
+	accCalc.Init(cfg.th_y_sign, anal);
 
 	// load input
 	vector<TSpline *> modelSplines;
@@ -186,7 +216,7 @@ int main(int argc, const char **argv)
 		// generate true event
 		Kinematics k_tr;
 		k_tr.t = t;
-		k_tr.phi = gRandom->Rndm() * M_PI * th_y_sign;
+		k_tr.phi = gRandom->Rndm() * M_PI * cfg.th_y_sign;
 
 		k_tr.TPhiToThetas(env);
 

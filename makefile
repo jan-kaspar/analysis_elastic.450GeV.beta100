@@ -7,8 +7,11 @@ all: \
 	.eff3outof4_fit \
 	.distill \
 	.distributions \
+	.pileup \
 	.process_timber \
-	.resolution_fit
+	.resolution_fit \
+	.unfolding_cf_mc \
+	.unfolding_cf_ni
 
 # default rule
 .% : %.cc classes/AcceptanceCalculator.hh classes/Analysis.hh classes/command_line_tools.hh classes/common_algorithms.hh\
