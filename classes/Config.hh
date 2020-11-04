@@ -36,6 +36,9 @@ struct Config
 	// range of timestamps (UNIX time - timestamp0)
 	double timestamp_min, timestamp_max;
 
+	// directory with associated Timber data
+	string timber_dir;
+
 	void Load(const edm::ParameterSet &ps);
 
 	void Print() const;
@@ -52,6 +55,8 @@ void Config::Load(const edm::ParameterSet & ps)
 
 	timestamp_min = ps.getParameter<double>("timestamp_min");
 	timestamp_max = ps.getParameter<double>("timestamp_max");
+
+	timber_dir = ps.getParameter<string>("timber_dir");
 }
 
 //----------------------------------------------------------------------------------------------------

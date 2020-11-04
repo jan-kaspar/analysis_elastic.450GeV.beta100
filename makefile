@@ -1,6 +1,7 @@
 all: \
 	.distill \
 	.distributions \
+	.process_timber \
 	.resolution_fit
 
 # default rule

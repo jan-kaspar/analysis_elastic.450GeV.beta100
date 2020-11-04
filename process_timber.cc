@@ -1,11 +1,8 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
-#include "TGraphErrors.h"
-#include "TH1D.h"
+#include "TGraph.h"
 
 using namespace std;
 
@@ -38,9 +35,9 @@ void ProcessOne(TGraph *g_em, const string &beam, const string &proj)
 		double time = g_em->GetX()[i];
 		const double emit = g_em->GetY()[i] * 1E-6;
 
-		time -= timestamp0;
+		time -= cfg.timestamp0;
 
-		if (time < timestamp_min - time_margin || time > timestamp_max + time_margin)
+		if (time < cfg.timestamp_min - time_margin || time > cfg.timestamp_max + time_margin)
 			continue;
 
 		const double bd = sqrt(emit / ga / beta_st);
@@ -78,9 +75,9 @@ void ProcessCombined(TGraph *g_em_b1, TGraph *g_em_b2, const string &beam, const
 		if (emit1 < 0. || emit2 < 0.)
 			continue;
 
-		time -= timestamp0;
+		time -= cfg.timestamp0;
 
-		if (time < timestamp_min - time_margin || time > timestamp_max + time_margin)
+		if (time < cfg.timestamp_min - time_margin || time > cfg.timestamp_max + time_margin)
 			continue;
 
 		const double bd1 = sqrt(emit1 / ga / beta_st);
@@ -104,18 +101,57 @@ void ProcessCombined(TGraph *g_em_b1, TGraph *g_em_b2, const string &beam, const
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
+	// print settings
+	cfg.Print();
+
 	// get input data
-	TFile *f_in = TFile::Open(("/afs/cern.ch/exp/totem/scratch/data/RP/" + timberDir + "/conditions/emittance.root").c_str());
+	TFile *f_in = TFile::Open(("/afs/cern.ch/exp/totem/scratch/data/RP/" + cfg.timber_dir + "/conditions/emittance.root").c_str());
 
 	TGraph *g_emit_B1_H = (TGraph *) f_in->Get("LHC.BSRT.5R4.B1:AVERAGE_WEIGHTED_EMITTANCE_H");
 	TGraph *g_emit_B1_V = (TGraph *) f_in->Get("LHC.BSRT.5R4.B1:AVERAGE_WEIGHTED_EMITTANCE_V");
