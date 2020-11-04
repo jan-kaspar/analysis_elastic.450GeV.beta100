@@ -148,8 +148,6 @@ int main(int argc, const char **argv)
 	// compatibility check
 	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
-	if (argc != 2)
-		return 1;
 
 	// files
 	TFile *inF = new TFile("alignment.root");

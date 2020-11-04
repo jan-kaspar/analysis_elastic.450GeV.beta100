@@ -236,7 +236,7 @@ int main(int argc, const char **argv)
 	printf(">> input chain\n");
 	for (const auto &ntupleDir : cfg.distilled_files)
 	{
-		string f = ntupleDir + "/distill_" + argv[1] + ".root";
+		string f = ntupleDir + "/distill_" + cfg.diagonal_str + ".root";
 		printf("    %s\n", f.c_str());
 		ch_in->Add(f.c_str());
 	}
@@ -255,7 +255,7 @@ int main(int argc, const char **argv)
 	ch_in->SetBranchAddress("v_R_2_F", &ev.h.R_2_F.v); ch_in->SetBranchAddress("x_R_2_F", &ev.h.R_2_F.x); ch_in->SetBranchAddress("y_R_2_F", &ev.h.R_2_F.y);
 
 	// prepare output
-	TFile *outF = new TFile((string("eff3outof4_") + argv[1] + ".root").c_str(), "recreate");
+	TFile *outF = new TFile((string("eff3outof4_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// tolerances (= 1 sigma of left-right difference)
 	double si_de_th_x = 46E-6;

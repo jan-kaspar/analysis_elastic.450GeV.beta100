@@ -170,7 +170,7 @@ int main(int argc, const char **argv)
 	ch_in->SetBranchAddress("event_num", &ev.event_num);
 
 	// init output files
-	TFile *outF = new TFile((outputDir+"/distributions_anti_" + argv[1] + ".root").c_str(), "recreate");
+	TFile *outF = new TFile((outputDir+"/distributions_anti_" + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// book metadata histograms
 	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", 97001, 16E3-0.5, 113E3+0.5);
