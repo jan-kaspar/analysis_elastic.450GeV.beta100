@@ -1,0 +1,10 @@
+#!/bin/bash
+
+make -C "test"
+
+for dgn in 45b_56t 45t_56b
+do
+	test/compare \
+		"../4rp-before-new-framework/DS-fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" \
+		"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after"
+done
