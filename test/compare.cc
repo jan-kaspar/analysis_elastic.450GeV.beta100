@@ -37,8 +37,6 @@ int CompareGraphs(const TGraph *g1, const TGraph *g2)
 
 int CompareHistograms(const TH1 *h1, const TH1 *h2)
 {
-    printf("* CompareHistograms\n");
-
     if (h1->GetNbinsX() != h2->GetNbinsX())
     {
         printf("* number of bins is different\n");

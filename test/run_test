@@ -13,6 +13,7 @@ fi
 # compile everything
 build_directories=(
 	"."
+	"test"
 )
 
 for d in ${build_directories[*]}
@@ -30,4 +31,11 @@ ds="fill7291/Totem1"
 ./run -no-bckg "distributions.cc" "data/$ds" || exit 13
 
 # make comparison to reference
-# TODO
+echo "-------------------- RUNNING COMPARISON --------------------"
+
+for dgn in 45b_56t 45t_56b
+do
+	test/compare \
+		"test/reference.root" "$dgn/acceptance correction/eb/h_t_after" \
+		"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 30
+done
