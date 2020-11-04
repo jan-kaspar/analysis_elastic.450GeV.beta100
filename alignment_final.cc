@@ -158,9 +158,9 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 
 	printf("number of points: %lu\n", points.size());
 
-	// initialize fitter
 	// TODO
 	/*
+	// initialize fitter
 	TFitterMinuit *minuit = new TFitterMinuit();
 	S2_FCN fcn;
 	minuit->SetMinuitFCN(&fcn);
@@ -262,7 +262,8 @@ int main(int argc, const char **argv)
 	// prepare output
 	TFile *outF = new TFile("alignment_final.root", "recreate");
 
-	MakeFit(h_45b, h_45t);
+	// TODO
+	//MakeFit(h_45b, h_45t);
 
 	delete outF;
 	return 0;
