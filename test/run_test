@@ -2,6 +2,14 @@
 
 source environment || exit 1
 
+# check for FIXME
+output=`grep -RlI "FIXME" . 2> /dev/null`
+if [ -n "$output" ]
+then
+	echo "There are FIXMEs in the code."
+	exit 2
+fi
+
 # compile everything
 build_directories=(
 	"."
