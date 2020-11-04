@@ -28,7 +28,21 @@ ds="fill7291/Totem1"
 ./run -no-bckg "distill.cc" "data/$ds" || exit 10
 ./run -no-bckg "distributions.cc" "data/$ds" -O "-bootstrap 1" || exit 11
 ./run -no-bckg "resolution_fit.cc" "data/$ds" || exit 12
-./run -no-bckg "distributions.cc" "data/$ds" || exit 13
+
+# TODO: uncomment once the RP directory is restored
+#./run -no-bckg "process_timber.cc" "data/$ds" || exit 20
+
+./run -no-bckg "alignment.cc" "data/$ds" || exit 21
+./run -no-bckg "alignment_fit.cc" "data/$ds" || exit 22
+
+#TODO: eff
+#TODO: unfolding
+
+./run -no-bckg "distributions.cc" "data/$ds" || exit 30
+
+./run -no-bckg "alignment_final.cc" "data/$ds" || exit 31
+
+# TODO: merge || exit 40
 
 # make comparison to reference
 echo "-------------------- RUNNING COMPARISON --------------------"
@@ -37,5 +51,5 @@ for dgn in 45b_56t 45t_56b
 do
 	test/compare \
 		"test/reference.root" "$dgn/acceptance correction/eb/h_t_after" \
-		"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 30
+		"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 50
 done

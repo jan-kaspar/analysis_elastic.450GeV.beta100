@@ -1,8 +1,7 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
+// TODO: clean
 #include "TFile.h"
 #include "TGraphErrors.h"
 #include "TF1.h"
@@ -104,15 +103,53 @@ void FitOneUnit(TDirectory *inDir, GraphSet &gs)
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
+
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
+		return rcIncompatibleDiagonal;
 	if (argc != 2)
 		return 1;
-
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
-		return rcIncompatibleDiagonal;
 
 	// files
 	TFile *inF = new TFile("alignment.root");
@@ -149,8 +186,8 @@ int main(int argc, char **argv)
 		double center, bla;
 		g_idx->GetPoint(pi, center, bla);
 		double w = g_idx->GetErrorX(pi);
-		unsigned long from = floor(timestamp0 + center - w);
-		unsigned long to = ceil(timestamp0 + center + w); to--;
+		unsigned long from = floor(cfg.timestamp0 + center - w);
+		unsigned long to = ceil(cfg.timestamp0 + center + w); to--;
 		fprintf(fo, "%lu,%lu", from, to);
 		for (unsigned int ui = 0; ui < units.size(); ui++)
 		{

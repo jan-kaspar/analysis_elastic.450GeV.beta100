@@ -1,4 +1,7 @@
 all: \
+	.alignment \
+	.alignment_final \
+	.alignment_fit \
 	.distill \
 	.distributions \
 	.process_timber \

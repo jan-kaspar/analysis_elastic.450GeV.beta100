@@ -1,8 +1,7 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
+// TODO: clean
 #include "TFile.h"
 #include "TCanvas.h"
 #include "TGraph.h"
@@ -43,7 +42,6 @@ struct result
 	}
 };
 
-//----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
 TF1 *f_gauss = NULL;
@@ -883,15 +881,54 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
+
+	// print settings
+	cfg.Print();
 
 	// input files
 	TFile *inF_45b = new TFile("distributions_45b_56t.root");

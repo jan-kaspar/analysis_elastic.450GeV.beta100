@@ -1,14 +1,14 @@
-#include "common_definitions.hh"
-#include "common_algorithms.hh"
-#include "parameters.hh"
-#include "common.hh"
+#include "classes/common_init.hh"
+#include "classes/command_line_tools.hh"
 
 #include "TFile.h"
-#include "TGraphErrors.h"
-#include "TH1D.h"
 #include "TH2D.h"
+
+// TODO: find the new approach
+/*
 #include "Minuit2/FCNBase.h"
 #include "TFitterMinuit.h"
+*/
 
 #include <vector>
 
@@ -25,6 +25,8 @@ vector<Point> points;
 
 //----------------------------------------------------------------------------------------------------
 
+// TODO
+/*
 class S2_FCN : public ROOT::Minuit2::FCNBase
 {
 	public:
@@ -108,6 +110,7 @@ TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const std::vector<double> &par)
 
 	return h;
 }
+*/
 
 //----------------------------------------------------------------------------------------------------
 
@@ -156,6 +159,8 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	printf("number of points: %lu\n", points.size());
 
 	// initialize fitter
+	// TODO
+	/*
 	TFitterMinuit *minuit = new TFitterMinuit();
 	S2_FCN fcn;
 	minuit->SetMinuitFCN(&fcn);
@@ -193,24 +198,55 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 
 	TH2D *m = fcn.MakeDiffMap(h_45b, par);
 	m->Write();
-
-	// print results
-	/*
-	printf("res 0: %E\n", minuit->GetParameter(0));
-	printf("res 1: %E\n", minuit->GetParameter(1));
 	*/
 }
 
 //----------------------------------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+void PrintUsage()
 {
-	if (argc != 2)
-		return 1;
+	printf("USAGE: program <option> <option>\n");
+	printf("OPTIONS:\n");
+	printf("    -cfg <file>       config file\n");
+	printf("    -dgn <string>     diagonal\n");
+}
 
-	// init diagonal
-	Init(argv[1]);
-	if (diagonal != dCombined)
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	string cfg_file = "config.py";
+	string diagonal_input = "";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
+		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// run initialisation
+	if (Init(cfg_file, diagonal_input) != 0)
+		return 2;
+
+	// compatibility check
+	if (cfg.diagonal != dCombined)
 		return rcIncompatibleDiagonal;
 
 	// get input data
