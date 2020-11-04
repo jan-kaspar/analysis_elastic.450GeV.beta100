@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export BASE_DIR=`pwd -P`
+
 shopt -s expand_aliases
 
 cwd=`pwd`

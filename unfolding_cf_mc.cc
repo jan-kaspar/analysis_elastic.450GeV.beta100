@@ -93,6 +93,10 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 
+	unsigned int N_ev = (unsigned int) 4E8;
+	unsigned int seed = 1;
+
+
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
@@ -123,31 +127,24 @@ int main(int argc, const char **argv)
 	if (cfg.diagonal == dCombined)
 		return rcIncompatibleDiagonal;
 
-	// settings
-	unsigned int N_ev = (unsigned int) 4E8;
-	unsigned int seed = 1;
-
+	// apply settings
 	gRandom->SetSeed(seed);
 	
 	// binnings
 	vector<string> binnings = anal.binnings;
 
 	// models
+	string base_dir = getenv("BASE_DIR");
 	vector<Model> models = {
-		{ "fit-1", "/afs/cern.ch/work/j/jkaspar/work/analyses/elastic/450GeV/beta100/4rp/fits_for_corr/fit.root", "g_fit_1" },
+		{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
 	};
 
 	// print info
+	PrintConfiguration();
+
 	printf("\n");
 	printf("N_ev = %u = %.1E\n", N_ev, (double) N_ev);
 	printf("seed = %u\n", seed);
-	printf("\n");
-	printf("------------------------------ environment ------------------------------\n");
-	env.Print();
-	printf("\n");
-	printf("------------------------------- analysis --------------------------------\n");
-	anal.Print();
-	printf("\n");
 
 	// initialize acceptance calculator
 	AcceptanceCalculator accCalc;
@@ -185,7 +182,7 @@ int main(int argc, const char **argv)
 	}
 
 	// prepare output
-	string fn_out = string("unfolding_cf_mc_") + argv[1] + ".root";
+	string fn_out = string("unfolding_cf_mc_") + cfg.diagonal_str + ".root";
 	TFile *f_out = new TFile(fn_out.c_str(), "recreate");
 	if (f_out->IsZombie())
 	{

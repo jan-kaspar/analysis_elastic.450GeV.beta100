@@ -302,18 +302,13 @@ int main(int argc, const char **argv)
 	vector<string> binnings = anal.binnings;
 
 	// models
+	string base_dir = getenv("BASE_DIR");
 	vector<Model> models = {
-		{ "fit-1", "/afs/cern.ch/work/j/jkaspar/work/analyses/elastic/450GeV/beta100/4rp/fits_for_corr/fit.root", "g_fit_1" },
+		{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
 	};
 
 	// print info
-	printf("\n");
-	printf("------------------------------ environment ------------------------------\n");
-	env.Print();
-	printf("\n");
-	printf("------------------------------- analysis --------------------------------\n");
-	anal.Print();
-	printf("\n");
+	PrintConfiguration();
 
 	// smearing sigmas
 	n_sm_si = 5;
@@ -334,7 +329,7 @@ int main(int argc, const char **argv)
 	}
 
 	// prepare output
-	string fn_out = string("unfolding_cf_ni_") + argv[1] + ".root";
+	string fn_out = string("unfolding_cf_ni_") + cfg.diagonal_str + ".root";
 	TFile *f_out = new TFile(fn_out.c_str(), "recreate");
 	if (f_out->IsZombie())
 	{
