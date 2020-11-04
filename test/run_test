@@ -27,8 +27,11 @@ done
 echo "-------------------- RUNNING ANALYSIS --------------------"
 ds="fill7291/Totem1"
 ./run -no-bckg "distill.cc" "data/$ds" || exit 10
-./run -no-bckg "distributions.cc" "data/$ds" -O "-bootstrap 1 -details 5" || exit 11
-./run -no-bckg "resolution_fit.cc" "data/$ds" || exit 12
+./run -no-bckg "distill.cc" "data/$ds" -danti || exit 11
+
+./run -no-bckg "distributions.cc" "data/$ds" -O "-bootstrap 1 -details 5" || exit 12
+
+./run -no-bckg "resolution_fit.cc" "data/$ds" || exit 13
 
 # TODO: uncomment once the RP directory is restored
 #./run -no-bckg "process_timber.cc" "data/$ds" || exit 20
@@ -45,7 +48,7 @@ ds="fill7291/Totem1"
 #./run -no-bckg "unfolding_cf_mc.cc" "data/$ds" || exit 27
 ./run -no-bckg "unfolding_cf_ni.cc" "data/$ds" || exit 28
 
-./run -no-bckg "distributions_anti.cc" "data/$ds" -O "-danti" || exit 29
+./run -no-bckg "distributions_anti.cc" "data/$ds" -danti || exit 29
 
 ./run -no-bckg "distributions.cc" "data/$ds" || exit 30
 
