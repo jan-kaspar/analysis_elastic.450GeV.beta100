@@ -1,5 +1,7 @@
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
+#include "classes/common_event.hh"
+#include "classes/Kinematics.hh"
 #include "classes/AcceptanceCalculator.hh"
 #include "classes/common_algorithms.hh"
 

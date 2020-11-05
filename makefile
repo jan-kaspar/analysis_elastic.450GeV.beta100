@@ -1,4 +1,20 @@
+CLASSES_HEADERS=$(shell find classes -name "*.hh")
+CLASSES_OBJECTS=$(shell find classes -name "*.cc"|while read f; do echo $${f%.cc}.o; done)
+
 all: \
+	classes/AcceptanceCalculator.o \
+	classes/Analysis.o \
+	classes/command_line_tools.o \
+	classes/common_algorithms.o \
+	classes/common_alignment.o \
+	classes/common_event.o \
+	classes/common_init.o \
+	classes/Config.o \
+	classes/Environment.o \
+	classes/FiducialCut.o \
+	classes/Kinematics.o \
+	classes/numerical_integration.o \
+	classes/Stat.o \
 	.alignment \
 	.alignment_final \
 	.alignment_fit \
@@ -14,13 +30,39 @@ all: \
 	.unfolding_cf_mc \
 	.unfolding_cf_ni
 
-# default rule
-.% : %.cc classes/AcceptanceCalculator.hh classes/Analysis.hh classes/command_line_tools.hh classes/common_algorithms.hh\
-		classes/common_alignment.hh classes/common_init.hh classes/common_event.hh classes/Config.hh classes/Environment.hh\
-		classes/FiducialCut.hh classes/Kinematics.hh classes/numerical_integration.hh
-	@ echo "BUILDING $@"
-	@g++ --std=c++17 `root-config --libs` -lMinuit `root-config --cflags` -O3 -Wall  -Wextra -Wno-attributes -g \
-		$(INCS_LIBS) \
-		$< -o $@
+# default classes rule
+classes/%.o : classes/%.cc
+	@echo "BUILDING $@"
+	@g++ $(GCC_OPT) $(INCS_LIBS) -c $< -o $@
 
-# extra dependencies
+# default program rule
+.% : %.cc $(CLASSES_OBJECTS)
+	@echo "BUILDING $@"
+	@g++ $(GCC_OPT) $(INCS_LIBS) $(CLASSES_OBJECTS) $< -o $@
+
+# classes dependencies
+classes/AcceptanceCalculator.o : classes/Analysis.hh classes/Kinematics.hh classes/numerical_integration.hh
+
+classes/Analysis.o : classes/common_alignment.hh classes/FiducialCut.hh classes/common_event.hh classes/Kinematics.hh classes/common_alignment.hh
+
+classes/command_line_tools.o : 
+
+classes/common_algorithms.o : classes/common_event.hh classes/Environment.hh classes/Analysis.hh classes/Kinematics.hh
+
+classes/common_alignment.o :
+
+classes/common_event.o : classes/common_alignment.hh
+
+classes/common_init.o : classes/Config.hh classes/Environment.hh classes/Analysis.hh
+
+classes/Config.o : 
+
+classes/Environment.o : 
+
+classes/FiducialCut.o : 
+
+classes/Kinematics.o : classes/Environment.hh
+
+classes/numerical_integration.o : 
+
+classes/Stat.o : 

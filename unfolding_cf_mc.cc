@@ -2,11 +2,13 @@
 #include "classes/command_line_tools.hh"
 #include "classes/common_algorithms.hh"
 #include "classes/AcceptanceCalculator.hh"
+#include "classes/Kinematics.hh"
 
 #include "TGraph.h"
 #include "TFile.h"
 #include "TH1D.h"
 #include "TSpline.h"
+#include "TRandom3.h"
 
 #include <string>
 #include <map>

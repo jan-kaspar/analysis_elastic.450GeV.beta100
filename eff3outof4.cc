@@ -1,6 +1,7 @@
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 #include "classes/common_algorithms.hh"
+#include "classes/common_event.hh"
 
 #include "TFile.h"
 #include "TCanvas.h"

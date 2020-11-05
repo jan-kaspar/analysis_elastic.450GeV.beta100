@@ -1,20 +1,14 @@
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
+#include "classes/common_event.hh"
 
-// TODO: clean
 #include "TFile.h"
-#include "TCanvas.h"
-#include "TGraph.h"
-#include "TGraphErrors.h"
-#include "TChain.h"
 #include "TH1D.h"
 #include "TH2D.h"
-#include "TF1.h"
 
 #include <vector>
 #include <map>
 #include <string>
-#include <cmath>
 
 #include "DataFormats/FWLite/interface/Handle.h"
 #include "DataFormats/FWLite/interface/ChainEvent.h"

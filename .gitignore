@@ -5,6 +5,7 @@
 *.pdf
 *.out
 *.pyc
+*.o
 .*
 
 !.gitignore
