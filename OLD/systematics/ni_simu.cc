@@ -91,7 +91,7 @@ double dist_d_y(double d_y)
 
 //----------------------------------------------------------------------------------------------------
 
-TSpline *dist_true_t_spline = NULL;
+TSpline *dist_true_t_spline = nullptr;
 
 double dist_t_true(double t)
 {
@@ -174,7 +174,7 @@ double IntegOverMX(double m_x, double *param, const void *)
 	const double rel_precision = 1E-3;
 	const double range_m_y = 5. * anal_sim.si_th_y_2arm; 
 
-	const double I = RealIntegrate(IntegOverMY, param_out, NULL, -range_m_y, +range_m_y, 0., rel_precision, int_ws_m_y_size, int_ws_m_y, "IntegOverMX");
+	const double I = RealIntegrate(IntegOverMY, param_out, nullptr, -range_m_y, +range_m_y, 0., rel_precision, int_ws_m_y_size, int_ws_m_y, "IntegOverMX");
 
 	return I * dist_m_x(m_x);
 }
@@ -188,7 +188,7 @@ double dist_th_x_th_y_smea(double th_x_p, double th_y_p)
 	const double rel_precision = 1E-3;
 	const double range_m_x = 5. * anal_sim.si_th_x_2arm; 
 
-	return RealIntegrate(IntegOverMX, param, NULL, -range_m_x, +range_m_x, 0., rel_precision, int_ws_m_x_size, int_ws_m_x, "dist_th_x_th_y_smea");
+	return RealIntegrate(IntegOverMX, param, nullptr, -range_m_x, +range_m_x, 0., rel_precision, int_ws_m_x_size, int_ws_m_x, "dist_th_x_th_y_smea");
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ double IntegOverDX(double d_x, double *param, const void *)
 		const double si_d_y = anal_sim.si_th_y_LRdiff;
 		I = ( TMath::Erf(d_y_max / sqrt(2.) / si_d_y) - TMath::Erf(d_y_min / sqrt(2.) / si_d_y) ) / 2.;
 	} else {
-		I = RealIntegrate(IntegOverDY, NULL, NULL, d_y_min, d_y_max, 0., rel_precision, int_ws_d_y_size, int_ws_d_y, "IntegOverDX");
+		I = RealIntegrate(IntegOverDY, nullptr, nullptr, d_y_min, d_y_max, 0., rel_precision, int_ws_d_y_size, int_ws_d_y, "IntegOverDX");
 	}
 
 	return I * dist_d_x(d_x);
@@ -254,7 +254,7 @@ double acceptance_smea(double th_x_p, double th_y_p)
 	const double abs_precision = 1E-3;
 	const double range_d_x = 5. * anal_sim.si_th_x_LRdiff;
 
-	return RealIntegrate(IntegOverDX, param, NULL, -range_d_x, +range_d_x, abs_precision, 0., int_ws_d_x_size, int_ws_d_x, "acceptance_smea");
+	return RealIntegrate(IntegOverDX, param, nullptr, -range_d_x, +range_d_x, abs_precision, 0., int_ws_d_x_size, int_ws_d_x, "acceptance_smea");
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -323,9 +323,9 @@ double dist_t_reco(double t_p)
 		phiSum += phi_end - phi_start;
 
 		if (th_y_sign == +1)
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, phi_start, phi_end, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, phi_start, phi_end, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 		else
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 	}
 
 	return integralSum / phiSum;
@@ -442,8 +442,8 @@ int main(int argc, const char **argv)
 	// initialise acceptance calculation
 	accCalc.Init(th_y_sign, anal_rec);
 
-	dist_true_t_spline = NULL;
-	TGraph *g_dsdt = NULL;
+	dist_true_t_spline = nullptr;
+	TGraph *g_dsdt = nullptr;
    	for (const auto &itd : inputTDistributions)
 	{
 		if (itd.label == model)
@@ -453,7 +453,7 @@ int main(int argc, const char **argv)
 		}
 	}
 
-	if (dist_true_t_spline == NULL)
+	if (dist_true_t_spline == nullptr)
 	{
 		printf("ERROR: dsigma/dt model '%s' not available.\n", model.c_str());
 		return 5;

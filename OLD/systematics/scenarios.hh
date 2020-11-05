@@ -364,7 +364,7 @@ void CalculateNonGaussianDistributionTransformation(TF1 *dist, double min, doubl
 
 //----------------------------------------------------------------------------------------------------
 
-TF1 *f_non_gaussian_dist_d_x = NULL;
+TF1 *f_non_gaussian_dist_d_x = nullptr;
 double ngx_et, ngx_al, ngx_be;
 
 void LoadNonGaussianDistributions(double si_d_x, double /* si_d_y */)

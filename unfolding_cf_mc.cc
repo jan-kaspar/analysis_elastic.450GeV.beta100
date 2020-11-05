@@ -37,7 +37,7 @@ struct Model
 
 struct PlotGroup
 {
-	TH1D *h_t_tr = NULL, *h_t_sm = NULL;
+	TH1D *h_t_tr = nullptr, *h_t_sm = nullptr;
 
 	void Init(unsigned int Nbins, double *binEdges)
 	{

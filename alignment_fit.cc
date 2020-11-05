@@ -16,7 +16,7 @@ struct GraphSet
 {
 	TGraph *a, *b, *c;
 
-	GraphSet() : a(NULL), b(NULL), c(NULL)
+	GraphSet() : a(nullptr), b(nullptr), c(nullptr)
 	{
 	}
 };
@@ -48,7 +48,7 @@ TGraph* WriteFitGraph(TGraph *gi, TF1 *f)
 
 //----------------------------------------------------------------------------------------------------
 
-TGraphErrors *g_idx = NULL;
+TGraphErrors *g_idx = nullptr;
 
 //----------------------------------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ void FitOneUnit(TDirectory *inDir, GraphSet &gs)
 	TGraphErrors *g_b = (TGraphErrors *) inDir->Get("b");
 	TGraphErrors *g_c = (TGraphErrors *) inDir->Get("c");
 
-	if (g_idx == NULL)
+	if (g_idx == nullptr)
 		g_idx = g_a;
 
 	TF1 *pol0 = new TF1("pol0", "[0]");

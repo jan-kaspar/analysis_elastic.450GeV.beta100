@@ -42,7 +42,7 @@ struct result
 
 //----------------------------------------------------------------------------------------------------
 
-TF1 *f_gauss = NULL;
+TF1 *f_gauss = nullptr;
 
 void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 		double y_min_top, double y_min_bot, double y_max_top, double y_max_bot,
@@ -981,7 +981,7 @@ int main(int argc, const char **argv)
 			TGraph *g_b = (TGraph *) inF_45b->Get((string(buf)+"g_y_"+units[ui]+"_vs_x_"+units[ui]+"_sel").c_str());
 			TGraph *gw_b = (TGraph *) inF_45b->Get((string(buf)+"g_w_vs_timestamp_sel").c_str());
 			
-			if (g_t == NULL || gw_t == NULL || g_b == NULL || gw_b == NULL)
+			if (g_t == nullptr || gw_t == nullptr || g_b == nullptr || gw_b == nullptr)
 			{
 				printf("ERROR: missing input g_t = %p, gw_t = %p, g_b = %p, gw_b = %p\n", g_t, gw_t, g_b, gw_b);
 				continue;

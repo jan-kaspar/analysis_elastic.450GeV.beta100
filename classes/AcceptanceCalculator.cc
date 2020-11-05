@@ -88,7 +88,7 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 	{
 		I = ( TMath::Erf(d_y_max / sqrt(2.) / ac->anal.si_th_y_LRdiff) - TMath::Erf(d_y_min / sqrt(2.) / ac->anal.si_th_y_LRdiff) ) / 2.;
 	} else {
-		I = RealIntegrate(AcceptanceCalculator::IntegOverDY, NULL, ac, d_y_min, d_y_max, 0., 1E-3,
+		I = RealIntegrate(AcceptanceCalculator::IntegOverDY, nullptr, ac, d_y_min, d_y_max, 0., 1E-3,
 			ac->integ_workspace_size_d_y, ac->integ_workspace_d_y, "AcceptanceCalculator::IntegOverDX");
 	}
 

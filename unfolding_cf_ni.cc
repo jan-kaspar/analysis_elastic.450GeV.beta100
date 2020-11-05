@@ -53,7 +53,7 @@ double dist_m_y(double m_y)
 
 //----------------------------------------------------------------------------------------------------
 
-TSpline *dist_t_true_spline = NULL;
+TSpline *dist_t_true_spline = nullptr;
 
 // true distribution of t
 double dist_t_true(double t)
@@ -92,7 +92,7 @@ double IntegOverMY(double x, double *p, const void *)
 
 	double range_x = n_sm_si * si_m_x;
 	double precision = 1E-2;
-	double imx = RealIntegrate(IntegOverMX, param, NULL, -range_x, +range_x, 0., precision,
+	double imx = RealIntegrate(IntegOverMX, param, nullptr, -range_x, +range_x, 0., precision,
 		int_ws_MX_size, int_ws_MX, "IntegOverMY");
 
 	return imx * dist_m_y(m_y);
@@ -105,7 +105,7 @@ double dist_th_x_th_y_smea(double th_x, double th_y)
 	double param[] = { th_x, th_y };
 	double range = n_sm_si * si_m_y;
 	double precision = 1E-2;
-	return RealIntegrate(IntegOverMY, param, NULL, -range, +range, 0., precision,
+	return RealIntegrate(IntegOverMY, param, nullptr, -range, +range, 0., precision,
 			int_ws_MY_size, int_ws_MY, "dist_th_x_th_y_sm");
 }
 
@@ -143,9 +143,9 @@ double dist_t_sm(double t)
 		phiSum += phi_end - phi_start;
 
 		if (cfg.th_y_sign == +1)
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, phi_start, phi_end, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, phi_start, phi_end, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 		else
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 	}
 
 	return (phiSum > 0.) ? integralSum / phiSum : 0.;
@@ -366,7 +366,7 @@ int main(int argc, const char **argv)
 
 		// clean up
 		delete dist_t_true_spline;
-		dist_t_true_spline = NULL;
+		dist_t_true_spline = nullptr;
 
 		delete f_in;
 	}

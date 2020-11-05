@@ -109,7 +109,7 @@ int main(int argc, const char **argv)
 			printf("* cut selection list empty\n");
 		else {
 			char *pch = strtok(buf, ",");
-			while (pch != NULL)
+			while (pch != nullptr)
 			{
 				unsigned int cut = atoi(pch);
 				if (cut < 1 || cut > 10)
@@ -118,7 +118,7 @@ int main(int argc, const char **argv)
 					return 2;
 				}
 				anal.cuts.push_back(cut);
-				pch = strtok (NULL, ",");
+				pch = strtok (nullptr, ",");
 			}
 		}
 	}

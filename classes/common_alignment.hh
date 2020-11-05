@@ -47,7 +47,7 @@ struct AlignmentSource
 	struct GraphSet
 	{
 		TGraph *L_2_F, *L_1_F, *R_1_F, *R_2_F;
-		GraphSet() : L_2_F(NULL), L_1_F(NULL), R_1_F(NULL), R_2_F(NULL)
+		GraphSet() : L_2_F(nullptr), L_1_F(nullptr), R_1_F(nullptr), R_2_F(nullptr)
 		{
 		}
 	} gs_a, gs_b, gs_c;

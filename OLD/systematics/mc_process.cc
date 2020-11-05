@@ -18,7 +18,7 @@ TH1D* GetHistogram(const string &dir, const string &model, const string &scenari
 	if (!f_in)
 	{
 		printf("ERROR: can't open file '%s'.\n", file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	string path = binning + "/" + obj;
@@ -26,10 +26,10 @@ TH1D* GetHistogram(const string &dir, const string &model, const string &scenari
 	if (!h_orig)
 	{
 		printf("ERROR: can't load object '%s'.\n", path.c_str());
-		return NULL;
+		return nullptr;
 	}
 
-	gDirectory = NULL;	// not to associate h_ret with f_in which will be closed in a moment
+	gDirectory = nullptr;	// not to associate h_ret with f_in which will be closed in a moment
 	TH1D *h_ret = new TH1D(*h_orig);
 
 	delete f_in;
@@ -203,8 +203,8 @@ int main(int argc, const char **argv)
 				continue;
 
 			// make corrected histograms for scaling
-			TH1D *h_t_1 = NULL;
-			TH1D *h_t_0 = NULL;
+			TH1D *h_t_1 = nullptr;
+			TH1D *h_t_0 = nullptr;
 			if (scenario.mode == Scenario::mDsdt)
 			{
 				TH1D *h_unsm_corr = new TH1D(*h_t_tr_ref);

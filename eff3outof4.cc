@@ -35,7 +35,7 @@ struct HistGroup
 		de_th_x = new TH1D("", ";#Delta #theta_{x}", 200, -150E-6, +150E-6);
 		de_th_y = new TH1D("", ";#Delta #theta_{y}", 200, -50E-6, +50E-6);
 
-		if (th_x_binning_edges_1d == NULL)
+		if (th_x_binning_edges_1d == nullptr)
 			BuildThBinning();
 
 		th_x = new TH1D("", ";#theta_{x}", th_x_binning_n_1d, th_x_binning_edges_1d);

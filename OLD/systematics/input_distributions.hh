@@ -44,14 +44,14 @@ TObject* GetObject(const string &file, const string &path)
 	if (!f)
 	{
 		printf("ERROR: can't load file `%s'.\n", file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	TObject *o = f->Get(path.c_str());
 	if (!o)
 	{
 		printf("ERROR: can't load object `%s' from file `%s'.\n", path.c_str(), file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	return o;
@@ -77,7 +77,7 @@ int LoadTDistributions()
 	inputTDistributions.push_back({
 		"fitN-2",
 		(TGraph *) GetObject("/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/combined/first_fits/2/do_fit.root", "variant 2/g_dsdt_CH"),
-		NULL
+		nullptr
 	});
 
 	// preprocess t-distributions

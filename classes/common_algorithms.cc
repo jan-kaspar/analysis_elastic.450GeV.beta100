@@ -173,9 +173,9 @@ HitData ProtonTransport(const Kinematics & k, const Environment & env)
 
 //----------------------------------------------------------------------------------------------------
 
-double *th_x_binning_edges_1d=NULL, *th_y_binning_edges_1d=NULL;
-double *th_x_binning_edges_2d=NULL, *th_y_binning_edges_2d=NULL;
-double *th_x_binning_edges_2d_coarse=NULL, *th_y_binning_edges_2d_coarse=NULL;
+double *th_x_binning_edges_1d=nullptr, *th_y_binning_edges_1d=nullptr;
+double *th_x_binning_edges_2d=nullptr, *th_y_binning_edges_2d=nullptr;
+double *th_x_binning_edges_2d_coarse=nullptr, *th_y_binning_edges_2d_coarse=nullptr;
 
 int th_x_binning_n_1d=0, th_y_binning_n_1d=0;
 int th_x_binning_n_2d=0, th_y_binning_n_2d=0;

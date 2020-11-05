@@ -427,7 +427,7 @@ int main(int argc, const char **argv)
 			printf("* cut selection list empty\n");
 		else {
 			char *pch = strtok(buf, ",");
-			while (pch != NULL)
+			while (pch != nullptr)
 			{
 				unsigned int cut = atoi(pch);
 				if (cut < 1 || cut > 10)
@@ -436,7 +436,7 @@ int main(int argc, const char **argv)
 					return 2;
 				}
 				anal.cuts.push_back(cut);
-				pch = strtok (NULL, ",");
+				pch = strtok (nullptr, ",");
 			}
 		}
 	}
@@ -497,7 +497,7 @@ int main(int argc, const char **argv)
 	ch_in->SetBranchAddress("event_num", &ev.event_num);
 
 	// get time-dependent corrections
-	TGraph *corrg_pileup = NULL;
+	TGraph *corrg_pileup = nullptr;
 	if (anal.use_pileup_efficiency_fits)
 	{
 		string path = inputDir + "/pileup_fit_combined.root";
@@ -511,8 +511,8 @@ int main(int argc, const char **argv)
 	}
 
 	// get time-dependent resolution
-	TGraph *g_d_x_RMS = NULL;
-	TGraph *g_d_y_RMS = NULL;
+	TGraph *g_d_x_RMS = nullptr;
+	TGraph *g_d_y_RMS = nullptr;
 	if (anal.use_resolution_fits)
 	{
 		string path = inputDir + "/resolution_fit_" + cfg.diagonal_str + ".root";
@@ -527,10 +527,10 @@ int main(int argc, const char **argv)
 	}
 
 	// get th_y* dependent efficiency correction
-	TF1 *f_3outof4_efficiency_L_F = NULL;
-	TF1 *f_3outof4_efficiency_L_N = NULL;
-	TF1 *f_3outof4_efficiency_R_N = NULL;
-	TF1 *f_3outof4_efficiency_R_F = NULL;
+	TF1 *f_3outof4_efficiency_L_F = nullptr;
+	TF1 *f_3outof4_efficiency_L_N = nullptr;
+	TF1 *f_3outof4_efficiency_R_N = nullptr;
+	TF1 *f_3outof4_efficiency_R_F = nullptr;
 	if (anal.use_3outof4_efficiency_fits)
 	{
 		// TODO: this doesn't seem good
@@ -1610,7 +1610,7 @@ int main(int argc, const char **argv)
 		bh_t_normalized_unsmeared[bi]->SetName("h_t_normalized_unsmeared");
 
 		map<unsigned int, TH1D *>::iterator it = map_unsmearing_correction.find(bi);
-		TH1D *h_corr = (it == map_unsmearing_correction.end()) ? NULL : it->second;
+		TH1D *h_corr = (it == map_unsmearing_correction.end()) ? nullptr : it->second;
 
 		for (int bin = 1; bin <= bh_t_normalized_unsmeared[bi]->GetNbinsX(); ++bin)
 		{
@@ -1618,7 +1618,7 @@ int main(int argc, const char **argv)
 			double v = bh_t_normalized_unsmeared[bi]->GetBinContent(bin);
 			double v_u = bh_t_normalized_unsmeared[bi]->GetBinError(bin);
 
-			double corr = (h_corr == NULL) ? 0. : h_corr->GetBinContent(bin);
+			double corr = (h_corr == nullptr) ? 0. : h_corr->GetBinContent(bin);
 
 			bh_t_normalized_unsmeared[bi]->SetBinContent(bin, v * corr);
 			bh_t_normalized_unsmeared[bi]->SetBinError(bin, v_u * corr);

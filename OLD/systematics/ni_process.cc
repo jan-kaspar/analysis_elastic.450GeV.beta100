@@ -18,7 +18,7 @@ TGraph* GetGraph(const string &dir, const string &model, const string &scenario,
 	if (!f_in)
 	{
 		printf("ERROR: can't open file '%s'.\n", file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	string path = obj;
@@ -26,10 +26,10 @@ TGraph* GetGraph(const string &dir, const string &model, const string &scenario,
 	if (!h_orig)
 	{
 		printf("ERROR: can't load object '%s'.\n", path.c_str());
-		return NULL;
+		return nullptr;
 	}
 
-	gDirectory = NULL;	// not to associate h_ret with f_in which will be closed in a moment
+	gDirectory = nullptr;	// not to associate h_ret with f_in which will be closed in a moment
 	TGraph *h_ret = new TGraph(*h_orig);
 
 	delete f_in;
@@ -242,8 +242,8 @@ int main(int argc, const char **argv)
 			continue;
 
 		// make corrected histograms for scaling
-		TGraph *g_1 = NULL;
-		TGraph *g_0 = NULL;
+		TGraph *g_1 = nullptr;
+		TGraph *g_0 = nullptr;
 		if (scenario.mode == Scenario::mDsdt)
 		{
 			TGraph *g_unsm_corr = Divide(g_tr_ref, g_re_ref);

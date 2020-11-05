@@ -190,8 +190,8 @@ int main(int argc, const char **argv)
 	if (LoadTDistributions() != 0)
 		return 1;
 
-	TSpline *s_dsdt = NULL;
-	TGraph *g_dsdt = NULL;
+	TSpline *s_dsdt = nullptr;
+	TGraph *g_dsdt = nullptr;
    	for (const auto &itd : inputTDistributions)
 	{
 		if (itd.label == model)
@@ -201,7 +201,7 @@ int main(int argc, const char **argv)
 		}
 	}
 
-	if (s_dsdt == NULL)
+	if (s_dsdt == nullptr)
 	{
 		printf("ERROR: dsigma/dt model '%s' not available.\n", model.c_str());
 		return 5;

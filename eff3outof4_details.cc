@@ -157,7 +157,7 @@ struct HistGroup
 	TH1D *h_y, *h_th_x, *h_th_y;
 	TH2D *h_th_x_th_y;
 
-	HistGroup() : h_y(NULL), h_th_y(NULL) {}
+	HistGroup() : h_y(nullptr), h_th_y(nullptr) {}
 
 	void Init()
 	{

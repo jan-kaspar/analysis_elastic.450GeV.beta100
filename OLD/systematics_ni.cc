@@ -102,7 +102,7 @@ bool useAcceptanceCuts = true;
 bool useAcceptanceCorrections = true;
 
 // non-gaussian distribution of De^{R-L} th_y
-TF1 *dist_diffRL_th_y = NULL;
+TF1 *dist_diffRL_th_y = nullptr;
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ double dist_de_th_y_R(double de_th_y)
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-TSpline *dist_t_true_spline = NULL;
+TSpline *dist_t_true_spline = nullptr;
 
 /// true distribution of t
 double dist_t_true(double t)
@@ -283,7 +283,7 @@ double IntegOverMY(double x, double *p, const void *)
 
 	double range_x = n_si * si_m_x;
 	double precision = 1E-2;
-	double imx = RealIntegrate(IntegOverMX, param, NULL, -range_x, +range_x, 0., precision,
+	double imx = RealIntegrate(IntegOverMX, param, nullptr, -range_x, +range_x, 0., precision,
 		int_ws_MX_size, int_ws_MX, "IntegOverMY-imx");
 
 	// ----- integral over d_y -----
@@ -320,7 +320,7 @@ double IntegOverMY(double x, double *p, const void *)
 	double idy = 0.;
 	if (UB > LB)
 	{
-		idy = RealIntegrate(IntegOverDY, param, NULL, LB, UB, 0., precision,
+		idy = RealIntegrate(IntegOverDY, param, nullptr, LB, UB, 0., precision,
 			int_ws_DY_size, int_ws_DY, "IntegOverMY-idy");
 	}
 	
@@ -351,7 +351,7 @@ double dist_th_x_th_y_sm_acc(double th_x, double th_y)
 	double param[] = { th_x, th_y };
 	double range = n_si * si_m_y;
 	double precision = 1E-2;
-	return RealIntegrate(IntegOverMY, param, NULL, -range, +range, 0., precision,
+	return RealIntegrate(IntegOverMY, param, nullptr, -range, +range, 0., precision,
 			int_ws_MY_size, int_ws_MY, "dist_th_x_th_y_sm");
 }
 
@@ -456,9 +456,9 @@ double dist_t_re(double t)
 		phiSum += phi_end - phi_start;
 
 		if (th_y_sign == +1.)
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, phi_start, phi_end, 0., precision, int_ws_phi_size, int_ws_phi, "dist_t_re");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, phi_start, phi_end, 0., precision, int_ws_phi_size, int_ws_phi, "dist_t_re");
 		else
-			integralSum += RealIntegrate(IntegOverPhi, param, NULL, -phi_end, -phi_start, 0., precision, int_ws_phi_size, int_ws_phi, "dist_t_re");
+			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, -phi_end, -phi_start, 0., precision, int_ws_phi_size, int_ws_phi, "dist_t_re");
 	}
 
 	// "phi" acceptance correction, multiplied by Jacobian 1/(2 pi)
@@ -677,14 +677,14 @@ TObject* GetObject(const string &file, const string &path)
 	if (!f)
 	{
 		printf("ERROR: can't load file `%s'.\n", file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	TObject *o = f->Get(path.c_str());
 	if (!o)
 	{
 		printf("ERROR: can't load object `%s' from file `%s'.\n", path.c_str(), file.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	return o;

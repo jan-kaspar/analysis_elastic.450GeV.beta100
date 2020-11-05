@@ -190,7 +190,7 @@ void BuildMatrix(const string &label, const vector<string> &contributions, const
 	vector<const Mode *> sel_modes;
 	for (unsigned int ci = 0; ci < contributions.size(); ci++)
 	{
-		const Mode *m = NULL;
+		const Mode *m = nullptr;
 		for (unsigned int mi = 0; mi < modes.size(); mi++)
 		{
 			if (modes[mi].tag.compare(contributions[ci]) == 0)
@@ -200,7 +200,7 @@ void BuildMatrix(const string &label, const vector<string> &contributions, const
 			}
 		}
 
-		if (m == NULL)
+		if (m == nullptr)
 		{
 			printf("ERROR: mode `%s' doesn't exist.\n", contributions[ci].c_str());
 			return;
@@ -394,7 +394,7 @@ int main(int argc, const char **argv)
 		TFile *f_in = TFile::Open((dir_mc+"/"+diagonal+"/mc_process.root").c_str());
 		TH1D *h_in = (TH1D *) f_in->Get(("none/" + binning + "/h_eff").c_str());
 
-		gDirectory = NULL;
+		gDirectory = nullptr;
 		v_binning_h.push_back(new TH1D(*h_in));
 
 		delete f_in;
@@ -419,7 +419,7 @@ int main(int argc, const char **argv)
 				for (const auto &binning : binnings)
 				{
 					TH1D *h_in = (TH1D *) f_in->Get((mode.tag + "/" + binning + "/h_eff").c_str());
-					gDirectory = NULL;
+					gDirectory = nullptr;
 					v.push_back(BuildHistogramWithoutOffset(h_in));
 				}
 
@@ -443,7 +443,7 @@ int main(int argc, const char **argv)
 				vector<TH1D *> v;
 				for (unsigned int bi = 0; bi < binnings.size(); bi++)
 				{
-					gDirectory = NULL;
+					gDirectory = nullptr;
 
 					TH1D *h = BuildHistogramFromGraph(g_reg, v_binning_h[bi]);
 
