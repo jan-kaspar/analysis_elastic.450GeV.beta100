@@ -1,0 +1,36 @@
+#!/bin/bash
+
+base_dir=`pwd -P`
+
+(
+	echo "["
+
+	first="True"
+
+	for src in `find . -name "*.cc" | grep -v OLD`
+	do
+		if [ "$first" == "False" ]
+		then
+			echo "    ,"
+		fi
+
+		first="False"
+
+		src="${src#*/}"
+
+		extra=""
+		t=`echo $src|grep classes`
+		if [ -n "$t" ]
+		then
+			extra="-c"
+		fi
+
+		echo "    {"
+		echo "         \"command\": \"clang++ $extra $GCC_OPT_CLANG $INCS $src\","
+		echo "         \"directory\": \"$base_dir\","
+		echo "         \"file\": \"$base_dir/$src\""
+		echo "    }"
+	done
+
+	echo "]"
+) > "compile_commands.json"

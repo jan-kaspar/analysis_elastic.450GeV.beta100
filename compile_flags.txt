@@ -1,3 +1,0 @@
---std=c++17
--I/afs/cern.ch/work/j/jkaspar/work/software/ctpps/production/CMSSW_10_6_17/src
--I/cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_10_6_17/src
