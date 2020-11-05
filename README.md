@@ -1,3 +1,10 @@
+# Initialisation
+ 1) Initialise environment: `bash --rcfile environment`.
+
+ 2) Prepare compilation dictionary: `./build_compile_commands_json`
+
+
+
 # Standard analysis flow
 
  1) Prepare skimmed/distilled ntuples:
@@ -11,6 +18,8 @@
 
  4) Re-run distributions (this time with the auxiliary input):
  `./run distributions.cc data/fill*/Totem1/`
+
+
 
 # Automated test
  * go to the base directory (where `run` file is)
