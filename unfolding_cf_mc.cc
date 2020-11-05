@@ -154,7 +154,7 @@ int main(int argc, const char **argv)
 
 	// load input
 	vector<TSpline *> modelSplines;
-	for (const auto model : models)
+	for (const auto &model : models)
 	{
 		TFile *f_in = TFile::Open(model.file.c_str());
 		TGraph *g_dsdt = (TGraph *) f_in->Get(model.object.c_str());
