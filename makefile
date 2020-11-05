@@ -30,6 +30,23 @@ all: \
 	.unfolding_cf_mc \
 	.unfolding_cf_ni
 
+clean:
+	rm -f classes/*.o
+	rm -f .alignment \
+	rm -f .alignment_final \
+	rm -f .alignment_fit \
+	rm -f .eff3outof4 \
+	rm -f .eff3outof4_details \
+	rm -f .eff3outof4_fit \
+	rm -f .distill \
+	rm -f .distributions \
+	rm -f .distributions_anti \
+	rm -f .pileup \
+	rm -f .process_timber \
+	rm -f .resolution_fit \
+	rm -f .unfolding_cf_mc \
+	rm -f .unfolding_cf_ni
+
 # default classes rule
 classes/%.o : classes/%.cc
 	@echo "BUILDING $@"
