@@ -20,7 +20,7 @@ build_directories=(
 for d in ${build_directories[*]}
 do
 	echo "-------------------- BUILDING $d --------------------"
-	make -C "$d" || exit 3
+	make -C "$d" -j8 || exit 3
 done
 
 # run basic analysis
