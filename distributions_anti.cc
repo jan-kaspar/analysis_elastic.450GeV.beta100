@@ -41,7 +41,7 @@ int main(int argc, const char **argv)
 	string cutSelectionString = "default";
 	string outputDir = ".";
 	string inputDir = ".";
-	double input_n_si = 4.0;
+	double input_n_si = -1.;
 
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
@@ -90,7 +90,8 @@ int main(int argc, const char **argv)
 	
 	// select cuts
 	anal.BuildCuts(); 
-	anal.n_si = input_n_si;
+	if (input_n_si > 0.)
+		anal.n_si = input_n_si;
 
 	if (cutSelectionString != "default")
 	{

@@ -343,7 +343,7 @@ int main(int argc, const char **argv)
 	string cutSelectionString = "default";
 	string outputDir = ".";
 	string inputDir = ".";
-	double input_n_si = 4.0;
+	double input_n_si = -1.;
 	unsigned int time_group_divisor = 0;
 	unsigned int time_group_remainder = 0;
 	unsigned int event_group_divisor = 0;
@@ -408,7 +408,8 @@ int main(int argc, const char **argv)
 
 	// select cuts
 	anal.BuildCuts(); 
-	anal.n_si = input_n_si;
+	if (input_n_si > 0.)
+		anal.n_si = input_n_si;
 
 	if (cutSelectionString != "default")
 	{
