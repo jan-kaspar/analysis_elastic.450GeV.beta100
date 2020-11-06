@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# get input
+reference_directory="$1"
+if [ -z "$reference_directory" ]
+then
+	reference_directory="none"
+fi
+
+log_short="$2"
+if [ -z "$log_short" ]
+then
+	log_short="test.log_short"
+fi
+
+# reset
+rm -f "$log_short"
+
+echo "* starting test at: " >> "$log_short"
+
+# prepare environment
 source environment || exit 1
 
 # check for FIXME
@@ -10,18 +29,20 @@ then
 	exit 2
 fi
 
-# compile everything
-build_directories=(
-	"."
-	"fits_for_corr"
-	"test"
-)
+echo "* FIXME check OK" >> "$log_short"
 
-for d in ${build_directories[*]}
+# compile everything
+for mkf in `find . -name *makefile|grep -v OLD`
 do
-	echo "-------------------- BUILDING $d --------------------"
-	make -C "$d" -j8 || exit 3
+	dir=${mkf%/makefile}
+
+	echo "-------------------- BUILDING $dir --------------------"
+	make -C "$dir" -j8 || exit 3
 done
+
+echo "* compilation OK" >> "$log_short"
+
+# TODO: add static analysis check
 
 # run basic analysis
 echo "-------------------- RUNNING ANALYSIS --------------------"
@@ -56,12 +77,21 @@ ds="fill7291/Totem1"
 
 # TODO: merge || exit 40
 
+echo "* analysis check OK" >> "$log_short"
+
 # make comparison to reference
 echo "-------------------- RUNNING COMPARISON --------------------"
 
-for dgn in 45b_56t 45t_56b
-do
-	test/compare \
-		"test/reference.root" "$dgn/acceptance correction/eb/h_t_after" \
-		"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 50
-done
+if [ "$reference_directory" == "none" ]
+then
+	echo "* comparison not run (missing reference)" >> "$log_short"
+else
+	for dgn in 45b_56t 45t_56b
+	do
+		test/compare \
+			"test/reference.root" "$dgn/acceptance correction/eb/h_t_after" \
+			"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 50
+	done
+
+	echo "* comparison OK" >> "$log_short"
+fi
