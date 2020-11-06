@@ -120,6 +120,6 @@ else
 	then
 		echo "* comparison OK" >> "$log_short"
 	else
-		echo "* comparison: $_diff differences" >> "$log_short"
+		echo "* comparison: $n_diff differences" >> "$log_short"
 	fi
 fi
