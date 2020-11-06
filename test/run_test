@@ -16,7 +16,7 @@ fi
 # reset
 rm -f "$log_short"
 
-echo "* starting test at: " >> "$log_short"
+echo "* starting test at: $(pwd -P)" >> "$log_short"
 
 # prepare environment
 source environment || exit 1
