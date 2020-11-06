@@ -4,7 +4,8 @@
 reference_directory="$1"
 if [ -z "$reference_directory" ]
 then
-	reference_directory="none"
+	reference_directory=`ls -d ../IB/4rp/*/|head -n 1`
+	echo "* sitting default reference directory: $reference_directory"
 fi
 
 log_short="$2"
@@ -31,6 +32,16 @@ fi
 
 echo "* FIXME check OK" >> "$log_short"
 
+# check for TODO
+n_TODO=`grep -RlI "TODO" . 2> /dev/null  | grep -v .git | grep -v test/run_test|wc -l`
+
+if [ "$n_TODO" -eq "0" ]
+then
+	echo "* TODO check OK" >> "$log_short"
+else
+	echo "* TODO check: $n_TODO" files affected >> "$log_short"
+fi
+
 # compile everything
 for mkf in `find . -name *makefile|grep -v OLD`
 do
@@ -47,6 +58,7 @@ echo "* compilation OK" >> "$log_short"
 # run basic analysis
 echo "-------------------- RUNNING ANALYSIS --------------------"
 ds="fill7291/Totem1"
+
 ./run -no-bckg "distill.cc" "data/$ds" || exit 10
 ./run -no-bckg "distill.cc" "data/$ds" -danti || exit 11
 
@@ -82,16 +94,32 @@ echo "* analysis check OK" >> "$log_short"
 # make comparison to reference
 echo "-------------------- RUNNING COMPARISON --------------------"
 
+n_diff="0"
+
+function MakeOneComparison()
+{
+	local file="$1"
+	local obj="$2"
+
+	test/compare \
+		"./data/$ds/$file" "$obj" \
+		"$reference_directory/data/$ds/$file" "$obj" || let n_diff+=1
+}
+
 if [ "$reference_directory" == "none" ]
 then
 	echo "* comparison not run (missing reference)" >> "$log_short"
 else
-	for dgn in 45b_56t 45t_56b
-	do
-		test/compare \
-			"test/reference.root" "$dgn/acceptance correction/eb/h_t_after" \
-			"data/fill7291/Totem1/distributions_$dgn.root" "acceptance correction/eb/h_t_after" || exit 50
-	done
+	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
+	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
 
-	echo "* comparison OK" >> "$log_short"
+	MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
+	MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
+
+	if [ "$n_diff" -eq "0" ]
+	then
+		echo "* comparison OK" >> "$log_short"
+	else
+		echo "* comparison: $_diff differences" >> "$log_short"
+	fi
 fi
