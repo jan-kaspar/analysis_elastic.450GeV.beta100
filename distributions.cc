@@ -1,3 +1,4 @@
+#include <TDirectory.h>
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 #include "classes/common_event.hh"
@@ -575,6 +576,9 @@ int main(int argc, const char **argv)
 		for (map<unsigned int, TH1D *>::iterator it = map_unsmearing_correction.begin(); it != map_unsmearing_correction.end(); ++it)
 			printf("\tbinning %s: %p\n", binnings[it->first].c_str(), it->second);
 	}
+
+	// avoid "replacing existing" messages
+	gDirectory = nullptr;
 
 	// book metadata histograms
 	unsigned int timestamp_bins = cfg.timestamp_max - cfg.timestamp_min + 1;
@@ -1636,6 +1640,7 @@ int main(int argc, const char **argv)
 		bh_t_normalized_unsmeared_rel_diff[bi] = MakeRelDiff(bh_t_normalized_unsmeared[bi]);
 		bh_t_normalized_unsmeared_rel_diff[bi]->SetName("h_t_eb_normalized_unsmeared_rel_diff");
 	}
+
 	// save histograms
 	TCanvas *c;
 

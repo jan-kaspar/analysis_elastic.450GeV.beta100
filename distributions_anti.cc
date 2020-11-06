@@ -169,6 +169,9 @@ int main(int argc, const char **argv)
 	// init output files
 	TFile *outF = new TFile((outputDir+"/distributions_anti_" + cfg.diagonal_str + ".root").c_str(), "recreate");
 
+	// avoid "replacing existing" messages
+	gDirectory = nullptr;
+
 	// book metadata histograms
 	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", 97001, 16E3-0.5, 113E3+0.5);
 	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", 97001, 16E3-0.5, 113E3+0.5);
