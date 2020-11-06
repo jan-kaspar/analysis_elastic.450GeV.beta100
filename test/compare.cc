@@ -3,8 +3,20 @@
 #include "TH1D.h"
 
 #include <string>
+#include <tuple>
 
 using namespace std;
+
+//----------------------------------------------------------------------------------------------------
+
+std::tuple<double, bool, bool> CompareValues(const double v1, const double v2)
+{
+    const double rel_diff = (v1 == 0. && v2 == 0.) ? 0. : (v2 - v1) / (v2 + v1) * 2.;
+    const bool diff_minor = (fabs(rel_diff) > 1E-6);
+    const bool diff_major = (fabs(rel_diff) > 1E-3);
+
+    return {rel_diff, diff_major, diff_minor};
+}
 
 //----------------------------------------------------------------------------------------------------
 
@@ -16,19 +28,35 @@ int CompareGraphs(const TGraph *g1, const TGraph *g2)
         return 1;
     }
 
+    bool diff_major = false;
+    bool diff_minor = false;
+
     for (int i = 0; i < g1->GetN(); ++i)
     {
-        const double x1 = g1->GetX()[i];
-        const double y1 = g1->GetY()[i];
-        const double x2 = g2->GetX()[i];
-        const double y2 = g2->GetY()[i];
+        const double x_1 = g1->GetX()[i];
+        const double y_1 = g1->GetY()[i];
 
-        if (x1 != x2 || y1 != y2)
-        {
-            printf("* difference in point %i: (1) = (%.3E, %.3E), (2) = (%.3E, %.3E)\n", i, x1, y1, x2, y2);
-            return 2;
-        }
+        const double x_2 = g2->GetX()[i];
+        const double y_2 = g2->GetY()[i];
+
+        auto [x_rel_diff, x_diff_major, x_diff_minor] = CompareValues(x_1, x_2);
+        diff_major |= x_diff_major;
+        diff_minor |= x_diff_minor;
+        if (x_diff_minor != 0)
+            printf("* point %i: difference in x: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", i, x_1, x_2, x_rel_diff);
+
+        auto [y_rel_diff, y_diff_major, y_diff_minor] = CompareValues(y_1, y_2);
+        diff_major |= y_diff_major;
+        diff_minor |= y_diff_minor;
+        if (y_diff_minor != 0)
+            printf("* point %i: difference in x: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", i, y_1, y_2, y_rel_diff);
     }
+
+    if (diff_major)
+        return 2;
+
+    if (diff_minor)
+        return 3;
 
     return 0;
 }
@@ -43,38 +71,43 @@ int CompareHistograms(const TH1 *h1, const TH1 *h2)
         return 1;
     }
 
-    bool error = false;
+    bool diff_major = false;
+    bool diff_minor = false;
+
     for (int bi = 1; bi <= h1->GetNbinsX(); ++bi)
     {
-        const double c1 = h1->GetBinCenter(bi);
-        const double w1 = h1->GetBinWidth(bi);
-        const double v1 = h1->GetBinContent(bi);
+        const double c_1 = h1->GetBinCenter(bi);
+        const double w_1 = h1->GetBinWidth(bi);
+        const double v_1 = h1->GetBinContent(bi);
 
-        const double c2 = h2->GetBinCenter(bi);
-        const double w2 = h2->GetBinWidth(bi);
-        const double v2 = h2->GetBinContent(bi);
+        const double c_2 = h2->GetBinCenter(bi);
+        const double w_2 = h2->GetBinWidth(bi);
+        const double v_2 = h2->GetBinContent(bi);
 
-        if (c1 != c2)
-        {
-            printf("* bin %i: difference in bin center: (1) = %.3E, (2) = %.3E\n", bi, c1, c2);
-            error = true;
-        }
+        auto [c_rel_diff, c_diff_major, c_diff_minor] = CompareValues(c_1, c_2);
+        diff_major |= c_diff_major;
+        diff_minor |= c_diff_minor;
+        if (c_diff_minor != 0)
+            printf("* bin %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
 
-        if (w1 != w2)
-        {
-            printf("* bin %i: difference in bin width: (1) = %.3E, (2) = %.3E\n", bi, w1, w2);
-            error = true;
-        }
+        auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
+        diff_major |= w_diff_major;
+        diff_minor |= w_diff_minor;
+        if (w_diff_minor != 0)
+            printf("* bin %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
 
-        if (v1 != v2)
-        {
-            printf("* bin %i: difference in bin content: (1) = %.3E, (2) = %.3E\n", bi, v1, v2);
-            error = true;
-        }
+        auto [v_rel_diff, v_diff_major, v_diff_minor] = CompareValues(v_1, v_2);
+        diff_major |= v_diff_major;
+        diff_minor |= v_diff_minor;
+        if (v_diff_minor != 0)
+            printf("* bin %i: difference in bin content: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, v_1, v_2, v_rel_diff);
     }
 
-    if (error)
+    if (diff_major)
         return 2;
+
+    if (diff_minor)
+        return 3;
 
     return 0;
 }
