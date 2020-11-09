@@ -76,21 +76,18 @@ int main(int argc, const char **argv)
 	units.push_back("R_2_F");
 
 	// fit function
-	TF1 *pol0 = new TF1("pol0", "[0]", -120E-6, +120E-6);	pol0->SetLineColor(2);
-	TF1 *pol1 = new TF1("pol1", "[0] + [1]*x", -120E-6, +120E-6);	pol1->SetLineColor(8);
+	TF1 *pol0 = new TF1("pol0", "[0]");
+	pol0->SetLineColor(2);
+
+	TF1 *pol1 = new TF1("pol1", "[0] + [1]*x");
+	pol1->SetLineColor(8);
 
 	for (unsigned int dgni = 0; dgni < diagonals.size(); dgni++)
 	{
 		printf("\n\n------------------------------ %s ------------------------------\n", diagonals[dgni].c_str());
 	
-		// FIXME: this is left after migration - check
-		// diagonal settings
-		//Init(diagonals[dgni]);
-		
-		//double th_y_min = max(anal.th_y_lcut_L, anal.th_y_lcut_R) + 5E-6;
-		//double th_y_max = min(anal.th_y_hcut_L, anal.th_y_hcut_R) - 3E-6;
-		const double th_y_min = 40E-6;
-		const double th_y_max = 110E-6;
+		const double th_y_min = 20E-6;
+		const double th_y_max = 200E-6;
 		
 		printf("th_y_min = %E\n", th_y_min);
 		printf("th_y_max = %E\n", th_y_max);
@@ -124,12 +121,12 @@ int main(int argc, const char **argv)
 			
 			h_eff->Write();
 
-			h_eff->Fit(pol0, "", "", th_y_min, th_y_max);
 			pol0->SetRange(th_y_min, th_y_max);
+			h_eff->Fit(pol0, "", "", th_y_min, th_y_max);
 			pol0->Write();
 
-			h_eff->Fit(pol1, "", "", th_y_min, th_y_max);
 			pol1->SetRange(th_y_min, th_y_max);
+			h_eff->Fit(pol1, "", "", th_y_min, th_y_max);
 			pol1->Write();
 		}
 	}
