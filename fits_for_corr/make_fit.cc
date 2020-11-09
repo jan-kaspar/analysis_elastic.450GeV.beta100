@@ -7,7 +7,7 @@
 int main()
 {
 	TFile *f_in = new TFile("../DS-merged/merged.root");
-	TH1D *h_in = (TH1D *) f_in->Get("eb/merged/combined/h_dNdt"); // TODO: change to dsigma/dt
+	TH1D *h_in = (TH1D *) f_in->Get("eb/merged/combined/h_dsdt");
 
 	TF1 *ff = new TF1("ff", "[0]/x/x + [1] * exp(-[2]*x)", 1E-6, 0.10);
 
@@ -29,7 +29,7 @@ int main()
 	ff->SetParameter(9, 6.52);
 	*/
 
-	h_in->Fit(ff, "", "", 1E-6, 0.02);
+	h_in->Fit(ff, "", "", 2E-4, 0.02);
 
 	//printf("ff(0) = %f mb / GeV^2\n", ff->Eval(0.));
 
