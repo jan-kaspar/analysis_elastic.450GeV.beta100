@@ -43,6 +43,8 @@ else
 fi
 
 # compile everything
+make || exit 3
+
 for mkf in `find . -name *makefile|grep -v OLD`
 do
 	dir=${mkf%/makefile}
