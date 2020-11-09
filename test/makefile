@@ -1,5 +1,4 @@
 all: \
-	build_reference \
 	compare	
 
 # default rule
