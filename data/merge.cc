@@ -1,3 +1,5 @@
+#include "classes/command_line_tools.hh"
+
 #include "TFile.h"
 #include "TH1D.h"
 
@@ -10,16 +12,16 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-struct shist
+struct SHist
 {
 	TH1D *hist;
 	double scale;
-	shist(TH1D *_h, double _s) : hist(_h), scale(_s) {}
+	SHist(TH1D *_h, double _s) : hist(_h), scale(_s) {}
 };
 
 //----------------------------------------------------------------------------------------------------
 
-TH1D* Merge(const vector<shist> &hists, bool sumBins)
+TH1D* Merge(const vector<SHist> &hists, bool sumBins)
 {
 	// prepare merged histogram
 	TH1D *m = new TH1D(*hists[0].hist);
@@ -131,10 +133,10 @@ int main()
 		TDirectory *binningDir = f_out->mkdir(binnings[bi].c_str());
 
 		// list of histograms for final merge
-		vector<shist> full_list_L, full_list_no_L;				
+		vector<SHist> full_list_L, full_list_no_L;				
 
 		// map: diagonal --> list of inputs
-		map<string, vector<shist> > full_map_L, full_map_no_L;
+		map<string, vector<SHist> > full_map_L, full_map_no_L;
 
 		for (unsigned int ei = 0; ei < entries.size(); ei++)
 		{
@@ -142,7 +144,7 @@ int main()
 
 			TDirectory *datasetDir = binningDir->mkdir(entries[ei].output.c_str());
 
-			vector<shist> ds_list_L, ds_list_no_L;
+			vector<SHist> ds_list_L, ds_list_no_L;
 			for (unsigned int dgni = 0; dgni < diagonals.size(); dgni++)
 			{
 				printf("\t\t\t%s\n", diagonals[dgni].c_str());
@@ -174,8 +176,8 @@ int main()
 				h_norm_L->SetName("h_dsdt");
 				h_norm_no_L->SetName("h_dNdt");
 
-				shist sc_hist_L(h_norm_L, entries[ei].stat_unc_scale);
-				shist sc_hist_no_L(h_norm_no_L, entries[ei].stat_unc_scale);
+				SHist sc_hist_L(h_norm_L, entries[ei].stat_unc_scale);
+				SHist sc_hist_no_L(h_norm_no_L, entries[ei].stat_unc_scale);
 
 				ds_list_L.push_back(sc_hist_L);
 				ds_list_no_L.push_back(sc_hist_no_L);
@@ -203,7 +205,7 @@ int main()
 		// save merged histograms
 		TDirectory *mergedDir = binningDir->mkdir("merged");
 
-		for (map<string, vector<shist> >::iterator it = full_map_L.begin(); it != full_map_L.end(); ++it)
+		for (map<string, vector<SHist> >::iterator it = full_map_L.begin(); it != full_map_L.end(); ++it)
 		{
 			gDirectory = mergedDir->mkdir(it->first.c_str());
 			Merge(it->second, false)->Write();
