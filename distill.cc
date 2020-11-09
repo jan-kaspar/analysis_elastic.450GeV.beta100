@@ -126,10 +126,6 @@ int main(int argc, const char **argv)
 	{
 		ev_count++;
 
-		// TODO: remove
-		//if (ev_count > 100000)
-		//	break;
-
 		// fill meta data
 		ev.lumi_section = event.id().luminosityBlock();
 		ev.timestamp = event.time().unixTime() - cfg.timestamp0;

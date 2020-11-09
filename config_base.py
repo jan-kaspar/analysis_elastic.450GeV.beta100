@@ -179,8 +179,8 @@ cfg_45b_56t = cfg.clone(
 
     unsmearing_file = "unfolding_cf_ni_45b_56t.root",
 
-    inefficiency_3outof4 = 0.0, # TODO
-    inefficiency_pile_up = 0.0 # TODO
+    inefficiency_3outof4 = 0.0,
+    inefficiency_pile_up = 0.0
   )
 )
 
@@ -206,8 +206,8 @@ cfg_45t_56b = cfg.clone(
 
     unsmearing_file = "unfolding_cf_ni_45t_56b.root",
 
-    inefficiency_3outof4 = 0.0, # TODO
-    inefficiency_pile_up = 0.0 # TODO
+    inefficiency_3outof4 = 0.0,
+    inefficiency_pile_up = 0.0
   )
 )
 

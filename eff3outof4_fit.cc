@@ -83,7 +83,7 @@ int main(int argc, const char **argv)
 	{
 		printf("\n\n------------------------------ %s ------------------------------\n", diagonals[dgni].c_str());
 	
-		// TODO: this is left after migration
+		// FIXME: this is left after migration - check
 		// diagonal settings
 		//Init(diagonals[dgni]);
 		

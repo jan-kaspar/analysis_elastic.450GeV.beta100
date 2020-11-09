@@ -1,7 +1,6 @@
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 
-// TODO: clean
 #include "TFile.h"
 #include "TGraphErrors.h"
 #include "TF1.h"

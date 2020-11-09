@@ -6,7 +6,7 @@ HitData HitData::ApplyAlignment(const AlignmentData &al) const
 {
 	HitData r;
 
-	// TODO: rotation updates also y !!
+	// FIXME: rotation updates also y !!
 	r.L_2_F.x = L_2_F.x - al.a_L_2_F * L_2_F.y - al.b_L_2_F; r.L_2_F.y = L_2_F.y - al.c_L_2_F;
 	r.L_1_F.x = L_1_F.x - al.a_L_1_F * L_1_F.y - al.b_L_1_F; r.L_1_F.y = L_1_F.y - al.c_L_1_F;
 
