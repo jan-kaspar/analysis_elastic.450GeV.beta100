@@ -115,9 +115,9 @@ int CompareHistograms1D(const TH1 *h1, const TH1 *h2)
 
 //----------------------------------------------------------------------------------------------------
 
-int CompareHistograms2D(const TH2 *h1, const TH2 *h2)
+int CompareHistograms2D(const TH2 *h_1, const TH2 *h_2)
 {
-    if (h1->GetNbinsX() != h2->GetNbinsX() || h1->GetNbinsY() != h2->GetNbinsY())
+    if (h_1->GetNbinsX() != h_2->GetNbinsX() || h_1->GetNbinsY() != h_2->GetNbinsY())
     {
         printf("* number of bins is different\n");
         return 1;
@@ -126,31 +126,58 @@ int CompareHistograms2D(const TH2 *h1, const TH2 *h2)
     bool diff_major = false;
     bool diff_minor = false;
 
-    for (int bi_x = 1; bi_x <= h1->GetNbinsX(); ++bi_x)
+    // check x bins
+    for (int bi = 1; bi <= h_1->GetNbinsX(); ++bi)
     {
-        for (int bi_y = 1; bi_y <= h1->GetNbinsY(); ++bi_y)
+        const double c_1 = h_1->GetXaxis()->GetBinCenter(bi);
+        const double w_1 = h_1->GetXaxis()->GetBinWidth(bi);
+
+        const double c_2 = h_2->GetXaxis()->GetBinCenter(bi);
+        const double w_2 = h_2->GetXaxis()->GetBinWidth(bi);
+
+        auto [c_rel_diff, c_diff_major, c_diff_minor] = CompareValues(c_1, c_2);
+        diff_major |= c_diff_major;
+        diff_minor |= c_diff_minor;
+        if (c_diff_minor != 0)
+            printf("* bin x %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
+
+        auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
+        diff_major |= w_diff_major;
+        diff_minor |= w_diff_minor;
+        if (w_diff_minor != 0)
+            printf("* bin x %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
+    }
+
+    // check y bins
+    for (int bi = 1; bi <= h_1->GetNbinsY(); ++bi)
+    {
+        const double c_1 = h_1->GetYaxis()->GetBinCenter(bi);
+        const double w_1 = h_1->GetYaxis()->GetBinWidth(bi);
+
+        const double c_2 = h_2->GetYaxis()->GetBinCenter(bi);
+        const double w_2 = h_2->GetYaxis()->GetBinWidth(bi);
+
+        auto [c_rel_diff, c_diff_major, c_diff_minor] = CompareValues(c_1, c_2);
+        diff_major |= c_diff_major;
+        diff_minor |= c_diff_minor;
+        if (c_diff_minor != 0)
+            printf("* bin y %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
+
+        auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
+        diff_major |= w_diff_major;
+        diff_minor |= w_diff_minor;
+        if (w_diff_minor != 0)
+            printf("* bin y %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
+    }
+
+    // check bin content
+    for (int bi_x = 1; bi_x <= h_1->GetNbinsX(); ++bi_x)
+    {
+        for (int bi_y = 1; bi_y <= h_1->GetNbinsY(); ++bi_y)
         {
-            const int bi = h1->GetBin(bi_x, bi_y);
-
-            const double c_1 = h1->GetBinCenter(bi);
-            const double w_1 = h1->GetBinWidth(bi);
-            const double v_1 = h1->GetBinContent(bi);
-
-            const double c_2 = h2->GetBinCenter(bi);
-            const double w_2 = h2->GetBinWidth(bi);
-            const double v_2 = h2->GetBinContent(bi);
-
-            auto [c_rel_diff, c_diff_major, c_diff_minor] = CompareValues(c_1, c_2);
-            diff_major |= c_diff_major;
-            diff_minor |= c_diff_minor;
-            if (c_diff_minor != 0)
-                printf("* bin x %i, bin y %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, c_1, c_2, c_rel_diff);
-
-            auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
-            diff_major |= w_diff_major;
-            diff_minor |= w_diff_minor;
-            if (w_diff_minor != 0)
-                printf("* bin x %i, bin y %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, w_1, w_2, w_rel_diff);
+            const int bi = h_1->GetBin(bi_x, bi_y);
+            const double v_1 = h_1->GetBinContent(bi);
+            const double v_2 = h_2->GetBinContent(bi);
 
             auto [v_rel_diff, v_diff_major, v_diff_minor] = CompareValues(v_1, v_2);
             diff_major |= v_diff_major;
