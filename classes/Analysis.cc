@@ -123,6 +123,16 @@ void Analysis::Load(const edm::ParameterSet &ps)
 
 	unsmearing_file = ps.getParameter<string>("unsmearing_file");
 	unsmearing_object = ps.getParameter<string>("unsmearing_object");
+
+	for (const auto &p : ps.getParameter<vector<edm::ParameterSet>>("alignment_y_ranges"))
+	{
+		alignmentYRanges[p.getParameter<string>("unit")] = AlignmentYRange(
+			p.getParameter<double>("bot_min"),
+			p.getParameter<double>("bot_max"),
+			p.getParameter<double>("top_min"),
+			p.getParameter<double>("top_max")
+		);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------
