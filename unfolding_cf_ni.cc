@@ -348,7 +348,7 @@ int main(int argc, const char **argv)
 	int_ws_MY = gsl_integration_workspace_alloc(int_ws_MY_size);
 
 	// loop over data fits
-	for (const auto model : models)
+	for (const auto &model : models)
 	{
 		TDirectory *d_model = f_out->mkdir(model.label.c_str());
 
