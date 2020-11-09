@@ -551,15 +551,17 @@ int main(int argc, const char **argv)
 	}
 
 	// get unsmearing correction
-	printf("\n>> unsmearing_file = %s\n", anal.unsmearing_file.c_str());
+	printf("\n");
+	printf(">> unsmearing_file = %s\n", anal.unsmearing_file.c_str());
 	printf(">> unsmearing_object = %s\n", anal.unsmearing_object.c_str());
 
 	map<unsigned int, TH1D *> map_unsmearing_correction;
 
-	TFile *unsmearing_correction_file = TFile::Open(anal.unsmearing_file.c_str());
+	const string &unsmearing_file_exp = replace(anal.unsmearing_file, "<diagonal>", cfg.diagonal_str);
+	TFile *unsmearing_correction_file = TFile::Open(unsmearing_file_exp.c_str());
 	if (!unsmearing_correction_file)
 	{
-		printf("ERROR: unfolding file `%s' can not be opened.\n", anal.unsmearing_file.c_str());
+		printf("ERROR: unfolding file `%s' can not be opened.\n", unsmearing_file_exp.c_str());
 	} else {
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{

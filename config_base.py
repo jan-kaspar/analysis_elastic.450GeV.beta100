@@ -124,7 +124,7 @@ cfg = cms.PSet(
 
     binnings = cms.vstring("ub", "eb"),
 
-    unsmearing_file = cms.string(""),
+    unsmearing_file = cms.string("unfolding_cf_ni_<diagonal>.root"),
     unsmearing_object = cms.string("fit-1/<binning>"),
 
     alignment_y_ranges = cms.VPSet(
@@ -177,8 +177,6 @@ cfg_45b_56t = cfg.clone(
     fc_R = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
     fc_G = FiducialCut([[-338E-6, 32E-6], [50E-6, 32E-6], [250E-6, 42E-6], [385E-6, 80E-6], [270E-6, 124E-6], [-280E-6, 129E-6], [-385E-6, 60E-6]]),
 
-    unsmearing_file = "unfolding_cf_ni_45b_56t.root",
-
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
   )
@@ -203,8 +201,6 @@ cfg_45t_56b = cfg.clone(
     fc_L = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
     fc_R = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
     fc_G = FiducialCut([[-50E-6, 32E-6], [-250E-6, 42E-6], [-365E-6, 80E-6], [-265E-6, 130E-6], [250E-6, 132E-6], [355E-6, 95E-6], [375E-6, 43E-6], [330E-6, 32E-6]]),
-
-    unsmearing_file = "unfolding_cf_ni_45t_56b.root",
 
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
