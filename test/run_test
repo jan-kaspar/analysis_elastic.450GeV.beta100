@@ -87,7 +87,7 @@ ds="fill7291/Totem1"
 
 ./run -no-bckg "alignment_final.cc" "data/$ds" || exit 31
 
-# TODO: merge || exit 40
+data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || exit 40
 
 echo "* analysis check OK" >> "$log_short"
 
@@ -101,10 +101,17 @@ function MakeOneComparison()
 {
 	local file="$1"
 	local obj="$2"
+	local options="$3"
 
-	test/compare \
-		"./data/$ds/$file" "$obj" \
-		"$reference_directory/data/$ds/$file" "$obj"
+	local file1="./data/$ds/$file"
+	local file2="$reference_directory/data/$ds/$file"
+	if [ "$options" == "global" ]
+	then
+		file1="$file"
+		file2="$reference_directory/$file"
+	fi
+
+	test/compare "$file1" "$obj" "$file2" "$obj"
 	res="$?"
 
 	if [ ! "$res" -eq "0" ]
@@ -174,7 +181,7 @@ else
 	MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
 	MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
 
-	# TODO: check for merge
+	MakeOneComparison "data/merged.root" "eb/merged/combined/h_dsdt" "global"
 
 	if [ "$n_diff" -eq "0" ]
 	then

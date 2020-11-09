@@ -3,6 +3,8 @@
 #include "TFile.h"
 #include "TH1D.h"
 
+#include <cstdio>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <map>
@@ -92,24 +94,81 @@ struct Entry
 
 //----------------------------------------------------------------------------------------------------
 
-int main()
+void PrintUsage()
 {
+	printf("USAGE: merge <option> <option> ...\n");
+	printf("OPTIONS:\n");
+	printf("    -output <file>     set output file\n");
+	printf("    -entry <string>    add entry in format 'directory,scale,label,merge'\n");
+}
+
+//----------------------------------------------------------------------------------------------------
+
+int main(int argc, const char **argv)
+{
+	// defaults
+	vector<string> input_entries;
+	string output_file_name = "merged.root";
+
+	// parse command line
+	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
+	{
+		if (strcmp(argv[argi], "-h") == 0 || strcmp(argv[argi], "--help") == 0)
+		{
+			cl_error = 1;
+			continue;
+		}
+
+		if (TestStringParameter(argc, argv, argi, "-output", output_file_name)) continue;
+
+		if (strcmp(argv[argi], "-entry") == 0)
+		{
+			input_entries.push_back(argv[++argi]);
+			continue;
+		}
+
+		printf("ERROR: unknown option '%s'.\n", argv[argi]);
+		cl_error = 1;
+	}
+
+	if (cl_error)
+	{
+		PrintUsage();
+		return 1;
+	}
+
+	// build list of entries
 	vector<Entry> entries;
-	entries.push_back(Entry("DS-fill7280/Totem1", 1., "DS-fill7280", true));
 
-	entries.push_back(Entry("DS-fill7281/Totem1", 1., "DS-fill7281", true));
+	if (! input_entries.empty())
+	{
+		for (const auto &ie : input_entries)
+		{
+			istringstream iss(ie);
+			string dir; getline(iss, dir, ',');
+			string scale; getline(iss, scale, ',');
+			string label; getline(iss, label, ',');
+			string merge; getline(iss, merge, ',');
 
-	entries.push_back(Entry("DS-fill7282/Totem1", 1., "DS-fill7282", true));
-	entries.push_back(Entry("DS-fill7283/Totem1", 1., "DS-fill7283", true));
-	entries.push_back(Entry("DS-fill7284/Totem1", 1., "DS-fill7284", true));
-	entries.push_back(Entry("DS-fill7285/Totem1", 1., "DS-fill7285", true));
+			entries.emplace_back(dir, atof(scale.c_str()), label, atoi(merge.c_str()));
+		}
 
-	entries.push_back(Entry("DS-fill7289/Totem1", 1., "DS-fill7289", true));
+	} else {
+		printf("* using default list of entries\n");
 
-	entries.push_back(Entry("DS-fill7291/Totem1", 1., "DS-fill7291", true));
+		entries.push_back(Entry("fill7280/Totem1", 1., "fill7280", true));
 
-	//entries.push_back(Entry("DS-firstParts", 1., "DS-firstParts", false));
-	//entries.push_back(Entry("DS-lastParts", 1., "DS-lastParts", false));
+		entries.push_back(Entry("fill7281/Totem1", 1., "fill7281", true));
+
+		entries.push_back(Entry("fill7282/Totem1", 1., "fill7282", true));
+		entries.push_back(Entry("fill7283/Totem1", 1., "fill7283", true));
+		entries.push_back(Entry("fill7284/Totem1", 1., "fill7284", true));
+		entries.push_back(Entry("fill7285/Totem1", 1., "fill7285", true));
+
+		entries.push_back(Entry("fill7289/Totem1", 1., "fill7289", true));
+
+		entries.push_back(Entry("fill7291/Totem1", 1., "fill7291", true));
+	}
 
 	vector<string> diagonals;
 	diagonals.push_back("45b_56t");
@@ -118,12 +177,14 @@ int main()
 	vector<string> binnings;
 	binnings.push_back("ub");
 	binnings.push_back("eb");
-	//binnings.push_back("ob-1-20-0.05");
-	//binnings.push_back("ob-2-10-0.05");
-	//binnings.push_back("ob-3-5-0.05");
+
+	// print info
+	printf("* %lu entries:\n", entries.size());
+	for (const auto& e : entries)
+		printf("  %s, %.3f, %s, %u\n", e.input.c_str(), e.stat_unc_scale, e.output.c_str(), e.merge);
 
 	// prepare output
-	TFile *f_out = new TFile("merged.root", "recreate");
+	TFile *f_out = new TFile(output_file_name.c_str(), "recreate");
 
 	// loop over binnings
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
@@ -149,7 +210,7 @@ int main()
 			{
 				printf("\t\t\t%s\n", diagonals[dgni].c_str());
 
-				string fn = "../" + entries[ei].input + "/distributions_"+diagonals[dgni]+".root";
+				string fn = entries[ei].input + "/distributions_"+diagonals[dgni]+".root";
 				TFile *f_in = TFile::Open(fn.c_str());
 				if (!f_in)
 				{
