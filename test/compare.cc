@@ -1,6 +1,7 @@
 #include "TFile.h"
 #include "TGraph.h"
 #include "TH1D.h"
+#include "TH2D.h"
 
 #include <string>
 #include <tuple>
@@ -63,7 +64,7 @@ int CompareGraphs(const TGraph *g1, const TGraph *g2)
 
 //----------------------------------------------------------------------------------------------------
 
-int CompareHistograms(const TH1 *h1, const TH1 *h2)
+int CompareHistograms1D(const TH1 *h1, const TH1 *h2)
 {
     if (h1->GetNbinsX() != h2->GetNbinsX())
     {
@@ -101,6 +102,62 @@ int CompareHistograms(const TH1 *h1, const TH1 *h2)
         diff_minor |= v_diff_minor;
         if (v_diff_minor != 0)
             printf("* bin %i: difference in bin content: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, v_1, v_2, v_rel_diff);
+    }
+
+    if (diff_major)
+        return 2;
+
+    if (diff_minor)
+        return 3;
+
+    return 0;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+int CompareHistograms2D(const TH2 *h1, const TH2 *h2)
+{
+    if (h1->GetNbinsX() != h2->GetNbinsX() || h1->GetNbinsY() != h2->GetNbinsY())
+    {
+        printf("* number of bins is different\n");
+        return 1;
+    }
+
+    bool diff_major = false;
+    bool diff_minor = false;
+
+    for (int bi_x = 1; bi_x <= h1->GetNbinsX(); ++bi_x)
+    {
+        for (int bi_y = 1; bi_y <= h1->GetNbinsY(); ++bi_y)
+        {
+            const int bi = h1->GetBin(bi_x, bi_y);
+
+            const double c_1 = h1->GetBinCenter(bi);
+            const double w_1 = h1->GetBinWidth(bi);
+            const double v_1 = h1->GetBinContent(bi);
+
+            const double c_2 = h2->GetBinCenter(bi);
+            const double w_2 = h2->GetBinWidth(bi);
+            const double v_2 = h2->GetBinContent(bi);
+
+            auto [c_rel_diff, c_diff_major, c_diff_minor] = CompareValues(c_1, c_2);
+            diff_major |= c_diff_major;
+            diff_minor |= c_diff_minor;
+            if (c_diff_minor != 0)
+                printf("* bin x %i, bin y %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, c_1, c_2, c_rel_diff);
+
+            auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
+            diff_major |= w_diff_major;
+            diff_minor |= w_diff_minor;
+            if (w_diff_minor != 0)
+                printf("* bin x %i, bin y %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, w_1, w_2, w_rel_diff);
+
+            auto [v_rel_diff, v_diff_major, v_diff_minor] = CompareValues(v_1, v_2);
+            diff_major |= v_diff_major;
+            diff_minor |= v_diff_minor;
+            if (v_diff_minor != 0)
+                printf("* bin x %i, bin y %i: difference in bin content: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, v_1, v_2, v_rel_diff);
+        }
     }
 
     if (diff_major)
@@ -163,15 +220,20 @@ int main(int argc, const char **argv)
     // do comparison
     const bool obj1_graph = obj1->InheritsFrom("TGraph");
     const bool obj1_histogram = obj1->InheritsFrom("TH1");
+    const bool obj1_histogram_2d = obj1->InheritsFrom("TH2");
 
     const bool obj2_graph = obj2->InheritsFrom("TGraph");
     const bool obj2_histogram = obj2->InheritsFrom("TH1");
+    const bool obj2_histogram_2d = obj2->InheritsFrom("TH2");
 
     if (obj1_graph && obj2_graph)
         return CompareGraphs((TGraph *) obj1, (TGraph *) obj2);
 
+    if (obj1_histogram_2d && obj2_histogram_2d)
+        return CompareHistograms2D((TH2 *) obj1, (TH2 *) obj2);
+
     if (obj1_histogram && obj2_histogram)
-        return CompareHistograms((TH1 *) obj1, (TH1 *) obj2);
+        return CompareHistograms1D((TH1 *) obj1, (TH1 *) obj2);
 
     printf("ERROR: don't know how to compare objects of types %s (1) and %s (2).\n", obj1->ClassName(), obj2->ClassName());
 
