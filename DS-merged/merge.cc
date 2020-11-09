@@ -114,7 +114,7 @@ int main()
 	diagonals.push_back("45t_56b");
 
 	vector<string> binnings;
-	binnings.push_back("ub");
+	//binnings.push_back("ub");
 	binnings.push_back("eb");
 	//binnings.push_back("ob-1-20-0.05");
 	//binnings.push_back("ob-2-10-0.05");
