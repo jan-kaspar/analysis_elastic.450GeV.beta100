@@ -24,14 +24,14 @@ export PS1="\[\033[00;34m\]${compName} \[\033[00;33m\]${CMSSW_VERSION}\[\033[00;
 
 export GSL_DIR="/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/gsl/2.2.1-pafccj2"
 
-export INCS="-I${GSL_DIR}/include -L${GSL_DIR}/lib \
-	-I${CMSSW_BASE}/src -I${CMSSW_RELEASE_BASE}/src -L${CMSSW_BASE}/lib/$SCRAM_ARCH -L${CMSSW_RELEASE_BASE}/lib/$SCRAM_ARCH \
-	-I`root-config --incdir` \
-	-I$BASE_DIR"
+export INCS="-I${GSL_DIR}/include -L${GSL_DIR}/lib\
+ -I${CMSSW_BASE}/src -I${CMSSW_RELEASE_BASE}/src -L${CMSSW_BASE}/lib/$SCRAM_ARCH -L${CMSSW_RELEASE_BASE}/lib/$SCRAM_ARCH\
+ -I`root-config --incdir`\
+ -I$BASE_DIR"
 
-export LIBS="-lgsl -lgslcblas -lm \
-	-lDataFormatsFWLite -lDataFormatsCommon -lDataFormatsCTPPSDetId -lDataFormatsCTPPSReco -lFWCoreParameterSet -lFWCoreParameterSetReader \
-	`root-config --libs` -lMinuit"
+export LIBS="-lgsl -lgslcblas -lm\
+ -lDataFormatsFWLite -lDataFormatsCommon -lDataFormatsCTPPSDetId -lDataFormatsCTPPSReco -lFWCoreParameterSet -lFWCoreParameterSetReader\
+ `root-config --libs` -lMinuit"
 
 export INCS_LIBS="$INCS $LIBS"
 
