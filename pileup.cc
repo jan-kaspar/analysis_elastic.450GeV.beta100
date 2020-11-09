@@ -422,10 +422,6 @@ int main(int argc, const char **argv)
 	{
 		ev_count++;
 
-		// TODO: remove
-		//if (ev_count > 10000)
-		//	break;
-
 		const unsigned int ev_run = event.id().run();
 		const unsigned int ev_lumi_section = event.id().luminosityBlock();
 		const unsigned int ev_bunch = event.bunchCrossing();
