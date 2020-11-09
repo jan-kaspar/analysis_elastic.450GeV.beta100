@@ -1,7 +1,5 @@
 #!/bin/bash
 
-base_dir=`pwd -P`
-
 (
 	echo "["
 
@@ -27,8 +25,8 @@ base_dir=`pwd -P`
 
 		echo "    {"
 		echo "         \"command\": \"clang++ $extra $GCC_OPT_CLANG $INCS $src\","
-		echo "         \"directory\": \"$base_dir\","
-		echo "         \"file\": \"$base_dir/$src\""
+		echo "         \"directory\": \"$BASE_DIR\","
+		echo "         \"file\": \"$BASE_DIR/$src\""
 		echo "    }"
 	done
 
