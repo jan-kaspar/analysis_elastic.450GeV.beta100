@@ -4,7 +4,7 @@
 reference_directory="$1"
 if [ -z "$reference_directory" ]
 then
-	reference_directory=`ls -d ../IB/4rp/*/|head -n 1`
+	reference_directory=`ls -d ../IB/4rp/*/|tail -n 1`
 	echo "* setting default reference directory: $reference_directory"
 fi
 
@@ -23,7 +23,7 @@ echo "* starting test at: $(pwd -P)" >> "$log_short"
 source environment || exit 1
 
 # check for FIXME
-output=`grep -RlI "FIXME" . 2> /dev/null  | grep -v .git | grep -v test/run_test`
+output=`grep -RlI "FIXME" . 2> /dev/null  | grep -v "OLD\|.git\|.tex\|.log\|test/run_test"`
 if [ -n "$output" ]
 then
 	echo "There are FIXMEs in the code."
@@ -33,7 +33,7 @@ fi
 echo "* FIXME check OK" >> "$log_short"
 
 # check for TODO
-n_TODO=`grep -RlI "TODO" . 2> /dev/null  | grep -v .git | grep -v test/run_test|wc -l`
+n_TODO=`grep -RlI "TODO" . 2> /dev/null  | grep -v "OLD\|.git\|.tex\|.log\|test/run_test" |wc -l`
 
 if [ "$n_TODO" -eq "0" ]
 then
@@ -105,11 +105,18 @@ function MakeOneComparison()
 	test/compare \
 		"./data/$ds/$file" "$obj" \
 		"$reference_directory/data/$ds/$file" "$obj"
+	res="$?"
 
-	if [ ! "$?" -eq "0" ]
+	if [ ! "$res" -eq "0" ]
 	then
 		let n_diff+=1
-		failed_comparisons="${failed_comparisons}  - $file, $obj\n"
+
+		diff_msg=""
+		if [ "$res" -eq "1" ]; then diff_msg=" (number of points)"; fi
+		if [ "$res" -eq "2" ]; then diff_msg=" (major)"; fi
+		if [ "$res" -eq "3" ]; then diff_msg=" (minor)"; fi
+
+		failed_comparisons="${failed_comparisons}  - $file, $obj$diff_msg\n"
 	fi
 }
 
@@ -124,7 +131,7 @@ else
 	MakeOneComparison "alignment.root" "global/R_2_F/b"
 	MakeOneComparison "alignment.root" "global/R_2_F/c"
 
-	# TODO: alignment_final
+	MakeOneComparison "alignment_final.root" "diff map"
 
 	MakeOneComparison "alignment_fit.root" "L_2_F/a_fit"
 	MakeOneComparison "alignment_fit.root" "L_2_F/b_fit"
