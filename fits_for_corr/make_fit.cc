@@ -7,16 +7,18 @@
 int main()
 {
 	TFile *f_in = new TFile("../../4rp-before-new-framework/DS-merged/merged.root");
-	TH1D *h_in = (TH1D *) f_in->Get("eb/merged/combined/h_dNdt"); // FIXME: change to dsigma/dt
+	TH1D *h_in = (TH1D *) f_in->Get("eb/merged/combined/h_dsdt");
 
 	TF1 *ff = new TF1("ff", "[0]/x/x + [1] * exp(-[2]*x)", 1E-6, 0.10);
 
 	TCanvas *c = new TCanvas();
 	c->SetLogy(1);
 
+	/*
 	ff->SetParameter(0, 2.22E2);
 	ff->SetParameter(1, 1.97E8);
 	ff->SetParameter(2, 1.30E1);
+	*/
 
 	h_in->Fit(ff, "", "", 2E-4, 0.02);
 
