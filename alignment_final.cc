@@ -4,13 +4,11 @@
 #include "TFile.h"
 #include "TH2D.h"
 
-// TODO: find the new approach
-/*
-#include "Minuit2/FCNBase.h"
-#include "TFitterMinuit.h"
-*/
+#include "Fit/Fitter.h"
 
+#include <memory>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -25,24 +23,21 @@ vector<Point> points;
 
 //----------------------------------------------------------------------------------------------------
 
-// TODO
-/*
-class S2_FCN : public ROOT::Minuit2::FCNBase
+class S2_FCN
 {
 	public:
 		S2_FCN() {}
 
-  		double operator() (const std::vector<double> &) const;
-  		double Up() const { return 1.; }
+		double operator() (const double *par) const;
 
-		static double f(double x, double y, const std::vector<double> &);
+		static double f(double x, double y, const double* par);
 
-		TH2D* MakeDiffMap(const TH2D *orig, const std::vector<double> &par);
+		TH2D* MakeDiffMap(const TH2D *orig, const double* par);
 };
 
 //----------------------------------------------------------------------------------------------------
 
-double S2_FCN::f(double x, double y, const std::vector<double> &par)
+double S2_FCN::f(double x, double y, const double* par)
 {
 	const double &A = par[0] * 1E9;
 	const double &mu_x = par[1] * 1E-6;
@@ -59,7 +54,7 @@ double S2_FCN::f(double x, double y, const std::vector<double> &par)
 
 //----------------------------------------------------------------------------------------------------
 
-double S2_FCN::operator() (const std::vector<double> &par) const
+double S2_FCN::operator() (const double* par) const
 {
 	//printf("--------------------------------------------------\n");
 
@@ -81,7 +76,7 @@ double S2_FCN::operator() (const std::vector<double> &par) const
 
 //----------------------------------------------------------------------------------------------------
 
-TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const std::vector<double> &par)
+TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const double* par)
 {
 	printf(">> MakeDiffMap\n");
 
@@ -110,7 +105,6 @@ TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const std::vector<double> &par)
 
 	return h;
 }
-*/
 
 //----------------------------------------------------------------------------------------------------
 
@@ -158,47 +152,43 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 
 	printf("number of points: %lu\n", points.size());
 
-	// TODO
-	/*
 	// initialize fitter
-	TFitterMinuit *minuit = new TFitterMinuit();
-	S2_FCN fcn;
-	minuit->SetMinuitFCN(&fcn);
+	unique_ptr<S2_FCN> s2_fcn(new S2_FCN);
+	unique_ptr<ROOT::Fit::Fitter> fitter(new ROOT::Fit::Fitter);
+
+	constexpr unsigned int n_params = 5;
+	double pStart[] = {0, 0, 0, 0, 0};
+	fitter->SetFCN(n_params, *s2_fcn, pStart, 0, true);
 
 	// set initial parameters
-	minuit->SetParameter(0, "const", 4., 0.1, 0., 0.);	// * 1E9
-	minuit->SetParameter(1, "mean x", 0., 1., 0., 0.);	// in urad
-	minuit->SetParameter(2, "sigma x", 40., 1., 0., 0.);
-	minuit->SetParameter(3, "mean y", 0., 1., 0., 0.);
-	minuit->SetParameter(4, "sigma y", 40., 1., 0., 0.);
+	fitter->Config().ParSettings(0).Set("const", 4., 0.1);	// * 1E9
+	fitter->Config().ParSettings(1).Set("mean x", 0., 1.);	// in urad
+	fitter->Config().ParSettings(2).Set("sigma x", 40., 1.);
+	fitter->Config().ParSettings(3).Set("mean y", 0., 1.);
+	fitter->Config().ParSettings(4).Set("sigma y", 40., 1.);
 
 	// run fit
-	minuit->SetPrintLevel(3);
-	minuit->CreateMinimizer();
-	minuit->Minimize();
+	fitter->FitFCN();
+	fitter->FitFCN();
 
 	// get parameters
-	vector<double> par;
-	for (int i = 0; i < minuit->GetNumberTotalParameters(); i++)
-	{
-		par.push_back(minuit->GetParameter(i));
-	}
+	const ROOT::Fit::FitResult &result = fitter->Result();
+	const double *params = result.GetParams();
 
 	// print results
 	printf("\n");
 
-	double chiSq = fcn(par);
-	double ndf = points.size() - minuit->GetNumberTotalParameters();
-	printf("chiSq = %E, ndf = %E, chiSq/ndf = %.3f\n", chiSq, ndf, chiSq/ndf);
+	const double chiSq = (*s2_fcn)(params);
+	const unsigned int ndf = points.size() - n_params;
+	printf("chiSq = %E, ndf = %i, chiSq/ndf = %.3f\n", chiSq, ndf, chiSq/ndf);
 
-	printf("x: mean = %.3f urad, sigma = %.3f urad\n", minuit->GetParameter(1), minuit->GetParameter(2));
-	printf("y: mean = %.3f urad, sigma = %.3f urad\n", minuit->GetParameter(3), minuit->GetParameter(4));
+	printf("x: mean = %.3f urad, sigma = %.3f urad\n", params[1], params[2]);
+	printf("y: mean = %.3f urad, sigma = %.3f urad\n", params[3], params[4]);
 
 	printf("\n");
 
-	TH2D *m = fcn.MakeDiffMap(h_45b, par);
+	TH2D *m = s2_fcn->MakeDiffMap(h_45b, params);
 	m->Write();
-	*/
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -253,18 +243,20 @@ int main(int argc, const char **argv)
 	PrintConfiguration();
 
 	// get input data
-	TFile *inF_45b = new TFile("distributions_45b_56t.root");
-	TH2D *h_45b = (TH2D *) inF_45b->Get("normalization/h_th_y_vs_th_x_normalized");
+	TFile *f_in_45b = new TFile("distributions_45b_56t.root");
+	TH2D *h_45b = (TH2D *) f_in_45b->Get("normalization/h2_th_y_vs_th_x_normalized");
 	
-	TFile *inF_45t = new TFile("distributions_45t_56b.root");
-	TH2D *h_45t = (TH2D *) inF_45t->Get("normalization/h_th_y_vs_th_x_normalized");
+	TFile *f_in_45t = new TFile("distributions_45t_56b.root");
+	TH2D *h_45t = (TH2D *) f_in_45t->Get("normalization/h2_th_y_vs_th_x_normalized");
 	
 	// prepare output
-	TFile *outF = new TFile("alignment_final.root", "recreate");
+	TFile *f_out = new TFile("alignment_final.root", "recreate");
 
-	// TODO
-	//MakeFit(h_45b, h_45t);
+	// run fit
+	MakeFit(h_45b, h_45t);
 
-	delete outF;
+	// clean up
+	delete f_out;
+
 	return 0;
 }
