@@ -95,7 +95,7 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 
-	unsigned int N_ev = (unsigned int) 4E8;
+	unsigned int N_ev = (unsigned int) 1E7;
 	unsigned int seed = 1;
 
 
