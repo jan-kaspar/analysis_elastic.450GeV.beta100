@@ -12,7 +12,7 @@ function PrintUsage()
 	echo -e "	-dcomb			select 'combined' diagonal"
 	echo -e "	-danti			select anti-diagonals"
 	echo -e "	-O <option>		pass the option to the program"
-	echo -e "	-no-bckg		do no run programs in background"
+	echo -e "	-wait			wait for all programs to finish"
 #	echo -e "	-batch			prepare job for LXBATCH instead of executing locally"
 #	echo -e "	-submit			submit job to LXBATCH, implies -lxbatch option"
 }
@@ -36,10 +36,12 @@ function RunOneDiagonal()
 	case "$errCode" in
 		0)
 			echo "$label > done"
+			return 0
 			;;
 
 		$rcIncompatibleDiagonal)
 			rm "$log"
+			return 0
 			;;
 
 		*)
@@ -63,15 +65,9 @@ function RunOneDirectory()
 
 		for diag in ${diagonals[*]}
 		do
-			if [ "$runInBackground" == "y" ]
-			then
-				RunOneDiagonal &
-			else
-				RunOneDiagonal || exit 10
-			fi
+			RunOneDiagonal &
+			pids="$pids $!"
 		done
-
-		wait
 	done
 
 	cd - &>/dev/null
@@ -85,7 +81,8 @@ diagonals=("45b_56t" "45t_56b" "combined")
 
 run_options=""
 
-runInBackground="y"
+waitForPrograms="n"
+pids=""
 
 batch="n"
 submit="n"
@@ -126,8 +123,8 @@ do
 			run_options="$1"
 			;;
 
-		"-no-bckg")
-			runInBackground="n"
+		"-wait")
+			waitForPrograms="y"
 			;;
 
 		"-lxbatch")
@@ -159,6 +156,7 @@ do
 	shift
 done
 
+# compile all programs
 for prog in ${programs}
 do
 	target=".${prog%.*}"
@@ -167,12 +165,24 @@ done
 
 binDir=`pwd -P`
 
+# execute for directories
 for dir in ${directories[*]}
 do
-	if [ "$runInBackground" == "y" ]
-	then
-		RunOneDirectory &
-	else
-		RunOneDirectory
-	fi
+	RunOneDirectory
 done
+
+# wait for programs, if desired
+if [ "$waitForPrograms" == "y" ]
+then
+	error="n"
+
+	for p in $pids
+	do
+		wait $p || error="y"
+	done
+
+	if [ "$error" == "y" ]
+	then
+		exit 1
+	fi
+fi
