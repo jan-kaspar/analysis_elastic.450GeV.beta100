@@ -421,8 +421,6 @@ int main(int argc, char **argv)
 			if (argc-1 > i)
 				bootstrap = (int) atoi(argv[++i]);
 
-			printf("-------------------------bla\n");
-
 			continue;
 		}
 
