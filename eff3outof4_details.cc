@@ -71,7 +71,7 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 		unsigned int rpDecId = 100*rpId.arm() + 10*rpId.station() + 1*rpId.rp();
 		unsigned int plane = rpId.plane();
 
-		if (ds.size() == 0)
+		if (ds.empty())
 			continue;
 
 		if (rpId.isStripsCoordinateUDirection())
@@ -86,7 +86,7 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 		TotemRPDetId rpId(ds.detId());
 		unsigned int rpDecId = 100*rpId.arm() + 10*rpId.station() + 1*rpId.rp();
 
-		for (const auto pat : ds)
+		for (const auto& pat : ds)
 		{
 			if (!pat.getFittable())
 				continue;
@@ -146,21 +146,23 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 
 		f.pat_suff_destr = (n_patterns_eff_u > 0 || n_patterns_eff_v > 0);
 	}
-
-	// debug
 }
 
 //----------------------------------------------------------------------------------------------------
 
 struct HistGroup
 {
-	TH1D *h_y, *h_th_x, *h_th_y;
-	TH2D *h_th_x_th_y;
+	bool initialised = false;
 
-	HistGroup() : h_y(nullptr), h_th_y(nullptr) {}
+	TH1D *h_y = nullptr, *h_th_x = nullptr, *h_th_y = nullptr;
+	TH2D *h_th_x_th_y = nullptr;
 
 	void Init()
 	{
+		initialised = true;
+
+		gDirectory = nullptr;
+
 		h_y = new TH1D("", ";y   (mm)", 100, -40., +40.);
 
 		h_th_x = new TH1D("", ";#theta_{x}   (#murad)", 200, -400., +400.);
@@ -171,7 +173,7 @@ struct HistGroup
 
 	void Fill(double y, double th_x, double th_y)
 	{
-		if (!h_y)
+		if (!initialised)
 			Init();
 
 		h_y->Fill(y);
