@@ -43,7 +43,7 @@ else
 fi
 
 # compile everything
-make || exit 3
+make -j8 || exit 3
 
 for mkf in `find . -name *makefile|grep -v OLD`
 do

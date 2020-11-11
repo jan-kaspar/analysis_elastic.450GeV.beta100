@@ -53,8 +53,7 @@ struct Environment
 	TMatrixD opt_per_gen;
 
 	// alignment uncertainties
-	// TODO: used ?
-	//double si_de_x, si_de_y_R, si_de_y_D, si_tilt;
+	double si_de_x, si_de_y;
 
 	// misalignments (mm)
 	// TODO: used ?

@@ -33,7 +33,25 @@ struct Stat
 	void SetLabels(const vector<string> &_l);
 
 	template <class T>
-	void Fill(const T &v);
+	void Fill(const T &v)
+	{
+		S1 += 1.;
+		for (unsigned int i = 0; i < dim; i++)
+		{
+			Sv[i] += v[i];
+			Svv[i] += v[i]*v[i];
+			Svvv[i] += v[i]*v[i]*v[i];
+			Svvvv[i] += v[i]*v[i]*v[i]*v[i];
+
+			for (unsigned int j = 0; j < dim; j++)
+			{
+				Sxy[i][j] += v[i] * v[j];
+				Sxxy[i][j] += v[i]*v[i] * v[j];
+				Sxyy[i][j] += v[i] * v[j]*v[j];
+				Sxxyy[i][j] += v[i]*v[i] * v[j]*v[j];
+			}
+		}
+	}
 
 	void Fill(double v1, double v2 = 0., double v3 = 0., double v4 = 0., double v5 = 0.);
 

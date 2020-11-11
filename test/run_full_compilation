@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# compile everything
+make -j8 || exit 3
+
+for mkf in `find . -name *makefile|grep -v OLD`
+do
+	dir=${mkf%/makefile}
+
+	echo "-------------------- BUILDING $dir --------------------"
+	make -C "$dir" -j8 || exit 3
+done

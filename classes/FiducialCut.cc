@@ -24,6 +24,17 @@ void FiducialCut::Print() const
 
 //----------------------------------------------------------------------------------------------------
 
+void FiducialCut::Shift(double x, double y)
+{
+	for (auto &p : points)
+	{
+		p.x += x;
+		p.y += y;
+	}	
+}
+
+//----------------------------------------------------------------------------------------------------
+
 bool FiducialCut::Satisfied(double th_x, double th_y) const
 {
 	unsigned int n_le = 0, n_gr = 0;

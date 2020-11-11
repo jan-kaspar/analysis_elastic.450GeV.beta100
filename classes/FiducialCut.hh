@@ -37,6 +37,8 @@ struct FiducialCut
 
 	void Print() const;
 
+	void Shift(double x, double y);
+
 	bool Satisfied(double th_x, double th_y) const;
 
 	void GetThYRange(double th_x, double &th_y_min, double &th_y_max) const;
