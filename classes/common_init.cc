@@ -1,7 +1,10 @@
 #include "common_init.hh"
+#include <cstdio>
+#include <string>
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSetReader/interface/ParameterSetReader.h"
+#include "FWCore/Utilities/interface/Exception.h"
 
 //----------------------------------------------------------------------------------------------------
 
@@ -63,11 +66,28 @@ int Init(const string &cfg_file, const string &diagonal_input)
 	edm::ParameterSet config;
 	
 	try {
-		config = edm::readPSetsFrom(cfg_file)->getParameter<edm::ParameterSet>(cfg.python_object);
+		// split path to directory and file names
+		auto p = cfg_file.find_last_of('/');
+		const string dir_name = (p != string::npos) ? cfg_file.substr(0, p) : ".";
+		string file_name = (p != string::npos) ? cfg_file.substr(p+1) : cfg_file;
+
+		// strip .py from file name
+		p = file_name.find_last_of('.');
+		file_name = (p != string::npos) ? file_name.substr(0, p) : file_name;
+
+		// compile importing python code
+		std::string code;
+		code += "import sys\n";
+		code += "import os\n";
+		code += "sys.path.append(os.path.abspath('" + dir_name + "'))\n";
+		code += "from " + file_name + " import *";
+
+		// read in python config
+		config = edm::readPSetsFrom(code)->getParameter<edm::ParameterSet>(cfg.python_object);
 	}
-	catch (...)
+	catch (const cms::Exception &e)
 	{
-		printf("ERROR in Init: cannot load object '%s' from file '%s'.\n", cfg.python_object.c_str(), cfg_file.c_str());
+		printf("ERROR in Init: cannot load object '%s' from file '%s':\n%s", cfg.python_object.c_str(), cfg_file.c_str(), e.what());
 		return 2;
 	}
 
