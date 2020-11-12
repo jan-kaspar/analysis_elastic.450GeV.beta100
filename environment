@@ -30,7 +30,7 @@ export INCS="-I${GSL_DIR}/include -L${GSL_DIR}/lib\
  -I$BASE_DIR"
 
 export LIBS="-lgsl -lgslcblas -lm\
- -lDataFormatsFWLite -lDataFormatsCommon -lDataFormatsCTPPSDetId -lDataFormatsCTPPSReco -lFWCoreParameterSet -lFWCoreParameterSetReader\
+ -lDataFormatsFWLite -lDataFormatsCommon -lDataFormatsCTPPSDetId -lDataFormatsCTPPSReco -lFWCoreParameterSet -lFWCoreParameterSetReader -lFWCoreUtilities\
  `root-config --libs` -lMinuit"
 
 export INCS_LIBS="$INCS $LIBS"
