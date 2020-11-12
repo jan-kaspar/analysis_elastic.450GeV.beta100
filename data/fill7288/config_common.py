@@ -2,7 +2,8 @@ import sys
 import os
 import FWCore.ParameterSet.Config as cms
 
-sys.path.append(os.path.relpath("../../../"))
+tfd = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(tfd + "/../..")
 from config_base import *
 
 #--------------------
