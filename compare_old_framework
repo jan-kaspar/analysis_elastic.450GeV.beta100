@@ -105,16 +105,34 @@ dir_file_ref="{reference_directory}/DS-$ds"
 # data/all-good
 #----------------------------------------------------------------------------------------------------
 
-for dir in data/all-good/Totem1/*
+###    for dir in data/all-good/Totem1/*
+###    do
+###    	subdir="${dir##*/}"
+###    	echo "* $subdir"
+###    
+###    	dir_file_loc="$dir"
+###    	dir_file_ref="${reference_directory}/DS-all-good/Totem1/$subdir"
+###    
+###    	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
+###    	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
+###    	#MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+###    	#MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+###    done
+
+
+
+#----------------------------------------------------------------------------------------------------
+# studies/background
+#----------------------------------------------------------------------------------------------------
+
+for dir in studies/background/fill7280/Totem1/*
 do
 	subdir="${dir##*/}"
 	echo "* $subdir"
 
 	dir_file_loc="$dir"
-	dir_file_ref="${reference_directory}/DS-all-good/Totem1/$subdir"
+	dir_file_ref="${reference_directory}/background_studies/DS-fill7280/Totem1/$subdir"
 
 	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
 	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
-	#MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
-	#MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
 done
