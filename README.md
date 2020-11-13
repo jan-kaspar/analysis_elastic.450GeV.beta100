@@ -44,7 +44,7 @@
 
 40) Merge t-distributions form datasets and diagonals
  * `cd data`
- * `make && ./merge`
+ * `./merge`
  * `cd ..`
 
 
