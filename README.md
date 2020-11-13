@@ -1,7 +1,9 @@
 # Initialisation
  1) Initialise environment: `bash --rcfile environment`.
 
- 2) Prepare compilation dictionary: `./build_compile_commands_json`
+ 2) Prepare makefile and clang compilation dictionary: `./configure`
+
+ 3) Run compilation: `make -j8`
 
 
 
