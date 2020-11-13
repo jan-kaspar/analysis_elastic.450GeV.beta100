@@ -2,9 +2,11 @@
 #include "TGraph.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TCanvas.h"
 
 #include <string>
 #include <tuple>
+#include <memory>
 
 using namespace std;
 
@@ -21,7 +23,7 @@ std::tuple<double, bool, bool> CompareValues(const double v1, const double v2)
 
 //----------------------------------------------------------------------------------------------------
 
-int CompareGraphs(const TGraph *g1, const TGraph *g2)
+int CompareGraphsImp(const TGraph *g1, const TGraph *g2)
 {
     if (g1->GetN() != g2->GetN())
     {
@@ -64,7 +66,31 @@ int CompareGraphs(const TGraph *g1, const TGraph *g2)
 
 //----------------------------------------------------------------------------------------------------
 
-int CompareHistograms1D(const TH1 *h1, const TH1 *h2)
+int CompareGraphs(TGraph *g1, TGraph *g2, const string& plot_fn)
+{
+    const int r = CompareGraphsImp(g1, g2);
+
+    if (r != 0 && !plot_fn.empty())
+    {
+        unique_ptr<TCanvas> c(new TCanvas);
+
+        g1->SetLineColor(2);
+        g1->SetMarkerColor(2);
+        g1->Draw("alp");
+
+        g2->SetLineColor(4);
+        g2->SetMarkerColor(4);
+        g2->Draw("lp");
+
+        c->SaveAs(plot_fn.c_str());
+    }
+
+    return r;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+int CompareHistograms1DImp(const TH1 *h1, const TH1 *h2)
 {
     if (h1->GetNbinsX() != h2->GetNbinsX())
     {
@@ -115,7 +141,29 @@ int CompareHistograms1D(const TH1 *h1, const TH1 *h2)
 
 //----------------------------------------------------------------------------------------------------
 
-int CompareHistograms2D(const TH2 *h_1, const TH2 *h_2)
+int CompareHistograms1D(TH1 *h1, TH1 *h2, const string &plot_fn)
+{
+    const int r = CompareHistograms1DImp(h1, h2);
+
+    if (r != 0 && !plot_fn.empty())
+    {
+        unique_ptr<TCanvas> c(new TCanvas);
+
+        h1->SetLineColor(2);
+        h1->Draw("");
+
+        h2->SetLineColor(4);
+        h2->Draw("same");
+
+        c->SaveAs(plot_fn.c_str());
+    }
+
+    return r;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+int CompareHistograms2DImp(const TH2 *h_1, const TH2 *h_2)
 {
     if (h_1->GetNbinsX() != h_2->GetNbinsX() || h_1->GetNbinsY() != h_2->GetNbinsY())
     {
@@ -198,6 +246,29 @@ int CompareHistograms2D(const TH2 *h_1, const TH2 *h_2)
 
 //----------------------------------------------------------------------------------------------------
 
+int CompareHistograms2D(TH2 *h_1, TH2 *h_2, const string &plot_fn)
+{
+    const int r = CompareHistograms2DImp(h_1, h_2);
+
+    if (r != 0 && !plot_fn.empty())
+    {
+        unique_ptr<TCanvas> c(new TCanvas);
+        c->Divide(2, 1);
+
+        c->cd(1);
+        h_1->Draw("colz");
+
+        c->cd(2);
+        h_2->Draw("colz");
+
+        c->SaveAs(plot_fn.c_str());
+    }
+
+    return r;
+}
+
+//----------------------------------------------------------------------------------------------------
+
 int main(int argc, const char **argv)
 {
     if (argc < 5)
@@ -210,6 +281,10 @@ int main(int argc, const char **argv)
     string n_obj1 = argv[2];
     string n_file2 = argv[3];
     string n_obj2 = argv[4];
+
+    string plot_file = "";
+    if (argc >= 6)
+        plot_file = argv[5];
 
     printf("comparing (1) to (2):\n");
     printf("    (1): %s from %s\n", n_obj1.c_str(), n_file1.c_str());
@@ -254,13 +329,13 @@ int main(int argc, const char **argv)
     const bool obj2_histogram_2d = obj2->InheritsFrom("TH2");
 
     if (obj1_graph && obj2_graph)
-        return CompareGraphs((TGraph *) obj1, (TGraph *) obj2);
+        return CompareGraphs((TGraph *) obj1, (TGraph *) obj2, plot_file);
 
     if (obj1_histogram_2d && obj2_histogram_2d)
-        return CompareHistograms2D((TH2 *) obj1, (TH2 *) obj2);
+        return CompareHistograms2D((TH2 *) obj1, (TH2 *) obj2, plot_file);
 
     if (obj1_histogram && obj2_histogram)
-        return CompareHistograms1D((TH1 *) obj1, (TH1 *) obj2);
+        return CompareHistograms1D((TH1 *) obj1, (TH1 *) obj2, plot_file);
 
     printf("ERROR: don't know how to compare objects of types %s (1) and %s (2).\n", obj1->ClassName(), obj2->ClassName());
     return 10;
