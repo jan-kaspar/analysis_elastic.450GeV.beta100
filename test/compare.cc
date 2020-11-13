@@ -23,6 +23,13 @@ std::tuple<double, bool, bool> CompareValues(const double v1, const double v2)
 
 //----------------------------------------------------------------------------------------------------
 
+unique_ptr<TCanvas> NewDefaultCanvas()
+{
+    return make_unique<TCanvas>("cmp", "", 2048, 1536);
+}
+
+//----------------------------------------------------------------------------------------------------
+
 int CompareGraphsImp(const TGraph *g1, const TGraph *g2)
 {
     if (g1->GetN() != g2->GetN())
@@ -72,7 +79,7 @@ int CompareGraphs(TGraph *g1, TGraph *g2, const string& plot_fn)
 
     if (r != 0 && !plot_fn.empty())
     {
-        unique_ptr<TCanvas> c(new TCanvas);
+        unique_ptr<TCanvas> c = NewDefaultCanvas();
 
         g1->SetLineColor(2);
         g1->SetMarkerColor(2);
@@ -147,7 +154,7 @@ int CompareHistograms1D(TH1 *h1, TH1 *h2, const string &plot_fn)
 
     if (r != 0 && !plot_fn.empty())
     {
-        unique_ptr<TCanvas> c(new TCanvas);
+        unique_ptr<TCanvas> c = NewDefaultCanvas();
 
         h1->SetLineColor(2);
         h1->Draw("");
@@ -252,7 +259,7 @@ int CompareHistograms2D(TH2 *h_1, TH2 *h_2, const string &plot_fn)
 
     if (r != 0 && !plot_fn.empty())
     {
-        unique_ptr<TCanvas> c(new TCanvas);
+        unique_ptr<TCanvas> c = NewDefaultCanvas();
         c->Divide(2, 1);
 
         c->cd(1);
