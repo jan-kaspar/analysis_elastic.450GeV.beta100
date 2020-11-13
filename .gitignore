@@ -6,6 +6,7 @@
 *.out
 *.pyc
 *.o
+*.png
 .*
 
 compile_commands.json
