@@ -271,6 +271,7 @@ rm -f "$report"
 source environment || exit 1
 
 # run steps
+failure="False"
 for step in $steps
 do
 	echo "----- $step --------------------------------------------------"
@@ -278,7 +279,12 @@ do
 	echo "<li>$step</li>" >> "$report"
 	echo "<ul>" >> "$report"
 
-	$step || break
+	$step
+	if [ "$?" -ne "0" ]
+	then
+		failure="True"
+		break
+	fi
 
 	echo "</ul>" >> "$report"
 done
@@ -289,3 +295,8 @@ done
 	echo "</body>"
 	echo "</html>"
 ) >> "$report"
+
+if [ "$failure" == "True" ]
+then
+	exit 10
+fi
