@@ -220,28 +220,28 @@ int main(int argc, const char **argv)
     if (!file1)
     {
         printf("ERROR: cannot open file '%s'.\n", n_file1.c_str());
-        return 2;
+        return 10;
     }
 
     TObject *obj1 = file1->Get(n_obj1.c_str());
     if (!obj1)
     {
-        printf("ERROR: cannot load object '%s'.\n", n_obj1.c_str());
-        return 3;
+        printf("ERROR: cannot load object '%s' from file1.\n", n_obj1.c_str());
+        return 11;
     }
 
     TFile *file2 = TFile::Open(n_file2.c_str());
     if (!file2)
     {
         printf("ERROR: cannot open file '%s'.\n", n_file2.c_str());
-        return 4;
+        return 12;
     }
 
     TObject *obj2 = file2->Get(n_obj2.c_str());
     if (!obj2)
     {
-        printf("ERROR: cannot load object '%s'.\n", n_obj2.c_str());
-        return 5;
+        printf("ERROR: cannot load object '%s' from file2.\n", n_obj2.c_str());
+        return 13;
     }
 
     // do comparison
@@ -263,6 +263,5 @@ int main(int argc, const char **argv)
         return CompareHistograms1D((TH1 *) obj1, (TH1 *) obj2);
 
     printf("ERROR: don't know how to compare objects of types %s (1) and %s (2).\n", obj1->ClassName(), obj2->ClassName());
-
-    return 0;
+    return 10;
 }

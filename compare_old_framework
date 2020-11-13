@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make -C "test"
+make -j8 || exit 1
 
 #----------------------------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ function MakeOneComparison()
 	then
 		let n_diff+=1
 
-		diff_msg=""
+		diff_msg=" (code $res)"
 		if [ "$res" -eq "1" ]; then diff_msg=" (number of points)"; fi
 		if [ "$res" -eq "2" ]; then diff_msg=" (major)"; fi
 		if [ "$res" -eq "3" ]; then diff_msg=" (minor)"; fi
@@ -125,14 +125,37 @@ dir_file_ref="{reference_directory}/DS-$ds"
 # studies/background
 #----------------------------------------------------------------------------------------------------
 
-for dir in studies/background/fill7280/Totem1/*
-do
-	subdir="${dir##*/}"
-	echo "* $subdir"
+###   for dir in studies/background/fill7280/Totem1/*
+###   do
+###   	subdir="${dir##*/}"
+###   	echo "* $subdir"
+###   
+###   	dir_file_loc="$dir"
+###   	dir_file_ref="${reference_directory}/background_studies/DS-fill7280/Totem1/$subdir"
+###   
+###   	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
+###   	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
+###   done
 
-	dir_file_loc="$dir"
-	dir_file_ref="${reference_directory}/background_studies/DS-fill7280/Totem1/$subdir"
 
-	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
-	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
-done
+
+#----------------------------------------------------------------------------------------------------
+# studies/reconstruction_formulae
+#----------------------------------------------------------------------------------------------------
+
+dir_file_loc="studies/reconstruction_formulae"
+dir_file_ref="${reference_directory}/reconstruction_formulae"
+
+MakeOneComparison "test_formulae_graph.root" "theta_x_one_pot_hit_L2F, th_x_L/pitch,beamDiv,vertex/g_stddev"
+MakeOneComparison "test_formulae_graph.root" "theta_x_one_arm_regr, th_x_L/pitch,beamDiv,vertex/g_stddev"
+MakeOneComparison "test_formulae_graph.root" "theta_x_two_arm_regr_LRavg, th_x/pitch,beamDiv,vertex/g_stddev"
+
+MakeOneComparison "test_formulae_graph.root" "theta_y_one_pot_hit_L1F, th_y_L/pitch,beamDiv,vertex/g_stddev"
+MakeOneComparison "test_formulae_graph.root" "theta_y_one_arm_hit, th_y_L/pitch,beamDiv,vertex/g_stddev"
+MakeOneComparison "test_formulae_graph.root" "theta_y_two_arm_hit_LRavg, th_y/pitch,beamDiv,vertex/g_stddev"
+
+MakeOneComparison "test_formulae_graph.root" "vtx_x_two_arm_regr_LRavg, vtx_x/pitch,beamDiv,angle/g_stddev"
+
+MakeOneComparison "test_formulae_graph.root" "vtx_y_two_arm_regr_LRavg, vtx_y/pitch,beamDiv,angle/g_stddev"
+
+MakeOneComparison "test_formulae_correlation.root" "theta_x_one_pot_hit_LR2F/pitch,beamDiv,vertex/th_x=5.00E-05,th_y=5.00E-05,vtx_x=0.00E+00/h2_scatter"
