@@ -137,6 +137,8 @@ function MainAnalysisComparison()
 	if [ "$reference_directory" == "none" ]
 	then
 		echo "<li>not run - missing reference</li>" >> "$report"
+
+		return 1
 	else
 		MakeOneComparison "alignment.root" "global/L_1_F/a"
 		MakeOneComparison "alignment.root" "global/L_1_F/b"
@@ -202,6 +204,8 @@ function MainAnalysisComparison()
 			echo "<ul>" >> "$report"
 			echo -e "$failed_comparisons" >> "$report"
 			echo "</ul>" >> "$report"
+
+			return 2
 		fi
 	fi
 }
