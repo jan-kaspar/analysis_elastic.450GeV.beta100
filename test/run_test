@@ -43,15 +43,8 @@ else
 fi
 
 # compile everything
-make -j8 || exit 3
-
-for mkf in `find . -name *makefile|grep -v OLD`
-do
-	dir=${mkf%/makefile}
-
-	echo "-------------------- BUILDING $dir --------------------"
-	make -C "$dir" -j8 || exit 3
-done
+./configure || exit 3
+make -j8 || exit 4
 
 echo "* compilation OK" >> "$log_short"
 

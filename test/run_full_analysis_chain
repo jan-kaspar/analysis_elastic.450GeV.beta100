@@ -10,8 +10,6 @@ done
 make clean || exit 1
 make -j8 || exit 2
 
-make -C "data" || exit 3
-
 # re-run everything
 datasets="data/fill*/Totem1"
 
