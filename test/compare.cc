@@ -81,10 +81,12 @@ int CompareGraphs(TGraph *g1, TGraph *g2, const string& plot_fn)
     {
         unique_ptr<TCanvas> c = NewDefaultCanvas();
 
+        g1->SetLineStyle(1);
         g1->SetLineColor(2);
         g1->SetMarkerColor(2);
         g1->Draw("alp");
 
+        g2->SetLineStyle(2);
         g2->SetLineColor(4);
         g2->SetMarkerColor(4);
         g2->Draw("lp");
@@ -156,9 +158,11 @@ int CompareHistograms1D(TH1 *h1, TH1 *h2, const string &plot_fn)
     {
         unique_ptr<TCanvas> c = NewDefaultCanvas();
 
+        h1->SetLineStyle(1);
         h1->SetLineColor(2);
         h1->Draw("");
 
+        h2->SetLineStyle(2);
         h2->SetLineColor(4);
         h2->Draw("same");
 
