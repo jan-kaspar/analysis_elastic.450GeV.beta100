@@ -195,10 +195,10 @@ void BuildThBinning()
 		if (x != 0E-6)
 			edges.push_front(-x);
 
-		if (x > 400E-6)
+		if (x > 480E-6)
 			break;
 
-		x += 5.000000E-06 + -1.071429E-02 * x + 3.214286E+03 * x*x;
+		x += 20E-6;
 	}
 
 	th_x_binning_edges_1d = new double[edges.size()];
@@ -211,9 +211,10 @@ void BuildThBinning()
 	for (double y = 0E-6; ; )
 	{
 		edges.push_back(y);
-		if (y > 130E-6)
+		if (y > 160E-6)
 			break;
-		y += 2.000000E-06 + 4.166667E-03 * y + 4.427083E+07 * y*y*y;
+
+		y += (y > 30E-6) ? 10./120 * (y - 30E-6) + 5E-6 : 5E-6;
 	}
 
 	th_y_binning_edges_1d = new double[edges.size()];
@@ -229,12 +230,10 @@ void BuildThBinning()
 		if (x != 0E-6)
 			edges.push_front(-x);
 
-		if (x > 400E-6)
+		if (x > 480E-6)
 			break;
 
-		//x += 5.000000E-06 + -1.071429E-02 * x + 3.214286E+03 * x*x;
-		//x += 5.000000E-06 + -4.761905E-04 * x + 3.476190E+03 * x*x;
-		x += 5.000000E-06 + 5.155844E-02 * x + 2.467532E+03 * x*x;
+		x += 50E-6;
 	}
 
 	th_x_binning_edges_2d = new double[edges.size()];
@@ -250,11 +249,10 @@ void BuildThBinning()
 	for (double y = 0E-6; ; )
 	{
 		edges.push_back(y);
-		if (y > 130E-6)
+		if (y > 160E-6)
 			break;
 
-		//y += 2.000000E-06 + 4.166667E-03 * y + 4.427083E+07 * y*y*y;
-		y += 2.000000E-06 + 2.083333E-02 * y + 4.166667E+07 * y*y*y;
+		y += (y > 30E-6) ? 10./120 * (y - 30E-6) + 5E-6 : 5E-6;
 	}
 
 	printf("\n");
