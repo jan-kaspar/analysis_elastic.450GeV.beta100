@@ -4,18 +4,18 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[], fills[];
-//datasets.push("DS-fill7280/Totem1"); fills.push("7280");
-datasets.push("DS-fill7281/Totem1"); fills.push("7281");
-//datasets.push("DS-fill7282/Totem1"); fills.push("7282");
-//datasets.push("DS-fill7283/Totem1"); fills.push("7283");
-//datasets.push("DS-fill7284/Totem1"); fills.push("7284");
-//datasets.push("DS-fill7285/Totem1"); fills.push("7285");
-//datasets.push("DS-fill7286/Totem1"); fills.push("7286");
-//datasets.push("DS-fill7287/Totem1"); fills.push("7287");
-//datasets.push("DS-fill7288/Totem1"); fills.push("7288");
-//datasets.push("DS-fill7289/Totem1"); fills.push("7289");
-//datasets.push("DS-fill7290/Totem1"); fills.push("7290");
-datasets.push("DS-fill7291/Totem1"); fills.push("7291");
+//datasets.push("data/fill7280/Totem1"); fills.push("7280");
+datasets.push("data/fill7281/Totem1"); fills.push("7281");
+//datasets.push("data/fill7282/Totem1"); fills.push("7282");
+//datasets.push("data/fill7283/Totem1"); fills.push("7283");
+//datasets.push("data/fill7284/Totem1"); fills.push("7284");
+//datasets.push("data/fill7285/Totem1"); fills.push("7285");
+//datasets.push("data/fill7286/Totem1"); fills.push("7286");
+//datasets.push("data/fill7287/Totem1"); fills.push("7287");
+//datasets.push("data/fill7288/Totem1"); fills.push("7288");
+datasets.push("data/fill7289/Totem1"); fills.push("7289");
+//datasets.push("data/fill7290/Totem1"); fills.push("7290");
+datasets.push("data/fill7291/Totem1"); fills.push("7291");
 
 string diagonals[];
 diagonals.push("45b_56t");
@@ -31,7 +31,7 @@ xSizeDef = 6cm;
 ySizeDef = 5cm;
 //yTicksDef = RightTicks(5., 1.);
 //xTicks=LeftTicks(format="$$", 20., 10.)
-xTicksDef = LeftTicks(50., 10.);
+xTicksDef = LeftTicks(200., 100.);
 
 int gx=0, gy=0;
 
@@ -75,7 +75,7 @@ for (int dsi : datasets.keys)
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
 			draw(scale(1e6, 1e6*sgn), RootGetObject(f, d+"/th_x, th_y dependence/h_simple_ratio_vs_th_x_th_y"), "def");
 
-			limits((-150, 0), (150, 110), Crop);
+			limits((-450, 0), (+450, 150), Crop);
 		}
 	}
 }

@@ -5,17 +5,17 @@ string topDir = "../../";
 
 string datasets[], fills[];
 //datasets.push("DS-fill7280/Totem1"); fills.push("7280");
-datasets.push("DS-fill7281/Totem1"); fills.push("7281");
-//datasets.push("DS-fill7282/Totem1"); fills.push("7282");
-//datasets.push("DS-fill7283/Totem1"); fills.push("7283");
-//datasets.push("DS-fill7284/Totem1"); fills.push("7284");
-//datasets.push("DS-fill7285/Totem1"); fills.push("7285");
-//datasets.push("DS-fill7286/Totem1"); fills.push("7286");
-//datasets.push("DS-fill7287/Totem1"); fills.push("7287");
-//datasets.push("DS-fill7288/Totem1"); fills.push("7288");
-//datasets.push("DS-fill7289/Totem1"); fills.push("7289");
-//datasets.push("DS-fill7290/Totem1"); fills.push("7290");
-//datasets.push("DS-fill7291/Totem1"); fills.push("7291");
+datasets.push("data/fill7281/Totem1"); fills.push("7281");
+//datasets.push("data/fill7282/Totem1"); fills.push("7282");
+//datasets.push("data/fill7283/Totem1"); fills.push("7283");
+//datasets.push("data/fill7284/Totem1"); fills.push("7284");
+//datasets.push("data/fill7285/Totem1"); fills.push("7285");
+//datasets.push("data/fill7286/Totem1"); fills.push("7286");
+//datasets.push("data/fill7287/Totem1"); fills.push("7287");
+//datasets.push("data/fill7288/Totem1"); fills.push("7288");
+datasets.push("data/fill7289/Totem1"); fills.push("7289");
+//datasets.push("data/fill7290/Totem1"); fills.push("7290");
+datasets.push("data/fill7291/Totem1"); fills.push("7291");
 
 string diagonals[];
 diagonals.push("45b_56t");
@@ -39,7 +39,7 @@ TF1_nPoints = 4;
 
 for (int dsi : datasets.keys)
 {
-	real rp_eff_cen[] = { 0.96, 0.98, 0.97, 0.95};
+	real rp_eff_cen[] = { 0.96, 0.98, 0.97, 0.98};
 	//if (datasets[dsi] == "DS2a")
 	//	rp_eff_cen = new real[] { 0.95, 0.98, 0.98, 0.96 };
 
@@ -91,7 +91,7 @@ for (int dsi : datasets.keys)
 				+ format("$\pm %#.1f) \un{rad^{-1}}$", fit.rExec("GetParError", 1));
 			label(slope_label, (60, y), red, Fill(white));
 
-			limits((0, 100*rp_eff_cen[rpi] - 2), (110, 100*rp_eff_cen[rpi] + 2), Crop);
+			limits((0, 100*rp_eff_cen[rpi] - 2), (150, 100*rp_eff_cen[rpi] + 2), Crop);
 			fLegend = BuildLegend();
 		}
 
