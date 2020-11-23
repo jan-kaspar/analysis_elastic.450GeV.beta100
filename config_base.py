@@ -161,16 +161,16 @@ cfg.anal.si_th_x_2arm_unc = -999.
 
 cfg_45b_56t = cfg.clone(
   anal = dict(
-    cut1_a = 1., cut1_c = +4E-6, cut1_si = 35E-6,
+    cut1_a = 1., cut1_c = +0E-6, cut1_si = 35E-6,
     cut2_a = 1., cut2_c = -1.5E-6, cut2_si = 8E-6,
 
-    cut5_a = 0.105, cut5_c = -0.02, cut5_si = 0.08,
+    cut5_a = 0.105, cut5_c = -0.04, cut5_si = 0.08,
     cut6_a = 0.105, cut6_c = +0.03, cut6_si = 0.08,
 
-    cut7_a = 0., cut7_c = -0.02, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = +0.30, cut8_si = 2.8,
+    cut7_a = 0., cut7_c = +0.04, cut7_si = 0.55,
+    cut8_a = 0., cut8_c = +0.50, cut8_si = 2.8,
 
-    cut9_a = -0.28, cut9_c = +0.02, cut9_si = 0.14,
+    cut9_a = -0.28, cut9_c = +0.00, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = +0.02, cut10_si = 0.14,
 
     fc_L = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
@@ -186,16 +186,16 @@ cfg_45b_56t = cfg.clone(
 
 cfg_45t_56b = cfg.clone(
   anal = dict(
-    cut1_a = 1., cut1_c = -7E-6, cut1_si = 34E-6,
+    cut1_a = 1., cut1_c = -3E-6, cut1_si = 34E-6,
     cut2_a = 1., cut2_c = +0.5E-6, cut2_si = 8E-6,
 
-    cut5_a = 0.105, cut5_c = -0.01, cut5_si = 0.08,
-    cut6_a = 0.105, cut6_c = -0.06, cut6_si = 0.08,
+    cut5_a = 0.105, cut5_c = -0.02, cut5_si = 0.08,
+    cut6_a = 0.105, cut6_c = -0.07, cut6_si = 0.08,
 
-    cut7_a = 0., cut7_c = -0.04, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = -0.20, cut8_si = 2.8,
+    cut7_a = 0., cut7_c = -0.09, cut7_si = 0.55,
+    cut8_a = 0., cut8_c = -0.14, cut8_si = 2.8,
 
-    cut9_a = -0.28, cut9_c = +0.00, cut9_si = 0.14,
+    cut9_a = -0.28, cut9_c = +0.01, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = -0.02, cut10_si = 0.14,
 
     fc_L = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
