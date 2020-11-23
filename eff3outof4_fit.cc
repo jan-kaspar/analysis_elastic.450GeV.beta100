@@ -86,8 +86,8 @@ int main(int argc, const char **argv)
 	{
 		printf("\n\n------------------------------ %s ------------------------------\n", diagonals[dgni].c_str());
 	
-		const double th_y_min = 20E-6;
-		const double th_y_max = 200E-6;
+		const double th_y_min = 40E-6;
+		const double th_y_max = 140E-6;
 		
 		printf("th_y_min = %E\n", th_y_min);
 		printf("th_y_max = %E\n", th_y_max);
@@ -127,6 +127,7 @@ int main(int argc, const char **argv)
 
 			pol1->SetRange(th_y_min, th_y_max);
 			h_eff->Fit(pol1, "", "", th_y_min, th_y_max);
+			pol1->FixParameter(1, 0.);
 			pol1->Write();
 		}
 	}
