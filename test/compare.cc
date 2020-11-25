@@ -2,6 +2,7 @@
 #include "TGraph.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TF1.h"
 #include "TCanvas.h"
 
 #include <string>
@@ -26,6 +27,59 @@ std::tuple<double, bool, bool> CompareValues(const double v1, const double v2)
 unique_ptr<TCanvas> NewDefaultCanvas()
 {
     return make_unique<TCanvas>("cmp", "", 2048, 1536);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+const string title = "(1) blue solid, (2) red dashed";
+
+void SetStyle(TObject *o, unsigned int style)
+{
+    int color = 0;
+    int lineStyle = 0;
+    int width = 2;
+
+    if (style == 1)
+    {
+        color = 4;
+        lineStyle = 1;
+    }
+
+    if (style == 2)
+    {
+        color = 2;
+        lineStyle = 2;
+    }
+
+    if (o->InheritsFrom("TGraph"))
+    {
+        TGraph *g = (TGraph *) o;
+        g->SetLineStyle(lineStyle);
+        g->SetLineColor(color);
+        g->SetMarkerColor(color);
+        g->SetLineWidth(width);
+
+        for (auto *o : * g->GetListOfFunctions())
+           SetStyle(o, style) ;
+    }
+
+    if (o->InheritsFrom("TH1"))
+    {
+        TH1 *h = (TH1 *) o;
+        h->SetLineStyle(lineStyle);
+        h->SetLineColor(color);
+        h->SetLineWidth(width);
+
+        for (auto *o : * h->GetListOfFunctions())
+           SetStyle(o, style) ;
+    }
+
+    if (o->InheritsFrom("TF1"))
+    {
+        TF1 *f = (TF1 *) o;
+        f->SetLineStyle(lineStyle);
+        f->SetLineColor(color);
+    }
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -81,14 +135,11 @@ int CompareGraphs(TGraph *g1, TGraph *g2, const string& plot_fn)
     {
         unique_ptr<TCanvas> c = NewDefaultCanvas();
 
-        g1->SetLineStyle(1);
-        g1->SetLineColor(2);
-        g1->SetMarkerColor(2);
+        SetStyle(g1, 1);
+        g1->SetTitle(title.c_str());
         g1->Draw("alp");
 
-        g2->SetLineStyle(2);
-        g2->SetLineColor(4);
-        g2->SetMarkerColor(4);
+        SetStyle(g2, 2);
         g2->Draw("lp");
 
         c->SaveAs(plot_fn.c_str());
@@ -158,12 +209,11 @@ int CompareHistograms1D(TH1 *h1, TH1 *h2, const string &plot_fn)
     {
         unique_ptr<TCanvas> c = NewDefaultCanvas();
 
-        h1->SetLineStyle(1);
-        h1->SetLineColor(2);
+        SetStyle(h1, 1);
+        h1->SetTitle(title.c_str());
         h1->Draw("");
 
-        h2->SetLineStyle(2);
-        h2->SetLineColor(4);
+        SetStyle(h2, 2);
         h2->Draw("same");
 
         c->SaveAs(plot_fn.c_str());
@@ -267,9 +317,11 @@ int CompareHistograms2D(TH2 *h_1, TH2 *h_2, const string &plot_fn)
         c->Divide(2, 1);
 
         c->cd(1);
+        h_1->SetTitle("(1)");
         h_1->Draw("colz");
 
         c->cd(2);
+        h_2->SetTitle("(2)");
         h_2->Draw("colz");
 
         c->SaveAs(plot_fn.c_str());
