@@ -18,7 +18,7 @@ function MakeFilesOne()
 		then
 			buffer="$buffer,\n"
 		fi
-		buffer="$buffer    \"root://eostotem.cern.ch//$eos_dir/$file\""
+		buffer="$buffer  \"root://eostotem.cern.ch//$eos_dir/$file\""
 
 	done
 
@@ -27,25 +27,16 @@ function MakeFilesOne()
 		return
 	fi
 
-	# make config
+	# make list of files
 	mkdir -p "$dir"
 
-	if [ ! -f "$dir/config.py" ]
-	then
-		(
-			echo "import sys"
-			echo "import os"
-			echo "import FWCore.ParameterSet.Config as cms"
-			echo ""
-			echo "sys.path.append(os.path.relpath(\"../\"))"
-			echo "from config_common import *"
-			echo ""
-			echo "for c in all_cfg:"
-			echo "  c.input_files = cms.vstring("
-			echo -e "$buffer"
-			echo "  )"
-		) > "$dir/config.py"
-	fi
+	(
+		echo "import FWCore.ParameterSet.Config as cms"
+		echo ""
+		echo "input_files = cms.vstring("
+		echo -e "$buffer"
+		echo ")"
+	) > "$dir/input_files.py"
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -72,9 +63,9 @@ function MakeFiles()
 	fi
 
 	# make per stream configs
-	MakeFilesOne "$dir/Totem1" "$eos_dir_base/Totem1/version3" "$run_sel"
-	MakeFilesOne "$dir/ZeroBias" "$eos_dir_base/ZeroBias/version2" "$run_sel"
-	MakeFilesOne "$dir/EmptyBX" "$eos_dir_base/EmptyBX/version1" "$run_sel"
+	MakeFilesOne "$dir/Totem1" "$eos_dir_base/Totem1/version5" "$run_sel"
+	MakeFilesOne "$dir/ZeroBias" "$eos_dir_base/ZeroBias/version5" "$run_sel"
+	MakeFilesOne "$dir/EmptyBX" "$eos_dir_base/EmptyBX/version5" "$run_sel"
 }
 
 #----------------------------------------------------------------------------------------------------
