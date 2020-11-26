@@ -1471,13 +1471,13 @@ int main(int argc, const char **argv)
 	printf("\n");
 	for (auto &p : lumiSectionBoundaries)
 	{
-		printf("run = %u, LS = %u: from %u to %u\n", p.first.first, p.first.second, p.second.first, p.second.second);
+		printf("LS boundary: run = %u, LS = %u, from %u to %u\n", p.first.first, p.first.second, p.second.first, p.second.second);
 	}
 
 	printf("\n");
 	for (auto &p : runTimestampBoundaries)
 	{
-		printf("run %u: from %u to %u\n", p.first, p.second.first, p.second.second);
+		printf("run boundary: run %u, from %u to %u\n", p.first, p.second.first, p.second.second);
 	}
 
 	printf(">> th_min = %E\n", th_min);
