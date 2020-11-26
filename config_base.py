@@ -28,8 +28,38 @@ cfg = cms.PSet(
 
   anal = cms.PSet(
     excl_timeIntervals = cms.VPSet(
-      cms.PSet(first=cms.uint32(112100), second=cms.uint32(112400)),
-      cms.PSet(first=cms.uint32(115000), second=cms.uint32(117000))
+      # fill 7280, high PU prob
+      cms.PSet(first=cms.uint32(78680), second=cms.uint32(79259)),
+      cms.PSet(first=cms.uint32(79920), second=cms.uint32(79979)),
+      cms.PSet(first=cms.uint32(80640), second=cms.uint32(81059)),
+      cms.PSet(first=cms.uint32(84840), second=cms.uint32(84964)),
+
+      # fill 7281, high PU prob
+      cms.PSet(first=cms.uint32(93360), second=cms.uint32(93479)),
+      cms.PSet(first=cms.uint32(94440), second=cms.uint32(94499)),
+
+      # fill 7282
+      cms.PSet(first=cms.uint32(105700), second=cms.uint32(105899)), # high PU prob
+      cms.PSet(first=cms.uint32(107520), second=cms.uint32(107556)), # high PU prob
+      cms.PSet(first=cms.uint32(112100), second=cms.uint32(112400)), # th_y resolution degraded
+      cms.PSet(first=cms.uint32(112380), second=cms.uint32(112559)), # high PU prob
+      cms.PSet(first=cms.uint32(115000), second=cms.uint32(117000)), # th_y resolution degraded
+
+      # fill 7284, high PU prob
+      cms.PSet(first=cms.uint32(131220), second=cms.uint32(131339)),
+      cms.PSet(first=cms.uint32(133920), second=cms.uint32(134339)),
+      cms.PSet(first=cms.uint32(137640), second=cms.uint32(137759)),
+      cms.PSet(first=cms.uint32(141420), second=cms.uint32(141659)),
+
+      # fill 7285, high PU prob
+      cms.PSet(first=cms.uint32(150480), second=cms.uint32(150634)),
+      cms.PSet(first=cms.uint32(152340), second=cms.uint32(152969)),
+
+      # fill 7289, high PU prob
+      cms.PSet(first=cms.uint32(206000), second=cms.uint32(206099)),
+
+      # fill 7291, high PU prob
+      cms.PSet(first=cms.uint32(233078), second=cms.uint32(233099)),
     ),
 
     excl_bunches = cms.vuint32(),
