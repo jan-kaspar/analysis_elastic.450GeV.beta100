@@ -52,10 +52,10 @@ for (int dsi : f_datasets.keys)
 	{
 		string dgn = diagonals[di];
 
-		real y_max = 0.15;
+		real y_max = 0.10;
 		
 		NewPad("time$\ung{h}$", "destructive pile-up probability");
-		DrawBands(fills[dsi], bands="run", labels="ds", 0, y_max);
+		DrawBands(fills[dsi], bands="run", labels="run", 0, y_max);
 		
 		for (int ci : criteria.keys)
 		{
