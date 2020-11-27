@@ -17,5 +17,15 @@ do
 
         echo "AddRun(\"$fill\", $run, $from, $to);"
     done
+
+    cat $d/Totem1/distributions_45b_56t.log | grep "excl boundary" | while read line
+    do
+        from=`echo $line|awk '{print $4}'`
+        to=`echo $line|awk '{print $6}'`
+
+        run=${run%,}
+
+        echo "AddExcl(\"$fill\", $from, $to);"
+    done
 done
 
