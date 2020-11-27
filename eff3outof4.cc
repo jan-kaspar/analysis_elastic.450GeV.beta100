@@ -12,10 +12,6 @@
 
 using namespace std;
 
-// th_x cut
-double th_x_min = -200E-6;
-double th_x_max = +200E-6;
-
 //----------------------------------------------------------------------------------------------------
 
 struct HistGroup
@@ -23,12 +19,8 @@ struct HistGroup
 	TH1D *de_th_x, *de_th_y;
 	TH1D *th_x;
 	TH1D *th_y;
-	TH1D *th_y_xcut;
 	TH2D *th_x_th_y;
 	TH1D *t;
-
-	// map: period --> th_y histogram with th_x cut
-	map<signed int, TH1D *> p_th_y_xcut;
 
 	void Init()
 	{
@@ -40,7 +32,6 @@ struct HistGroup
 
 		th_x = new TH1D("", ";#theta_{x}", th_x_binning_n_1d, th_x_binning_edges_1d);
 		th_y = new TH1D("", ";#theta_{y}", th_y_binning_n_1d, th_y_binning_edges_1d);
-		th_y_xcut = new TH1D("", ";#theta_{y}", th_y_binning_n_1d, th_y_binning_edges_1d);
 
 		th_x_th_y = new TH2D("", ";#theta_{x};#theta_{y}", th_x_binning_n_2d, th_x_binning_edges_2d,
 			th_y_binning_n_2d, th_y_binning_edges_2d);
@@ -52,7 +43,7 @@ struct HistGroup
 		delete [] bin_edges;
 	}
 
-	void Fill(double thx, double thy, signed int period)
+	void Fill(double thx, double thy)
 	{
 		if (!th_x)
 			Init();
@@ -62,23 +53,7 @@ struct HistGroup
 		
 		th_x_th_y->Fill(thx, fabs(thy));
 
-		if (thx > th_x_min && thx < th_x_max)
-		{
-			th_y_xcut->Fill(fabs(thy));
-
-			map<signed int, TH1D *>::iterator it = p_th_y_xcut.find(period);
-			if (it == p_th_y_xcut.end())
-			{
-				it = p_th_y_xcut.insert(pair<signed int, TH1D *>(period,
-						new TH1D("", ";#theta_{y}", 100, 0E-6, 200E-6)
-						)).first;
-			}
-			it->second->Fill(fabs(thy));
-		}
-
-		double p = 6.5E3;
-		double t_val = p*p * (thx*thx + thy*thy);
-
+		const double t_val = env.p*env.p * (thx*thx + thy*thy);
 		t->Fill(t_val);
 	}
 
@@ -303,24 +278,21 @@ int main(int argc, const char **argv)
 			h_al = h_al.ApplyAlignment(alData);
 		}
 
-		// period
-		signed int period = int((ev.timestamp - anal.alignment_t0) / anal.alignment_ts);
-
 		// loop over tested RP combinations
 		for (unsigned int rpi = 0; rpi < rps.size(); rpi++)
 		{
 			// determine which pots are selected for event definition
-			bool L_2_F = (rps[rpi].find("L_2_F") == string::npos);
-			bool L_1_F = (rps[rpi].find("L_1_F") == string::npos);
-			bool R_1_F = (rps[rpi].find("R_1_F") == string::npos);
-			bool R_2_F = (rps[rpi].find("R_2_F") == string::npos);
+			const bool L_2_F = (rps[rpi].find("L_2_F") == string::npos);
+			const bool L_1_F = (rps[rpi].find("L_1_F") == string::npos);
+			const bool R_1_F = (rps[rpi].find("R_1_F") == string::npos);
+			const bool R_2_F = (rps[rpi].find("R_2_F") == string::npos);
 
 			// tracks in all selected RPs?
 			if ( (L_2_F && !ev.h.L_2_F.v) || (L_1_F && !ev.h.L_1_F.v) || (R_1_F && !ev.h.R_1_F.v) || (R_2_F && !ev.h.R_2_F.v) )
 				continue;
 			
 			// tracks in all 4/4 RPs?
-			bool allTracks = ev.h.L_2_F.v && ev.h.L_1_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
+			const bool allTracks = ev.h.L_2_F.v && ev.h.L_1_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
 
 			// calculate elastic kinematics for the selected tracks
 			double th_y_L_sel = 0., th_x_L_sel = 0., norm_L = 0.;
@@ -333,26 +305,26 @@ int main(int argc, const char **argv)
 			if (R_1_F) { norm_R += 1.; th_x_R_sel += +h_al.R_1_F.x / env.L_x_R_1_F; th_y_R_sel += +h_al.R_1_F.y / env.L_y_R_1_F; }
 			th_x_R_sel /= norm_R; th_y_R_sel /= norm_R;
 
-			double th_x_sel = (th_x_R_sel + th_x_L_sel) / 2.;
-			double th_y_sel = (th_y_R_sel + th_y_L_sel) / 2.;
+			const double th_x_sel = (th_x_R_sel + th_x_L_sel) / 2.;
+			const double th_y_sel = (th_y_R_sel + th_y_L_sel) / 2.;
 
-			double de_th_x_sel = th_x_R_sel - th_x_L_sel;
-			double de_th_y_sel = th_y_R_sel - th_y_L_sel;
+			const double de_th_x_sel = th_x_R_sel - th_x_L_sel;
+			const double de_th_y_sel = th_y_R_sel - th_y_L_sel;
 	
 			// cuts on elastic kinematics at various sigma-levels
 			for (unsigned int nsi = 0; nsi < n_si.size(); nsi++)
 			{
 				h_sel[rpi][nsi].FillDelta(de_th_x_sel, de_th_y_sel);
 			
-				bool cut_th_x = (fabs(de_th_x_sel) < n_si[nsi] * si_de_th_x);
-				bool cut_th_y = (fabs(de_th_y_sel) < n_si[nsi] * si_de_th_y);
+				const bool cut_th_x = (fabs(de_th_x_sel) < n_si[nsi] * si_de_th_x);
+				const bool cut_th_y = (fabs(de_th_y_sel) < n_si[nsi] * si_de_th_y);
 
 				if (cut_th_x && cut_th_y)
 				{
-					h_sel[rpi][nsi].Fill(th_x_sel, th_y_sel, period);
+					h_sel[rpi][nsi].Fill(th_x_sel, th_y_sel);
 			
 					if (allTracks)
-						h_full[rpi][nsi].Fill(th_x_sel, th_y_sel, period);
+						h_full[rpi][nsi].Fill(th_x_sel, th_y_sel);
 				}
 			}
 		}
@@ -397,11 +369,11 @@ int main(int argc, const char **argv)
 			h_full[rpi][nsi].th_x->Draw("same");
 			c->Write("th_x comparison");
 
-			TH1D *h_simple_ratio_vs_th_x = MakeSimpleRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -30E-6, 30E-6, false);
+			TH1D *h_simple_ratio_vs_th_x = MakeSimpleRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -300E-6, 300E-6, false);
 			h_simple_ratio_vs_th_x->SetName("h_simple_ratio.th_x");
 			h_simple_ratio_vs_th_x->Write();
 
-			TH1D *h_refined_ratio_vs_th_x = MakeRefinedRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -30E-6, 30E-6, false);
+			TH1D *h_refined_ratio_vs_th_x = MakeRefinedRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -300E-6, 300E-6, false);
 			h_refined_ratio_vs_th_x->SetName("h_refined_ratio.th_x");
 			h_refined_ratio_vs_th_x->Write();
 
@@ -420,36 +392,13 @@ int main(int argc, const char **argv)
 			h_full[rpi][nsi].th_y->Draw("same");
 			c->Write("th_y comparison");
 
-			TH1D *h_simple_ratio_vs_th_y = MakeSimpleRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 10E-6, 90E-6, false);
+			TH1D *h_simple_ratio_vs_th_y = MakeSimpleRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 30E-6, 150E-6, false);
 			h_simple_ratio_vs_th_y->SetName("h_simple_ratio.th_y");
 			h_simple_ratio_vs_th_y->Write();
 
-			TH1D *h_refined_ratio_vs_th_y = MakeRefinedRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 10E-6, 90E-6, false);
+			TH1D *h_refined_ratio_vs_th_y = MakeRefinedRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 30E-6, 150E-6, false);
 			h_refined_ratio_vs_th_y->SetName("h_refined_ratio.th_y");
 			h_refined_ratio_vs_th_y->Write();
-
-			//--------------------
-
-			gDirectory = nsiDir->mkdir("th_y dependence with th_x cut");
-			printf("\tth_y dependence with th_x cut\n");
-			c = new TCanvas();
-			h_sel[rpi][nsi].th_y_xcut->SetName("h_sel.th_y");
-			h_sel[rpi][nsi].th_y_xcut->Sumw2();
-			h_sel[rpi][nsi].th_y_xcut->SetLineColor(2);
-			h_sel[rpi][nsi].th_y_xcut->Draw();
-			h_full[rpi][nsi].th_y_xcut->SetName("h_full.th_y");
-			h_full[rpi][nsi].th_y_xcut->Sumw2();
-			h_full[rpi][nsi].th_y_xcut->SetLineColor(4);
-			h_full[rpi][nsi].th_y_xcut->Draw("same");
-			c->Write("th_y comparison");
-
-			TH1D *h_simple_ratio_vs_th_y_cut = MakeSimpleRatio(h_full[rpi][nsi].th_y_xcut, h_sel[rpi][nsi].th_y_xcut, ff, 10E-6, 90E-6, true);
-			h_simple_ratio_vs_th_y_cut->SetName("h_simple_ratio.th_y");
-			h_simple_ratio_vs_th_y_cut->Write();
-
-			TH1D *h_refined_ratio_vs_th_y_cut = MakeRefinedRatio(h_full[rpi][nsi].th_y_xcut, h_sel[rpi][nsi].th_y_xcut, ff, 10E-6, 90E-6, true);
-			h_refined_ratio_vs_th_y_cut->SetName("h_refined_ratio.th_y");
-			h_refined_ratio_vs_th_y_cut->Write();
 
 			//--------------------
 
@@ -465,62 +414,6 @@ int main(int argc, const char **argv)
 			
 			//--------------------
 			
-			gDirectory = nsiDir->mkdir("th_y dependence with th_x cut, per period");
-			map<signed int, TH1D *> &m_sel = h_sel[rpi][nsi].p_th_y_xcut;
-			map<signed int, TH1D *> &m_full = h_full[rpi][nsi].p_th_y_xcut;
-
-			TGraphErrors *g_eff_vs_time = new TGraphErrors();
-			g_eff_vs_time->SetName("g_eff_vs_time");
-
-			TF1 *f_const = new TF1("f_const", "[0]");
-			
-			for (map<signed int, TH1D *>::iterator it = m_sel.begin(); it != m_sel.end(); ++it)
-			{
-				signed int period = it->first;
-				double timestamp = (double(period) + 0.5) * anal.alignment_ts + anal.alignment_t0;
-
-				TH1D *h_sel = m_sel[period];
-				TH1D *h_full = m_full[period];
-
-				if (!h_sel || !h_full)
-					continue;
-
-				TH1D *h_ratio = new TH1D(*h_full);
-				for (int bi = 1; bi < h_ratio->GetNbinsX(); bi++)
-				{
-					double N_sel = h_sel->GetBinContent(bi);
-					double N_full = h_full->GetBinContent(bi);
-					double p = (N_sel > 0.) ? N_full / N_sel : 0.;
-					double v = p * (1. - p);
-					double s = (v > 0. && N_sel > 0.) ? sqrt(v / N_sel) : 0.;
-
-					h_ratio->SetBinContent(bi, p);
-					h_ratio->SetBinError(bi, s);
-				}
-
-				h_ratio->Fit(f_const, "Q", "", 10E-6, 90E-6);
-
-				double eff = f_const->GetParameter(0);
-				double eff_u = f_const->GetParError(0);
-				
-				char buf[100];
-				sprintf(buf, "h_ratio, period=%i", period);
-				h_ratio->SetName(buf);
-				h_ratio->Write();
-
-				delete h_ratio;
-
-				int idx = g_eff_vs_time->GetN();
-				g_eff_vs_time->SetPoint(idx, timestamp, eff);
-				g_eff_vs_time->SetPointError(idx, 0., eff_u);
-			}
-
-			g_eff_vs_time->Write();
-
-			delete f_const;
-
-			//--------------------
-
 			gDirectory = nsiDir->mkdir("t dependence");
 			printf("\tt dependence\n");
 			c = new TCanvas();
