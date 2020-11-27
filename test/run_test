@@ -77,7 +77,7 @@ function MainAnalysis()
 	./run -wait "eff3outof4_details.cc" "data/$ds" || return 24
 	./run -wait "eff3outof4_fit.cc" "data/$ds" || return 25
 
-	./run -wait "pileup.cc" "data/$ds" || return 26
+	./run -wait "pileup.cc" "data/$ds/../ZeroBias" || return 26
 
 	#./run -wait "unfolding_cf_mc.cc" "data/$ds" || return 27
 	./run -wait "unfolding_cf_ni.cc" "data/$ds" || return 28
