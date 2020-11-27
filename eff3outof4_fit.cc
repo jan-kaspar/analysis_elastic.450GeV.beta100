@@ -112,7 +112,7 @@ int main(int argc, const char **argv)
 			TDirectory *unitDir = dgnDir->mkdir(units[ui].c_str());
 			gDirectory = unitDir;
 
-			TH1D *h_eff = (TH1D *) f_in->Get(("excluded RPs "+units[ui]+"/n_si 3.0/th_y dependence with th_x cut/h_refined_ratio.th_y").c_str());
+			TH1D *h_eff = (TH1D *) f_in->Get(("excluded RPs "+units[ui]+"/n_si 3.0/th_y dependence/h_refined_ratio.th_y").c_str());
 			if (h_eff == nullptr)
 			{
 				printf("ERROR: can't load h_eff for unit '%s'.\n", units[ui].c_str());
