@@ -6,19 +6,17 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string fills[], f_datasets[];
-/*
 f_datasets.push("data/fill7280/ZeroBias"); fills.push("7280");
 f_datasets.push("data/fill7281/ZeroBias"); fills.push("7281");
 f_datasets.push("data/fill7282/ZeroBias"); fills.push("7282");
 f_datasets.push("data/fill7283/ZeroBias"); fills.push("7283");
 f_datasets.push("data/fill7284/ZeroBias"); fills.push("7284");
 f_datasets.push("data/fill7285/ZeroBias"); fills.push("7285");
-f_datasets.push("data/fill7286/ZeroBias"); fills.push("7286");
-f_datasets.push("data/fill7287/ZeroBias"); fills.push("7287");
-f_datasets.push("data/fill7288/ZeroBias"); fills.push("7288");
+//f_datasets.push("data/fill7286/ZeroBias"); fills.push("7286");
+//f_datasets.push("data/fill7287/ZeroBias"); fills.push("7287");
+//f_datasets.push("data/fill7288/ZeroBias"); fills.push("7288");
 f_datasets.push("data/fill7289/ZeroBias"); fills.push("7289");
-f_datasets.push("data/fill7290/ZeroBias"); fills.push("7290");
-*/
+//f_datasets.push("data/fill7290/ZeroBias"); fills.push("7290");
 f_datasets.push("data/fill7291/ZeroBias"); fills.push("7291");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
