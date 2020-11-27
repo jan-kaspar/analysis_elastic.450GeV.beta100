@@ -194,8 +194,8 @@ function MainAnalysisComparison()
 		MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_1_F/h_refined_ratio.th_y"
 		MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_2_F/h_refined_ratio.th_y"
 
-		MakeOneComparison "pileup_combined.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
-		MakeOneComparison "pileup_combined.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+		MakeOneComparison "pileup_correction.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+		MakeOneComparison "pileup_correction.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
 
 		MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
 		MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
