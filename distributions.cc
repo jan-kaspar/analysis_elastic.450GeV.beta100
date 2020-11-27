@@ -499,17 +499,21 @@ int main(int argc, const char **argv)
 	ch_in->SetBranchAddress("event_num", &ev.event_num);
 
 	// get time-dependent corrections
-	TGraph *corrg_pileup = nullptr;
+	TGraph *g_input_pileup_ineff = nullptr;
 	if (anal.use_pileup_efficiency_fits)
 	{
-		string path = inputDir + "/pileup_fit_combined.root";
-		TFile *puF = TFile::Open(path.c_str());
-		if (!puF)
+		string path = inputDir + "/pileup_correction.root";
+		TFile *f_pu = TFile::Open(path.c_str());
+		if (!f_pu)
 			printf("ERROR: pile-up correction file `%s' cannot be opened.\n", path.c_str());
-		if (cfg.diagonal == d45b_56t)
-			corrg_pileup = (TGraph *) puF->Get("45b_56t/dgn");
-		if (cfg.diagonal == d45t_56b)
-			corrg_pileup = (TGraph *) puF->Get("45t_56b/dgn");
+
+		string obj_path = cfg.diagonal_str + "/dgn/pat_suff_destr && pat_suff_destr, L || R/rel";
+		g_input_pileup_ineff = (TGraph *) f_pu->Get(obj_path.c_str());
+
+		if (!g_input_pileup_ineff)
+			printf("ERROR: pile-up correction object '%s' cannot be loaded.\n", obj_path.c_str());
+
+		printf(">> using time-dependent pile-up correction: %p\n", g_input_pileup_ineff);
 	}
 
 	// get time-dependent resolution
@@ -518,12 +522,12 @@ int main(int argc, const char **argv)
 	if (anal.use_resolution_fits)
 	{
 		string path = inputDir + "/resolution_fit_" + cfg.diagonal_str + ".root";
-		TFile *resFile = TFile::Open(path.c_str());
-		if (!resFile)
+		TFile *f_res = TFile::Open(path.c_str());
+		if (!f_res)
 			printf("ERROR: resolution file `%s' cannot be opened.\n", path.c_str());
 
-		g_d_x_RMS = (TGraph *) resFile->Get("d_x/g_fits");
-		g_d_y_RMS = (TGraph *) resFile->Get("d_y/g_fits");
+		g_d_x_RMS = (TGraph *) f_res->Get("d_x/g_fits");
+		g_d_y_RMS = (TGraph *) f_res->Get("d_y/g_fits");
 
 		printf("\n>> using time-dependent resolutions: %p, %p\n", g_d_x_RMS, g_d_y_RMS);
 	}
@@ -1098,23 +1102,19 @@ int main(int argc, const char **argv)
 			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_F->Eval(k.th_y * 1E6);
 		}
 
-		double inefficiency_shower_near = anal.inefficiency_shower_near;
-
 		double inefficiency_pile_up = anal.inefficiency_pile_up;
 		if (anal.use_pileup_efficiency_fits)
-			inefficiency_pile_up = corrg_pileup->Eval(ev.timestamp);
-
-		double inefficiency_trigger = anal.inefficiency_trigger;
+			inefficiency_pile_up = g_input_pileup_ineff->Eval(ev.timestamp);
 
 		double norm_corr =
-			1./(1. - (inefficiency_3outof4 + inefficiency_shower_near))
+			1./(1. - (inefficiency_3outof4 + anal.inefficiency_shower_near))
 			* 1./(1. - inefficiency_pile_up)
-			* 1./(1. - inefficiency_trigger);
+			* 1./(1. - anal.inefficiency_trigger)
+			* 1./(1. - anal.inefficiency_DAQ);
 
 		p_norm_corr->Fill(ev.timestamp, norm_corr);
 		p_3outof4_corr->Fill(k.th_y, inefficiency_3outof4);
 
-		// TODO: add inefficiency_DAQ
 		double normalization = anal.bckg_corr * norm_corr / anal.L_int;
 
 		// data for alignment
