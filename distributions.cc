@@ -533,25 +533,24 @@ int main(int argc, const char **argv)
 	}
 
 	// get th_y* dependent efficiency correction
-	TF1 *f_3outof4_efficiency_L_F = nullptr;
-	TF1 *f_3outof4_efficiency_L_N = nullptr;
-	TF1 *f_3outof4_efficiency_R_N = nullptr;
-	TF1 *f_3outof4_efficiency_R_F = nullptr;
+	TF1 *f_3outof4_efficiency_L_2_F = nullptr;
+	TF1 *f_3outof4_efficiency_L_1_F = nullptr;
+	TF1 *f_3outof4_efficiency_R_1_F = nullptr;
+	TF1 *f_3outof4_efficiency_R_2_F = nullptr;
 	if (anal.use_3outof4_efficiency_fits)
 	{
-		// TODO: this doesn't seem good
-		string path = inputDir + "/eff3outof4_details_fit_old.root";
-		TFile *effFile = TFile::Open(path.c_str());
-		if (!effFile)
+		string path = inputDir + "/eff3outof4_fit.root";
+		TFile *f_eff = TFile::Open(path.c_str());
+		if (!f_eff)
 			printf("ERROR: 3-out-of-4 efficiency file `%s' cannot be opened.\n", path.c_str());
 
-		f_3outof4_efficiency_L_F = (TF1 *) effFile->Get( (cfg.diagonal_str + "/L_F/fit").c_str() );
-		f_3outof4_efficiency_L_N = (TF1 *) effFile->Get( (cfg.diagonal_str + "/L_N/fit").c_str() );
-		f_3outof4_efficiency_R_N = (TF1 *) effFile->Get( (cfg.diagonal_str + "/R_N/fit").c_str() );
-		f_3outof4_efficiency_R_F = (TF1 *) effFile->Get( (cfg.diagonal_str + "/R_F/fit").c_str() );
+		f_3outof4_efficiency_L_2_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/L_2_F/pol0").c_str() );
+		f_3outof4_efficiency_L_1_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/L_1_F/pol0").c_str() );
+		f_3outof4_efficiency_R_1_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/R_1_F/pol0").c_str() );
+		f_3outof4_efficiency_R_2_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/R_2_F/pol0").c_str() );
 
 		printf("\n>> using 3-out-of-4 fits: %p, %p, %p, %p\n",
-			f_3outof4_efficiency_L_F, f_3outof4_efficiency_L_N, f_3outof4_efficiency_R_N, f_3outof4_efficiency_R_F);
+			f_3outof4_efficiency_L_2_F, f_3outof4_efficiency_L_1_F, f_3outof4_efficiency_R_1_F, f_3outof4_efficiency_R_2_F);
 	}
 
 	// get unsmearing correction
@@ -1096,10 +1095,10 @@ int main(int argc, const char **argv)
 		if (anal.use_3outof4_efficiency_fits)
 		{
 			inefficiency_3outof4 = 0.;
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_F->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_N->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_N->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_F->Eval(k.th_y * 1E6);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_y * 1E6);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_y * 1E6);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_y * 1E6);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_y * 1E6);
 		}
 
 		double inefficiency_pile_up = anal.inefficiency_pile_up;
