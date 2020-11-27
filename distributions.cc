@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 #include "classes/common_event.hh"
@@ -585,8 +586,8 @@ int main(int argc, const char **argv)
 	unsigned int timestamp_bins = cfg.timestamp_max - cfg.timestamp_min + 1;
 
 	TH1D *h_timestamp_input = new TH1D("h_timestamp_input", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
+	TH1D *h_timestamp_input_kept = new TH1D("h_timestamp_input_kept", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
 	TH1D *h_timestamp_dgn = new TH1D("h_timestamp_dgn", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
-	TH1D *h_timestamp_B0 = new TH1D("h_timestamp_B0", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
 	TH1D *h_timestamp_sel = new TH1D("h_timestamp_sel", ";timestamp;rate   (Hz)", timestamp_bins, cfg.timestamp_min-0.5, cfg.timestamp_max+0.5);
 
 	TGraph *g_run_vs_timestamp = new TGraph(); g_run_vs_timestamp->SetName("g_run_vs_timestamp"); g_run_vs_timestamp->SetTitle(";timestamp;run");
@@ -969,6 +970,8 @@ int main(int argc, const char **argv)
 			rtbit->second.second = max(rtbit->second.second, ev.timestamp);
 		}
 
+		h_timestamp_input->Fill(ev.timestamp);
+
 		// check whether the event is to be skipped
 		if (anal.SkipEvent(ev.run_num, ev.lumi_section, ev.timestamp, ev.bunch_num))
 			continue;
@@ -1000,7 +1003,7 @@ int main(int argc, const char **argv)
 		// diagonal cut
 		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
 
-		h_timestamp_input->Fill(ev.timestamp);
+		h_timestamp_input_kept->Fill(ev.timestamp);
 
 		if (!allDiagonalRPs)
 			continue;
@@ -1011,7 +1014,6 @@ int main(int argc, const char **argv)
 
 		if (detailsLevel >= 2)
 		{
-			h_timestamp_B0->Fill(ev.timestamp);
 			g_run_vs_timestamp->SetPoint(g_run_vs_timestamp->GetN(), ev.timestamp, ev.run_num);
 			//g_ev_num_vs_timestamp->SetPoint(g_ev_num_vs_timestamp->GetN(), ev.timestamp, ev.event_num);
 			//g_tr_num_vs_timestamp->SetPoint(g_tr_num_vs_timestamp->GetN(), ev.timestamp, ev.trigger_num);
@@ -1152,6 +1154,7 @@ int main(int argc, const char **argv)
 
 		// fill raw histograms
 		h_timestamp_sel->Fill(ev.timestamp);
+
 		if (detailsLevel >= 2)
 		{
 			g_timestamp_vs_ev_idx_sel->SetPoint(g_timestamp_vs_ev_idx_sel->GetN(), ev_idx, ev.timestamp);
@@ -1480,6 +1483,41 @@ int main(int argc, const char **argv)
 		printf("run boundary: run %u, from %u to %u\n", p.first, p.second.first, p.second.second);
 	}
 
+	printf("\n");
+	// excl boundary
+	{
+		h_timestamp_input->Rebin(10);
+		h_timestamp_input_kept->Rebin(10);
+
+		double ts_start = -1;
+		double ts_max = -1;
+
+		for (int bi = 1; bi < h_timestamp_input->GetNbinsX(); ++bi)
+		{
+			const auto &ts_min = h_timestamp_input->GetBinLowEdge(bi);
+			ts_max = h_timestamp_input->GetBinLowEdge(bi) + h_timestamp_input->GetBinWidth(bi);
+
+			const auto &c_input = h_timestamp_input->GetBinContent(bi);
+			const auto &c_kept = h_timestamp_input_kept->GetBinContent(bi);
+
+			if (ts_start < 0)
+			{
+				if (c_input > 0 && c_kept <= 0.)
+					ts_start = ts_min;
+			} else {
+				if (c_kept > 0 || c_input <= 0.)
+				{
+					printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_min);
+					ts_start = -1;
+				}
+			}
+		}
+
+		if (ts_start >= 0.)
+			printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_max);
+	}
+
+	printf("\n");
 	printf(">> th_min = %E\n", th_min);
 	printf(">> th_y_L_min = %E\n", th_y_L_min);
 	printf(">> th_y_R_min = %E\n", th_y_R_min);
@@ -1649,20 +1687,14 @@ int main(int argc, const char **argv)
 	if (detailsLevel >= 2)
 	{
 		h_timestamp_input->SetLineColor(1);
-		h_timestamp_dgn->SetLineColor(2);
-		h_timestamp_B0->SetLineColor(6);
+		h_timestamp_input_kept->SetLineColor(2);
+		h_timestamp_dgn->SetLineColor(6);
 		h_timestamp_sel->SetLineColor(4);
-
-		/*
-		h_timestamp_dgn->Write();
-		h_timestamp_B0->Write();
-		h_timestamp_sel->Write();
-		*/
 
 		c = new TCanvas("rate cmp");
 		h_timestamp_input->Draw();
+		h_timestamp_input_kept->Draw("sames");
 		h_timestamp_dgn->Draw("sames");
-		//h_timestamp_B0->Draw("sames");
 		h_timestamp_sel->Draw("sames");
 		c->Write();
 
