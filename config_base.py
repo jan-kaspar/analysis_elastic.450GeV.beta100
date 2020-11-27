@@ -37,6 +37,7 @@ cfg = cms.PSet(
       # fill 7281, high PU prob
       cms.PSet(first=cms.uint32(93360), second=cms.uint32(93479)),
       cms.PSet(first=cms.uint32(94440), second=cms.uint32(94499)),
+      cms.PSet(first=cms.uint32(101500), second=cms.uint32(101600)), # tiny end of fill
 
       # fill 7282
       cms.PSet(first=cms.uint32(105700), second=cms.uint32(105899)), # high PU prob
