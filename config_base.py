@@ -68,8 +68,15 @@ cfg = cms.PSet(
     excl_runs = cms.vuint32(324467),
 
     excl_lsIntervals = cms.VPSet(
+      # horizontal RPs inserted - decreased efficiency
+
+      # fill 7281
       cms.PSet(run=cms.uint32(324462), ls_first=cms.uint32( 94), ls_second=cms.uint32(338)),
+
+      # fill 7289
       cms.PSet(run=cms.uint32(324532), ls_first=cms.uint32(399), ls_second=cms.uint32(520)),
+
+      # fill 7291
       cms.PSet(run=cms.uint32(324536), ls_first=cms.uint32(360), ls_second=cms.uint32(509))
     ),
 
