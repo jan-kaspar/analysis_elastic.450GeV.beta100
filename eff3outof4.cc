@@ -223,6 +223,7 @@ int main(int argc, const char **argv)
 
 	// set up branches
 	EventRed ev;
+	ch_in->SetBranchAddress("lumi_section", &ev.lumi_section);
 	ch_in->SetBranchAddress("timestamp", &ev.timestamp);
 	ch_in->SetBranchAddress("run_num", &ev.run_num);
 	ch_in->SetBranchAddress("bunch_num", &ev.bunch_num);
