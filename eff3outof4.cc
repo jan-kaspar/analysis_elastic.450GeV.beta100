@@ -19,7 +19,7 @@ struct HistGroup
 	TH1D *de_th_x, *de_th_y;
 	TH1D *th_x;
 	TH1D *th_y;
-	TH2D *th_x_th_y;
+	TH2D *th_x_th_y, *th_x_th_y_unif;
 	TH1D *t;
 
 	void Init()
@@ -35,6 +35,8 @@ struct HistGroup
 
 		th_x_th_y = new TH2D("", ";#theta_{x};#theta_{y}", th_x_binning_n_2d, th_x_binning_edges_2d,
 			th_y_binning_n_2d, th_y_binning_edges_2d);
+
+		th_x_th_y_unif = new TH2D("", ";#theta_{x};#theta_{y}", 40, -400E-6, 400E-6, 60, -150E-6, 150E-6);
 
 		unsigned int N_bins;
 		double *bin_edges;
@@ -52,6 +54,7 @@ struct HistGroup
 		th_y->Fill(fabs(thy));
 		
 		th_x_th_y->Fill(thx, fabs(thy));
+		th_x_th_y_unif->Fill(thx, fabs(thy));
 
 		const double t_val = env.p*env.p * (thx*thx + thy*thy);
 		t->Fill(t_val);
@@ -412,6 +415,18 @@ int main(int argc, const char **argv)
 			TH2D *h_simple_ratio_vs_th_x_th_y = MakeSimpleRatio(h_full[rpi][nsi].th_x_th_y, h_sel[rpi][nsi].th_x_th_y);
 			h_simple_ratio_vs_th_x_th_y->SetName("h_simple_ratio_vs_th_x_th_y");
 			h_simple_ratio_vs_th_x_th_y->Write();
+
+			//--------------------
+
+			gDirectory = nsiDir->mkdir("th_x, th_y dependence (unif)");
+			h_sel[rpi][nsi].th_x_th_y_unif->SetName("h_sel.th_x_th_y");
+			h_sel[rpi][nsi].th_x_th_y_unif->Write();
+			h_full[rpi][nsi].th_x_th_y_unif->SetName("h_full.th_x_th_y");
+			h_full[rpi][nsi].th_x_th_y_unif->Write();
+
+			TH2D *h_simple_ratio_vs_th_x_th_y_unif = MakeSimpleRatio(h_full[rpi][nsi].th_x_th_y_unif, h_sel[rpi][nsi].th_x_th_y_unif);
+			h_simple_ratio_vs_th_x_th_y_unif->SetName("h_simple_ratio_vs_th_x_th_y");
+			h_simple_ratio_vs_th_x_th_y_unif->Write();
 			
 			//--------------------
 			
