@@ -206,13 +206,13 @@ void AnalyzeOnePot(const string &pot_excl,
 	map<unsigned int, RPFlags> &flags, const vector<AlignmentData> &alignment, CounterMap &c)
 {
 	// which pots are selected for track/event definition
-	bool sel_L_2_F = (pot_excl.find("L_2_F") == string::npos);
-	bool sel_L_1_F = (pot_excl.find("L_1_F") == string::npos);
-	bool sel_R_1_F = (pot_excl.find("R_1_F") == string::npos);
-	bool sel_R_2_F = (pot_excl.find("R_2_F") == string::npos);
+	const bool sel_L_2_F = (pot_excl.find("L_2_F") == string::npos);
+	const bool sel_L_1_F = (pot_excl.find("L_1_F") == string::npos);
+	const bool sel_R_1_F = (pot_excl.find("R_1_F") == string::npos);
+	const bool sel_R_2_F = (pot_excl.find("R_2_F") == string::npos);
 
 	// do all selected pots have tracks?
-	bool skip = (sel_L_2_F && !flags[id_L_2_F].tr) || (sel_L_1_F && !flags[id_L_1_F].tr)
+	const bool skip = (sel_L_2_F && !flags[id_L_2_F].tr) || (sel_L_1_F && !flags[id_L_1_F].tr)
 		|| (sel_R_1_F && !flags[id_R_1_F].tr) || (sel_R_2_F && !flags[id_R_2_F].tr);
 
 	if (skip)
@@ -240,20 +240,20 @@ void AnalyzeOnePot(const string &pot_excl,
 	if (sel_R_1_F) { norm_R += 1.; th_x_R_sel += +h_al.R_1_F.x / env.L_x_R_1_F; th_y_R_sel += +h_al.R_1_F.y / env.L_y_R_1_F; }
 	th_x_R_sel /= norm_R; th_y_R_sel /= norm_R;
 
-	double th_x_sel = (th_x_R_sel + th_x_L_sel) / 2.;
-	double th_y_sel = (th_y_R_sel + th_y_L_sel) / 2.;
+	const double th_x_sel = (th_x_R_sel + th_x_L_sel) / 2.;
+	const double th_y_sel = (th_y_R_sel + th_y_L_sel) / 2.;
 
-	double de_th_x_sel = th_x_R_sel - th_x_L_sel;
-	double de_th_y_sel = th_y_R_sel - th_y_L_sel;
+	const double de_th_x_sel = th_x_R_sel - th_x_L_sel;
+	const double de_th_y_sel = th_y_R_sel - th_y_L_sel;
 
 	// can this be elastic event
 	// si_de_... determined by eff3outof4.cc
-	double si_de_th_x = 46E-6;
-	double si_de_th_y = 8.5E-6;
-	double n_si = 3.;
+	const double si_de_th_x = 46E-6;
+	const double si_de_th_y = 8.5E-6;
+	const double n_si = 3.;
 
-	bool cut_th_x = (fabs(de_th_x_sel) < n_si * si_de_th_x);
-	bool cut_th_y = (fabs(de_th_y_sel) < n_si * si_de_th_y);
+	const bool cut_th_x = (fabs(de_th_x_sel) < n_si * si_de_th_x);
+	const bool cut_th_y = (fabs(de_th_y_sel) < n_si * si_de_th_y);
 
 	if (!cut_th_x || !cut_th_y)
 		return;
@@ -267,23 +267,23 @@ void AnalyzeOnePot(const string &pot_excl,
 	if (pot_excl.compare("R_2_F") == 0) { id_test = id_R_2_F; y_test = + h_al.R_2_F.y; th_x_test = + h_al.R_2_F.x / env.L_x_R_2_F; th_y_test = + h_al.R_2_F.y / env.L_y_R_2_F; }
 
 	// reference quantities
-	double th_x_ref = th_x_sel;
-	double th_y_ref = th_y_sel;
-	double y_ref = y_test;
+	const double th_x_ref = th_x_sel;
+	const double th_y_ref = th_y_sel;
+	const double y_ref = y_test;
 
 	// what happens with the test pot
-	RPFlags &flags_test = flags[id_test];
+	const RPFlags &flags_test = flags[id_test];
 
-	bool rp_test_pl_insuff = flags_test.pl_insuff; 
+	const bool rp_test_pl_insuff = flags_test.pl_insuff;
 
-	bool rp_test_pl_suff = flags_test.pl_suff;
-	bool rp_test_pl_suff_no_track = rp_test_pl_suff && !flags_test.tr;
+	const bool rp_test_pl_suff = flags_test.pl_suff;
+	const bool rp_test_pl_suff_no_track = rp_test_pl_suff && !flags_test.tr;
 
-	bool rp_test_pat_more = flags_test.pat_more;
+	const bool rp_test_pat_more = flags_test.pat_more;
 
-	bool rp_test_track = flags_test.tr;
+	const bool rp_test_track = flags_test.tr;
 
-	bool rp_test_track_compatible = rp_test_track
+	const bool rp_test_track_compatible = rp_test_track
 		&& (fabs(th_x_test - th_x_ref) < n_si * si_de_th_x)
 		&& (fabs(th_y_test - th_y_ref) < n_si * si_de_th_y);
 
@@ -424,7 +424,7 @@ int main(int argc, const char **argv)
 	printf("* events in input chain: %llu\n", event.size());
 	
 	// prepare output
-	TFile *outF = new TFile("eff3outof4_details.root", "recreate");
+	TFile *f_out = new TFile("eff3outof4_details.root", "recreate");
 
 	// prepare counters and histograms
 	map<string, CounterMap> counters;	// map: diagonal label -> CounterMap
@@ -461,7 +461,7 @@ int main(int argc, const char **argv)
 	// save results
 	for (map<string, CounterMap>::iterator dgni = counters.begin(); dgni != counters.end(); ++dgni)
 	{
-		TDirectory *dgnDir = outF->mkdir(dgni->first.c_str());
+		TDirectory *dgnDir = f_out->mkdir(dgni->first.c_str());
 		
 		for (CounterMap::iterator oi = dgni->second.begin(); oi != dgni->second.end(); ++oi)
 		{
@@ -518,6 +518,6 @@ int main(int argc, const char **argv)
 		}
 	}
 
-	delete outF;
+	delete f_out;
 	return 0;
 }
