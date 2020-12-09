@@ -46,6 +46,10 @@ cfg = cms.PSet(
       cms.PSet(first=cms.uint32(112380), second=cms.uint32(112559)), # high PU prob
       cms.PSet(first=cms.uint32(115000), second=cms.uint32(117000)), # th_y resolution degraded
 
+      # fill 7283, additional 3/4 inefficiency (PU prob >~ 1%)
+      cms.PSet(first=cms.uint32(121000), second=cms.uint32(123000)),
+      cms.PSet(first=cms.uint32(124400), second=cms.uint32(127000)),
+
       # fill 7284, high PU prob
       cms.PSet(first=cms.uint32(131220), second=cms.uint32(131339)),
       cms.PSet(first=cms.uint32(133920), second=cms.uint32(134339)),
@@ -55,6 +59,11 @@ cfg = cms.PSet(
       # fill 7285, high PU prob
       cms.PSet(first=cms.uint32(150480), second=cms.uint32(150634)),
       cms.PSet(first=cms.uint32(152340), second=cms.uint32(152969)),
+
+      # additional 3/4 inefficiency (PU prob >~ 1%)
+      cms.PSet(first=cms.uint32(148000), second=cms.uint32(150600)),
+      cms.PSet(first=cms.uint32(151600), second=cms.uint32(152600)),
+      cms.PSet(first=cms.uint32(154300), second=cms.uint32(160000)),
 
       # fill 7289, high PU prob
       cms.PSet(first=cms.uint32(206000), second=cms.uint32(206099)),
