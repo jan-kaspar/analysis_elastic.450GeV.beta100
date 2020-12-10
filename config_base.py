@@ -146,7 +146,7 @@ cfg = cms.PSet(
 
     use_resolution_fits = cms.bool(True),
 
-    use_3outof4_efficiency_fits = cms.bool(False),
+    use_3outof4_efficiency_fits = cms.bool(True),
     use_pileup_efficiency_fits = cms.bool(True),
 
     inefficiency_3outof4 = cms.double(0.),

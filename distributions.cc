@@ -14,6 +14,7 @@
 #include "TGraphErrors.h"
 #include "TChain.h"
 #include "TF1.h"
+#include "TF2.h"
 #include "TCanvas.h"
 
 using namespace std;
@@ -532,22 +533,22 @@ int main(int argc, const char **argv)
 		printf("\n>> using time-dependent resolutions: %p, %p\n", g_d_x_RMS, g_d_y_RMS);
 	}
 
-	// get th_y* dependent efficiency correction
-	TF1 *f_3outof4_efficiency_L_2_F = nullptr;
-	TF1 *f_3outof4_efficiency_L_1_F = nullptr;
-	TF1 *f_3outof4_efficiency_R_1_F = nullptr;
-	TF1 *f_3outof4_efficiency_R_2_F = nullptr;
+	// get th*_x and th*_y dependent efficiency correction
+	TF2 *f_3outof4_efficiency_L_2_F = nullptr;
+	TF2 *f_3outof4_efficiency_L_1_F = nullptr;
+	TF2 *f_3outof4_efficiency_R_1_F = nullptr;
+	TF2 *f_3outof4_efficiency_R_2_F = nullptr;
 	if (anal.use_3outof4_efficiency_fits)
 	{
-		string path = inputDir + "/eff3outof4_fit.root";
+		string path = inputDir + "/eff3outof4_fit_" + cfg.diagonal_str + ".root";
 		TFile *f_eff = TFile::Open(path.c_str());
 		if (!f_eff)
 			printf("ERROR: 3-out-of-4 efficiency file `%s' cannot be opened.\n", path.c_str());
 
-		f_3outof4_efficiency_L_2_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/L_2_F/pol0").c_str() );
-		f_3outof4_efficiency_L_1_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/L_1_F/pol0").c_str() );
-		f_3outof4_efficiency_R_1_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/R_1_F/pol0").c_str() );
-		f_3outof4_efficiency_R_2_F = (TF1 *) f_eff->Get( (cfg.diagonal_str + "/R_2_F/pol0").c_str() );
+		f_3outof4_efficiency_L_2_F = (TF2 *) f_eff->Get("L_2_F/ff");
+		f_3outof4_efficiency_L_1_F = (TF2 *) f_eff->Get("L_1_F/ff");
+		f_3outof4_efficiency_R_1_F = (TF2 *) f_eff->Get("R_1_F/ff");
+		f_3outof4_efficiency_R_2_F = (TF2 *) f_eff->Get("R_2_F/ff");
 
 		printf("\n>> using 3-out-of-4 fits: %p, %p, %p, %p\n",
 			f_3outof4_efficiency_L_2_F, f_3outof4_efficiency_L_1_F, f_3outof4_efficiency_R_1_F, f_3outof4_efficiency_R_2_F);
@@ -1095,10 +1096,11 @@ int main(int argc, const char **argv)
 		if (anal.use_3outof4_efficiency_fits)
 		{
 			inefficiency_3outof4 = 0.;
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_y * 1E6);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_y * 1E6);
+			// FIXME: this is possibly wrong -- in 3/4 fits th_y is always positive, here not!
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_x, k.th_y);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_x, k.th_y);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_x, k.th_y);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y);
 		}
 
 		double inefficiency_pile_up = anal.inefficiency_pile_up;
