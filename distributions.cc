@@ -914,8 +914,8 @@ int main(int argc, const char **argv)
 	TGraph *g_th_y_vs_th_x_acc = new TGraph(); g_th_y_vs_th_x_acc->SetName("g_th_y_vs_th_x_acc"); g_th_y_vs_th_x_acc->SetTitle(";#theta_{x}^{L};#theta_{y}^{L}");
 
 	// book normalization histograms
-	TProfile *p_norm_corr = new TProfile("p_norm_corr", ";timestamp", 1000, 16E3, 113E3);
-	TProfile *p_3outof4_corr = new TProfile("p_3outof4_corr", ";#theta_{y}^{*}", 120, -120E-6, 120E-6);
+	TProfile *p_norm_corr = new TProfile("p_norm_corr", ";timestamp", timestamp_bins/100, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_3outof4_corr = new TProfile("p_3outof4_corr", ";#theta_{y}^{*}", 120, -150E-6, 150E-6);
 
 	map<unsigned int, TH1D*> bh_t_normalized;
 	for (unsigned int bi = 0; bi < binnings.size(); ++bi)
@@ -1096,11 +1096,10 @@ int main(int argc, const char **argv)
 		if (anal.use_3outof4_efficiency_fits)
 		{
 			inefficiency_3outof4 = 0.;
-			// FIXME: this is possibly wrong -- in 3/4 fits th_y is always positive, here not!
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_x, k.th_y);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_x, k.th_y);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_x, k.th_y);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
 		}
 
 		double inefficiency_pile_up = anal.inefficiency_pile_up;
