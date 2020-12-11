@@ -1,0 +1,9 @@
+#!/bin/bash
+
+./run_multiple_mc_simu -events 1E6 -wait
+./run_multiple_mc_process -events 1E6
+
+./run_multiple_ni_simu -wait
+./run_multiple_ni_process
+
+./matrix -dir-mc data-mc/1E6
