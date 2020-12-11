@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#----------------------------------------------------------------------------------------------------
+# defaults
+
 diagonals=(
 	"45b_56t"
 	"45t_56b"
@@ -45,6 +48,60 @@ configurations=(
 use_lxbatch="n"
 bsub_options="pool>1"
 bsub_queue="1nh"
+
+wait_for_jobs="n"
+
+#----------------------------------------------------------------------------------------------------
+# parse command line
+
+function PrintUsage()
+{
+	echo "USAGE: run_multiple_mc_simu [option] [option] ..."
+	echo "OPTIONS:"
+	echo "    -events <int>    number of events to simulate"
+	echo "    -lxbatch         prepare jobs on LXBATCH instead of local machine"
+	echo "    -submit          submit jobs to LXBATCH"
+	echo "    -queue <string>  set LXBATCH queue"
+	echo "    -wait            wait for jobs run in background"
+}
+
+while [ "$1" != "" ]
+do
+	key="$1"
+
+	case $key in
+		-h|--help)
+			PrintUsage
+			exit 0
+		;;
+
+		-lxbatch)
+			use_lxbatch="y"
+		;;
+
+		-submit)
+			submit="y"
+		;;
+
+		-queue)
+			bsub_queue="$2"
+			shift
+		;;
+
+		-wait)
+			wait_for_jobs="y"
+			shift
+		;;
+
+		*)
+			echo "ERROR: unknown option '$key'."
+			PrintUsage
+			exit 1
+		;;
+	esac
+
+	shift
+done
 
 #----------------------------------------------------------------------------------------------------
 
@@ -96,3 +153,10 @@ do
 		ExecuteOne
 	done
 done
+
+#----------------------------------------------------------------------------------------------------
+
+if [ "$wait_for_jobs" == "y" ]
+then
+	wait
+fi

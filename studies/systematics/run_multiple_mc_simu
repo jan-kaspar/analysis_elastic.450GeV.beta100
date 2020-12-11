@@ -51,9 +51,10 @@ stat=""
 # TODO: migrate to HTCondor
 use_lxbatch="n"
 bsub_options="pool>1"
-#bsub_queue="8nh"
 bsub_queue="1nd"
 submit="n"
+
+wait_for_jobs="n"
 
 #----------------------------------------------------------------------------------------------------
 # parse command line
@@ -66,6 +67,7 @@ function PrintUsage()
 	echo "    -lxbatch         prepare jobs on LXBATCH instead of local machine"
 	echo "    -submit          submit jobs to LXBATCH"
 	echo "    -queue <string>  set LXBATCH queue"
+	echo "    -wait            wait for jobs run in background"
 }
 
 while [ "$1" != "" ]
@@ -93,6 +95,11 @@ do
 
 		-queue)
 			bsub_queue="$2"
+			shift
+		;;
+
+		-wait)
+			wait_for_jobs="y"
 			shift
 		;;
 
@@ -172,3 +179,10 @@ do
 		ExecuteOne
 	done
 done
+
+#----------------------------------------------------------------------------------------------------
+
+if [ "$wait_for_jobs" == "y" ]
+then
+	wait
+fi
