@@ -91,7 +91,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
 		//    this recovers single-arm sigma = 0.50 um
 		// TODO: update
-		const double v = 0.50E-6 / sqrt(2.);
+		const double v = 3E-6;
 
 		if (scenario == "sh-thx")
 		{
@@ -101,7 +101,6 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			anal_rec.fc_L.Shift(v, 0.);
 			anal_rec.fc_R.Shift(v, 0.);
 			anal_rec.fc_G.Shift(v, 0.);
-
 
 			return 0;
 		}
@@ -123,13 +122,15 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	{
 		// TODO: update
 		// sigma of the TB correlated, LR symmetric mode
-		const double v = 0.35E-6 / sqrt(2.);
+		const double v = 2E-6;
 
+		// TODO: update
 		// typical value De^{R-L} th_y ~ 0.04 urad
-		const double v_LR_asym = 0.04E-6 / 2.;
+		const double v_LR_asym = 2E-6;
 
+		// TODO: update
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
-		const double v_TB_uncorr = 0.017E-6 / sqrt(2.);
+		const double v_TB_uncorr = 0.02E-6 / sqrt(2.);
 
 		// TODO: review the modes, use only the relevant ones
 
