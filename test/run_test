@@ -90,6 +90,10 @@ function MainAnalysis()
 
 	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
 
+	cd "studies/systematics"
+	./ru_all
+	cd - &> /dev/null
+
 	echo "<li>OK</li>" >> "$report"
 }
 
@@ -135,7 +139,14 @@ function MakeOneComparison()
 		if [ "$res" -eq "2" ]; then diff_msg="major"; fi
 		if [ "$res" -eq "3" ]; then diff_msg="minor"; fi
 
-		failed_comparisons="${failed_comparisons}    <li>$file, $obj ($diff_msg, <a href="$plot_file">plot</a>)</li>\n"
+		if [ -n "$diff_msg" ]
+		then
+			diff_msg="$diff_msg, <a href="$plot_file">plot</a>"
+		else
+			diff_msg="other error"
+		fi
+
+		failed_comparisons="${failed_comparisons}    <li>$file, $obj ($diff_msg)</li>\n"
 	fi
 }
 
@@ -206,6 +217,9 @@ function MainAnalysisComparison()
 		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
 
 		MakeOneComparison "data/merged.root" "eb/merged/combined/h_dsdt" "global"
+
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all-but-norm/eb/h_stddev" "global"
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all/eb/h_stddev" "global"
 
 		if [ "$n_diff" -eq "0" ]
 		then
