@@ -76,10 +76,9 @@ vector<InputTDistribution> inputTDistributions;
 int LoadTDistributions()
 {
 	// define input t-distributions
-	// TODO: update
 	inputTDistributions.push_back({
-		"fitN-2",
-		(TGraph *) GetObject("/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/combined/first_fits/2/do_fit.root", "variant 2/g_dsdt_CH"),
+		"fit_1",
+		(TGraph *) GetObject("../../fits_for_corr/fit.root", "g_fit_1"),
 		nullptr
 	});
 

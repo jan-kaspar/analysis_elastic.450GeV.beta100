@@ -131,6 +131,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
 		const double v_TB_uncorr = 0.017E-6 / sqrt(2.);
 
+		// TODO: review the modes, use only the relevant ones
+
 		if (scenario == "sh-thy")
 		{
 			biases.L.sh_th_y = v;
@@ -185,6 +187,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		const double v_xy = 0.013 / sqrt(2.);
 		const double v_yx = 0.00039 / sqrt(2.);
 
+		// TODO: verify the statement below
+		// TODO: if needed, the fiducial range can be transformed according to v_xy and v_yx - and be sure
 		// with the current values of v_xy, v_yx, the effect on the fiducial cuts in negligible
 		// low bound: th_x ~ 20 urad, th_y ~ 4 urad
 		//     th_x --> 20.04 urad, th_y --> 4.006 urad
@@ -375,6 +379,10 @@ double ngx_et, ngx_al, ngx_be;
 
 void LoadNonGaussianDistributions(double si_d_x, double /* si_d_y */)
 {
+	// TODO: remove once functional
+	throw 1;
+
+	// TODO: update path
 	TFile *f_in = TFile::Open("/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/beta2500/2rp/non-gaussianity/fit_dx.root");
 	f_non_gaussian_dist_d_x = new TF1(* (TF1 *) f_in->Get("ff"));
 	delete f_in;

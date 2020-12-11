@@ -4,6 +4,7 @@
 #include "TGraph.h"
 #include "TF1.h"
 
+#include <cstdio>
 #include <vector>
 #include <string>
 
@@ -21,11 +22,10 @@ TGraph* GetGraph(const string &dir, const string &model, const string &scenario,
 		return nullptr;
 	}
 
-	string path = obj;
-	TGraph *h_orig = (TGraph *) f_in->Get(path.c_str());
+	TGraph *h_orig = (TGraph *) f_in->Get(obj.c_str());
 	if (!h_orig)
 	{
-		printf("ERROR: can't load object '%s'.\n", path.c_str());
+		printf("ERROR: can't load object '%s'.\n", obj.c_str());
 		return nullptr;
 	}
 
@@ -91,8 +91,12 @@ void Scale(TGraph *g, double s)
 //----------------------------------------------------------------------------------------------------
 
 /// To be kept synchronised with function "ProcessOne" in "../normalisation/normalisation.cc"
-double GetNormalisation(TGraph *g)
+double GetNormalisation(TGraph * /*g*/)
 {
+	return 1.;
+
+	// FIXME: update
+	/*
 	// settings
 	double t_fit_min = 0.01, t_fit_max = 0.05;
 	double t_sum_min = 0.01, t_sum_max = 0.5;
@@ -129,8 +133,7 @@ double GetNormalisation(TGraph *g)
 	double c_full = c_extr + c_graph;
 
 	return si_el_ref / c_full;
-
-	return 1.;
+	*/
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -154,8 +157,8 @@ int main(int argc, const char **argv)
 
 	string ref_scenario = "none";
 
-	string model_base = "fitN-2";
-	string model_secondary = "fitN-4";
+	string model_base = "fit_1"; 		// used for most scenarios
+	string model_secondary = "fit_1";	// used only for unsmearing model uncertainty
 
 	struct Scenario
 	{
@@ -177,6 +180,8 @@ int main(int argc, const char **argv)
 		{ "tilt-thx-thy", Scenario::mDsdt },
 		{ "tilt-thx-thy-LRasym", Scenario::mDsdt },
 
+		// TODO: uncomment when ready
+		/*
 		{ "sc-thxy-mode1", Scenario::mDsdt },
 		{ "sc-thxy-mode2", Scenario::mDsdt },
 		{ "sc-thxy-mode3", Scenario::mDsdt },
@@ -194,6 +199,7 @@ int main(int argc, const char **argv)
 		{ "my-sigma", Scenario::mUnsmearing },
 
 		{ "norm", Scenario::mDsdt },
+		*/
 	};
 
 	// parse command line
@@ -229,11 +235,11 @@ int main(int argc, const char **argv)
 
 		TDirectory *d_scenario = f_out->mkdir(scenario.label.c_str());
 
-		// get reference histograms
+		// get reference graphs
 		TGraph *g_tr_ref = GetGraph(inputDirectory, model_base, ref_scenario, "g_dsdt_true");
 		TGraph *g_re_ref = GetGraph(inputDirectory, model_base, ref_scenario, "g_dsdt_reco");
 
-		// get histogram with effect
+		// get graphs with effect
 		TGraph *g_tr = GetGraph(inputDirectory, model_base, scenario.label, "g_dsdt_true");
 		TGraph *g_re = GetGraph(inputDirectory, model_base, scenario.label, "g_dsdt_reco");
 
@@ -241,7 +247,7 @@ int main(int argc, const char **argv)
 		if (!g_tr_ref || !g_re_ref || !g_re)
 			continue;
 
-		// make corrected histograms for scaling
+		// make corrected graphs for scaling
 		TGraph *g_1 = nullptr;
 		TGraph *g_0 = nullptr;
 		if (scenario.mode == Scenario::mDsdt)
@@ -265,10 +271,10 @@ int main(int argc, const char **argv)
 		}
 
 		// normalise histograms
-		double n_0 = GetNormalisation(g_0);
+		const double n_0 = GetNormalisation(g_0);
 		Scale(g_0, n_0);
 
-		double n_1 = GetNormalisation(g_1);
+		const double n_1 = GetNormalisation(g_1);
 		Scale(g_1, n_1);
 
 		// evaluate effect
@@ -283,7 +289,7 @@ int main(int argc, const char **argv)
 		delete g_eff;
 	}
 
-	// model uncertainty of the unsmearing correction
+	// extra: model uncertainty of the unsmearing correction
 	TDirectory *d_scenario = f_out->mkdir("unsmearing-model");
 
 	{
@@ -303,10 +309,10 @@ int main(int argc, const char **argv)
 			TGraph *g_bias = Multiply(g_re_base, g_unsm_corr);
 
 			// normalise histograms
-			double n_base = GetNormalisation(g_tr_base);
+			const double n_base = GetNormalisation(g_tr_base);
 			Scale(g_tr_base, n_base);
 
-			double n_bias = GetNormalisation(g_bias);
+			const double n_bias = GetNormalisation(g_bias);
 			Scale(g_bias, n_bias);
 
 			// evaluate effect
@@ -321,6 +327,8 @@ int main(int argc, const char **argv)
 			delete g_eff;
 		}
 	}
+
+	delete f_out;
 
 	return 0;
 }

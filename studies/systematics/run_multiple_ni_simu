@@ -1,0 +1,98 @@
+#!/bin/bash
+
+diagonals=(
+	"45b_56t"
+	"45t_56b"
+)
+
+configurations=(
+	"fit_1/none"
+
+	"fit_1/sh-thx"
+	"fit_1/sh-thx-LRasym"
+
+	"fit_1/sh-thy"
+	"fit_1/sh-thy-LRasym"
+	"fit_1/sh-thy-TBuncor"
+	"fit_1/sh-thy-TBuncor-LRasym"
+
+	"fit_1/tilt-thx-thy"
+	"fit_1/tilt-thx-thy-LRasym"
+
+# TODO: uncomment when ready
+#	"fit_1/sc-thxy-mode1"
+#	"fit_1/sc-thxy-mode2"
+#	"fit_1/sc-thxy-mode3"
+#
+#	"fit_1/dx-sigma"
+#	"fit_1/dy-sigma"
+#	"fit_1/dx-non-gauss"
+#
+#	"fit_1/eff-intercept"
+#	"fit_1/eff-slope"
+#
+#	"fit_1/beam-mom"
+#
+#	"fit_1/mx-sigma"
+#	"fit_1/my-sigma"
+#
+#	"fit_1/norm"
+#
+#	"fitN-4/none"
+)
+
+# TODO: migrate to HTCondor
+use_lxbatch="n"
+bsub_options="pool>1"
+bsub_queue="1nh"
+
+#----------------------------------------------------------------------------------------------------
+
+function ExecuteOne()
+{
+	echo "* $dir/$scenario"
+
+	local cwd=`pwd -P`
+
+	local tag="$scenario"
+
+	local job_dir="$cwd"
+	local job_file="$dir/.${tag}.job"
+	local job_log_file="$dir/.${tag}.log_job"
+
+	local command="{ time ./ni_simu -model \"$model\" -dgn \"$diagonal\" -scenario \"$scenario\" -output \"$dir/$scenario.root\" ; } \&> \"$dir/$scenario.log\""
+
+	cat "job_template" | sed "\
+			s|\$CMSSW_BASE|$CMSSW_BASE|; \
+			s|\$JOB_DIR|$job_dir|; \
+			s|\$JOB_LOG_FILE|$job_log_file|; \
+			s|\$COMMAND|$command|; \
+		" > "$job_file"
+	chmod u+x "$job_file"
+
+	if [ "$use_lxbatch" == "n" ]
+	then
+		"./$job_file" &
+	else
+		result=`bsub -R "$bsub_options" -q "$bsub_queue" -o /dev/null -e /dev/null "$cwd/$job_file"`
+		echo "    $result"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+make -C ../../ -j8 || exit 1
+
+for diagonal in ${diagonals[*]}
+do
+	for configuration in ${configurations[*]}
+	do
+		model=${configuration%%/*}
+		scenario=${configuration##*/}
+
+		dir="data-ni/$diagonal/$model"
+		mkdir -p "$dir"
+
+		ExecuteOne
+	done
+done

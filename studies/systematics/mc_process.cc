@@ -106,8 +106,8 @@ int main(int argc, const char **argv)
 
 	string ref_scenario = "none";
 
-	string model_base = "fitN-2";
-	string model_secondary = "fitN-4";
+	string model_base = "fit_1";
+	string model_secondary = "fit_1";
 
 	struct Scenario
 	{
@@ -129,6 +129,8 @@ int main(int argc, const char **argv)
 		{ "tilt-thx-thy", Scenario::mDsdt },
 		{ "tilt-thx-thy-LRasym", Scenario::mDsdt },
 
+		// TODO: uncomment when ready
+		/*
 		{ "sc-thxy-mode1", Scenario::mDsdt },
 		{ "sc-thxy-mode2", Scenario::mDsdt },
 		{ "sc-thxy-mode3", Scenario::mDsdt },
@@ -148,6 +150,7 @@ int main(int argc, const char **argv)
 		{ "my-sigma", Scenario::mUnsmearing },
 
 		{ "norm", Scenario::mDsdt },
+		*/
 	};
 
 	// parse command line
@@ -175,9 +178,7 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("ob-1-20-0.05");
-	binnings.push_back("ob-2-10-0.05");
-	binnings.push_back("ob-3-5-0.05");
+	binnings.push_back("eb");
 
 	// output file	
 	TFile *f_out = new TFile(outFileName.c_str(), "recreate");

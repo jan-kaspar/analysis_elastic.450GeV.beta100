@@ -8,6 +8,7 @@
 #include "TSpline.h"
 #include "TF1.h"
 
+#include <cstdio>
 #include <string>
 #include <cmath>
 
@@ -88,7 +89,7 @@ const TGraph* RegularizeGraph(const TGraph *g_in, const string &label)
 
 		idx_max = idx;
 	}
-
+	
 	// stop, if nothing to be regularised
 	if (idx_min < 0)
 		return g_in;
@@ -301,8 +302,8 @@ int main(int argc, const char **argv)
 	string dir_mc = "data-mc/1E9";
 	string dir_ni = "data-ni";
 
-	t_min = 8E-4;
-	t_max = 1.;
+	t_min = 1E-4;
+	t_max = 4E-2;
 
 	string outputFile = "matrix.root";
 
@@ -344,9 +345,7 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("ob-1-20-0.05");
-	binnings.push_back("ob-2-10-0.05");
-	binnings.push_back("ob-3-5-0.05");
+	binnings.push_back("eb");
 
 	// list of modes
 	vector<Mode> modes = {
@@ -361,6 +360,8 @@ int main(int argc, const char **argv)
 		Mode("tilt-thx-thy", Mode::sNI, Mode::coFull),
 		Mode("tilt-thx-thy-LRasym", Mode::sMC, Mode::coFull),
 
+		// TODO: uncomment when ready
+		/*
 		Mode("sc-thxy-mode1", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode2", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode3", Mode::sNI, Mode::coFull),
@@ -379,6 +380,7 @@ int main(int argc, const char **argv)
 		Mode("mx-sigma", Mode::sNI, Mode::coFull),
 		Mode("my-sigma", Mode::sNI, Mode::coFull),
 		Mode("unsmearing-model", Mode::sNI, Mode::coFull),
+		*/
 
 		Mode("norm", Mode::sExt, Mode::coFull),
 	};
@@ -436,6 +438,11 @@ int main(int argc, const char **argv)
 				TFile *f_in = TFile::Open((dir_ni+"/"+diagonal+"/ni_process.root").c_str());
 				
 				TGraph *g_in = (TGraph *) f_in->Get((mode.tag + "/g_eff").c_str());
+				if (!g_in)
+				{
+					printf("ERROR: cannot load object %s.", (mode.tag + "/g_eff").c_str());
+					return 1;
+				}
 
 				gDirectory = f_out;
 				const TGraph *g_reg = RegularizeGraph(g_in, mode.tag + ":" + diagonal);
@@ -581,18 +588,6 @@ int main(int argc, const char **argv)
 	vector<string> contributions;
 
 	contributions = {
-		"sh-thy",
-
-		"sc-thxy-mode3",
-
-		"dy-sigma",
-
-		"beam-mom",
-	};
-
-	BuildMatrix("leading", contributions, modes, binnings);
-
-	contributions = {
 		"sh-thx",
 		"sh-thx-LRasym",
 
@@ -601,6 +596,8 @@ int main(int argc, const char **argv)
 		"sh-thy-TBuncor",
 		"sh-thy-TBuncor-LRasym",
 
+		// TODO: uncomment when ready
+		/*
 		"tilt-thx-thy",
 		"tilt-thx-thy-LRasym",
 
@@ -611,10 +608,8 @@ int main(int argc, const char **argv)
 		"dx-sigma",
 		"dy-sigma",
 		"dx-non-gauss",
-		// these two modes give contributions compatible with 0, but are "noisy" a create visually
-		// unpleasant effects in the summary (envelope), therefore they are left out
-		//"dx-mx-corr",
-		//"dy-my-corr",
+		"dx-mx-corr",
+		"dy-my-corr",
 
 		"eff-intercept",
 		"eff-slope",
@@ -624,6 +619,7 @@ int main(int argc, const char **argv)
 		"mx-sigma",
 		"my-sigma",
 		"unsmearing-model",
+		*/
 	};
 
 	BuildMatrix("all-but-norm", contributions, modes, binnings);

@@ -72,9 +72,9 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 	string scenario = "none";
-	string model = "fitN-2";
+	string model = "fit_1";
 
-	unsigned int n_events = (unsigned int) 1e5;
+	unsigned int n_events = (unsigned int) 1E5;
 	unsigned int seed = 1;
 
 	string outFileName = "ouput.root";
@@ -159,7 +159,8 @@ int main(int argc, const char **argv)
 	anal_rec.Print();
 
 	// load non-gaussian distributions
-	LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
+	// TODO: uncomment when ready
+	//LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
 
 	// random seed
 	gRandom->SetSeed(seed);
@@ -210,9 +211,7 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("ob-1-20-0.05");
-	binnings.push_back("ob-2-10-0.05");
-	binnings.push_back("ob-3-5-0.05");
+	binnings.push_back("eb");
 
 	// book histograms
 	vector<TH1D*> bh_t_tr, bh_t_re;
@@ -230,6 +229,7 @@ int main(int argc, const char **argv)
 	TH1D *h_d_y = new TH1D("h_d_y", ";d_y", 200, -5E-6, +5E-6);
 
 	// simulation settings
+	// TODO: check/adjust this
 	const double be = 6.;
 	const double ga = 1. - exp(-be * anal_sim.t_max_full);
 
@@ -338,6 +338,8 @@ int main(int argc, const char **argv)
 		bh_t_re[bi]->Scale(1., "width");
 		bh_t_re[bi]->Write("h_t_re");
 	}
+
+	delete f_out;
 
 	return 0;
 }

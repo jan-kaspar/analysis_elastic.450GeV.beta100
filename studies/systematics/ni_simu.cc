@@ -14,6 +14,7 @@
 #include "TGraph.h"
 #include "TMath.h"
 
+#include <cstdio>
 #include <vector>
 #include <string>
 #include <set>
@@ -260,11 +261,11 @@ double acceptance_smea(double th_x_p, double th_y_p)
 
 //----------------------------------------------------------------------------------------------------
 
-double dist_reco_th_x_th_y(double th_x_p, double th_y_p)
+double dist_th_x_th_y_reco(double th_x_p, double th_y_p)
 {
 	// evaluate smearing acceptance correction as in the analysis
-	double F = accCalc.SmearingFactor(th_x_p, th_y_p);
-	double corr_acc_sm = (F == 0.) ? 0. : 1. / F;
+	const double F = accCalc.SmearingFactor(th_x_p, th_y_p);
+	const double corr_acc_sm = (F == 0.) ? 0. : 1. / F;
 
 	return dist_th_x_th_y_smea(th_x_p, th_y_p) * acceptance_smea(th_x_p, th_y_p) * corr_acc_sm;
 }
@@ -278,7 +279,7 @@ double IntegOverPhi(double phi, double *par, const void *)
 	const double th_x_p = th_p * cos(phi);
 	const double th_y_p = th_p * sin(phi);
 
-	double result = dist_reco_th_x_th_y(th_x_p, th_y_p);
+	const double result = dist_th_x_th_y_reco(th_x_p, th_y_p);
 
 	return result;
 }
@@ -337,7 +338,7 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 	string scenario = "none";
-	string model = "fitN-2";
+	string model = "fit_1";
 
 	string outFileName = "output.root";
 
@@ -415,7 +416,8 @@ int main(int argc, const char **argv)
 	anal_rec.Print();
 
 	// load non-gaussian distributions
-	LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
+	// TODO: uncomment when ready
+	//LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
 
 	// load input dsigma/dt distribution
 	if (LoadTDistributions() != 0)
@@ -466,8 +468,7 @@ int main(int argc, const char **argv)
 	TGraph *g_dsdt_true = new TGraph(); g_dsdt_true->SetName("g_dsdt_true"); g_dsdt_true->SetLineColor(1);
 	TGraph *g_dsdt_reco = new TGraph(); g_dsdt_reco->SetName("g_dsdt_reco"); g_dsdt_reco->SetLineColor(4);
 
-	// TODO: adjust range
-	for (double t = 8E-4; t <= 1.0;)
+	for (double t = 2.1E-4; t <= 3.2E-2;)
 	{
 		const double v_true = dist_t_true(t);
 		const double v_reco = dist_t_reco(t);
@@ -476,16 +477,11 @@ int main(int argc, const char **argv)
 		g_dsdt_true->SetPoint(idx, t, v_true);
 		g_dsdt_reco->SetPoint(idx, t, v_reco);
 
-		// TODO: adjust binning
+		//printf("t = %.1E, dsdt_true = %.1E, dsdt_reco = %.1E\n", t, v_true, v_reco);
+
 		// advance t
-		double dt = 0.005;
-		if (t < 1.0) dt = 0.01;
-		if (t < 0.6) dt = 0.005;
-		if (t < 0.3) dt = 0.01;
-		if (t < 0.2) dt = 0.005;
-		if (t < 0.01) dt = 0.001;
-		if (t < 4E-3) dt = 0.0001;
-		if (t < 1.5E-3) dt = 0.00005;
+		double dt = 1E-3;
+		if (t < 3E-3) dt = 3e-5;
 		t += dt;
 	}
 
