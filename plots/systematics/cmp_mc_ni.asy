@@ -13,9 +13,9 @@ diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
 z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
 //z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-z_t_maxs.push(1.0); z_t_Steps.push(0.2); z_t_steps.push(0.1); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
+z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
 
-string mc_source = "systematics/data-mc/1E9";
+string mc_source = "studies/systematics/data-mc/1E6";
 
 AddAllModes();
 //FilterModes("sh-thy-LRasym");
@@ -54,14 +54,14 @@ for (int mi : modes.keys)
 	{
 		for (int zi : z_t_maxs.keys)
 		{
-			TH1_x_max = TGraph_x_max = z_t_maxs[zi];
+			TH1_x_max = TGraph_x_max = 2 * z_t_maxs[zi];
 			
 			NewPad("$|t|\ung{GeV^2}$", "systematic effect");
 
 			// ----- MC -----
 
 			string mc_f = topDir + mc_source + "/" + diagonals[dgni] + "/mc_process.root";
-			string objPath = modes[mi].mc_tag + "/ob-3-5-0.05/h_eff";
+			string objPath = modes[mi].mc_tag + "/eb/h_eff";
 
 			RootObject os = RootGetObject(mc_f, objPath, error=false);
 			if (os.valid)
@@ -69,7 +69,7 @@ for (int mi : modes.keys)
 
 			// ----- numerical integration, full -----
 
-			string ni_f = topDir + "systematics/data-ni/" + diagonals[dgni] + "/ni_process.root";
+			string ni_f = topDir + "studies/systematics/data-ni/" + diagonals[dgni] + "/ni_process.root";
 
 			string objPath = modes[mi].ni_tag + "/g_eff";
 
@@ -98,7 +98,7 @@ for (int mi : modes.keys)
 			limits((0, -e_max), (t_max, e_max), Crop);
 		
 			xaxis(YEquals(0, false), dashed);
-			yaxis(XEquals(8e-4, false), dashed);
+			//yaxis(XEquals(8e-4, false), dashed);
 	
 			if (!legend_drawn)
 			{

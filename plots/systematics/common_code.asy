@@ -53,6 +53,8 @@ void AddAllModes()
 		"", "sh-thx-LRasym", 1
 	);
 
+	return;
+
 	//--------------------
 
 	AddMode("\vbox{\hbox{shift in $\th_y^*$}\hbox{L-R symmetric}\hbox{T-B correlated}}", red,
