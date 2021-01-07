@@ -95,7 +95,7 @@ double GetNormalisation(TGraph * /*g*/)
 {
 	return 1.;
 
-	// FIXME: update
+	// TODO: update
 	/*
 	// settings
 	double t_fit_min = 0.01, t_fit_max = 0.05;
