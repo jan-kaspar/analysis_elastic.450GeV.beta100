@@ -40,8 +40,12 @@ TH1D* GetHistogram(const string &dir, const string &model, const string &scenari
 //----------------------------------------------------------------------------------------------------
 
 /// To be kept synchronised with function "ProcessOne" in "../normalisation/normalisation.cc"
-double GetNormalisation(TH1D *h)
+double GetNormalisation(TH1D * /*h*/)
 {
+	return 1;
+
+	// TODO: update
+	/*
 	// settings
 	double t_fit_min = 0.01, t_fit_max = 0.05;
 	double t_sum_min = 0.01, t_sum_max = 0.5;
@@ -68,11 +72,9 @@ double GetNormalisation(TH1D *h)
 
 	delete ff;
 
-	/*
-	printf("        summing from bin %i (left edge %.4f) to bin %i (right edge %.4f)\n",
-		bi_sum_min, h->GetBinLowEdge(bi_sum_min),
-		bi_sum_max, h->GetBinLowEdge(bi_sum_max) + h->GetBinWidth(bi_sum_max));
-	*/
+	//printf("        summing from bin %i (left edge %.4f) to bin %i (right edge %.4f)\n",
+	//	bi_sum_min, h->GetBinLowEdge(bi_sum_min),
+	//	bi_sum_max, h->GetBinLowEdge(bi_sum_max) + h->GetBinWidth(bi_sum_max));
 
 	double c_hist = 0;
 	for (int bi = bi_fit_min; bi <= bi_sum_max; ++bi)
@@ -83,6 +85,7 @@ double GetNormalisation(TH1D *h)
 	double c_full = c_extr + c_hist;
 
 	return si_el_ref / c_full;
+	*/
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -304,6 +307,8 @@ int main(int argc, const char **argv)
 		delete h_t_bias;
 		delete h_eff;
 	}
+
+	delete f_out;
 
 	return 0;
 }

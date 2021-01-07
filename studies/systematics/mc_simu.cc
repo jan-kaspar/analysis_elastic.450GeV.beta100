@@ -225,8 +225,8 @@ int main(int argc, const char **argv)
 		bh_t_re.push_back(new TH1D("", ";|t|;events per bin", N_bins, bin_edges)); bh_t_re[bi]->Sumw2();
 	}
 
-	TH1D *h_d_x = new TH1D("h_d_x", ";d_x", 200, -70E-6, +70E-6);
-	TH1D *h_d_y = new TH1D("h_d_y", ";d_y", 200, -5E-6, +5E-6);
+	TH1D *h_d_x = new TH1D("h_d_x", ";d_x", 200, -120E-6, +120E-6);
+	TH1D *h_d_y = new TH1D("h_d_y", ";d_y", 200, -20E-6, +20E-6);
 
 	// simulation settings
 	// TODO: check/adjust this
