@@ -91,7 +91,7 @@ function MainAnalysis()
 	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
 
 	cd "studies/systematics"
-	./ru_all
+	./ru_all "1E6"
 	cd - &> /dev/null
 
 	echo "<li>OK</li>" >> "$report"
