@@ -1,3 +1,7 @@
+real t_min_axis = 2e-4;
+
+//----------------------------------------------------------------------------------------------------
+
 struct Mode
 {
 	string label;
@@ -86,7 +90,7 @@ void AddAllModes()
 
 	AddMode("\vbox{\hbox{$x$-$y$ tilt}\hbox{L-R anti-symmetric}}", darkred+dashed,
 		"", "tilt-thx-thy-LRasym", 1,
-		"", "", 1
+		"", "tilt-thx-thy-LRasym", 1
 	);
 
 	//--------------------
