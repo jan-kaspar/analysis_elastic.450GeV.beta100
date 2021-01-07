@@ -85,13 +85,12 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		return 0;
 	}
 
-	// ---------- x shift ----------
+	// ---------- theta_x shift ----------
 
 	{
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
-		//    this recovers single-arm sigma = 0.50 um
-		// TODO: update
-		const double v = 3E-6;
+		// here, conversion from single-arm sigma:
+		const double v = 7.4E-6 / sqrt(2);
 
 		if (scenario == "sh-thx")
 		{
@@ -120,19 +119,16 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	// ---------- y shift ----------
 
 	{
-		// TODO: update
 		// sigma of the TB correlated, LR symmetric mode
-		const double v = 2E-6;
+		const double v = 1.9E-6 / sqrt(2);
+
+		// sigma of the TB correlated, LR anti-symmetric mode
+		const double v_LR_asym = 1.9E-6 / sqrt(2);
 
 		// TODO: update
-		// typical value De^{R-L} th_y ~ 0.04 urad
-		const double v_LR_asym = 2E-6;
-
-		// TODO: update
+		// TODO: needed ?
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
-		const double v_TB_uncorr = 0.02E-6 / sqrt(2.);
-
-		// TODO: review the modes, use only the relevant ones
+		//const double v_TB_uncorr = 0.02E-6 / sqrt(2.);
 
 		if (scenario == "sh-thy")
 		{
@@ -157,6 +153,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			return 0;
 		}
 
+		/*
 		if (scenario == "sh-thy-TBuncor")
 		{
 			biases.L.sh_th_y = v_TB_uncorr;
@@ -179,22 +176,20 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 			return 0;
 		}
+		*/
 	}
 
 	// ---------- xy tilt ----------
 
 	{
-		// TODO: update
-		const double v_xy = 0.013 / sqrt(2.);
-		const double v_yx = 0.00039 / sqrt(2.);
+		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
+		// division by sqrt(2) is conversion from single-arm sigmas
+		const double v_xy = 3.9E-1 / sqrt(2.);		// sometimes denoted as C
+		const double v_yx = 6.3E-4 / sqrt(2.);		// sometimes denoted as D
 
-		// TODO: verify the statement below
+		// TODO: verify this assumption:
+		//    with the current values of v_xy, v_yx, the effect on the fiducial cuts in negligible
 		// TODO: if needed, the fiducial range can be transformed according to v_xy and v_yx - and be sure
-		// with the current values of v_xy, v_yx, the effect on the fiducial cuts in negligible
-		// low bound: th_x ~ 20 urad, th_y ~ 4 urad
-		//     th_x --> 20.04 urad, th_y --> 4.006 urad
-		// high bound: th_x ~ 100 urad, th_y ~ 100 urad
-		//     th_x --> 100.9 urad, th_y --> 100.03 urad
 
 		if (scenario.compare("tilt-thx-thy") == 0)
 		{
@@ -258,6 +253,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- acceptance correction ----------
 
+	/*
 	if (scenario == "dx-sigma")
 	{
 		// TODO: update
@@ -292,9 +288,11 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		biases.d_m_corr_coef_y = -0.26;
 		return 0;
 	}
+	*/
 
 	// ---------- inefficiency correction ----------
 
+	/*
 	if (scenario == "eff-intercept")
 	{
 		// TODO: update
@@ -309,6 +307,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		biases.eff_slope = 15.;
 		return 0;
 	}
+	*/
 
 	// ---------- beam momentum ----------
 
@@ -322,6 +321,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- unsmearing ----------
 
+	/*
 	if (scenario == "mx-sigma")
 	{
 		// TODO: update
@@ -335,15 +335,18 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		anal_sim.si_th_y_2arm += 0.010E-6;
 		return 0;
 	}
+	*/
 
 	// ---------- normalisation ----------
 
+	/*
 	if (scenario == "norm")
 	{
 		// TODO: update
 		biases.norm = 0.05;
 		return 0;
 	}
+	*/
 
 	return 1;
 }

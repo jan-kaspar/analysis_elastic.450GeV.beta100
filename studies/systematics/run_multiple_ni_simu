@@ -9,6 +9,7 @@ diagonals=(
 )
 
 configurations=(
+# TODO: uncomment others when ready
 	"fit_1/none"
 
 	"fit_1/sh-thx"
@@ -16,13 +17,12 @@ configurations=(
 
 	"fit_1/sh-thy"
 	"fit_1/sh-thy-LRasym"
-	"fit_1/sh-thy-TBuncor"
-	"fit_1/sh-thy-TBuncor-LRasym"
+#	"fit_1/sh-thy-TBuncor"
+#	"fit_1/sh-thy-TBuncor-LRasym"
 
 	"fit_1/tilt-thx-thy"
 	"fit_1/tilt-thx-thy-LRasym"
 
-# TODO: uncomment when ready
 #	"fit_1/sc-thxy-mode1"
 #	"fit_1/sc-thxy-mode2"
 #	"fit_1/sc-thxy-mode3"
@@ -34,7 +34,7 @@ configurations=(
 #	"fit_1/eff-intercept"
 #	"fit_1/eff-slope"
 #
-#	"fit_1/beam-mom"
+	"fit_1/beam-mom"
 #
 #	"fit_1/mx-sigma"
 #	"fit_1/my-sigma"

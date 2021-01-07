@@ -116,6 +116,8 @@ int main(int argc, const char **argv)
 	};
 
 	vector<Scenario> scenarios = {
+		// TODO: uncomment other when ready
+
 		{ "none", Scenario::mDsdt },
 
 		{ "sh-thx", Scenario::mDsdt },
@@ -123,13 +125,12 @@ int main(int argc, const char **argv)
 
 		{ "sh-thy", Scenario::mDsdt },
 		{ "sh-thy-LRasym", Scenario::mDsdt },
-		{ "sh-thy-TBuncor", Scenario::mDsdt },
-		{ "sh-thy-TBuncor-LRasym", Scenario::mDsdt },
+		//{ "sh-thy-TBuncor", Scenario::mDsdt },
+		//{ "sh-thy-TBuncor-LRasym", Scenario::mDsdt },
 
 		{ "tilt-thx-thy", Scenario::mDsdt },
 		{ "tilt-thx-thy-LRasym", Scenario::mDsdt },
 
-		// TODO: uncomment when ready
 		/*
 		{ "sc-thxy-mode1", Scenario::mDsdt },
 		{ "sc-thxy-mode2", Scenario::mDsdt },
@@ -143,9 +144,11 @@ int main(int argc, const char **argv)
 
 		{ "eff-intercept", Scenario::mDsdt },
 		{ "eff-slope", Scenario::mDsdt },
+		*/
 
 		{ "beam-mom", Scenario::mDsdt },
 
+		/*
 		{ "mx-sigma", Scenario::mUnsmearing },
 		{ "my-sigma", Scenario::mUnsmearing },
 

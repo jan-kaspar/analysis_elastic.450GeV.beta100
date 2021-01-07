@@ -53,8 +53,6 @@ void AddAllModes()
 		"", "sh-thx-LRasym", 1
 	);
 
-	return;
-
 	//--------------------
 
 	AddMode("\vbox{\hbox{shift in $\th_y^*$}\hbox{L-R symmetric}\hbox{T-B correlated}}", red,
@@ -67,6 +65,7 @@ void AddAllModes()
 		"", "sh-thy-LRasym", 1
 	);
 
+	/*
 	AddMode("\vbox{\hbox{shift in $\th_y^*$}\hbox{L-R symmetric}\hbox{T-B uncorrelated}}", red,
 		"", "sh-thy-TBuncor", 1,
 		"", "sh-thy-TBuncor", 1
@@ -76,6 +75,7 @@ void AddAllModes()
 		"", "sh-thy-TBuncor-LRasym", 1,
 		"", "sh-thy-TBuncor-LRasym", 1
 	);
+	*/
 
 	//--------------------
 
@@ -91,6 +91,7 @@ void AddAllModes()
 
 	//--------------------
 
+	/*
 	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 1}}", heavygreen,
 		"", "sc-thxy-mode1", 1,
 		"", "sc-thxy-mode1", 1
@@ -144,6 +145,7 @@ void AddAllModes()
 		"", "eff-slope", 1,
 		"", "eff-slope", 1
 	);
+	*/
 
 	//--------------------
 	
@@ -154,6 +156,7 @@ void AddAllModes()
 
 	//--------------------
 
+	/*
 	AddMode("\vbox{\hbox{unsmearing:}\hbox{uncert.~of $\si(m_x)$}}", blue+dashed,
 		"", "mx-sigma", 1,
 		"", "mx-sigma", 1
@@ -175,6 +178,7 @@ void AddAllModes()
 		"", "norm", 1,
 		"", "norm", 1
 	);
+	*/
 }
 
 //----------------------------------------------------------------------------------------------------
