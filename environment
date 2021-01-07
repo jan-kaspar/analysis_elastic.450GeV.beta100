@@ -42,3 +42,5 @@ export GCC_OPT_CLANG="-O2 -std=c++1z"
 cd "$cwd"
 
 echo "CMSSW_BASE=$CMSSW_BASE"
+
+alias mk="make -C $BASE_DIR -j8"
