@@ -349,18 +349,19 @@ int main(int argc, const char **argv)
 
 	// list of modes
 	vector<Mode> modes = {
+		// TODO: uncomment others when ready
+
 		Mode("sh-thx", Mode::sNI, Mode::coFull),
 		Mode("sh-thx-LRasym", Mode::sNI, Mode::coFull),
 
 		Mode("sh-thy", Mode::sNI, Mode::coFull),
 		Mode("sh-thy-LRasym", Mode::sNI, Mode::coFull),
-		Mode("sh-thy-TBuncor", Mode::sNI, Mode::coNo),
-		Mode("sh-thy-TBuncor-LRasym", Mode::sNI, Mode::coNo),
+		//Mode("sh-thy-TBuncor", Mode::sNI, Mode::coNo),
+		//Mode("sh-thy-TBuncor-LRasym", Mode::sNI, Mode::coNo),
 
 		Mode("tilt-thx-thy", Mode::sNI, Mode::coFull),
 		Mode("tilt-thx-thy-LRasym", Mode::sMC, Mode::coFull),
 
-		// TODO: uncomment when ready
 		/*
 		Mode("sc-thxy-mode1", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode2", Mode::sNI, Mode::coFull),
@@ -374,9 +375,11 @@ int main(int argc, const char **argv)
 
 		Mode("eff-intercept", Mode::sNI, Mode::coFull),
 		Mode("eff-slope", Mode::sNI, Mode::coFull),
+		*/
 
 		Mode("beam-mom", Mode::sNI, Mode::coFull),
 
+		/*
 		Mode("mx-sigma", Mode::sNI, Mode::coFull),
 		Mode("my-sigma", Mode::sNI, Mode::coFull),
 		Mode("unsmearing-model", Mode::sNI, Mode::coFull),
@@ -386,7 +389,8 @@ int main(int argc, const char **argv)
 	};
 
 	// normalisation uncertainty
-	const double norm_unc = 0.055;
+	// TODO: update
+	const double norm_unc = 0.10;
 
 	// load binning-reference histograms
 	vector<TH1D *> v_binning_h;
@@ -588,19 +592,19 @@ int main(int argc, const char **argv)
 	vector<string> contributions;
 
 	contributions = {
+		// TODO: uncomment others when ready
 		"sh-thx",
 		"sh-thx-LRasym",
 
 		"sh-thy",
 		"sh-thy-LRasym",
-		"sh-thy-TBuncor",
-		"sh-thy-TBuncor-LRasym",
+		//"sh-thy-TBuncor",
+		//"sh-thy-TBuncor-LRasym",
 
-		// TODO: uncomment when ready
-		/*
 		"tilt-thx-thy",
 		"tilt-thx-thy-LRasym",
 
+		/*
 		"sc-thxy-mode1",
 		"sc-thxy-mode2",
 		"sc-thxy-mode3",
@@ -613,9 +617,11 @@ int main(int argc, const char **argv)
 
 		"eff-intercept",
 		"eff-slope",
+		*/
 
 		"beam-mom",
 
+		/*
 		"mx-sigma",
 		"my-sigma",
 		"unsmearing-model",
