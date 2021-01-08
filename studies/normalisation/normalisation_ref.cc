@@ -48,14 +48,14 @@ int main()
 	string binning = "eb";
 
 	vector<string> datasets;
-	datasets.push_back("DS-fill7280/Totem1");
-	datasets.push_back("DS-fill7281/Totem1");
-	datasets.push_back("DS-fill7282/Totem1");
-	datasets.push_back("DS-fill7283/Totem1");
-	datasets.push_back("DS-fill7284/Totem1");
-	datasets.push_back("DS-fill7285/Totem1");
-	datasets.push_back("DS-fill7289/Totem1");
-	datasets.push_back("DS-fill7291/Totem1");
+	datasets.push_back("data/fill7280/Totem1");
+	datasets.push_back("data/fill7281/Totem1");
+	datasets.push_back("data/fill7282/Totem1");
+	datasets.push_back("data/fill7283/Totem1");
+	datasets.push_back("data/fill7284/Totem1");
+	datasets.push_back("data/fill7285/Totem1");
+	datasets.push_back("data/fill7289/Totem1");
+	datasets.push_back("data/fill7291/Totem1");
 
 	vector<string> diagonals;
 	diagonals.push_back("45b_56t");
@@ -71,7 +71,7 @@ int main()
 		{
 			printf("    %s\n", diagonals[dgni].c_str());
 
-			TFile *f_in = TFile::Open(("../"+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root").c_str());
+			TFile *f_in = TFile::Open(("../../"+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root").c_str());
 			TH1D *h_in = (TH1D *) f_in->Get(("normalization/"+binning+"/h_t_normalized_no_L").c_str());
 
 			ProcessOne(h_in);
