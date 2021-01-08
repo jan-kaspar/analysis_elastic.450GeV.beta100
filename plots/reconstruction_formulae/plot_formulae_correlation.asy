@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string f = "../../reconstruction_formulae/test_formulae_correlation.root";
+string f = "../../studies/reconstruction_formulae/test_formulae_correlation.root";
 
 string simulations[];
 simulations.push("pitch");

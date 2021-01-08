@@ -4,8 +4,8 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	//"DS-fill7281/Totem1",
-	"DS-fill7291/Totem1",
+	//"data/fill7281/Totem1",
+	"data/fill7291/Totem1",
 };
 
 real thetas[] = { 50, 100, 150, 200, 250, 300, 350 };

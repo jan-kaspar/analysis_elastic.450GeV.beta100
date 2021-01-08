@@ -42,7 +42,7 @@ for (string row : rows)
 
 		NewPad("$\theta^*_y\ung{\mu rad}$", "acceptance");
 		draw(scale(1e6, 1), RootGetObject(f, dir + "h_th_ratio_cut_over_no_cut"), "eb", magenta);
-		draw(scale(1e6, 1), RootGetObject(f, dir + "g_acc_smear_vs_th_y"), "l", black);
+		draw(scale(1e6, 1), RootGetObject(f, dir + "g_acc_smear_vs_th_y"), "l", black+1pt);
 		
 		limits((30, 0.4), (140, 1.1), Crop);
 	}
