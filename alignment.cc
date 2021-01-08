@@ -85,7 +85,7 @@ void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 
 		first = false;
 
-		if (h_x->GetEntries() < 800)
+		if (h_x->GetEntries() < 100)
 		{
 			delete h_x;
 			continue;
@@ -397,14 +397,13 @@ void DoVerticalAlignmentFit(TH1D *y_hist, map<string, map<signed int, result> > 
 	ff->SetParameter("n2", 10. * n1);
 	ff->SetParameter("si2", 5.);
 
-	// TODO: in principle, all fit parameters except "cen" can be made fixed to decrease fluctuations between datasets
-
 	y_hist->Fit(ff, "Q");
 
 	y_hist->Write("y_hist");
 
 	// fill results
-	results["c_fit"][period] = ff->GetParameter("cen") * 1E3;	// mm to um
+	const auto pIdx = ff->GetParNumber("cen");
+	results["c_fit"][period] = result(ff->GetParameter(pIdx) * 1E3, ff->GetParError(pIdx) * 1E3);	// mm to um
 
 	// clean up
 	delete ff;
@@ -423,8 +422,8 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	// horizontal selection
 	const double x_min = -5., x_max = +5.;	// mm
 
-	// rely on user cuts
-	double bs_y_cut = 0.;	// TODO: 3 * si_th_y * L_y_F = 3 * 1.9E-6 * 270m = 1.5 mm
+	// rely entirely on user-provided cuts
+	double bs_y_cut = 0.;
 	printf("\tbs_y_cut = %.3f mm\n", bs_y_cut);
 
 	// prepare samples, determine ranges 
@@ -514,6 +513,31 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	y_hist->Draw();
 	y_hist_range->Draw("same");
 	c->Write();
+
+	// remove potentially non-completely-filled bins
+	{
+		int bi0 = y_hist_range->FindBin(0.);
+
+		for (int bi = bi0; bi >= 1; --bi)
+		{
+			if (y_hist_range->GetBinContent(bi) > 0)
+			{
+				y_hist_range->SetBinContent(bi, 0.);
+				y_hist_range->SetBinError(bi, 0.);
+				break;
+			}
+		}
+
+		for (int bi = bi0; bi <= y_hist_range->GetNbinsX(); ++bi)
+		{
+			if (y_hist_range->GetBinContent(bi) > 0)
+			{
+				y_hist_range->SetBinContent(bi, 0.);
+				y_hist_range->SetBinError(bi, 0.);
+				break;
+			}
+		}
+	}
 
 	// run "fit" method
 	gDirectory = d_top->mkdir("fit");
@@ -875,17 +899,20 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 		de_y_mean_diff_sq*1E3, de_y_unc_mean_diff_sq*1E3,
 		de_y_hist_chi_sq*1E3, de_y_unc_hist_chi_sq*1E3);
 
-	// make final result
-	double center = - (de_y_min_diff + de_y_mean_diff_sq) / 2.;
-	double center_unc = max(s_step, de_y_unc_hist_chi_sq);
+	// make final "shift" result
+	const double center = - (de_y_min_diff + de_y_mean_diff_sq) / 2.;
+	const double center_unc = max(s_step, de_y_unc_hist_chi_sq);
 	printf("\tcenter:\n\t\t(%.0f +- %.0f) um\n", center*1E3, center_unc*1E3);
 
-	results["c"][period] = result(center*1E3, center_unc*1E3);
+	results["c_shift"][period] = result(center*1E3, center_unc*1E3);
 	
 	results["c_min_diff"][period] = result(-de_y_min_diff*1E3, 0.);
 	results["c_prob"][period] = result(-de_y_prob*1E3, 0.);
 	results["c_mean_diff_sq"][period] = result(-de_y_mean_diff_sq*1E3, de_y_unc_mean_diff_sq*1E3);
 	results["c_hist_chi_sq"][period] = result(-de_y_hist_chi_sq*1E3, de_y_unc_hist_chi_sq*1E3);
+
+	// combine "fit" and "shift" methods
+	results["c"][period] = result::Combine(results["c_fit"][period], results["c_shift"][period]);
 
 	gDirectory = d_top;
 }
