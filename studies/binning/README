@@ -1,4 +1,4 @@
-1. Run make
+1. Run mk
 
 2. Run "./get_acceptance_correction" which will extract from
 		"../DS-XXX/XXX/distributions_XXX.root"
@@ -17,3 +17,5 @@
 4. Run "./simu"
 
 5. Run "./make_generators"
+
+6. Make plots in "plots/".
