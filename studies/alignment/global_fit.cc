@@ -82,18 +82,14 @@ int main()
 {
 	// input
 	vector<string> datasets = {
-		"DS-fill7280/Totem1",
-		"DS-fill7281/Totem1",
-		"DS-fill7282/Totem1",
-		"DS-fill7283/Totem1",
-		"DS-fill7284/Totem1",
-		"DS-fill7285/Totem1",
-		"DS-fill7286/Totem1",
-		"DS-fill7287/Totem1",
-		"DS-fill7288/Totem1",
-		"DS-fill7289/Totem1",
-		"DS-fill7290/Totem1",
-		"DS-fill7291/Totem1",
+		"data/fill7280/Totem1",
+		"data/fill7281/Totem1",
+		"data/fill7282/Totem1",
+		"data/fill7283/Totem1",
+		"data/fill7284/Totem1",
+		"data/fill7285/Totem1",
+		"data/fill7289/Totem1",
+		"data/fill7291/Totem1",
 	};
 
 	vector<string> units = {
@@ -109,7 +105,7 @@ int main()
 	// process input
 	for (const auto &dataset : datasets)
 	{
-		string f_in_name = "../" + dataset + "/alignment_fit.root";
+		string f_in_name = "../../" + dataset + "/alignment_fit.root";
 		TFile *f_in = TFile::Open(f_in_name.c_str());
 
 		for (unsigned int ui = 0; ui < units.size(); ++ui)
