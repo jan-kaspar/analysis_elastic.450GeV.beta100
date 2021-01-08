@@ -399,13 +399,12 @@ void DoVerticalAlignmentFit(TH1D *y_hist, map<string, map<signed int, result> > 
 
 	// TODO: in principle, all fit parameters except "cen" can be made fixed to decrease fluctuations between datasets
 
-	// TODO: make it quite
-	y_hist->Fit(ff);
+	y_hist->Fit(ff, "Q");
 
 	y_hist->Write("y_hist");
 
 	// fill results
-	results["c_fit"][period] = ff->GetParameter("cen");
+	results["c_fit"][period] = ff->GetParameter("cen") * 1E3;	// mm to um
 
 	// clean up
 	delete ff;
@@ -421,6 +420,9 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 
 	TDirectory *d_top = gDirectory;
 
+	// horizontal selection
+	const double x_min = -5., x_max = +5.;	// mm
+
 	// rely on user cuts
 	double bs_y_cut = 0.;	// TODO: 3 * si_th_y * L_y_F = 3 * 1.9E-6 * 270m = 1.5 mm
 	printf("\tbs_y_cut = %.3f mm\n", bs_y_cut);
@@ -435,14 +437,20 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	
 	vector<entry> sample_t, sample_b;
 
+	double *xa = g_t->GetX();
 	double *ya = g_t->GetY();
 	double *wa = gw_t->GetY();
 	for (int i = 0; i < g_t->GetN(); i++)
 	{
-		double y = ya[i];
+		const double x = xa[i];
+		const double y = ya[i];
 
 		// skip bad fits
 		if (y <= 0.)
+			continue;
+
+		// horizontal selection
+		if (x < x_min || x > x_max)
 			continue;
 		
 		y_min_t = min(y_min_t, y);
@@ -452,14 +460,20 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 		sample_t.push_back(entry(y, wa[i]));
 	}
 	
+	xa = g_b->GetX();
 	ya = g_b->GetY();
 	wa = gw_b->GetY();
 	for (int i = 0; i < g_b->GetN(); i++)
 	{
-		double y = ya[i];
+		const double x = xa[i];
+		const double y = ya[i];
 
 		// skip bad fits
 		if (y >= 0.)
+			continue;
+
+		// horizontal selection
+		if (x < x_min || x > x_max)
 			continue;
 		
 		y_min_b = min(y_min_b, -y);
@@ -501,7 +515,7 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	y_hist_range->Draw("same");
 	c->Write();
 
-	// run fit method
+	// run "fit" method
 	gDirectory = d_top->mkdir("fit");
 	DoVerticalAlignmentFit(y_hist_range, results, period);
 
@@ -510,7 +524,7 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	delete y_hist;
 	delete y_hist_range;
 
-	// continue with shift method
+	// continue with "shift" method
 	gDirectory = d_top->mkdir("shift");
 
 	//printf("\t\t\t - sorting\n");
