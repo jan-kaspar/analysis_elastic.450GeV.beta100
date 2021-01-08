@@ -93,7 +93,7 @@ function MainAnalysis()
 	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
 
 	cd "studies/systematics"
-	./ru_all "1E6"
+	./run_all "1E6" || return 50
 	cd - &> /dev/null
 
 	echo "<li>OK</li>" >> "$report"
@@ -202,10 +202,10 @@ function MainAnalysisComparison()
 		MakeOneComparison "eff3outof4_details.root" "45t_56b/L_1_F/track/th_y : rel"
 		MakeOneComparison "eff3outof4_details.root" "45t_56b/R_2_F/track/th_y : rel"
 
-		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_2_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_1_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_1_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_2_F/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_2_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_1_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_1_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_2_F/h_simple_ratio_vs_th_x_th_y"
 
 		MakeOneComparison "pileup_correction.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
 		MakeOneComparison "pileup_correction.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
