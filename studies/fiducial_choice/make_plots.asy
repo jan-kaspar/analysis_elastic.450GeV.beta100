@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string topDir = "/afs/cern.ch/work/j/jkaspar/work/analyses/elastic/450GeV/beta100/4rp/DS-all-good/Totem1/";
+string topDir = "../../data/all-good/Totem1/";
 
 string dgns[], d_labels[];
 dgns.push("45b_56t"); d_labels.push("45 bot -- 56 top");

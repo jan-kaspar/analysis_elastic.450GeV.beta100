@@ -29,6 +29,9 @@ for c in all_cfg:
     "../../../fill7291/Totem1"
   )
 
+  c.anal.use_3outof4_efficiency_fits = False
+  c.anal.use_pileup_efficiency_fits = False
+
 #--------------------
 
 cfg_45b_56t.anal.L_int = 1.
