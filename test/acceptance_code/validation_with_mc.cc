@@ -209,7 +209,6 @@ int main(int argc, char **argv)
 		{ -0.5E-6, +0.5E-6 },
 		{ +100E-6, +101E-6 },
 		{ +200E-6, +201E-6 },
-		{ +300E-6, +301E-6 },
 	};
 
 	// prepare t-histograms
@@ -235,10 +234,10 @@ int main(int argc, char **argv)
 	vector<TH1D *> v_h_th_y_re, v_h_th_y_re_cut, v_h_th_y_re_cut_corr;
 	for (unsigned int i = 0; i < th_x_ranges.size(); ++i)
 	{
-		const double th_y_min = 30E-6, th_y_max = 80E-6;
-		v_h_th_y_re.push_back(new TH1D("", "#theta_{y}", 100, th_y_min, th_y_max));
-		v_h_th_y_re_cut.push_back(new TH1D("", "#theta_{y}", 100, th_y_min, th_y_max));
-		v_h_th_y_re_cut_corr.push_back(new TH1D("", "#theta_{y}", 100, th_y_min, th_y_max));
+		const double th_y_min = 30E-6, th_y_max = 140E-6;
+		v_h_th_y_re.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
+		v_h_th_y_re_cut.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
+		v_h_th_y_re_cut_corr.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
 	}
 
 	// prepare histograms for smearing control
@@ -465,11 +464,19 @@ int main(int argc, char **argv)
 		const double th_x_ref = (th_x_ranges[i].first + th_x_ranges[i].second) / 2.;
 
 		TGraph *g_acc_smear_vs_th_y = new TGraph();
-		for (double th_y = 3E-6; th_y <= 8E-6; th_y += 0.02E-6)
+		for (double th_y = 30E-6; th_y <= 140E-6; )
 		{
 			const double acc = accCalc.SmearingFactor(th_x_ref, th_y);
 			const int idx = g_acc_smear_vs_th_y->GetN();
 			g_acc_smear_vs_th_y->SetPoint(idx, th_y, acc);
+
+			double step = 5E-6;
+			if (30E-6 < th_y && th_y < 50E-6)
+				step = 1E-6;
+			if (110E-6 < th_y && th_y < 130E-6)
+				step = 1E-6;
+
+			th_y += step;
 		}
 
 		g_acc_smear_vs_th_y->Write("g_acc_smear_vs_th_y");

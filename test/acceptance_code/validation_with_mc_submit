@@ -2,12 +2,11 @@
 
 configs=()
 
-for t_max in "0.045"
+for t_max in "0.04"
 do
 	for corr_set in "corr" "uncorr"
 	do
-		# final statistics 1E9 : expected to run for ~6h
-		configs+=("$t_max 4E8 $corr_set")
+		configs+=("$t_max 1E8 $corr_set")
 	done
 done
 
@@ -17,15 +16,7 @@ seeds=(
 
 #----------------------------------------------------------------------------------------------------
 
-#batch_queue="8nm"
-#batch_queue="1nh"
-batch_queue="1nd"
-
-batch_resources=""
-#batch_resources="pool>10000" # require more than 10 GB of space in the pool directory
-
-#batch_options=""
-batch_options="-o /dev/null -e /dev/null"
+#batch_queue="1nd"
 
 #----------------------------------------------------------------------------------------------------
 

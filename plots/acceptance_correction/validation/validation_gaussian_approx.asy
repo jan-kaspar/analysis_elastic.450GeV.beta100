@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string topDir = "../../../acceptance_tests/";
+string topDir = "../../../test/acceptance_code/";
 
 string diagonals[] = {
 	"45b_56t",
