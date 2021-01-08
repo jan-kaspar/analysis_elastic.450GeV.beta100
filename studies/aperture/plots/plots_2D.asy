@@ -1,8 +1,10 @@
 import root;
 import pad_layout;
 
-string f_si = "single_arm.root";
-string f_do = "double_arm.root";
+string topDir = "../";
+
+string f_si = topDir + "single_arm.root";
+string f_do = topDir + "double_arm.root";
 
 int rebin = 2;
 

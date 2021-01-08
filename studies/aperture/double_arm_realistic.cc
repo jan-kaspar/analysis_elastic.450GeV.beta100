@@ -2,9 +2,6 @@
 #include "classes/AcceptanceCalculator.hh"
 #include "classes/Kinematics.hh"
 
-// TODO: replace
-//#include "parameters_test.h"
-
 #include "apertures.hh"
 #include "aperture_list.hh"
 

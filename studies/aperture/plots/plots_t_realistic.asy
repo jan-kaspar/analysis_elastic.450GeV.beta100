@@ -1,7 +1,9 @@
 import root;
 import pad_layout;
 
-string f_do = "double_arm_realistic.root";
+string topDir = "../";
+
+string f_do = topDir + "double_arm_realistic.root";
 
 //----------------------------------------------------------------------------------------------------
 
