@@ -103,7 +103,6 @@ TH1D* MakeSimpleRatio(TH1D *num, TH1D *den, TF1 *ff, double from, double to, boo
 TH1D* MakeRefinedRatio(TH1D *num, TH1D *den, TF1 *ff, double from, double to, bool verbose = false)
 {
 	double ep = ff->GetParameter(0);
-	double ep_err = ff->GetParError(0);
 
 	// improve error calculation: si(y)^2 = N ep (1-ep)
 	TH1D *rat = new TH1D(*num);
@@ -122,7 +121,7 @@ TH1D* MakeRefinedRatio(TH1D *num, TH1D *den, TF1 *ff, double from, double to, bo
 	
 	rat->Fit(ff, "Q", "", from, to);
 	ep = ff->GetParameter(0);
-	ep_err = ff->GetParError(0);
+	const double ep_err = ff->GetParError(0);
 	
 	if (verbose)
 		printf("\t\trefined fit: %.4f +- %.4f\n", ep, ep_err);

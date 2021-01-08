@@ -243,10 +243,10 @@ int main(int argc, char **argv)
 
 		// ----- fiducial cuts -----
 
-		double corr_phi = 0.;
-		bool skip = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y);
+		//double corr_phi = 0.;
+		const bool skip = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y);
 
-		corr_phi /= 2.;	// simulated just one hemishpere
+		//corr_phi /= 2.;	// simulated just one hemishpere
 
 		// ----- evaluate smearing -----
 
