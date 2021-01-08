@@ -94,7 +94,7 @@ for (int zi : z_t_maxs.keys)
 		limits((0, -e_max), (t_max, e_max), Crop);
 		
 		xaxis(YEquals(0, false), dashed);
-		//yaxis(XEquals(8e-4, false), dashed);
+		yaxis(XEquals(t_min_axis, false), dashed);
 	}
 }
 
