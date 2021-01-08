@@ -94,7 +94,7 @@ for (int ui : units.keys)
 	currentpad.yTicks = RightTicks(500., 100.);
 
 	real y_cen = 0;
-	real y_min = y_cen - 1000, y_max = y_cen + 1500;
+	real y_min = y_cen - 500, y_max = y_cen + 1100;
 
 	for (int dsi : datasets.keys)
 	{
@@ -110,7 +110,7 @@ for (int ui : units.keys)
 	if (drawFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/studies/alignment/global_fit.root", units[ui]+"/b_fit");
-		real unc = 150;
+		real unc = 100;
 
 		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
 		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
@@ -139,8 +139,9 @@ for (int ui : units.keys)
 		string dataset = datasets[dsi];
 		DrawFillBands(fills[dsi], y_min, y_max);
 
-		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c"), "p,eb", blue, mCi+1pt+blue);
-		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_fit"), "p,eb", heavygreen, mCi+1pt+heavygreen);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_fit"), "p,eb", magenta, mCi+1pt+magenta);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_shift"), "p,eb", heavygreen, mCi+1pt+heavygreen);
+		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c"), "p,eb", blue+1pt, mCi+1pt+blue);
 
 		/*
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_min_diff"), "p,eb", cyan, mCi+1pt+cyan);
@@ -155,7 +156,7 @@ for (int ui : units.keys)
 	if (drawFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/studies/alignment/global_fit.root", units[ui]+"/c_fit");
-		real unc = 300;
+		real unc = 250;
 
 		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
 		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
