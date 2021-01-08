@@ -60,6 +60,8 @@ function Compilation()
 
 function MainAnalysis()
 {
+	echo "<li>dataset: $ds</li>" >> "$report"
+
 	./run -wait "distill.cc" "data/$ds" || return 10
 	./run -wait "distill.cc" "data/$ds" -danti || return 11
 
@@ -200,10 +202,10 @@ function MainAnalysisComparison()
 		MakeOneComparison "eff3outof4_details.root" "45t_56b/L_1_F/track/th_y : rel"
 		MakeOneComparison "eff3outof4_details.root" "45t_56b/R_2_F/track/th_y : rel"
 
-		MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_2_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_1_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_1_F/h_refined_ratio.th_y"
-		MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_2_F/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_2_F/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_1_F/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_1_F/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_2_F/h_refined_ratio.th_y"
 
 		MakeOneComparison "pileup_correction.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
 		MakeOneComparison "pileup_correction.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
