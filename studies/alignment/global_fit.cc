@@ -85,9 +85,9 @@ int main()
 		"data/fill7280/Totem1",
 		"data/fill7281/Totem1",
 		"data/fill7282/Totem1",
-		"data/fill7283/Totem1",
+		//"data/fill7283/Totem1",	// low statistics - low quality results
 		"data/fill7284/Totem1",
-		"data/fill7285/Totem1",
+		//"data/fill7285/Totem1",	// low statistics - low quality results
 		"data/fill7289/Totem1",
 		"data/fill7291/Totem1",
 	};
