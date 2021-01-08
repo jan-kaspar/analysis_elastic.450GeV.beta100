@@ -17,7 +17,7 @@ for c in all_cfg:
   c.timber_dir = "2018_10_13_fill7291"
 
   c.anal.alignment_t0 = timestamp_min
-  c.anal.alignment_ts = (timestamp_max - timestamp_min) / 2.
+  c.anal.alignment_ts = (241454 - timestamp_min) / 2.
 
 #--------------------
 
