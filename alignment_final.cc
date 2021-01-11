@@ -1,12 +1,16 @@
+#include <TDirectory.h>
 #include "classes/common_init.hh"
 #include "classes/command_line_tools.hh"
 
 #include "TFile.h"
 #include "TH2D.h"
+#include "TCanvas.h"
+#include "TGraph.h"
 
 #include "Fit/Fitter.h"
 
 #include <memory>
+#include <cstdio>
 #include <vector>
 #include <memory>
 
@@ -32,6 +36,12 @@ class S2_FCN
 
 		static double f(double x, double y, const double* par);
 
+		static void InitFit(ROOT::Fit::FitConfig &, double v_min, double v_max);
+
+		static void PrintResults(const double *params);
+
+		static TGraph* GetResultGraph(const ROOT::Fit::FitResult &);
+
 		TH2D* MakeDiffMap(const TH2D *orig, const double* par);
 };
 
@@ -39,17 +49,72 @@ class S2_FCN
 
 double S2_FCN::f(double x, double y, const double* par)
 {
-	const double &A = par[0] * 1E9;
-	const double &mu_x = par[1] * 1E-6;
-	const double &si_x = par[2] * 1E-6;
-	const double &mu_y = par[3] * 1E-6;
-	const double &si_y = par[4] * 1E-6;
+	const double &mu_x = par[0];
+	const double &mu_y = par[1];
+
+	const double &A_1 = par[2];
+	const double &si_1_x = par[3];
+	const double &si_1_y = par[4];
+
+	const double &A_2 = par[5];
+	const double &si_2_x = par[6];
+	const double &si_2_y = par[7];
 		
-	double de_x = (x - mu_x) / si_x;
-	double de_y = (y - mu_y) / si_y;
-	double val = A * exp(- (de_x*de_x + de_y*de_y) / 2.);
-	
-	return val;
+	const double de_1_x = (x - mu_x) / si_1_x;
+	const double de_1_y = (y - mu_y) / si_1_y;
+
+	const double de_2_x = (x - mu_x) / si_2_x;
+	const double de_2_y = (y - mu_y) / si_2_y;
+
+	return
+		A_1 * exp(- (de_1_x*de_1_x + de_1_y*de_1_y) / 2.)
+		+ A_2 * exp(- (de_2_x*de_2_x + de_2_y*de_2_y) / 2.);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void S2_FCN::InitFit(ROOT::Fit::FitConfig &cfg, double v_min, double v_max)
+{
+	cfg.ParSettings(0).Set("mu_x", 0E-6, 1E-6);	// in rad
+	cfg.ParSettings(1).Set("mu_y", 0E-6, 1E-6);
+
+	cfg.ParSettings(2).Set("A_1", v_min, v_min/10);
+	cfg.ParSettings(3).Set("si_1_x", 20E-6, 1E-6);
+	cfg.ParSettings(4).Set("si_1_y", 20E-6, 1E-6);
+
+	cfg.ParSettings(5).Set("A_2", v_max*10, v_max*10/10);
+	cfg.ParSettings(6).Set("si_2_x", 5E-6, 1E-6);
+	cfg.ParSettings(7).Set("si_2_y", 5E-6, 1E-6);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void S2_FCN::PrintResults(const double *params)
+{
+	printf("mu_x = %.1f urad\n", params[0]*1E6);
+	printf("mu_y = %.1f urad\n", params[1]*1E6);
+
+	printf("A_1 = %.3E\n", params[2]);
+	printf("si_1_x = %.1f urad\n", params[3]*1E6);
+	printf("si_1_y = %.1f urad\n", params[4]*1E6);
+
+	printf("A_2 = %.3E\n", params[5]);
+	printf("si_2_x = %.1f urad\n", params[6]*1E6);
+	printf("si_2_y = %.1f urad\n", params[7]*1E6);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+TGraph* S2_FCN::GetResultGraph(const ROOT::Fit::FitResult &r)
+{
+	TGraph *g = new TGraph();
+
+	for (int i = 0; i < 8; ++i)
+	{
+		g->SetPoint(i, r.GetParams()[i], r.GetErrors()[i]);
+	}
+
+	return g;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -80,6 +145,7 @@ TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const double* par)
 {
 	printf(">> MakeDiffMap\n");
 
+	/*
 	double bs_x = orig->GetXaxis()->GetBinWidth(1);
 	double bs_y = orig->GetYaxis()->GetBinWidth(1);
 
@@ -90,20 +156,44 @@ TH2D* S2_FCN::MakeDiffMap(const TH2D *orig, const double* par)
 	printf("N_y = %u, lim_y = %E\n", N_y, lim_y);
 
 	TH2D *h = new TH2D("diff map", "", 2*N_x, -lim_x, +lim_x, 2*N_y, -lim_y, +lim_y);
+	*/
+
+	TH2D *h = new TH2D(*orig);
+	h->SetName("diff map");
+	h->Reset();
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{
 		const Point &p = points[i];
 
-		int bi_x = h->GetXaxis()->FindBin(p.x);
-		int bi_y = h->GetXaxis()->FindBin(p.y);
+		const int bi_x = h->GetXaxis()->FindBin(p.x);
+		const int bi_y = h->GetXaxis()->FindBin(p.y);
 
-		double de_f = (p.v - f(p.x, p.y, par)) / p.e;
+		const double de_f = (p.v - f(p.x, p.y, par)) / p.e;
 
-		h->SetBinContent(bi_x, bi_y, de_f*de_f);
+		h->SetBinContent(bi_x, bi_y, fabs(de_f));
 	}
 
 	return h;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+TGraph* GetFitProjectionY(const double *params, const vector<double> &th_x_bin_centers)
+{
+	TGraph *g = new TGraph();
+
+	for (double th_y = -200E-6; th_y <= +200E-6; th_y += 5E-6)
+	{
+		double sum = 0.;
+		for (const auto &th_x : th_x_bin_centers)
+			sum += S2_FCN::f(th_x, th_y, params);
+
+		int idx = g->GetN();
+		g->SetPoint(idx, th_y, sum);
+	}
+
+	return g;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -117,6 +207,10 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	vector<TH2D *> hists;
 	hists.push_back(h_45b);
 	hists.push_back(h_45t);
+
+	double v_min = 1E100;
+	double v_max = -1;
+
 	for (unsigned int hi = 0; hi < hists.size(); hi++)
 	{
 		TH2D *h = hists[hi];
@@ -130,18 +224,15 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 				p.v = h->GetBinContent(xi, yi);
 				p.e = h->GetBinError(xi, yi);
 
+				if (p.v > 0)
+					v_min = min(p.v, v_min);
+				v_max = max(p.v, v_max);
+
 				// exclude empty bins
 				if (p.v == 0. && p.e == 0.)
 					continue;
 
-				// remove partially filled bins at acceptance boundaries
-				if (p.x < -150E-6 || p.x > 150E-6 || fabs(p.y) > 98E-6 || (p.y > -15E-6 && p.y < +15E-6))
-					continue;
-
-				// theta cut
-				double th = sqrt(p.x*p.x + p.y*p.y);
-				if (th < 15E-6 || th > 100E-6)
-					continue;
+				// NB: points outside the fiducial cuts already removed in distributions.cc
 
 				points.push_back(p);
 
@@ -156,16 +247,12 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	unique_ptr<S2_FCN> s2_fcn(new S2_FCN);
 	unique_ptr<ROOT::Fit::Fitter> fitter(new ROOT::Fit::Fitter);
 
-	constexpr unsigned int n_params = 5;
-	double pStart[] = {0, 0, 0, 0, 0};
+	constexpr unsigned int n_params = 8;
+	double pStart[] = {0, 0, 0, 0, 0, 0, 0, 0};
 	fitter->SetFCN(n_params, *s2_fcn, pStart, 0, true);
 
 	// set initial parameters
-	fitter->Config().ParSettings(0).Set("const", 4., 0.1);	// * 1E9
-	fitter->Config().ParSettings(1).Set("mean x", 0., 1.);	// in urad
-	fitter->Config().ParSettings(2).Set("sigma x", 40., 1.);
-	fitter->Config().ParSettings(3).Set("mean y", 0., 1.);
-	fitter->Config().ParSettings(4).Set("sigma y", 40., 1.);
+	S2_FCN::InitFit(fitter->Config(), v_min, v_max);
 
 	// run fit
 	fitter->FitFCN();
@@ -182,13 +269,75 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	const unsigned int ndf = points.size() - n_params;
 	printf("chiSq = %E, ndf = %i, chiSq/ndf = %.3f\n", chiSq, ndf, chiSq/ndf);
 
-	printf("x: mean = %.3f urad, sigma = %.3f urad\n", params[1], params[2]);
-	printf("y: mean = %.3f urad, sigma = %.3f urad\n", params[3], params[4]);
+	S2_FCN::PrintResults(params);
 
 	printf("\n");
 
+	// save results
+	TGraph *g_results = S2_FCN::GetResultGraph(result);
+	g_results->Write("g_results");
+
+	// make checks
 	TH2D *m = s2_fcn->MakeDiffMap(h_45b, params);
 	m->Write();
+
+	TH2D *h2_th_y_vs_thx_input = new TH2D(*h_45b);
+	h2_th_y_vs_thx_input->Reset();
+	for (const auto &p : points)
+	{
+		const auto &bi = h2_th_y_vs_thx_input->FindBin(p.x, p.y);
+		h2_th_y_vs_thx_input->SetBinContent(bi, p.v);
+		h2_th_y_vs_thx_input->SetBinError(bi, p.e);
+	}
+	h2_th_y_vs_thx_input->Write("h2_th_y_vs_thx_input");
+
+	gDirectory = gDirectory->mkdir("th_x slices");
+
+	vector<pair<double, double>> th_x_slices = {
+		{ -200E-6, -150E-6 },
+		{ -150E-6, -100E-6 },
+		{ -100E-6, -75E-6 },
+		{ -75E-6, -50E-6 },
+		{ -50E-6, -25E-6 },
+		{ -25E-6, -0E-6 },
+		{ 0E-6, 25E-6 },
+		{ 25E-6, 50E-6 },
+		{ 50E-6, 75E-6 },
+		{ 75E-6, 100E-6 },
+		{ 100E-6, 150E-6 },
+		{ 150E-6, 200E-6 },
+	};
+
+	for (const auto &slice : th_x_slices)
+	{
+		const auto &th_x_min = slice.first;
+		const auto &th_x_max = slice.second;
+
+		const auto bi_min = h2_th_y_vs_thx_input->GetXaxis()->FindBin(th_x_min);
+		const auto bi_max = h2_th_y_vs_thx_input->GetXaxis()->FindBin(th_x_max);
+
+		vector<double> th_x_bin_centers;
+		for (int bi = bi_min; bi <= bi_max; ++bi)
+			th_x_bin_centers.push_back(h2_th_y_vs_thx_input->GetXaxis()->GetBinCenter(bi));
+
+		TH1D *h_th_y = h2_th_y_vs_thx_input->ProjectionY("proj", bi_min, bi_max);
+		h_th_y->SetLineColor(4);
+
+		char buf[100];
+		sprintf(buf, "%+.1f_%+.1f", th_x_min * 1E6, th_x_max * 1E6);
+
+		TCanvas *c = new TCanvas;
+		c->SetName(buf);
+
+		h_th_y->Draw();
+
+		TGraph *g = GetFitProjectionY(params, th_x_bin_centers);
+		g->SetName("fit");
+		g->SetLineColor(2);
+		g->Draw("l");
+
+		c->Write();
+	}
 }
 
 //----------------------------------------------------------------------------------------------------
