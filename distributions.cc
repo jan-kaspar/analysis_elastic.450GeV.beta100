@@ -313,6 +313,29 @@ void AnalyzeMode(TH2D *h2_input, const string &name)
 }
 
 //----------------------------------------------------------------------------------------------------
+
+void RemovePartiallyFilledBinsThetaXY(TH2D *h)
+{
+	for (double th_x = -400E-6; th_x < 400E-6; th_x += 1E-6)
+	{
+		double th_y_min, th_y_max;
+		anal.fc_G.GetThYRange(th_x, th_y_min, th_y_max);
+
+		for (const auto th_y : { th_y_min, th_y_max})
+		{
+			const auto th_y_signed = th_y * cfg.th_y_sign;
+			const auto &bi = h->FindBin(th_x, th_y_signed);
+			const auto &th_y_check = h->GetYaxis()->GetBinLowEdge(h->GetYaxis()->FindBin(th_y_signed));
+			if (fabs(th_y_check - th_y_signed) > 1E-10)
+			{
+				h->SetBinContent(bi, 0.);
+				h->SetBinError(bi, 0.);
+			}
+		}
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
 void PrintUsage()
@@ -1552,6 +1575,7 @@ int main(int argc, const char **argv)
 		bh_t_normalized[bi]->Scale(1., "width");
 	}
 
+	RemovePartiallyFilledBinsThetaXY(h2_th_y_vs_th_x_normalized);
 	h2_th_y_vs_th_x_normalized->Scale(1., "width");
 
 	th_y_diffLR->Scale(1., "width");
