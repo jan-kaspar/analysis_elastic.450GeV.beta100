@@ -1508,68 +1508,6 @@ int main(int argc, const char **argv)
 
 	printf("---------------------------- after event loop ---------------------------\n");
 
-	printf("\nlumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
-
-	printf("\n");
-	for (auto &p : lumiSectionBoundaries)
-	{
-		printf("LS boundary: run = %u, LS = %u, from %u to %u\n", p.first.first, p.first.second, p.second.first, p.second.second);
-	}
-
-	printf("\n");
-	for (auto &p : runTimestampBoundaries)
-	{
-		printf("run boundary: run %u, from %u to %u\n", p.first, p.second.first, p.second.second);
-	}
-
-	printf("\n");
-	// excl boundary
-	{
-		h_timestamp_input->Rebin(10);
-		h_timestamp_input_kept->Rebin(10);
-
-		double ts_start = -1;
-		double ts_max = -1;
-
-		for (int bi = 1; bi < h_timestamp_input->GetNbinsX(); ++bi)
-		{
-			const auto &ts_min = h_timestamp_input->GetBinLowEdge(bi);
-			ts_max = h_timestamp_input->GetBinLowEdge(bi) + h_timestamp_input->GetBinWidth(bi);
-
-			const auto &c_input = h_timestamp_input->GetBinContent(bi);
-			const auto &c_kept = h_timestamp_input_kept->GetBinContent(bi);
-
-			if (ts_start < 0)
-			{
-				if (c_input > 0 && c_kept <= 0.)
-					ts_start = ts_min;
-			} else {
-				if (c_kept > 0 || c_input <= 0.)
-				{
-					printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_min);
-					ts_start = -1;
-				}
-			}
-		}
-
-		if (ts_start >= 0.)
-			printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_max);
-	}
-
-	printf("\n");
-	printf(">> th_min = %E\n", th_min);
-	printf(">> th_y_L_min = %E\n", th_y_L_min);
-	printf(">> th_y_R_min = %E\n", th_y_R_min);
-
-	printf("\n");
-	printf("N_anal = %u\n", N_anal);
-	printf("N_4outof4 = %u\n", N_4outof4);
-	printf("N_el = %u\n", N_el);
-
-	printf("\nbunchCounter_el:\n");
-	for (const auto &p : bunchCounter_el)
-		printf("  bunch %u: %u\n", p.first, p.second);
-
 	// derived plots
 	TGraphErrors *th_y_sigmaLR_vs_th_y = new TGraphErrors();
 	th_y_sigmaLR_vs_th_y->SetName("th_y_sigmaLR_vs_th_y");
@@ -1738,8 +1676,19 @@ int main(int argc, const char **argv)
 	TCanvas *c;
 
 	gDirectory = f_out->mkdir("metadata");
-	if (detailsLevel >= 2)
 	{
+		const int rebin = 10;
+
+		h_timestamp_input->Rebin(rebin);
+		h_timestamp_input_kept->Rebin(rebin);
+		h_timestamp_dgn->Rebin(rebin);
+		h_timestamp_sel->Rebin(rebin);
+
+		h_timestamp_input->Scale(1./rebin);
+		h_timestamp_input_kept->Scale(1./rebin);
+		h_timestamp_dgn->Scale(1./rebin);
+		h_timestamp_sel->Scale(1./rebin);
+
 		h_timestamp_input->SetLineColor(1);
 		h_timestamp_input_kept->SetLineColor(2);
 		h_timestamp_dgn->SetLineColor(6);
@@ -1751,7 +1700,10 @@ int main(int argc, const char **argv)
 		h_timestamp_dgn->Draw("sames");
 		h_timestamp_sel->Draw("sames");
 		c->Write();
+	}
 
+	if (detailsLevel >= 2)
+	{
 		//g_timestamp_vs_ev_idx_dgn->Write();
 		g_timestamp_vs_ev_idx_sel->Write();
 
@@ -2299,6 +2251,68 @@ int main(int argc, const char **argv)
 	// print counters
 	for (map<unsigned int, unsigned long>::iterator it = n_ev_cut.begin(); it != n_ev_cut.end(); ++it)
 		printf("\tcut %u: %lu\n", it->first, it->second);
+
+	printf("\nlumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
+
+	printf("\n");
+	for (auto &p : lumiSectionBoundaries)
+	{
+		printf("LS boundary: run = %u, LS = %u, from %u to %u\n", p.first.first, p.first.second, p.second.first, p.second.second);
+	}
+
+	printf("\n");
+	for (auto &p : runTimestampBoundaries)
+	{
+		printf("run boundary: run %u, from %u to %u\n", p.first, p.second.first, p.second.second);
+	}
+
+	printf("\n");
+	// excl boundary
+	{
+		h_timestamp_input->Rebin(10);
+		h_timestamp_input_kept->Rebin(10);
+
+		double ts_start = -1;
+		double ts_max = -1;
+
+		for (int bi = 1; bi < h_timestamp_input->GetNbinsX(); ++bi)
+		{
+			const auto &ts_min = h_timestamp_input->GetBinLowEdge(bi);
+			ts_max = h_timestamp_input->GetBinLowEdge(bi) + h_timestamp_input->GetBinWidth(bi);
+
+			const auto &c_input = h_timestamp_input->GetBinContent(bi);
+			const auto &c_kept = h_timestamp_input_kept->GetBinContent(bi);
+
+			if (ts_start < 0)
+			{
+				if (c_input > 0 && c_kept <= 0.)
+					ts_start = ts_min;
+			} else {
+				if (c_kept > 0 || c_input <= 0.)
+				{
+					printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_min);
+					ts_start = -1;
+				}
+			}
+		}
+
+		if (ts_start >= 0.)
+			printf("excl boundary: from %.0f to %.0f\n", ts_start, ts_max);
+	}
+
+	printf("\n");
+	printf(">> th_min = %E\n", th_min);
+	printf(">> th_y_L_min = %E\n", th_y_L_min);
+	printf(">> th_y_R_min = %E\n", th_y_R_min);
+
+	printf("\n");
+	printf("N_anal = %u\n", N_anal);
+	printf("N_4outof4 = %u\n", N_4outof4);
+	printf("N_el = %u\n", N_el);
+
+	printf("\nbunchCounter_el:\n");
+	for (const auto &p : bunchCounter_el)
+		printf("  bunch %u: %u\n", p.first, p.second);
 
 	// clean up
 	delete f_out;
