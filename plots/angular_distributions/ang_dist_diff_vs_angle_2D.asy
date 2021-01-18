@@ -9,7 +9,10 @@ string datasets[] = {
 	"data/fill7291/Totem1",
 };
 
-string dgns[] = { "45b_56t", "45t_56b" };
+string dgns[] = {
+	//"45b_56t",
+	"45t_56b"
+};
 string dgn_labs[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
 
 string plot[];
@@ -43,7 +46,7 @@ void ProcessOne(string tag)
 				RootObject h2 = RootGetObject(f, base);
 				//h2.vExec("Rebin2D", 2, 2);
 
-				draw(scale(1e6, 1e6), h2, "def");
+				//draw(scale(1e6, 1e6), h2, "def");
 
 				string base = "selected - angles/p_"+plot[pi];
 

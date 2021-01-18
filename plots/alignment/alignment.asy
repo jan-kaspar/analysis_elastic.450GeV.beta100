@@ -38,6 +38,13 @@ void SetPadWidth()
 }
 
 //----------------------------------------------------------------------------------------------------
+
+real GetFitValue(RootObject fit)
+{
+	return fit.rExec("Eval", 45 * 3600);
+}
+
+//----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
 for (int ui : units.keys)
@@ -75,12 +82,14 @@ for (int ui : units.keys)
 		real unc = 5;
 
 		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
-		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt, format("fit: %.1f", GetFitValue(fit)));
 		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
-	//AttachLegend(unit_labels[ui], SE, SE);
+
+	if (drawFit)
+		AttachLegend(S, N);
 
 	SetPadWidth();
 }
@@ -113,12 +122,14 @@ for (int ui : units.keys)
 		real unc = 100;
 
 		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
-		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt, format("fit: %.1f", GetFitValue(fit)));
 		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
-	//AttachLegend(unit_labels[ui], SE, SE);
+
+	if (drawFit)
+		AttachLegend(S, N);
 
 	SetPadWidth();
 }
@@ -159,12 +170,14 @@ for (int ui : units.keys)
 		real unc = 250;
 
 		draw(shift(0, +unc)*swToHours, fit, "l", red+dashed);
-		draw(shift(0,    0)*swToHours, fit, "l", red+2pt);
+		draw(shift(0,    0)*swToHours, fit, "l", red+2pt, format("fit: %.1f", GetFitValue(fit)));
 		draw(shift(0, -unc)*swToHours, fit, "l", red+dashed);
 	}
 
 	ylimits(y_min, y_max, Crop);
-	//AttachLegend(unit_labels[ui], SE, SE);
+
+	if (drawFit)
+		AttachLegend(S, N);
 
 	SetPadWidth();
 }

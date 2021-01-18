@@ -30,6 +30,8 @@ xTicksDef = LeftTicks(5., 1.);
 
 TGraph_errorBar = None;
 
+bool drawTimber = false;
+
 //----------------------------------------------------------------------------------------------------
 
 for (int qi : quantities.keys)
@@ -39,8 +41,6 @@ for (int qi : quantities.keys)
 
 	for (int fi : fills.keys)
 	{
-		string ft = topDir + f_datasets[fi] + "/process_timber.root";
-
 		DrawBands(fills[fi], bands="run", labels="ds", 0., q_maxs[qi]);
 
 		for (int dgni : diagonals.keys)
@@ -50,8 +50,12 @@ for (int qi : quantities.keys)
 			draw(scale(1./3600, 1e6), RootGetObject(f, "time dependences/gRMS_diffLR_" + quantities[qi] + "_vs_time"), "l,p", d_pens[dgni], d_labels[dgni]);
 		}
 
-		TGraph_reducePoints = 30;
-		draw(scale(1./3600, 1e6), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
+		if (drawTimber)
+		{
+			TGraph_reducePoints = 30;
+			string ft = topDir + f_datasets[fi] + "/process_timber.root";
+			draw(scale(1./3600, 1e6), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
+		}
 
 		ylimits(0., q_maxs[qi], Crop);
 	}

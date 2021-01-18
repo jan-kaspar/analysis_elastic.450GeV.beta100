@@ -3,27 +3,23 @@ import pad_layout;
 include "../run_info.asy";
 
 string datasets[], fills[];
-datasets.push("DS-fill7280/Totem1"); fills.push("7280");
-datasets.push("DS-fill7281/Totem1"); fills.push("7281");
-datasets.push("DS-fill7282/Totem1"); fills.push("7282");
-datasets.push("DS-fill7283/Totem1"); fills.push("7283");
-datasets.push("DS-fill7284/Totem1"); fills.push("7284");
-datasets.push("DS-fill7285/Totem1"); fills.push("7285");
-datasets.push("DS-fill7286/Totem1"); fills.push("7286");
-datasets.push("DS-fill7287/Totem1"); fills.push("7287");
-datasets.push("DS-fill7288/Totem1"); fills.push("7288");
-datasets.push("DS-fill7289/Totem1"); fills.push("7289");
-datasets.push("DS-fill7290/Totem1"); fills.push("7290");
-datasets.push("DS-fill7291/Totem1"); fills.push("7291");
+datasets.push("data/fill7280/Totem1"); fills.push("7280");
+datasets.push("data/fill7281/Totem1"); fills.push("7281");
+datasets.push("data/fill7282/Totem1"); fills.push("7282");
+datasets.push("data/fill7283/Totem1"); fills.push("7283");
+datasets.push("data/fill7284/Totem1"); fills.push("7284");
+datasets.push("data/fill7285/Totem1"); fills.push("7285");
+datasets.push("data/fill7289/Totem1"); fills.push("7289");
+datasets.push("data/fill7291/Totem1"); fills.push("7291");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 string types[], t_labels[];
 pen t_pens[];
-types.push("input"); t_labels.push("coincidence of 2 RPs (220-fr)"); t_pens.push(heavygreen);
-types.push("dgn"); t_labels.push("coincidence of 4 RPs (220-fr and 210-fr)"); t_pens.push(red);
-types.push("sel"); t_labels.push("selected"); t_pens.push(blue);
+types.push("input"); t_labels.push("reco track coincidence of at least 1 RP in left and 1 RP in right arm"); t_pens.push(heavygreen);
+types.push("dgn"); t_labels.push("reco track coincidence of 4 RPs (220-fr and 210-fr)"); t_pens.push(red);
+types.push("sel"); t_labels.push("elastic selection"); t_pens.push(blue);
 
 string topDir = "../../";
 
@@ -34,7 +30,7 @@ ySizeDef = 6cm;
 
 TGraph_errorBar = None;
 
-int rebin = 30;
+int rebin = 3;
 
 //----------------------------------------------------------------------------------------------------
 
