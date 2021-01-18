@@ -151,7 +151,7 @@ int main(int argc, const char **argv)
 	PrintConfiguration();
 
 	// get input data
-	TFile *f_in = TFile::Open(("/afs/cern.ch/exp/totem/scratch/data/RP/" + cfg.timber_dir + "/conditions/emittance.root").c_str());
+	TFile *f_in = TFile::Open(("/afs/cern.ch/user/j/jkaspar/afsRP_900GeV/" + cfg.timber_dir + "/conditions/emittance.root").c_str());
 
 	TGraph *g_emit_B1_H = (TGraph *) f_in->Get("LHC.BSRT.5R4.B1:AVERAGE_WEIGHTED_EMITTANCE_H");
 	TGraph *g_emit_B1_V = (TGraph *) f_in->Get("LHC.BSRT.5R4.B1:AVERAGE_WEIGHTED_EMITTANCE_V");

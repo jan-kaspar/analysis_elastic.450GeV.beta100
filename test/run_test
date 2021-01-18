@@ -69,8 +69,7 @@ function MainAnalysis()
 
 	./run -wait "resolution_fit.cc" "data/$ds" || return 13
 
-	# TODO: uncomment once the RP directory is restored
-	#./run -wait "process_timber.cc" "data/$ds" || return 20
+	./run -wait "process_timber.cc" "data/$ds" || return 20
 
 	./run -wait "alignment.cc" "data/$ds" || return 21
 	./run -wait "alignment_fit.cc" "data/$ds" || return 22
