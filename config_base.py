@@ -89,17 +89,7 @@ cfg = cms.PSet(
       cms.PSet(run=cms.uint32(324536), ls_first=cms.uint32(360), ls_second=cms.uint32(509))
     ),
 
-    alignment_sources = cms.VPSet(
-      cms.PSet(
-        # first number: read from alignment.pdf, second number: correction reco-check plots
-        data = cms.VPSet(
-          cms.PSet(unit=cms.string("L_2_F"), a = cms.double(-7.0E-3), b = cms.double(   0E-3 - 25E-3), c = cms.double(+170E-3)),
-          cms.PSet(unit=cms.string("L_1_F"), a = cms.double(-8.5E-3), b = cms.double(+400E-3 + 25E-3), c = cms.double( +30E-3)),
-          cms.PSet(unit=cms.string("R_1_F"), a = cms.double(+5.0E-3), b = cms.double(+100E-3 + 25E-3), c = cms.double(-180E-3)),
-          cms.PSet(unit=cms.string("R_2_F"), a = cms.double(+3.5E-3), b = cms.double(+900E-3 - 25E-3), c = cms.double( -20E-3))
-        )
-      )
-    ),
+    alignment_sources = cms.VPSet(),
 
     t_min = cms.double(0.),
     t_max = cms.double(0.03),
@@ -206,19 +196,38 @@ cfg.anal.si_th_x_2arm_unc = -999.
 
 #----------------------------------------------------------------------------------------------------
 
+# diagonal-independent alignment constants
+a_L_2_F, b_L_2_F, c_L_2_F = -6.0E-3,  -16E-3, +158E-3
+a_L_1_F, b_L_1_F, c_L_1_F = -6.0E-3, +421E-3,   +8E-3
+a_R_1_F, b_R_1_F, c_R_1_F = +6.0E-3, +101E-3, -236E-3
+a_R_2_F, b_R_2_F, c_R_2_F = +6.0E-3, +863E-3,   -0E-3
+
+#----------------------------------------------------------------------------------------------------
+
 cfg_45b_56t = cfg.clone(
   anal = dict(
-    cut1_a = 1., cut1_c = +0E-6, cut1_si = 35E-6,
-    cut2_a = 1., cut2_c = -1.5E-6, cut2_si = 8E-6,
+    alignment_sources = cms.VPSet(
+      cms.PSet(
+        data = cms.VPSet(
+          cms.PSet(unit=cms.string("L_2_F"), a = cms.double(a_L_2_F + 2E-3 - 0.3E-3), b = cms.double(b_L_2_F - 17E-3), c = cms.double(c_L_2_F - 11E-3 - 90E-3)),
+          cms.PSet(unit=cms.string("L_1_F"), a = cms.double(a_L_1_F + 2E-3 + 0.3E-3), b = cms.double(b_L_1_F + 17E-3), c = cms.double(c_L_1_F + 11E-3 - 90E-3)),
+          cms.PSet(unit=cms.string("R_1_F"), a = cms.double(a_R_1_F - 2E-3 + 1.3E-3), b = cms.double(b_R_1_F -  3E-3), c = cms.double(c_R_1_F + 30E-3 - 90E-3)),
+          cms.PSet(unit=cms.string("R_2_F"), a = cms.double(a_R_2_F - 2E-3 - 1.3E-3), b = cms.double(b_R_2_F +  3E-3), c = cms.double(c_R_2_F - 30E-3 - 90E-3))
+        )
+      )
+    ),
 
-    cut5_a = 0.105, cut5_c = -0.04, cut5_si = 0.08,
+    cut1_a = 1., cut1_c = -2.0E-6, cut1_si = 35E-6,
+    cut2_a = 1., cut2_c = -0.3E-6, cut2_si = 8E-6,
+
+    cut5_a = 0.105, cut5_c = -0.01, cut5_si = 0.08,
     cut6_a = 0.105, cut6_c = +0.03, cut6_si = 0.08,
 
-    cut7_a = 0., cut7_c = +0.04, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = +0.50, cut8_si = 2.8,
+    cut7_a = 0., cut7_c = +0.01, cut7_si = 0.55,
+    cut8_a = 0., cut8_c = -0.11, cut8_si = 2.8,
 
     cut9_a = -0.28, cut9_c = +0.00, cut9_si = 0.14,
-    cut10_a = -0.29, cut10_c = +0.02, cut10_si = 0.14,
+    cut10_a = -0.29, cut10_c = +0.01, cut10_si = 0.14,
 
     fc_L = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
     fc_R = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
@@ -233,17 +242,28 @@ cfg_45b_56t = cfg.clone(
 
 cfg_45t_56b = cfg.clone(
   anal = dict(
-    cut1_a = 1., cut1_c = -3E-6, cut1_si = 34E-6,
-    cut2_a = 1., cut2_c = +0.5E-6, cut2_si = 8E-6,
+    alignment_sources = cms.VPSet(
+      cms.PSet(
+        data = cms.VPSet(
+          cms.PSet(unit=cms.string("L_2_F"), a = cms.double(a_L_2_F - 0.3E-3 + 1.5E-3), b = cms.double(b_L_2_F - 15E-3), c = cms.double(c_L_2_F + 15E-3 + 70E-3)),
+          cms.PSet(unit=cms.string("L_1_F"), a = cms.double(a_L_1_F - 0.3E-3 - 1.5E-3), b = cms.double(b_L_1_F + 15E-3), c = cms.double(c_L_1_F - 15E-3 + 70E-3)),
+          cms.PSet(unit=cms.string("R_1_F"), a = cms.double(a_R_1_F + 0.3E-3 + 1.3E-3), b = cms.double(b_R_1_F + 10E-3), c = cms.double(c_R_1_F + 20E-3 + 70E-3)),
+          cms.PSet(unit=cms.string("R_2_F"), a = cms.double(a_R_2_F + 0.3E-3 - 1.3E-3), b = cms.double(b_R_2_F - 10E-3), c = cms.double(c_R_2_F - 20E-3 + 70E-3))
+        )
+      )
+    ),
 
-    cut5_a = 0.105, cut5_c = -0.02, cut5_si = 0.08,
-    cut6_a = 0.105, cut6_c = -0.07, cut6_si = 0.08,
+    cut1_a = 1., cut1_c = -0.5E-6, cut1_si = 34E-6,
+    cut2_a = 1., cut2_c = -0.2E-6, cut2_si = 8E-6,
 
-    cut7_a = 0., cut7_c = -0.09, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = -0.14, cut8_si = 2.8,
+    cut5_a = 0.105, cut5_c = +0.01, cut5_si = 0.08,
+    cut6_a = 0.105, cut6_c = -0.04, cut6_si = 0.08,
+
+    cut7_a = 0., cut7_c = +0.00, cut7_si = 0.55,
+    cut8_a = 0., cut8_c = 0.10, cut8_si = 2.8,
 
     cut9_a = -0.28, cut9_c = +0.01, cut9_si = 0.14,
-    cut10_a = -0.29, cut10_c = -0.02, cut10_si = 0.14,
+    cut10_a = -0.29, cut10_c = -0.00, cut10_si = 0.14,
 
     fc_L = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
     fc_R = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
