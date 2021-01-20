@@ -76,20 +76,19 @@ void ProcessOne(string tag)
 		}
 	}
 
-	GShipout("ang_dist_diff_vs_angle_2D_" + tag, vSkip=1mm);
+	GShipout("ang_dist_single_arm_diff_vs_angle_2D_" + tag, vSkip=1mm);
 }
 
 //----------------------------------------------------------------------------------------------------
 
-plot.push("th_x_diffLR_vs_th_x"); lab_h.push("$\th_x^{*}\ung{\mu rad}$"); lab_v.push("$\De^{R-L}\th_x^{*}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
-plot.push("th_x_L_diffNF_vs_th_x_L"); lab_h.push("$\th_x^{*L}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_x^{*L}\ung{\mu rad}$"); y_min.push(-10); y_max.push(10);
-plot.push("th_x_R_diffNF_vs_th_x_R"); lab_h.push("$\th_x^{*R}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_x^{*R}\ung{\mu rad}$"); y_min.push(-10); y_max.push(10);
-
-plot.push("th_x_diffLR_vs_th_y"); lab_h.push("$\th_y^{*}\ung{\mu rad}$"); lab_v.push("$\De^{R-L}\th_x^{*}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
-plot.push("th_x_L_diffNF_vs_th_y_L"); lab_h.push("$\th_y^{*L}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_x^{*L}\ung{\mu rad}$"); y_min.push(-10); y_max.push(10);
-plot.push("th_x_R_diffNF_vs_th_y_R"); lab_h.push("$\th_y^{*R}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_x^{*R}\ung{\mu rad}$"); y_min.push(-10); y_max.push(10);
+/*
+plot.push("th_x_L_diffNA_vs_th_x_L"); lab_h.push("$\th_x^{*L}\ung{\mu rad}$"); lab_v.push("$\th_x^{*L, 210F} - \th_x^{*L}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
+plot.push("th_x_L_diffFA_vs_th_x_L"); lab_h.push("$\th_x^{*L}\ung{\mu rad}$"); lab_v.push("$\th_x^{*L, 220F} - \th_x^{*L}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
+plot.push("th_x_R_diffNA_vs_th_x_R"); lab_h.push("$\th_x^{*R}\ung{\mu rad}$"); lab_v.push("$\th_x^{*R, 210F} - \th_x^{*R}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
+plot.push("th_x_R_diffFA_vs_th_x_R"); lab_h.push("$\th_x^{*R}\ung{\mu rad}$"); lab_v.push("$\th_x^{*R, 220F} - \th_x^{*R}\ung{\mu rad}$"); y_min.push(-100); y_max.push(100);
 
 ProcessOne("x");
+*/
 
 //----------------------------------------------------------------------------------------------------
 
@@ -99,12 +98,9 @@ lab_v.delete();
 y_min.delete();
 y_max.delete();
 
-plot.push("th_y_diffLR_vs_th_y"); lab_h.push("$\th_y^{*}\ung{\mu rad}$"); lab_v.push("$\De^{R-L}\th_y^{*}\ung{\mu rad}$"); y_min.push(-20); y_max.push(+20);
-plot.push("th_y_L_diffNF_vs_th_y_L"); lab_h.push("$\th_y^{*L}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*L}\ung{\mu rad}$"); y_min.push(-2); y_max.push(+2);
-plot.push("th_y_R_diffNF_vs_th_y_R"); lab_h.push("$\th_y^{*R}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*R}\ung{\mu rad}$"); y_min.push(-2); y_max.push(+2);
-
-plot.push("th_y_diffLR_vs_th_x"); lab_h.push("$\th_x^{*}\ung{\mu rad}$"); lab_v.push("$\De^{R-L}\th_y^{*}\ung{\mu rad}$"); y_min.push(-20); y_max.push(+20);
-plot.push("th_y_L_diffNF_vs_th_x_L"); lab_h.push("$\th_x^{*L}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*L}\ung{\mu rad}$"); y_min.push(-2); y_max.push(+2);
-plot.push("th_y_R_diffNF_vs_th_x_R"); lab_h.push("$\th_x^{*R}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*R}\ung{\mu rad}$"); y_min.push(-2); y_max.push(+2);
+plot.push("th_y_L_diffNA_vs_th_y_L"); lab_h.push("$\th_y^{*L}\ung{\mu rad}$"); lab_v.push("$\th_y^{*L, 210F} - \th_y^{*L}\ung{\mu rad}$"); y_min.push(-1); y_max.push(1);
+plot.push("th_y_L_diffFA_vs_th_y_L"); lab_h.push("$\th_y^{*L}\ung{\mu rad}$"); lab_v.push("$\th_y^{*L, 220F} - \th_y^{*L}\ung{\mu rad}$"); y_min.push(-1); y_max.push(1);
+plot.push("th_y_R_diffNA_vs_th_y_R"); lab_h.push("$\th_y^{*R}\ung{\mu rad}$"); lab_v.push("$\th_y^{*R, 210F} - \th_y^{*R}\ung{\mu rad}$"); y_min.push(-1); y_max.push(1);
+plot.push("th_y_R_diffFA_vs_th_y_R"); lab_h.push("$\th_y^{*R}\ung{\mu rad}$"); lab_v.push("$\th_y^{*R, 220F} - \th_y^{*R}\ung{\mu rad}$"); y_min.push(-1); y_max.push(1);
 
 ProcessOne("y");
