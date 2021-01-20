@@ -8,13 +8,9 @@ string datasets[], dataset_fills[];
 datasets.push("data/fill7281/Totem1"); dataset_fills.push("7281");
 //datasets.push("data/fill7282/Totem1"); dataset_fills.push("7282");
 //datasets.push("data/fill7283/Totem1"); dataset_fills.push("7283");
-//datasets.push("data/fill7284/Totem1"); dataset_fills.push("7284");
+datasets.push("data/fill7284/Totem1"); dataset_fills.push("7284");
 //datasets.push("data/fill7285/Totem1"); dataset_fills.push("7285");
-//datasets.push("data/fill7286/Totem1"); dataset_fills.push("7286");
-//datasets.push("data/fill7287/Totem1"); dataset_fills.push("7287");
-//datasets.push("data/fill7288/Totem1"); dataset_fills.push("7288");
 datasets.push("data/fill7289/Totem1"); dataset_fills.push("7289");
-//datasets.push("data/fill7290/Totem1"); dataset_fills.push("7290");
 datasets.push("data/fill7291/Totem1"); dataset_fills.push("7291");
 
 string diagonals[], diagonal_labels[];
@@ -67,7 +63,12 @@ for (int dsi : datasets.keys)
 			string base = "selected - angles/g_mode_th_x"+arms[ai]+"_vs_th_y"+arms[ai];
 
 			draw(scale(1e6, 1e6), RootGetObject(f, base), "p", p, mCi+2pt+p, diagonal_labels[dgni]);
-			draw(scale(1e6, 1e6), RootGetObject(f, base + "|pol1"), p + dashed);
+
+			RootObject fit = RootGetObject(f, base + "|pol1");
+			draw(scale(1e6, 1e6), fit, p + dashed);
+
+			real xl = (diagonals[dgni] == "45b_56t") ? +50 : -50;
+			label(format("slope = $%#.2f$", fit.rExec("GetParameter", 1)) + format("$\pm %#.2f$", fit.rExec("GetParError", 1)), (xl, -20), p, Fill(white));
 		}
 
 		limits((-100, -30), (100, 30), Crop);
