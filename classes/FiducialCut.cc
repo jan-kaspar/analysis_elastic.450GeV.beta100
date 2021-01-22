@@ -35,6 +35,18 @@ void FiducialCut::Shift(double x, double y)
 
 //----------------------------------------------------------------------------------------------------
 
+void FiducialCut::ApplyCDTransform(double C, double D)
+{
+	for (auto &p : points)
+	{
+		const auto &p_orig = p;
+		p.x += C * p_orig.y;
+		p.y += D * p_orig.x;
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
+
 bool FiducialCut::Satisfied(double th_x, double th_y) const
 {
 	unsigned int n_le = 0, n_gr = 0;

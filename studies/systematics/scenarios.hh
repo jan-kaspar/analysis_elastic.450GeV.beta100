@@ -184,31 +184,36 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	{
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
 		// division by sqrt(2) is conversion from single-arm sigmas
-		const double v_xy = 3.9E-1 / sqrt(2.);		// sometimes denoted as C
-		const double v_yx = 6.3E-4 / sqrt(2.);		// sometimes denoted as D
-
-		// TODO: verify this assumption:
-		//    with the current values of v_xy, v_yx, the effect on the fiducial cuts in negligible
-		// TODO: if needed, the fiducial range can be transformed according to v_xy and v_yx - and be sure
+		const double C = 3.9E-1 / sqrt(2.);
+		const double D = 6.3E-4 / sqrt(2.);
 
 		if (scenario.compare("tilt-thx-thy") == 0)
 		{
-			biases.L.tilt_th_x_eff_prop_to_th_y = v_xy;
-			biases.R.tilt_th_x_eff_prop_to_th_y = v_xy;
+			biases.L.tilt_th_x_eff_prop_to_th_y = C;
+			biases.R.tilt_th_x_eff_prop_to_th_y = C;
 
-			biases.L.tilt_th_y_eff_prop_to_th_x = v_yx;
-			biases.R.tilt_th_y_eff_prop_to_th_x = v_yx;
+			biases.L.tilt_th_y_eff_prop_to_th_x = D;
+			biases.R.tilt_th_y_eff_prop_to_th_x = D;
+
+			anal_rec.fc_L.ApplyCDTransform(C, D);
+			anal_rec.fc_R.ApplyCDTransform(C, D);
+			anal_rec.fc_G.ApplyCDTransform(C, D);
 
 			return 0;
 		}
 
 		if (scenario.compare("tilt-thx-thy-LRasym") == 0)
 		{
-			biases.L.tilt_th_x_eff_prop_to_th_y = +v_xy;
-			biases.R.tilt_th_x_eff_prop_to_th_y = -v_xy;
+			biases.L.tilt_th_x_eff_prop_to_th_y = +C;
+			biases.R.tilt_th_x_eff_prop_to_th_y = -C;
 
-			biases.L.tilt_th_y_eff_prop_to_th_x = +v_yx;
-			biases.R.tilt_th_y_eff_prop_to_th_x = -v_yx;
+			biases.L.tilt_th_y_eff_prop_to_th_x = +D;
+			biases.R.tilt_th_y_eff_prop_to_th_x = -D;
+
+			anal_rec.fc_L.ApplyCDTransform(C, D);
+			anal_rec.fc_R.ApplyCDTransform(-C, -D);
+			// TODO: how to handle the global contour?
+			//anal_rec.fc_G.ApplyCDTransform(C, D);
 
 			return 0;
 		}
