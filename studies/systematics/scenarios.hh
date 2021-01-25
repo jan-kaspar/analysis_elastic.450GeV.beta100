@@ -125,10 +125,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		// sigma of the TB correlated, LR anti-symmetric mode
 		const double v_LR_asym = 1.0E-6 / sqrt(2);
 
-		// TODO: update
-		// TODO: needed ?
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
-		//const double v_TB_uncorr = 0.02E-6 / sqrt(2.);
+		const double v_TB_uncorr = 0.4E-6 / sqrt(2.);
 
 		if (scenario == "sh-thy")
 		{
@@ -153,7 +151,6 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			return 0;
 		}
 
-		/*
 		if (scenario == "sh-thy-TBuncor")
 		{
 			biases.L.sh_th_y = v_TB_uncorr;
@@ -176,7 +173,6 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 			return 0;
 		}
-		*/
 	}
 
 	// ---------- xy tilt ----------
@@ -212,8 +208,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 			anal_rec.fc_L.ApplyCDTransform(C * cfg.th_y_sign, D * cfg.th_y_sign);
 			anal_rec.fc_R.ApplyCDTransform(-C * cfg.th_y_sign, -D * cfg.th_y_sign);
-			// TODO: how to handle the global contour?
-			//anal_rec.fc_G.ApplyCDTransform(C, D);
+			// assume that the global contour is not modified
 
 			return 0;
 		}

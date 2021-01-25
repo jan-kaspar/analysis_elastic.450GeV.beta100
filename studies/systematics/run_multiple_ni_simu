@@ -17,8 +17,8 @@ configurations=(
 
 	"fit_1/sh-thy"
 	"fit_1/sh-thy-LRasym"
-#	"fit_1/sh-thy-TBuncor"
-#	"fit_1/sh-thy-TBuncor-LRasym"
+	"fit_1/sh-thy-TBuncor"
+	"fit_1/sh-thy-TBuncor-LRasym"
 
 	"fit_1/tilt-thx-thy"
 	"fit_1/tilt-thx-thy-LRasym"
