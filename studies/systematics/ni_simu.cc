@@ -207,9 +207,11 @@ double IntegOverDX(double d_x, double *param, const void *)
 	const double &th_x_p = param[0];
 	const double &th_y_p = param[1];
 
-	// extract anti-symmetric component of the shift bias
-	const double abias_sh_th_x = (biases.R.sh_th_x - biases.L.sh_th_x) / 2.;
-	const double abias_sh_th_y = (biases.R.sh_th_y - biases.L.sh_th_y) / 2.;
+	// extract anti-symmetric component of the shift/tilt bias
+	const double abias_sh_th_x = ((biases.R.sh_th_x + biases.R.tilt_th_x_eff_prop_to_th_y * th_y_p)
+		- (biases.L.sh_th_x + biases.L.tilt_th_x_eff_prop_to_th_y * th_y_p)) / 2.;
+	const double abias_sh_th_y = ((biases.R.sh_th_y + biases.R.tilt_th_y_eff_prop_to_th_x * th_x_p)
+		- (biases.L.sh_th_y + biases.L.tilt_th_y_eff_prop_to_th_x * th_x_p)) / 2.;
 
 	const double th_x_p_L = th_x_p - d_x/2. - abias_sh_th_x;
 	const double th_x_p_R = th_x_p + d_x/2. + abias_sh_th_x;
