@@ -78,7 +78,7 @@ struct Biases
 
 //----------------------------------------------------------------------------------------------------
 
-int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*/, Analysis &anal_sim, Environment &env_rec, Analysis &anal_rec)
+int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*/, Analysis &/*anal_sim*/, Environment &env_rec, Analysis &anal_rec)
 {
 	if (scenario == "none")
 	{
@@ -195,9 +195,9 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			biases.L.tilt_th_y_eff_prop_to_th_x = D;
 			biases.R.tilt_th_y_eff_prop_to_th_x = D;
 
-			anal_rec.fc_L.ApplyCDTransform(C, D);
-			anal_rec.fc_R.ApplyCDTransform(C, D);
-			anal_rec.fc_G.ApplyCDTransform(C, D);
+			anal_rec.fc_L.ApplyCDTransform(C * cfg.th_y_sign, D * cfg.th_y_sign);
+			anal_rec.fc_R.ApplyCDTransform(C * cfg.th_y_sign, D * cfg.th_y_sign);
+			anal_rec.fc_G.ApplyCDTransform(C * cfg.th_y_sign, D * cfg.th_y_sign);
 
 			return 0;
 		}
@@ -210,8 +210,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			biases.L.tilt_th_y_eff_prop_to_th_x = +D;
 			biases.R.tilt_th_y_eff_prop_to_th_x = -D;
 
-			anal_rec.fc_L.ApplyCDTransform(C, D);
-			anal_rec.fc_R.ApplyCDTransform(-C, -D);
+			anal_rec.fc_L.ApplyCDTransform(C * cfg.th_y_sign, D * cfg.th_y_sign);
+			anal_rec.fc_R.ApplyCDTransform(-C * cfg.th_y_sign, -D * cfg.th_y_sign);
 			// TODO: how to handle the global contour?
 			//anal_rec.fc_G.ApplyCDTransform(C, D);
 
@@ -318,7 +318,9 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	if (scenario.compare("beam-mom") == 0)
 	{
-		// TODO: update
+		// The relative uncertainty of 10^-3 is the more conservative estimate.
+		// NB: from Eq. (27) in https://cds.cern.ch/record/1546734 one may consider quoting the relative ucertainty
+		// of 0.11 / 450 ~ 2.5 * 10^-4
 		env_rec.p *= (1. - 0.001);
 
 		return 0;
