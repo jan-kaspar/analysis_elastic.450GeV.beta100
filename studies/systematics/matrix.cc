@@ -356,8 +356,8 @@ int main(int argc, const char **argv)
 
 		Mode("sh-thy", Mode::sNI, Mode::coFull),
 		Mode("sh-thy-LRasym", Mode::sNI, Mode::coFull),
-		//Mode("sh-thy-TBuncor", Mode::sNI, Mode::coNo),
-		//Mode("sh-thy-TBuncor-LRasym", Mode::sNI, Mode::coNo),
+		Mode("sh-thy-TBuncor", Mode::sNI, Mode::coNo),
+		Mode("sh-thy-TBuncor-LRasym", Mode::sNI, Mode::coNo),
 
 		Mode("tilt-thx-thy", Mode::sNI, Mode::coFull),
 		Mode("tilt-thx-thy-LRasym", Mode::sMC, Mode::coFull),
@@ -598,8 +598,8 @@ int main(int argc, const char **argv)
 
 		"sh-thy",
 		"sh-thy-LRasym",
-		//"sh-thy-TBuncor",
-		//"sh-thy-TBuncor-LRasym",
+		"sh-thy-TBuncor",
+		"sh-thy-TBuncor-LRasym",
 
 		"tilt-thx-thy",
 		"tilt-thx-thy-LRasym",
