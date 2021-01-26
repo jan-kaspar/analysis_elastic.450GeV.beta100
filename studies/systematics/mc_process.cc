@@ -128,8 +128,8 @@ int main(int argc, const char **argv)
 
 		{ "sh-thy", Scenario::mDsdt },
 		{ "sh-thy-LRasym", Scenario::mDsdt },
-		//{ "sh-thy-TBuncor", Scenario::mDsdt },
-		//{ "sh-thy-TBuncor-LRasym", Scenario::mDsdt },
+		{ "sh-thy-TBuncor", Scenario::mDsdt },
+		{ "sh-thy-TBuncor-LRasym", Scenario::mDsdt },
 
 		{ "tilt-thx-thy", Scenario::mDsdt },
 		{ "tilt-thx-thy-LRasym", Scenario::mDsdt },
