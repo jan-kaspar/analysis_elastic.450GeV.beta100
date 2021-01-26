@@ -56,7 +56,8 @@ int main()
 	const double y_sh_NF_rho = 0.;
 
 	const double tilt_unc = 5E-3;		// rad
-	const double tilt_NF_rho = 0.;		// rad
+	const double tilt_NF_unc = 0.5E-3;	// rad
+	const double tilt_NF_rho = 1. - tilt_NF_unc * tilt_NF_unc / 2. / tilt_unc / tilt_unc;
 
 	// uncertainty matrices
 	const TMatrixD &m_gen_sh_x = GetGenMatrix(x_sh_unc, x_sh_NF_rho);
