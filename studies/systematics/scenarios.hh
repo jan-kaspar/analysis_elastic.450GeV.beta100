@@ -180,8 +180,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	{
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
 		// division by sqrt(2) is conversion from single-arm sigmas
-		const double C = 3.9E-1 / sqrt(2.);
-		const double D = 6.3E-4 / sqrt(2.);
+		const double C = 7.7E-2 / sqrt(2.);
+		const double D = 8.6E-4 / sqrt(2.);
 
 		if (scenario.compare("tilt-thx-thy") == 0)
 		{
