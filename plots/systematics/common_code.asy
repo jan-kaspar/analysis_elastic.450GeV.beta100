@@ -69,7 +69,6 @@ void AddAllModes()
 		"", "sh-thy-LRasym", 1
 	);
 
-	/*
 	AddMode("\vbox{\hbox{shift in $\th_y^*$}\hbox{L-R symmetric}\hbox{T-B uncorrelated}}", red,
 		"", "sh-thy-TBuncor", 1,
 		"", "sh-thy-TBuncor", 1
@@ -79,7 +78,6 @@ void AddAllModes()
 		"", "sh-thy-TBuncor-LRasym", 1,
 		"", "sh-thy-TBuncor-LRasym", 1
 	);
-	*/
 
 	//--------------------
 

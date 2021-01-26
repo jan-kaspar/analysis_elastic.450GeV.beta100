@@ -8,7 +8,7 @@ xSizeDef = 6cm;
 
 string diagonals[], diagonal_labels[];
 diagonals.push("45b_56t"); diagonal_labels.push("45 bot -- 56 top");
-//diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
+diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
 
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
 z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);

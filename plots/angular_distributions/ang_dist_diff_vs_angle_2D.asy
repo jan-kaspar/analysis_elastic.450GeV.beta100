@@ -4,8 +4,13 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[] = {
-	//"data/fill7281/Totem1",
-	//"data/fill7289/Totem1",
+	"data/fill7280/Totem1",
+	"data/fill7281/Totem1",
+	"data/fill7282/Totem1",
+	"data/fill7283/Totem1",
+	"data/fill7284/Totem1",
+	"data/fill7285/Totem1",
+	"data/fill7289/Totem1",
 	"data/fill7291/Totem1",
 };
 
@@ -46,7 +51,7 @@ void ProcessOne(string tag)
 				RootObject h2 = RootGetObject(f, base);
 				//h2.vExec("Rebin2D", 2, 2);
 
-				draw(scale(1e6, 1e6), h2, "def");
+				//draw(scale(1e6, 1e6), h2, "def");
 
 				string base = "selected - angles/p_"+plot[pi];
 
