@@ -5,11 +5,11 @@ include "../common.asy";
 
 string datasets[];
 string periods[][];
-datasets.push("DS-fill7280/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("DS-fill7281/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("DS-fill7285/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("DS-fill7289/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("DS-fill7291/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7280/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7281/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7285/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7289/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7291/Totem1"); periods.push(new string[] { "0", "1"} );
 
 string units[], unit_labels[];
 real u_ycut_neg[], u_ycut_pos[];

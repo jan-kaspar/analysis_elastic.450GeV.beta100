@@ -3,7 +3,7 @@ import pad_layout;
 
 string topDir = "../../";
 
-string dataset = "DS-fill7291/Totem1";
+string dataset = "data/fill7291/Totem1";
 
 string bunches[];
 bunches.push("10");

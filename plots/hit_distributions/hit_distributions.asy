@@ -4,7 +4,7 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[];
-datasets.push("DS-fill7281/Totem1");
+datasets.push("data/fill7281/Totem1");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };

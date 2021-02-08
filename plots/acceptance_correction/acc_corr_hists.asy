@@ -1,10 +1,9 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string datasets[] = {
-	"DS-fill7291/Totem1"
+	"data/fill7291/Totem1"
 };
 
 real t_min[] = { 0.027, 0.02 };

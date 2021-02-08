@@ -1,24 +1,23 @@
 import root;
 import pad_layout;
+include "../common.asy";
 
 string datasets[];
-datasets.push("DS-fill7280/Totem1");
-datasets.push("DS-fill7281/Totem1");
-//datasets.push("DS-fill7282/Totem1");
-//datasets.push("DS-fill7283/Totem1");
-//datasets.push("DS-fill7284/Totem1");
-//datasets.push("DS-fill7285/Totem1");
-datasets.push("DS-fill7286/Totem1");
-//datasets.push("DS-fill7287/Totem1");
-//datasets.push("DS-fill7288/Totem1");
-//datasets.push("DS-fill7289/Totem1");
-//datasets.push("DS-fill7290/Totem1");
-//datasets.push("DS-fill7291/Totem1");
+datasets.push("fill7280/Totem1");
+datasets.push("fill7281/Totem1");
+//datasets.push("fill7282/Totem1");
+//datasets.push("fill7283/Totem1");
+//datasets.push("fill7284/Totem1");
+//datasets.push("fill7285/Totem1");
+datasets.push("fill7286/Totem1");
+//datasets.push("fill7287/Totem1");
+//datasets.push("fill7288/Totem1");
+//datasets.push("fill7289/Totem1");
+//datasets.push("fill7290/Totem1");
+//datasets.push("fill7291/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
-
-string topDir = "../../";
 
 string histogram = "acceptance correction/eb/h_t_after";
 
@@ -77,7 +76,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Log);
 		for (int ci : combinations.keys)
 		{
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			draw(RootGetObject(f, histogram), "eb", comb_pens[ci]);
 		}
 		
@@ -94,7 +93,7 @@ for (int dsi : datasets.keys)
 			if (combinations[ci] == ref_comb)
 				label += " (reference)";
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			draw(RootGetObject(f, histogram), "eb", comb_pens[ci], label);
 		}
 		
@@ -109,7 +108,7 @@ for (int dsi : datasets.keys)
 		
 		//--------------------
 		
-		string ref_f = topDir+"background_studies/"+dataset+"/"+ref_comb+"/distributions_"+diagonal+".root";
+		string ref_f = topDir+"studies/background/"+dataset+"/"+ref_comb+"/distributions_"+diagonal+".root";
 		RootObject ref_o = RootGetObject(ref_f, histogram);
 		
 		//--------------------
@@ -118,7 +117,7 @@ for (int dsi : datasets.keys)
 		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		for (int ci : combinations.keys)
 		{
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			RootObject o = RootGetObject(f, histogram);
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
@@ -134,7 +133,7 @@ for (int dsi : datasets.keys)
 			//if (combinations[ci] == ref_comb)
 			//	continue;
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			RootObject o = RootGetObject(f, histogram);
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
@@ -150,7 +149,7 @@ for (int dsi : datasets.keys)
 			//if (combinations[ci] == ref_comb)
 			//	continue;
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			RootObject o = RootGetObject(f, histogram);
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
