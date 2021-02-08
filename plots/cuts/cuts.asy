@@ -5,18 +5,18 @@ include "../common.asy";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	//"data/fill7280/Totem1",
-	"data/fill7281/Totem1",
-	//"data/fill7282/Totem1",
-	//"data/fill7283/Totem1",
-	//"data/fill7284/Totem1",
-	//"data/fill7285/Totem1",
-	//"data/fill7286/Totem1",
-	//"data/fill7287/Totem1",
-	//"data/fill7288/Totem1",
-	"data/fill7289/Totem1",
-	//"data/fill7290/Totem1",
-	"data/fill7291/Totem1",
+	//"DS-fill7280/Totem1",
+	"DS-fill7281/Totem1",
+	//"DS-fill7282/Totem1",
+	//"DS-fill7283/Totem1",
+	//"DS-fill7284/Totem1",
+	//"DS-fill7285/Totem1",
+	//"DS-fill7286/Totem1",
+	//"DS-fill7287/Totem1",
+	//"DS-fill7288/Totem1",
+	"DS-fill7289/Totem1",
+	//"DS-fill7290/Totem1",
+	"DS-fill7291/Totem1",
 };
 
 string dgns[] = {

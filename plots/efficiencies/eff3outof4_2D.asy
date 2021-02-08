@@ -4,21 +4,18 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[], fills[];
-/*
-datasets.push("data/fill7280/Totem1"); fills.push("7280");
-datasets.push("data/fill7281/Totem1"); fills.push("7281");
-datasets.push("data/fill7282/Totem1"); fills.push("7282");
-datasets.push("data/fill7283/Totem1"); fills.push("7283");
-datasets.push("data/fill7284/Totem1"); fills.push("7284");
-datasets.push("data/fill7285/Totem1"); fills.push("7285");
-//datasets.push("data-bad/fill7286/Totem1"); fills.push("7286");
-//datasets.push("data-bad/fill7287/Totem1"); fills.push("7287");
-//datasets.push("data-bad/fill7288/Totem1"); fills.push("7288");
-datasets.push("data/fill7289/Totem1"); fills.push("7289");
-//datasets.push("data-bad/fill7290/Totem1"); fills.push("7290");
-datasets.push("data/fill7291/Totem1"); fills.push("7291");
-*/
-datasets.push("data/fill7291/Totem1"); fills.push("7291");
+//datasets.push("DS-fill7280/Totem1"); fills.push("7280");
+datasets.push("DS-fill7281/Totem1"); fills.push("7281");
+//datasets.push("DS-fill7282/Totem1"); fills.push("7282");
+//datasets.push("DS-fill7283/Totem1"); fills.push("7283");
+//datasets.push("DS-fill7284/Totem1"); fills.push("7284");
+//datasets.push("DS-fill7285/Totem1"); fills.push("7285");
+//datasets.push("DS-fill7286/Totem1"); fills.push("7286");
+//datasets.push("DS-fill7287/Totem1"); fills.push("7287");
+//datasets.push("DS-fill7288/Totem1"); fills.push("7288");
+//datasets.push("DS-fill7289/Totem1"); fills.push("7289");
+//datasets.push("DS-fill7290/Totem1"); fills.push("7290");
+datasets.push("DS-fill7291/Totem1"); fills.push("7291");
 
 string diagonals[];
 diagonals.push("45b_56t");
@@ -34,11 +31,11 @@ xSizeDef = 6cm;
 ySizeDef = 5cm;
 //yTicksDef = RightTicks(5., 1.);
 //xTicks=LeftTicks(format="$$", 20., 10.)
-xTicksDef = LeftTicks(200., 100.);
+xTicksDef = LeftTicks(50., 10.);
 
 int gx=0, gy=0;
 
-TH2_palette = Gradient(magenta, magenta, blue, blue, heavygreen, yellow, red);
+TH2_palette = Gradient(blue, heavygreen, yellow, red);
 TH2_z_min = 0;
 TH2_z_max = 1.;
 
@@ -49,9 +46,7 @@ for (int dsi : datasets.keys)
 	for (int dgi : diagonals.keys)
 	{
 		string f = topDir + datasets[dsi] + "/eff3outof4_" + diagonals[dgi] + ".root";
-		string f_dist = topDir + datasets[dsi] + "/distributions_" + diagonals[dgi] + ".root";
-
-		real sgn = (diagonals[dgi] == "45b_56t") ? +1 : -1;
+		real sgn = +1;
 		string opt = "vl,eb";
 		
 		++gy; gx = 0;
@@ -73,16 +68,14 @@ for (int dsi : datasets.keys)
 		{
 			string d = "excluded RPs " + rps[rpi] + "/n_si 3.0";
 
-			TH2_z_min = 0.5; TH2_z_max = 1.0;
-			TH2_paletteTicks = PaletteTicks(Step=0.05, step=0.01);
+			TH2_z_min = 0.9; TH2_z_max = 1.0;
+			TH2_paletteTicks = PaletteTicks(Step=0.02, step=0.01);
 
 			++gx;
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
-			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y"), "def");
+			draw(scale(1e6, 1e6*sgn), RootGetObject(f, d+"/th_x, th_y dependence/h_simple_ratio_vs_th_x_th_y"), "def");
 
-			draw(scale(1e6, 1e6*sgn), RootGetObject(f_dist, "fiducial cuts/fc_G"), "l", black+1pt);
-
-			limits((-450, 0), (+450, 150), Crop);
+			limits((-150, 0), (150, 110), Crop);
 		}
 	}
 }

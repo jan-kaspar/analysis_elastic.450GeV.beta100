@@ -6,18 +6,18 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string fills[], f_datasets[];
-f_datasets.push("data/fill7280/ZeroBias"); fills.push("7280");
-f_datasets.push("data/fill7281/ZeroBias"); fills.push("7281");
-f_datasets.push("data/fill7282/ZeroBias"); fills.push("7282");
-f_datasets.push("data/fill7283/ZeroBias"); fills.push("7283");
-f_datasets.push("data/fill7284/ZeroBias"); fills.push("7284");
-f_datasets.push("data/fill7285/ZeroBias"); fills.push("7285");
-//f_datasets.push("data/fill7286/ZeroBias"); fills.push("7286");
-//f_datasets.push("data/fill7287/ZeroBias"); fills.push("7287");
-//f_datasets.push("data/fill7288/ZeroBias"); fills.push("7288");
-f_datasets.push("data/fill7289/ZeroBias"); fills.push("7289");
-//f_datasets.push("data/fill7290/ZeroBias"); fills.push("7290");
-f_datasets.push("data/fill7291/ZeroBias"); fills.push("7291");
+f_datasets.push("DS-fill7280/ZeroBias"); fills.push("7280");
+f_datasets.push("DS-fill7281/ZeroBias"); fills.push("7281");
+f_datasets.push("DS-fill7282/ZeroBias"); fills.push("7282");
+f_datasets.push("DS-fill7283/ZeroBias"); fills.push("7283");
+f_datasets.push("DS-fill7284/ZeroBias"); fills.push("7284");
+f_datasets.push("DS-fill7285/ZeroBias"); fills.push("7285");
+f_datasets.push("DS-fill7286/ZeroBias"); fills.push("7286");
+f_datasets.push("DS-fill7287/ZeroBias"); fills.push("7287");
+f_datasets.push("DS-fill7288/ZeroBias"); fills.push("7288");
+f_datasets.push("DS-fill7289/ZeroBias"); fills.push("7289");
+f_datasets.push("DS-fill7290/ZeroBias"); fills.push("7290");
+f_datasets.push("DS-fill7291/ZeroBias"); fills.push("7291");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
@@ -26,11 +26,9 @@ string template = "dgn/# && #, L || R";
 
 string criteria[] = { "pat_suff_destr", "pl_suff_destr" };
 
-xSizeDef = 20cm;
+xSizeDef = 10cm;
 
 TGraph_errorBar = None;
-
-xTicksDef = LeftTicks(0.5, 0.1);
 
 //----------------------------------------------------------------------------------------------------
 
@@ -52,10 +50,10 @@ for (int dsi : f_datasets.keys)
 	{
 		string dgn = diagonals[di];
 
-		real y_max = 0.10;
+		real y_max = 0.3;
 		
 		NewPad("time$\ung{h}$", "destructive pile-up probability");
-		DrawBands(fills[dsi], bands="run", labels="run", 0, y_max);
+		DrawBands(fills[dsi], bands="run", labels="ds", 0, y_max);
 		
 		for (int ci : criteria.keys)
 		{
@@ -64,7 +62,7 @@ for (int dsi : f_datasets.keys)
 
 			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
 			if (obj.valid)
-				draw(swToHours, obj, "p,l", p+dashed, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
+				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}
 		
 		ylimits(0, y_max, Crop);

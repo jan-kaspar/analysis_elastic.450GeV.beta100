@@ -6,16 +6,17 @@ AddAllModes();
 
 string topDir = "../../";
 
-string f = topDir + "studies/systematics/matrix.root";
+string f = topDir + "systematics/matrix.root";
 
-string binning = "eb";
+//string binning = "ob-1-20-0.05";
+string binning = "ob-3-5-0.05";
 
 string collection = "all-but-norm";
 
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
-z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-//z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
+//z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
+z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
+z_t_maxs.push(1.0); z_t_Steps.push(0.2); z_t_steps.push(0.1); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 

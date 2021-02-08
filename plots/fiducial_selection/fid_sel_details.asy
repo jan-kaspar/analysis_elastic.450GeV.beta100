@@ -4,9 +4,9 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	//"data/fill7281/Totem1",
-	//"data/fill7289/Totem1",
-	"data/fill7291/Totem1",
+	//"DS-fill7281/Totem1",
+	//"DS-fill7289/Totem1",
+	"DS-fill7291/Totem1",
 };
 
 string diagonals[], diagonal_labels[];

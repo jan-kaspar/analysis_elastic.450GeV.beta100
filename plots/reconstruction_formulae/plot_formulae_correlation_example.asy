@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string f = "../../studies/reconstruction_formulae/test_formulae_correlation.root";
+string f = "../../reconstruction_formulae/test_formulae_correlation.root";
 
 string simulations[];
 simulations.push("pitch,beamDiv,vertex");
@@ -25,6 +25,6 @@ void DrawSet(string formula, real scale_x, real limit_x, string label_x, real sc
 
 //----------------------------------------------------------------------------------------------------
 
-DrawSet("theta_x_one_pot_hit_LR2F", 1e6, 100, "$\De\th_x^{*,R}\ung{\mu rad}$", 1e6, 100, "$\De\th_x^{*,L}\ung{\mu rad}$");
+DrawSet("theta_x_one_pot_hit_LR2F", 1e6, 25, "$\De\th_x^{*,R}\ung{\mu rad}$", 1e6, 25, "$\De\th_x^{*,L}\ung{\mu rad}$");
 
-DrawSet("theta_y_one_pot_hit_LR2F", 1e6, 30, "$\De\th_y^{*,R}\ung{\mu rad}$", 1e6, 30, "$\De\th_y^{*,L}\ung{\mu rad}$");
+DrawSet("theta_y_one_pot_hit_LR2F", 1e6, 1, "$\De\th_y^{*,R}\ung{\mu rad}$", 1e6, 1, "$\De\th_y^{*,L}\ung{\mu rad}$");

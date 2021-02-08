@@ -4,14 +4,18 @@ include "../run_info.asy";
 include "../common.asy";
 
 string fills[], f_datasets[];
-fills.push("7280"); f_datasets.push("data/fill7280/Totem1");
-fills.push("7281"); f_datasets.push("data/fill7281/Totem1");
-fills.push("7282"); f_datasets.push("data/fill7282/Totem1");
-fills.push("7283"); f_datasets.push("data/fill7283/Totem1");
-fills.push("7284"); f_datasets.push("data/fill7284/Totem1");
-fills.push("7285"); f_datasets.push("data/fill7285/Totem1");
-fills.push("7289"); f_datasets.push("data/fill7289/Totem1");
-fills.push("7291"); f_datasets.push("data/fill7291/Totem1");
+fills.push("7280"); f_datasets.push("DS-fill7280/Totem1");
+fills.push("7281"); f_datasets.push("DS-fill7281/Totem1");
+fills.push("7282"); f_datasets.push("DS-fill7282/Totem1");
+fills.push("7283"); f_datasets.push("DS-fill7283/Totem1");
+fills.push("7284"); f_datasets.push("DS-fill7284/Totem1");
+fills.push("7285"); f_datasets.push("DS-fill7285/Totem1");
+fills.push("7286"); f_datasets.push("DS-fill7286/Totem1");
+fills.push("7287"); f_datasets.push("DS-fill7287/Totem1");
+fills.push("7288"); f_datasets.push("DS-fill7288/Totem1");
+fills.push("7289"); f_datasets.push("DS-fill7289/Totem1");
+fills.push("7290"); f_datasets.push("DS-fill7290/Totem1");
+fills.push("7291"); f_datasets.push("DS-fill7291/Totem1");
 
 string diagonals[], d_labels[];
 pen d_pens[];
@@ -30,8 +34,6 @@ xTicksDef = LeftTicks(2., 1.);
 
 TGraph_errorBar = None;
 
-bool drawTimber = false;
-
 //----------------------------------------------------------------------------------------------------
 
 for (int qi : quantities.keys)
@@ -40,6 +42,8 @@ for (int qi : quantities.keys)
 
 	for (int fi : fills.keys)
 	{
+		string ft = topDir + f_datasets[fi] + "/process_timber.root";
+
 		DrawBands(fills[fi], bands="run", labels="ds", 0., q_maxs[qi]);
 
 		for (int dgni : diagonals.keys)
@@ -49,12 +53,8 @@ for (int qi : quantities.keys)
 			draw(scale(1./3600, 1e3), RootGetObject(f, "time dependences/gRMS_" + quantities[qi] + "_vs_time"), "l,p", d_pens[dgni], d_labels[dgni]);
 		}
 
-		if (drawTimber)
-		{
-			string ft = topDir + f_datasets[fi] + "/process_timber.root";
-			TGraph_reducePoints = 30;
-			draw(scale(1./3600, 1e6), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
-		}
+		TGraph_reducePoints = 30;
+		draw(scale(1./3600, 1e6), RootGetObject(ft, "g_" + q_timber[qi]), black, "BSRTs");
 
 		ylimits(0., q_maxs[qi], Crop);
 	}

@@ -4,8 +4,7 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[];
-datasets.push("data/fill7281/Totem1");
-datasets.push("data/fill7291/Totem1");
+datasets.push("DS-fill7281/Totem1");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
@@ -62,7 +61,7 @@ for (int dsi : datasets.keys)
 		//draw(RootGetObject(file_45t, "hit distributions/vertical, not aligned, after selection/h2_y_"+units[ui]+"_vs_x_"+units[ui]+"_noal_sel"), "p");
 
 		limits((-15, -30), (15, 30), Crop);
-
+		
 		AttachLegend(replace(unit_labels[ui], "_", "\_"));
 	}
 }

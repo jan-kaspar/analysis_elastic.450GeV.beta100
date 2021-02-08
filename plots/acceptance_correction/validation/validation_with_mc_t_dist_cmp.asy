@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../../common.asy";
 
-string topDir = "../../../test/acceptance_code/";
+string topDir = "../../../acceptance_tests/";
 
 string rows[] = {
 	"simulations/<t_max>,1E8,uncorr/seed1/validation_with_mc.root",
@@ -32,18 +32,19 @@ for (string row : rows)
 
 	//--------------------
 
-	string f = topDir + replace(row, "<t_max>", "0.04");
+	string f = topDir + replace(row, "<t_max>", "0.045");
 	string binning = "eb";
 	
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{a.u.}$");
 	scale(Linear, Log);
 	PlotAll(f, binning);
-	limits((0, 1e1), (0.03, 1e6), Crop);
+	limits((0, 1e8), (0.04, 1e11), Crop);
+
 	
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{a.u.}$");
 	scale(Linear, Log);
 	PlotAll(f, binning);
-	limits((0, 1e1), (0.003, 1e6), Crop);
+	limits((0, 1e8), (0.003, 1e11), Crop);
 
 	AttachLegend(NW, NE);
 }
