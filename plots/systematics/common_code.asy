@@ -1,3 +1,7 @@
+real t_min_axis = 2e-4;
+
+//----------------------------------------------------------------------------------------------------
+
 struct Mode
 {
 	string label;
@@ -84,11 +88,12 @@ void AddAllModes()
 
 	AddMode("\vbox{\hbox{$x$-$y$ tilt}\hbox{L-R anti-symmetric}}", darkred+dashed,
 		"", "tilt-thx-thy-LRasym", 1,
-		"", "", 1
+		"", "tilt-thx-thy-LRasym", 1
 	);
 
 	//--------------------
 
+	/*
 	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 1}}", heavygreen,
 		"", "sc-thxy-mode1", 1,
 		"", "sc-thxy-mode1", 1
@@ -142,6 +147,7 @@ void AddAllModes()
 		"", "eff-slope", 1,
 		"", "eff-slope", 1
 	);
+	*/
 
 	//--------------------
 	
@@ -152,6 +158,7 @@ void AddAllModes()
 
 	//--------------------
 
+	/*
 	AddMode("\vbox{\hbox{unsmearing:}\hbox{uncert.~of $\si(m_x)$}}", blue+dashed,
 		"", "mx-sigma", 1,
 		"", "mx-sigma", 1
@@ -173,6 +180,7 @@ void AddAllModes()
 		"", "norm", 1,
 		"", "norm", 1
 	);
+	*/
 }
 
 //----------------------------------------------------------------------------------------------------

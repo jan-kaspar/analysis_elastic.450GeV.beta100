@@ -1,11 +1,8 @@
 import root;
 import pad_layout;
+include "../common.asy";
 
-string topDir = "../../";
-
-//string binning = "ob-1-20-0.05";
-string binning = "ob-2-10-0.05";
-//string binning = "ob-3-5-0.05";
+string binning = "eb";
 
 string diagonal = "combined";
 

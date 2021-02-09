@@ -1,9 +1,6 @@
 import root;
 import pad_layout;
-
 include "../common.asy";
-
-string topDir = "../../";
 
 string diagonals[], diagLabels[];
 diagonals.push("45b_56t"); diagLabels.push("45 bot -- 56 top");
@@ -25,7 +22,7 @@ for (int dgni : diagonals.keys)
 {
 	pen p = StdPen(dgni + 1);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"), "d0,eb,vl", p, diagLabels[dgni]);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"), "d0,eb,vl", p, diagLabels[dgni]);
 
 	AddToLegend(format("events $%.2E$", robj.rExec("GetEntries")));
 }
