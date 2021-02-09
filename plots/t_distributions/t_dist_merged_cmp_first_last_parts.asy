@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string datasets[];
 pen dataset_pens[];
@@ -12,7 +11,7 @@ drawGridDef = true;
 
 TH1_x_min = 8.1e-4;
 
-string binning = "ob-2-10-0.05";
+string binning = "eb";
 
 string diagonal = "combined";
 
@@ -25,7 +24,7 @@ for (int dsi : datasets.keys)
 {
 	pen p = dataset_pens[dsi];
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/" + datasets[dsi] + "/" + diagonal + "/h_dsdt"),
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/" + datasets[dsi] + "/" + diagonal + "/h_dsdt"),
 		"d0,eb,vl", p, datasets[dsi]);
 }
 

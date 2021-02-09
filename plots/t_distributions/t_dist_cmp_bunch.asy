@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string dataset = "data/fill7291/Totem1";
 
@@ -15,6 +14,8 @@ bunches.push("2429");
 string diagonals[], diagLabels[];
 diagonals.push("45b_56t"); diagLabels.push("45 bot -- 56 top");
 diagonals.push("45t_56b"); diagLabels.push("45 top -- 56 bot");
+
+string binning = "eb";
 
 drawGridDef = true;
 
@@ -33,8 +34,6 @@ for (int dgni : diagonals.keys)
 
 	NewPad("$|t|\ung{GeV^2}$", "$\d N/\d t\ung{mb/GeV^2}$", 12cm, 9cm);
 	scale(Linear, Log);
-
-	string binning = "ob-3-5-0.05";
 
 	for (int bi : bunches.keys)
 	{

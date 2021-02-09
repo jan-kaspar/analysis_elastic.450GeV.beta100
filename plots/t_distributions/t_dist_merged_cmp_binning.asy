@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string binnings[] = {
 	//"ub",
@@ -30,7 +29,7 @@ for (int bi : binnings.keys)
 	scale(Linear, Log);
 	currentpad.xTicks = LeftTicks(0.005, 0.001);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
 
 	limits((0, 4e1), (0.03, 1e4), Crop);
 	

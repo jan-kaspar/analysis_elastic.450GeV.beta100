@@ -1,25 +1,28 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string datasets[], fills[];
-//datasets.push("data/fill7280/Totem1"); fills.push("7280");
+/*
+datasets.push("data/fill7280/Totem1"); fills.push("7280");
 datasets.push("data/fill7281/Totem1"); fills.push("7281");
-//datasets.push("data/fill7282/Totem1"); fills.push("7282");
-//datasets.push("data/fill7283/Totem1"); fills.push("7283");
-//datasets.push("data/fill7284/Totem1"); fills.push("7284");
-//datasets.push("data/fill7285/Totem1"); fills.push("7285");
-//datasets.push("data/fill7286/Totem1"); fills.push("7286");
-//datasets.push("data/fill7287/Totem1"); fills.push("7287");
-//datasets.push("data/fill7288/Totem1"); fills.push("7288");
+datasets.push("data/fill7282/Totem1"); fills.push("7282");
+datasets.push("data/fill7283/Totem1"); fills.push("7283");
+datasets.push("data/fill7284/Totem1"); fills.push("7284");
+datasets.push("data/fill7285/Totem1"); fills.push("7285");
+//datasets.push("data-bad/fill7286/Totem1"); fills.push("7286");
+//datasets.push("data-bad/fill7287/Totem1"); fills.push("7287");
+//datasets.push("data-bad/fill7288/Totem1"); fills.push("7288");
 datasets.push("data/fill7289/Totem1"); fills.push("7289");
-//datasets.push("data/fill7290/Totem1"); fills.push("7290");
+//datasets.push("data-bad/fill7290/Totem1"); fills.push("7290");
 datasets.push("data/fill7291/Totem1"); fills.push("7291");
+*/
+
+datasets.push("data/fill7284/Totem1"); fills.push("7284");
 
 string diagonals[];
 diagonals.push("45b_56t");
-diagonals.push("45t_56b");
+//diagonals.push("45t_56b");
 
 string rps[], rp_labels[];
 rps.push("L_2_F"); rp_labels.push("45-220-fr");
@@ -31,7 +34,7 @@ xSizeDef = 6cm;
 ySizeDef = 5cm;
 //yTicksDef = RightTicks(5., 1.);
 //xTicks=LeftTicks(format="$$", 20., 10.)
-xTicksDef = LeftTicks(100., 50.);
+xTicksDef = LeftTicks(200., 100.);
 
 int gx=0, gy=0;
 
@@ -75,7 +78,7 @@ for (int dsi : datasets.keys)
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
 			draw(scale(1., sgn), RootGetObject(f, d+"/track/th_x, th_y : rel"), "def");
 
-			limits((-400, 0), (400, 150), Crop);
+			limits((-450, 0), (450, 150), Crop);
 		}
 		
 		++gy; gx = 0;
@@ -92,7 +95,7 @@ for (int dsi : datasets.keys)
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy);
 			draw(scale(1., sgn), RootGetObject(f, d+"/pl_suff_no_track/th_x, th_y : rel"), "def");
 
-			limits((-400, 0), (400, 150), Crop);
+			limits((-450, 0), (450, 150), Crop);
 		}
 	}
 }
