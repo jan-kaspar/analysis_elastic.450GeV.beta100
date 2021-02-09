@@ -6,8 +6,11 @@ include "../common.asy";
 string datasets[];
 string periods[][];
 datasets.push("data/fill7280/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("data/fill7281/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("data/fill7285/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7281/Totem1"); periods.push(new string[] { "0" } );
+datasets.push("data/fill7282/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7283/Totem1"); periods.push(new string[] { "0" } );
+datasets.push("data/fill7284/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7285/Totem1"); periods.push(new string[] { "0" } );
 datasets.push("data/fill7289/Totem1"); periods.push(new string[] { "0", "1"} );
 datasets.push("data/fill7291/Totem1"); periods.push(new string[] { "0", "1"} );
 

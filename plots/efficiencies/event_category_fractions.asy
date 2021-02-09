@@ -1,29 +1,18 @@
 import root;
 import pad_layout;
-
+include "../common.asy";
 include "../run_info.asy";
-
-string topDir = "../../";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string fills[], f_datasets[];
-/*
-f_datasets.push("data/fill7280/Totem1"); fills.push("7280");
+//f_datasets.push("data/fill7280/Totem1"); fills.push("7280");
 f_datasets.push("data/fill7281/Totem1"); fills.push("7281");
-f_datasets.push("data/fill7282/Totem1"); fills.push("7282");
-f_datasets.push("data/fill7283/Totem1"); fills.push("7283");
-f_datasets.push("data/fill7284/Totem1"); fills.push("7284");
+//f_datasets.push("data/fill7282/Totem1"); fills.push("7282");
+//f_datasets.push("data/fill7283/Totem1"); fills.push("7283");
+//f_datasets.push("data/fill7284/Totem1"); fills.push("7284");
 f_datasets.push("data/fill7285/Totem1"); fills.push("7285");
-f_datasets.push("data/fill7286/Totem1"); fills.push("7286");
-f_datasets.push("data/fill7287/Totem1"); fills.push("7287");
-f_datasets.push("data/fill7288/Totem1"); fills.push("7288");
-f_datasets.push("data/fill7289/Totem1"); fills.push("7289");
-*/
-f_datasets.push("data/fill7290/Totem1"); fills.push("7290");
-f_datasets.push("data/fill7290/ZeroBias"); fills.push("7290");
 f_datasets.push("data/fill7291/Totem1"); fills.push("7291");
-f_datasets.push("data/fill7291/ZeroBias"); fills.push("7291");
 
 string diagonals[], dgn_labels[];
 diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");

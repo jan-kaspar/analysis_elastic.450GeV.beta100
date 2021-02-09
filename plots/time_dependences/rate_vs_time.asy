@@ -1,6 +1,7 @@
 import root;
 import pad_layout;
 include "../run_info.asy";
+include "../common.asy";
 
 string datasets[], fills[];
 datasets.push("data/fill7280/Totem1"); fills.push("7280");
@@ -9,11 +10,7 @@ datasets.push("data/fill7282/Totem1"); fills.push("7282");
 datasets.push("data/fill7283/Totem1"); fills.push("7283");
 datasets.push("data/fill7284/Totem1"); fills.push("7284");
 datasets.push("data/fill7285/Totem1"); fills.push("7285");
-datasets.push("data/fill7286/Totem1"); fills.push("7286");
-datasets.push("data/fill7287/Totem1"); fills.push("7287");
-datasets.push("data/fill7288/Totem1"); fills.push("7288");
 datasets.push("data/fill7289/Totem1"); fills.push("7289");
-datasets.push("data/fill7290/Totem1"); fills.push("7290");
 datasets.push("data/fill7291/Totem1"); fills.push("7291");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
@@ -24,8 +21,6 @@ pen t_pens[];
 types.push("input"); t_labels.push("coincidence of 2 RPs (220-fr)"); t_pens.push(heavygreen);
 types.push("dgn"); t_labels.push("coincidence of 4 RPs (220-fr and 210-fr)"); t_pens.push(red);
 types.push("sel"); t_labels.push("selected"); t_pens.push(blue);
-
-string topDir = "../../";
 
 xSizeDef = 10cm;
 ySizeDef = 6cm;

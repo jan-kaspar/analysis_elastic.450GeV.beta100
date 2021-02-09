@@ -68,9 +68,23 @@ for (int dsi : datasets.keys)
 		NewPad("bottom-RP $y$ shift$\ung{mm}$", "");
 		currentpad.xTicks = LeftTicks(0.5, 0.1);
 	
-		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/g_max_diff"), "l,p", heavygreen, mCi+1pt+heavygreen);
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/shift/g_max_diff"), "l,p", heavygreen, mCi+1pt+heavygreen);
 	
 		limits((-1.0, 0), (+1.0, 0.1), Crop);
+		AttachLegend(unit_labels[ui], NE, NE);
+	}
+	
+	//--------------------
+	NewRow();
+	
+	for (int ui : units.keys)
+	{
+		NewPad("$y\ung{mm}$", "");
+	
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist"), "d0,vl", red);
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist|f"), "l", blue);
+	
+		limits((-30, 1e2), (+30, 1e3), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
 	}
 

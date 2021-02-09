@@ -1,9 +1,7 @@
 import root;
 import pad_layout;
-
 include "../run_info.asy";
-
-string topDir = "../../";
+include "../common.asy";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
@@ -14,11 +12,7 @@ datasets.push("data/fill7282/Totem1"); ds_labels.push("7282");
 datasets.push("data/fill7283/Totem1"); ds_labels.push("7283");
 datasets.push("data/fill7284/Totem1"); ds_labels.push("7284");
 datasets.push("data/fill7285/Totem1"); ds_labels.push("7285");
-datasets.push("data/fill7286/Totem1"); ds_labels.push("7286");
-datasets.push("data/fill7287/Totem1"); ds_labels.push("7287");
-datasets.push("data/fill7288/Totem1"); ds_labels.push("7288");
 datasets.push("data/fill7289/Totem1"); ds_labels.push("7289");
-datasets.push("data/fill7290/Totem1"); ds_labels.push("7290");
 datasets.push("data/fill7291/Totem1"); ds_labels.push("7291");
 
 string rows[];
