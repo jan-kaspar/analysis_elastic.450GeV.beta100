@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
-include "../run_info.asy";
 include "../common.asy";
+include "../run_info.asy";
 
 string datasets[], fills[];
 datasets.push("data/fill7280/Totem1"); fills.push("7280");

@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
-include "../run_info.asy";
 include "../common.asy";
+include "../run_info.asy";
 
 string datasets[];
 string periods[];
@@ -11,8 +11,8 @@ datasets.push("data/fill7281/Totem1"); periods.push("0");
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
 units.push("L_1_F"); unit_labels.push("L-210-fr");
-units.push("R_1_F"); unit_labels.push("R-210-rf");
-units.push("R_2_F"); unit_labels.push("R-220-fr" );
+units.push("R_1_F"); unit_labels.push("R-210-fr");
+units.push("R_2_F"); unit_labels.push("R-220-fr");
 
 xSizeDef = 10cm;
 drawGridDef = true;
@@ -33,10 +33,10 @@ for (int dsi : datasets.keys)
 	
 	for (int ui : units.keys)
 	{
-		NewPad("$y\ung{mm}$", "$\hbox{mean } x\ung{mm}$");
+		NewPad("$y\ung{mm}$", "$\hbox{central } x\ung{mm}$");
 	
-		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p"), "d0,eb", heavygreen);
-		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p|ff"), "l", magenta+1pt);
+		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p"), "d0,eb", blue);
+		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p|ff"), "l", red+1pt);
 
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile max/g_x_max_vs_y"), "p", blue);
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile max/g_x_max_vs_y|ff"), "l", red+1pt);

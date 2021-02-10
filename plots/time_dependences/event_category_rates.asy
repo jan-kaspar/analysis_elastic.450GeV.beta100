@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
-include "../run_info.asy";
 include "../common.asy";
+include "../run_info.asy";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 

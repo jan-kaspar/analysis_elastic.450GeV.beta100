@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
-include "../run_info.asy";
 include "../common.asy";
+include "../run_info.asy";
 
 string datasets[], fills[];
 datasets.push("data/fill7280/Totem1"); fills.push("7280");
@@ -17,7 +17,7 @@ string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
 units.push("L_1_F"); unit_labels.push("L-210-fr");
 units.push("R_1_F"); unit_labels.push("R-210-fr");
-units.push("R_2_F"); unit_labels.push("R-220-fr" );
+units.push("R_2_F"); unit_labels.push("R-220-fr");
 
 xSizeDef = 10cm;
 xTicksDef = LeftTicks(Step=5., step=1.);

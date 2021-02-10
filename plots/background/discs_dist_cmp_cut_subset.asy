@@ -63,6 +63,8 @@ for (int dsi : datasets.keys)
 
 		NewPad(false);
 		label(replace("{\SetFontSizesXX\vbox{\hbox{"+dataset+"}\hbox{"+dgn_labels[dgi]+"}}}", "_", "\_"));
+		
+		//--------------------
 
 		string combinations[];
 		pen comb_pens[];

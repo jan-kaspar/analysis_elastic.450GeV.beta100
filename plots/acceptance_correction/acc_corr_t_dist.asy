@@ -33,7 +33,7 @@ for (int dsi : datasets.keys)
 
 	for (int dgni : diagonals.keys)
 	{
-		string f = topDir + "/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
+		string f = topDir + datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d N/\d t$");
 		currentpad.xTicks = LeftTicks(0.005, 0.001);
