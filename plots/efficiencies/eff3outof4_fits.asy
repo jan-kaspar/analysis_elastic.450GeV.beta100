@@ -20,7 +20,7 @@ datasets.push("data/fill7291/Totem1"); fills.push("7291");
 
 string diagonals[];
 diagonals.push("45b_56t");
-//diagonals.push("45t_56b");
+diagonals.push("45t_56b");
 
 string rps[], rp_labels[];
 rps.push("L_2_F"); rp_labels.push("45-220-fr");

@@ -16,13 +16,14 @@ string binning = "eb";
 
 NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{mb/GeV^2}$", 12cm, 9cm);
 scale(Linear, Log);
-	currentpad.xTicks = LeftTicks(0.005, 0.001);
+currentpad.xTicks = LeftTicks(0.005, 0.001);
 
 for (int dgni : diagonals.keys)
 {
 	pen p = StdPen(dgni + 1);
 
-	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"), "d0,eb,vl", p, diagLabels[dgni]);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"),
+		"d0,eb,vl", p, diagLabels[dgni]);
 
 	AddToLegend(format("events $%.2E$", robj.rExec("GetEntries")));
 }
@@ -31,6 +32,6 @@ for (int dgni : diagonals.keys)
 //currentpad.yTicks = RightTicks(100., 50.);
 limits((0, 4e1), (0.03, 1e4), Crop);
 
-yaxis(XEquals(2e-4, false), dashed);
+yaxis(XEquals(t_min, false), dashed);
 
 AttachLegend();

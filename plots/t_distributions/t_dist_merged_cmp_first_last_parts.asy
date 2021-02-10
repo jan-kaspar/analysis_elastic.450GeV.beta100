@@ -41,7 +41,7 @@ for (int dsi : datasets.keys)
 {
 	pen p = dataset_pens[dsi];
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/" + datasets[dsi] + "/" + diagonal + "/h_dsdt"),
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/" + datasets[dsi] + "/" + diagonal + "/h_dsdt"),
 		"d0,eb,vl", p, datasets[dsi]);
 }
 

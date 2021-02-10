@@ -24,7 +24,7 @@ string rps[], rp_labels[];
 rps.push("L_2_F"); rp_labels.push("45-220-fr");
 rps.push("L_1_F"); rp_labels.push("45-210-fr");
 rps.push("R_1_F"); rp_labels.push("56-210-fr");
-rps.push("R_2_F"); rp_labels.push("56-220-fr" );
+rps.push("R_2_F"); rp_labels.push("56-220-fr");
 
 string n_si[];
 n_si.push("1.0");

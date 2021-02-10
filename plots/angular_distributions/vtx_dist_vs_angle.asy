@@ -44,7 +44,7 @@ for (int dsi : datasets.keys)
 
 			string base = "selected - vertex/h2_"+plot[pi];
 			RootObject h2 = RootGetObject(f, base);
-			//h2.vExec("Rebin2D", 2, 2);
+			h2.vExec("Rebin2D", 2, 2);
 
 			draw(scale(1e6, 1e3), h2, "def");
 

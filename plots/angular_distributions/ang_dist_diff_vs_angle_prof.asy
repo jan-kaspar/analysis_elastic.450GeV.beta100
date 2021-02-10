@@ -2,11 +2,10 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string datasets[] = {
-	"data/fill7281/Totem1",
-	"data/fill7289/Totem1",
-	"data/fill7291/Totem1",
-};
+string datasets[];
+datasets.push("data/fill7281/Totem1");
+datasets.push("data/fill7289/Totem1");
+datasets.push("data/fill7291/Totem1");
 
 string dgns[] = { "45b_56t", "45t_56b" };
 string dgn_labs[] = { "45 bot -- 56 top", "45 top -- 56 bot" };

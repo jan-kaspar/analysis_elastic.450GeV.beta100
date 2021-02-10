@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
-include common_code;
 include "../common.asy";
+include common_code;
 
 //----------------------------------------------------------------------------------------------------
 

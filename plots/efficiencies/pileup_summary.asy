@@ -48,7 +48,7 @@ for (int di : diagonals.keys)
 			string element = replace(template, "#", criteria[ci]);
 			pen p = StdPen(ci);
 
-			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=true);
+			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
 			if (obj.valid)
 				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}

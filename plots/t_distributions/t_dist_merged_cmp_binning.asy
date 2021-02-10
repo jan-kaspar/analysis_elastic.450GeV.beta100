@@ -35,12 +35,10 @@ for (int bi : binnings.keys)
 	
 	// ----------
 
-	/*
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{mb/GeV^2}$");
 	currentpad.xTicks = LeftTicks(0.002, 0.001);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
 
 	limits((0, 400), (0.01, 1000), Crop);
-	*/
 }

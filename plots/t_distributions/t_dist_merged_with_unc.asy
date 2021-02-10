@@ -6,6 +6,7 @@ string binning = "eb";
 
 string diagonal = "combined";
 
+// TODO
 string fit_file = "/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/combined/coulomb_analysis_1/fits/2500-2rp-ob-2-10-0.05/exp3,t_max=0.15/fit.root";
 string fit_obj = "g_fit_CH";
 

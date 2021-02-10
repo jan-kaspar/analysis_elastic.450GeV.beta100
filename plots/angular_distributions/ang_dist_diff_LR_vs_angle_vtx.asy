@@ -49,7 +49,7 @@ for (int dsi : datasets.keys)
 
 			string base = "selected - angles/h2_"+plot[pi];
 			RootObject h2 = RootGetObject(f, base);
-			//h2.vExec("Rebin2D", 2, 2);
+			h2.vExec("Rebin2D", 2, 2);
 
 			draw(scale(x_scale[pi], 1e6), h2, "def");
 
