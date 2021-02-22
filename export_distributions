@@ -1,20 +1,16 @@
 #!/bin/bash
 
-base_dir="/afs/cern.ch/user/j/jkaspar/public/900GeV/beta100"
+base_dir="/afs/cern.ch/user/j/jkaspar/public/ForFrici/beta100/version_2021_02_22"
 
 datasets=(
-	"DS-fill7280"
-	"DS-fill7281"
-	"DS-fill7282"
-	"DS-fill7283"
-	"DS-fill7284"
-	"DS-fill7285"
-	"DS-fill7286"
-	"DS-fill7287"
-	"DS-fill7288"
-	"DS-fill7289"
-	"DS-fill7290"
-	"DS-fill7291"
+	"data/fill7280"
+	"data/fill7281"
+	"data/fill7282"
+	"data/fill7283"
+	"data/fill7284"
+	"data/fill7285"
+	"data/fill7289"
+	"data/fill7291"
 )
 
 diagonals=(
