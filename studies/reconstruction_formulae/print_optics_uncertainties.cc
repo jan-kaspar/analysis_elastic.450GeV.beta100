@@ -71,10 +71,8 @@ void StudyEigenModes(unsigned int mode_start, unsigned int mode_end, const Envir
 
 int main()
 {
-	// nominal environment
 	Environment env;
-	env.InitNominal();
-	//env.UseMatchedOptics();
+	env.Init();
 
 	env.Print();
 
