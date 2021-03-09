@@ -1,0 +1,28 @@
+#!/bin/bash
+
+cwd=`pwd -P`
+
+ref_dir="../../beta11/4rp"
+
+for f_ref in $ref_dir/*.cc $ref_dir/classes/*.{cc,hh} $ref_dir/test/{compare.cc,run_test}
+#for f_ref in ../../beta11/4rp/plots/*/*.asy
+do
+	f_loc=${f_ref##*4rp/}
+
+	f_lnk=${f_loc/./.LowBeta.}
+	if [ "$f_lnk" == "$f_loc" ]; then f_lnk="$f_loc.LowBeta"; fi
+
+	cmp --silent "$f_ref" "$f_loc"
+	identical="$?"
+
+	echo "* $f_loc ($identical)"
+
+	if [ "$identical" == "0" ]
+	then
+		echo "    files identical, link not made"
+	else
+		echo "    making link"
+		rm -f "$f_lnk"
+		ln -sr "$cwd/$f_ref" "$cwd/$f_lnk"
+	fi
+done
