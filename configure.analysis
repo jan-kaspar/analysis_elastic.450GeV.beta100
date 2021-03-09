@@ -89,22 +89,22 @@ do
 
 	subtargets=""
 	
-	# this is the single most time consuming task - that's why it is run first and alone
+	# this is the single most time consuming task - that's why it is run first
 	opt=""
 	if [ "$fast" == "y" ]; then opt="-O \"-fast 1\""; fi
 	AddSubTarget "pileup_ZeroBias" "" "pileup.cc" "ZeroBias" "$opt"
 
-	AddSubTarget "pileup_Totem1" "pileup_ZeroBias" "pileup.cc" "Totem1" ""
+	AddSubTarget "pileup_Totem1" "" "pileup.cc" "Totem1" ""
 	
-	AddSubTarget "eff3outof4_details" "pileup_ZeroBias" "eff3outof4_details.cc" "Totem1" ""
+	AddSubTarget "eff3outof4_details" "" "eff3outof4_details.cc" "Totem1" ""
 
-	AddSubTarget "process_timber" "pileup_ZeroBias" "process_timber.cc" "Totem1" ""
+	AddSubTarget "process_timber" "" "process_timber.cc" "Totem1" ""
 
-	AddSubTarget "unfolding_mc" "pileup_ZeroBias" "unfolding_cf_mc.cc" "Totem1" ""
-	AddSubTarget "unfolding_ni" "pileup_ZeroBias" "unfolding_cf_ni.cc" "Totem1" ""
+	AddSubTarget "unfolding_mc" "" "unfolding_cf_mc.cc" "Totem1" ""
+	AddSubTarget "unfolding_ni" "" "unfolding_cf_ni.cc" "Totem1" ""
 
-	AddSubTarget "distill_dgn" "pileup_ZeroBias" "distill.cc" "Totem1" ""
-	AddSubTarget "distill_anti" "pileup_ZeroBias" "distill.cc" "Totem1" "-danti"
+	AddSubTarget "distill_dgn" "" "distill.cc" "Totem1" ""
+	AddSubTarget "distill_anti" "" "distill.cc" "Totem1" "-danti"
 
 	AddSubTarget "distributions_bootstrap" "distill_dgn" "distributions.cc" "Totem1" "-O \"-bootstrap 1\""
 	AddSubTarget "eff3outof4" "distill_dgn" "eff3outof4.cc" "Totem1" ""
