@@ -37,14 +37,16 @@
 
 \gdef\plot#1{%
 	\leavevmode
-	\pdfstartlink user {%
+	\pdfstartlink
+		attr{/Border [0 0 0]}%
+		user {%
 	    /Subtype /Link
 	    /A << 
 	        /Type /Action 
 	        /S /URI 
 	        /URI (\baseDir/plots/#1) 
 	    >>}%
-	\cBlue [\parse{#1}]\cBlack
+	\cBlue\uline{\parse{#1}}\cBlack
 	\pdfendlink
 }
 
@@ -52,14 +54,16 @@
 
 \gdef\summary#1{%
 	\leavevmode
-	\pdfstartlink user {%
+	\pdfstartlink
+		attr{/Border [0 0 0]}%
+		user {%
 	    /Subtype /Link
 	    /A << 
 	        /Type /Action 
 	        /S /URI 
 	        /URI (\baseDir/summaries/#1) 
 	    >>}%
-	\cBlue [\parse{#1}]\cBlack
+	\cBlue\uline{\parse{#1}}\cBlack
 	\pdfendlink
 }
 
