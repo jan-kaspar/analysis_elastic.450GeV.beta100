@@ -7,7 +7,7 @@
 
 //----------------------------------------------------------------------------------------------------
 
-Environment::Environment() : optics_version("nominal"), opt_cov(16), opt_per_gen(16, 16)
+Environment::Environment() : optics_version("v1"), opt_cov(16), opt_per_gen(16, 16)
 {
 }
 
@@ -59,7 +59,7 @@ void Environment::InitOptics()
 	for (int idx = 0; idx < n_optical_functions * n_optical_functions; ++idx)
 		opt_cov_data[idx] = 0;
 
-	// optics (nominal, sent by Frici on 26 Feb 2020)
+	// version nominal, sent by Frici on 26 Feb 2020
 	if (optics_version == "nominal")
 	{
 		v_x_R_1_F = -2.29251110442821; L_x_R_1_F = 35.1828162653735E3; v_y_R_1_F = 0.126220649033512; L_y_R_1_F = 171.911207102938E3; D_x_R_1_F = -0.0864671103458512E3;
@@ -67,6 +67,18 @@ void Environment::InitOptics()
 
 		v_x_L_1_F = -2.24947329593445; L_x_L_1_F = 35.8475945504415E3; v_y_L_1_F = 0.124161170232800; L_y_L_1_F = 173.630053228259E3; D_x_L_1_F = +0.0855111365318488E3;
 		v_x_L_2_F = -1.93196310652978; L_x_L_2_F = 27.6759142870506E3; v_y_L_2_F = 0.098769215019425; L_y_L_2_F = 194.499649253117E3; D_x_L_2_F = +0.0672035864182922E3;
+
+		optics_set = true;
+	}
+
+	// version v1, sent by Frici on 3 Mar 2021
+	if (optics_version == "v1")
+	{
+		v_x_R_1_F = -2.25830632888932; L_x_R_1_F = 36.5836944494489E3; v_y_R_1_F = -0.01834785764521860; L_y_R_1_F = 167.364428145004E3; D_x_R_1_F = 0E3;
+		v_x_R_2_F = -1.94602281958432; L_x_R_2_F = 28.4236464030796E3; v_y_R_2_F = -0.06236909420405130; L_y_R_2_F = 187.213362490210E3; D_x_R_2_F = 0E3;
+
+		v_x_L_1_F = -2.22676133379662; L_x_L_1_F = 36.5451226794256E3; v_y_L_1_F = +0.04076728366855310; L_y_L_1_F = 170.970215192752E3; D_x_L_1_F = 0E3;
+		v_x_L_2_F = -1.90985828033614; L_x_L_2_F = 28.2017100011691E3; v_y_L_2_F = +0.00475124530888865; L_y_L_2_F = 191.571488403204E3; D_x_L_2_F = 0E3;
 
 		optics_set = true;
 	}

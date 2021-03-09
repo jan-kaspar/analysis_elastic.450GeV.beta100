@@ -23,7 +23,7 @@ cfg = cms.PSet(
   timber_dir = cms.string(""),
 
   env = cms.PSet(
-    optics_version = cms.string("nominal")
+    optics_version = cms.string("v1")
   ),
 
   anal = cms.PSet(
@@ -217,14 +217,14 @@ cfg_45b_56t = cfg.clone(
       )
     ),
 
-    cut1_a = 1., cut1_c = -2.0E-6, cut1_si = 35E-6,
-    cut2_a = 1., cut2_c = -0.3E-6, cut2_si = 8E-6,
+    cut1_a = 1., cut1_c = -1.91E-6, cut1_si = 35E-6,
+    cut2_a = 1., cut2_c = +0.53E-6, cut2_si = 8E-6,
 
     cut5_a = 0.105, cut5_c = -0.01, cut5_si = 0.08,
     cut6_a = 0.105, cut6_c = +0.03, cut6_si = 0.08,
 
     cut7_a = 0., cut7_c = +0.01, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = -0.11, cut8_si = 2.8,
+    cut8_a = 0., cut8_c = -0.23, cut8_si = 2.8,
 
     cut9_a = -0.28, cut9_c = +0.00, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = +0.01, cut10_si = 0.14,
@@ -253,14 +253,14 @@ cfg_45t_56b = cfg.clone(
       )
     ),
 
-    cut1_a = 1., cut1_c = -0.5E-6, cut1_si = 34E-6,
-    cut2_a = 1., cut2_c = -0.2E-6, cut2_si = 8E-6,
+    cut1_a = 1., cut1_c = -0.47E-6, cut1_si = 34E-6,
+    cut2_a = 1., cut2_c = -1.12E-6, cut2_si = 8E-6,
 
     cut5_a = 0.105, cut5_c = +0.01, cut5_si = 0.08,
     cut6_a = 0.105, cut6_c = -0.04, cut6_si = 0.08,
 
-    cut7_a = 0., cut7_c = +0.00, cut7_si = 0.55,
-    cut8_a = 0., cut8_c = 0.10, cut8_si = 2.8,
+    cut7_a = 0., cut7_c = -0.01, cut7_si = 0.55,
+    cut8_a = 0., cut8_c = +0.12, cut8_si = 2.8,
 
     cut9_a = -0.28, cut9_c = +0.01, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = -0.00, cut10_si = 0.14,
