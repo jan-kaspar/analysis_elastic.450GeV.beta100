@@ -55,7 +55,7 @@ for (int dsi : datasets.keys)
 		string f = topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root";
 
 		draw(swToHours*scale(1, 1e6),
-			RootGetObject(f, "time dependences/gRMS_diffLR_th_x_vs_time"), "p,eb,d0",
+			RootGetObject(f, "time dependences/gRMS_diffRL_th_x_vs_time"), "p,eb,d0",
 			dgn_pens[dgni], mCi+2pt+dgn_pens[dgni], dgn_labels[dgni]);
 
 		RootObject fit = RootGetObject(topDir+datasets[dsi]+"/resolution_fit_"+diagonals[dgni]+".root", "d_x/g_fits");
@@ -97,7 +97,7 @@ for (int dsi : datasets.keys)
 		string f = topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root";
 
 		draw(swToHours*scale(1, 1e6),
-			RootGetObject(f, "time dependences/gRMS_diffLR_th_y_vs_time"), "p,eb,d0",
+			RootGetObject(f, "time dependences/gRMS_diffRL_th_y_vs_time"), "p,eb,d0",
 			dgn_pens[dgni], mCi+2pt+dgn_pens[dgni], dgn_labels[dgni]);
 
 		RootObject fit = RootGetObject(topDir+datasets[dsi]+"/resolution_fit_"+diagonals[dgni]+".root", "d_y/g_fits");

@@ -47,7 +47,7 @@ for (int qi : quantities.keys)
 		{
 			string f = topDir + f_datasets[fi] + "/distributions_" + diagonals[dgni] + ".root";
 			TGraph_reducePoints = 1;
-			draw(scale(1./3600, 1e6), RootGetObject(f, "time dependences/gRMS_diffLR_" + quantities[qi] + "_vs_time"), "l,p", d_pens[dgni], d_labels[dgni]);
+			draw(scale(1./3600, 1e6), RootGetObject(f, "time dependences/gRMS_diffRL_" + quantities[qi] + "_vs_time"), "l,p", d_pens[dgni], d_labels[dgni]);
 		}
 
 		TGraph_reducePoints = 30;
@@ -56,5 +56,5 @@ for (int qi : quantities.keys)
 		ylimits(0., q_maxs[qi], Crop);
 	}
 
-	GShipout(quantities[qi] + "_diffLR_vs_time");
+	GShipout(quantities[qi] + "_diffRL_vs_time");
 }
