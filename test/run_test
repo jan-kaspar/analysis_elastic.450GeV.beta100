@@ -257,8 +257,8 @@ function StudiesComparison()
 		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_y_one_arm_regr, th_y_L/pitch,beamDiv,vertex/g_stddev" "global"
 		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_y_two_arm_regr_LRavg, th_y/pitch,beamDiv,vertex/g_stddev" "global"
 
-		MakeOneComparison "studies/systematics/matrix.root" "matrices/all-but-norm/eb/h_stddev" "global"
-		MakeOneComparison "studies/systematics/matrix.root" "matrices/all/eb/h_stddev" "global"
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all-but-norm/sb1/h_stddev" "global"
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all/sb1/h_stddev" "global"
 
 		if [ "$n_diff" -eq "0" ]
 		then
