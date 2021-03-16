@@ -113,7 +113,10 @@ function MakeOneComparison()
 	plot_file="${plot_file// /_}"
 	plot_file="${plot_file}.png"
 
-	test/compare "$file1" "$obj" "$file2" "$obj" "$plot_file"
+	# TODO: remove
+	obj2=${obj/sb1/eb}
+
+	test/compare "$file1" "$obj" "$file2" "$obj2" "$plot_file"
 	res="$?"
 
 	if [ ! "$res" -eq "0" ]
@@ -166,15 +169,15 @@ function MainAnalysisComparison()
 
 		MakeOneComparison "distributions_45b_56t.root" "elastic cuts/cut 1/h_cq1"
 		MakeOneComparison "distributions_45b_56t.root" "elastic cuts/cut 2/h_cq2"
-		MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
-		MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+		MakeOneComparison "distributions_45b_56t.root" "acceptance correction/sb1/h_t_after"
+		MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/sb1/h_t_normalized_unsmeared"
 		MakeOneComparison "distributions_45t_56b.root" "elastic cuts/cut 1/h_cq1"
 		MakeOneComparison "distributions_45t_56b.root" "elastic cuts/cut 2/h_cq2"
-		MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
-		MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+		MakeOneComparison "distributions_45t_56b.root" "acceptance correction/sb1/h_t_after"
+		MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/sb1/h_t_normalized_unsmeared"
 
-		MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
-		MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
+		MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/sb1/h_t_after"
+		MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/sb1/h_t_after"
 
 		MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
 		MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
@@ -199,10 +202,10 @@ function MainAnalysisComparison()
 		MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
 		MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
 
-		MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
-		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
+		MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/sb1"
+		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/sb1"
 
-		MakeOneComparison "data/merged.root" "eb/merged/combined/h_dsdt" "global"
+		MakeOneComparison "data/merged.root" "sb1/merged/combined/h_dsdt" "global"
 
 		if [ "$n_diff" -eq "0" ]
 		then

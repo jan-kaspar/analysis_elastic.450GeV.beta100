@@ -29,7 +29,7 @@ int main()
 	ff->SetParameter(9, 6.52);
 	*/
 
-	h_in->Fit(ff, "", "", 1E-6, 0.02);
+	h_in->Fit(ff, "", "", 2.5E-4, 0.02);
 
 	//printf("ff(0) = %f mb / GeV^2\n", ff->Eval(0.));
 

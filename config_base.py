@@ -159,7 +159,7 @@ cfg = cms.PSet(
     alignment_t0 = cms.double(0.),
     alignment_ts = cms.double(60*60),
 
-    binnings = cms.vstring("ub", "eb"),
+    binnings = cms.vstring("sb1", "sb2", "sb3"),
 
     unsmearing_file = cms.string("unfolding_cf_ni_<diagonal>.root"),
     unsmearing_object = cms.string("fit-1/<binning>"),

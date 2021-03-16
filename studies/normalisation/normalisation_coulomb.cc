@@ -50,7 +50,7 @@ void ProcessOne(TH1D *h)
 int main()
 {
 	// configuration
-	string binning = "eb";
+	string binning = "sb1";
 
 	vector<string> datasets;
 	datasets.push_back("data/fill7280/Totem1");

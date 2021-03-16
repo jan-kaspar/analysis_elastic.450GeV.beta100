@@ -5,6 +5,7 @@
 #include "Analysis.hh"
 #include "Kinematics.hh"
 
+#include <cstdio>
 #include <deque>
 
 using namespace std;
@@ -117,18 +118,25 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 		}
 	}
 
-	if (type.compare("ob-0-1") == 0)
+	if (type.find("sb") == 0)
 	{
+		const double t_low = 0.002, t_high = 0.02;
+
+		double w_low = 1., w_high = 2.;
+		if (type == "sb1") { w_low = 1.0E-4; w_high = 0.5E-3; }
+		if (type == "sb2") { w_low = 2.0E-4; w_high = 1.0E-3; }
+		if (type == "sb3") { w_low = 3.0E-4; w_high = 2.0E-3; }
+
+		const double a = (w_high - w_low) / (t_high - t_low);
+
 		double t = anal.t_min;
 		while (t < anal.t_max)
 		{
 			be.push_back(t);
 
-			double w = 0.01;
-			if (t >= 0.00) w = 2E-4;
-			if (t >= 5E-4) w = (t - 0.00) / (0.01 - 0.00) * (0.0037 - 0.0001) + 0.0001;
-			if (t >= 0.01) w = (t - 0.01) / (0.06 - 0.01) * (0.0100 - 0.0037) + 0.0037;
-			if (t >= 0.06) w = 0.01;
+			double w = w_low;
+			if (t >= t_low) w = w_low + a * (t - t_low);
+			if (t >= t_high) w = w_high;
 
 			t += w;
 		}

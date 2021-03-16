@@ -184,7 +184,9 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("eb");
+	binnings.push_back("sb1");
+	binnings.push_back("sb2");
+	binnings.push_back("sb3");
 
 	// output file	
 	TFile *f_out = new TFile(outFileName.c_str(), "recreate");

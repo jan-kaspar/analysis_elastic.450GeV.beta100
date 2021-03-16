@@ -34,34 +34,34 @@ void ProfileToRMSGraph(TProfile *p, TGraphErrors *g)
 
 int main()
 {
-	double B = 18.;		// GeV^2
+	double B = 20.;		// GeV^2
 	double p = 450.;	// GeV
 
 	// 1-arm
-	double si_de_th_x = 26E-6;
+	double si_de_th_x = 23E-6;
 	double si_de_th_y = 6E-6;
 
-	double lcut_th_y_L = 35E-6;
-	double lcut_th_y_R = 35E-6;
-	double hcut_th_y_L = 135E-6;
-	double hcut_th_y_R = 135E-6;
+	double lcut_th_y_L = 32E-6;
+	double lcut_th_y_R = 32E-6;
+	double hcut_th_y_L = 125E-6;
+	double hcut_th_y_R = 125E-6;
 
 	TFile *out_f = new TFile("simu.root", "recreate");
 
 	TH1D *h_th_x_tr = new TH1D("h_th_x_tr", ";#theta_{x}^{*}  (#murad)", 200, -200E-6, -200E-6);
 	TH1D *h_th_y_tr = new TH1D("h_th_y_tr", ";#theta_{y}^{*}  (#murad)", 200, -200E-6, -200E-6);
-	TH1D *h_t_tr = new TH1D("h_t_tr", ";t  (GeV^{2})", 100, 0., 0.1);
+	TH1D *h_t_tr = new TH1D("h_t_tr", ";t  (GeV^{2})", 100, 0., 0.04);
 	
 	TH1D *h_th_x_sm = new TH1D("h_th_x_sm", ";#theta_{x}^{*}  (#murad)", 200, -200E-6, -200E-6);
 	TH1D *h_th_y_sm = new TH1D("h_th_y_sm", ";#theta_{y}^{*}  (#murad)", 200, -200E-6, -200E-6);
-	TH1D *h_t_sm = new TH1D("h_t_sm", ";t  (GeV^{2})", 100, 0., 0.1);
+	TH1D *h_t_sm = new TH1D("h_t_sm", ";t  (GeV^{2})", 100, 0., 0.04);
 
-	TH2D *h_de_t_vs_t = new TH2D("h_de_t_vs_t", ";t  (GeV^{2});#Delta t  (GeV^{2})", 100, 0., 0.1, 100, 0., 0.);
-	TProfile *p_de_t_vs_t = new TProfile("p_de_t_vs_t", ";t  (GeV^{2})", 280, 0., 0.1);
+	TH2D *h_de_t_vs_t = new TH2D("h_de_t_vs_t", ";t  (GeV^{2});#Delta t  (GeV^{2})", 100, 0., 0.04, 100, 0., 0.);
+	TProfile *p_de_t_vs_t = new TProfile("p_de_t_vs_t", ";t  (GeV^{2})", 280, 0., 0.04);
 
-	for (unsigned int i = 0; i < 40000000; i++)
+	for (unsigned int i = 0; i < 100000000; i++)
 	{
-		double t = gRandom->Rndm() * 0.2;
+		double t = gRandom->Rndm() * 0.04;
 		double phi = gRandom->Rndm() * M_PI;
 		double w = exp(-B*t);
 
