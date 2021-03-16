@@ -180,6 +180,11 @@ void AddAllModes()
 		"", "norm", 1,
 		"", "norm", 1
 	);
+
+	AddMode("\vbox{\hbox{others}}", gray,
+		"", "others", 1,
+		"", "others", 1
+	);
 	*/
 }
 

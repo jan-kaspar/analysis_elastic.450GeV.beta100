@@ -60,7 +60,7 @@ for (int mi : modes.keys)
 			// ----- MC -----
 
 			string mc_f = topDir + mc_source + "/" + diagonals[dgni] + "/mc_process.root";
-			string objPath = modes[mi].mc_tag + "/eb/h_eff";
+			string objPath = modes[mi].mc_tag + "/sb1/h_eff";
 
 			RootObject os = RootGetObject(mc_f, objPath, error=false);
 			if (os.valid)
