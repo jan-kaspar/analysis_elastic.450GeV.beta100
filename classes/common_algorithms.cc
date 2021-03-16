@@ -83,41 +83,6 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 
 	std::vector<double> be;
 
-	// low-|t| part
-	double t = anal.t_min;
-
-	// central part
-	if (type.compare("ub") == 0)
-	{
-		double w = 2E-3;
-		for (; t <= anal.t_max; t += w)
-			be.push_back(t);
-	}
-
-	if (type.compare("eb") == 0)
-	{
-		be.push_back(0.0E-4);
-		be.push_back(0.1E-4);
-		be.push_back(1.1E-4);
-		be.push_back(2.1E-4);
-
-		t = 4.0E-4;
-
-		double w = 0.2E-3;
-		for (; t < 0.6E-3; t += w)
-			be.push_back(t);
-
-		w = 0.2E-3;
-		for (; t < 0.02; t += w)
-			be.push_back(t);
-
-		for (; t < anal.t_max; t += w)
-		{
-			be.push_back(t);
-			w *= 1.05;
-		}
-	}
-
 	if (type.find("sb") == 0)
 	{
 		const double t_low = 0.002, t_high = 0.02;
@@ -130,9 +95,13 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 		const double a = (w_high - w_low) / (t_high - t_low);
 
 		double t = anal.t_min;
-		while (t < anal.t_max)
+		const double t_max = 0.1;
+		while (true)
 		{
 			be.push_back(t);
+
+			if (t > t_max)
+				break;
 
 			double w = w_low;
 			if (t >= t_low) w = w_low + a * (t - t_low);
@@ -141,12 +110,6 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 			t += w;
 		}
 	}
-
-	// high-|t| part
-	unsigned int N_bins_high = 10;
-	double w = (anal.t_max_full - anal.t_max) / N_bins_high;
-	for (unsigned int i = 0; i <= N_bins_high; i++)
-		be.push_back(anal.t_max + w * i);
 
 	bins = be.size() - 1;
 	binEdges = new double[be.size()];
