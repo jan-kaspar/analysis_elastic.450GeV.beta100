@@ -530,6 +530,7 @@ int main(int argc, const char **argv)
 	TFile *f_out = new TFile((outputDir+"/distributions_" + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	//FILE *f_out_cand = fopen((outputDir+"/candidates_" + cfg.diagonal_str + ".txt").c_str(), "w");
+	//FILE *f_out_debug = fopen((outputDir+"/debug_" + cfg.diagonal_str + ".txt").c_str(), "w");
 
 	// get input data
 	EventRed ev;
@@ -1391,6 +1392,14 @@ int main(int argc, const char **argv)
 
 		h_y_L_ratioFN_vs_y_L_N->Fill(h_al.L_1_F.y, h_al.L_2_F.y / h_al.L_1_F.y);
 		h_y_R_ratioFN_vs_y_R_N->Fill(h_al.R_1_F.y, h_al.R_2_F.y / h_al.R_1_F.y);
+		*/
+
+		// debug output
+		/*
+		fprintf(f_out_debug, "%E %E %E %E %E %E %E %E %E %E %E %E %E %E %E %E\n",
+			h_al.L_2_F.x, h_al.L_1_F.x, h_al.R_1_F.x, h_al.R_2_F.x, k.th_x_L, k.th_x_R, k.vtx_x_L, k.vtx_x_R,
+			h_al.L_2_F.y, h_al.L_1_F.y, h_al.R_1_F.y, h_al.R_2_F.y, k.th_y_L, k.th_y_R, k.vtx_y_L, k.vtx_y_R
+		);
 		*/
 
 		// fill angle histograms
@@ -2552,6 +2561,7 @@ int main(int argc, const char **argv)
 	delete f_out;
 
 	//fclose(f_out_cand);
+	//fclose(f_out_debug);
 
 	return 0;
 }
