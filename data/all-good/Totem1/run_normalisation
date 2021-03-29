@@ -1,0 +1,21 @@
+#!/bin/bash
+
+make -C ../../../ -j8 || exit 1
+
+#----------------------------------------------------------------------------------------------------
+
+function RunOne
+{
+	local ds="$1"
+	
+	echo "* $ds"
+
+	$BASE_DIR/studies/normalisation/normalisation -input "$ds" -print-details 0 -print-python 1 >> "$ds/config.py"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+for d in */
+do
+	RunOne "$d"
+done
