@@ -11,6 +11,90 @@ def FiducialCut(points):
 
 #----------------------------------------------------------------------------------------------------
 
+def Contour(fc):
+  output = []
+  for p in fc:
+    output.append([float(p.x.pythonValue()), float(p.y.pythonValue())])
+  return output
+
+#----------------------------------------------------------------------------------------------------
+
+def Shrink(points, sigma_x = 16E-6, sigma_y = 4E-6, th_x_low = -100E-6, th_x_high = +100E-6, th_y_low = 50E-6, th_y_high = 100E-6):
+  output = []
+  for p in points:
+    x = p[0]
+    y = p[1]
+
+    if (x < th_x_low):
+      x += sigma_x
+
+    if (x > th_x_high):
+      x -= sigma_x
+
+    if (y < th_y_low):
+      y += sigma_y
+
+    if (y > th_y_high):
+      y -= sigma_y
+
+    output.append([x, y])
+
+  return output
+
+#----------------------------------------------------------------------------------------------------
+
+def CutContour(points, x1, y1, x2, y2):
+  dx = x2 - x1
+  dy = y2 - y1
+
+  nx = -dy
+  ny = dx
+
+  output = []
+
+  for i in range(len(points)):
+    j = (i + 1) % len(points)
+
+    pi_x = points[i][0]
+    pi_y = points[i][1]
+
+    pj_x = points[j][0]
+    pj_y = points[j][1]
+
+    pi_proj = (pi_x - x1) * nx + (pi_y - y1) * ny
+    pj_proj = (pj_x - x1) * nx + (pj_y - y1) * ny
+
+    pi_in = (pi_proj >= 0)
+    pj_in = (pj_proj >= 0)
+
+    if (pi_in and pj_in):
+      output.append([pj_x, pj_y])
+
+    if ((pi_in and (not pj_in)) or ((not pi_in) and pj_in)):
+      # calculate intersection
+      d2x = pj_x - pi_x
+      d2y = pj_y - pi_y
+
+      de_a_x = pi_x - x1
+      de_a_y = pi_y - y1
+
+      det = - dx * d2y + d2x * dy
+
+      la1 = (-d2y * de_a_x + d2x * de_a_y) / det
+
+      c_x = x1 + la1 * dx
+      c_y = y1 + la1 * dy
+
+      if not pi_in:
+        output.append([c_x, c_y])
+        output.append([pj_x, pj_y])
+      else:
+        output.append([c_x, c_y])
+
+  return output
+
+#----------------------------------------------------------------------------------------------------
+
 cfg = cms.PSet(
   input_files = cms.vstring(),
   distilled_files = cms.vstring("."),
@@ -204,6 +288,8 @@ a_R_2_F, b_R_2_F, c_R_2_F = +6.0E-3, +863E-3,   -0E-3
 
 #----------------------------------------------------------------------------------------------------
 
+single_arm_contour_45b_56t = [[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]
+
 cfg_45b_56t = cfg.clone(
   anal = dict(
     alignment_sources = cms.VPSet(
@@ -229,9 +315,9 @@ cfg_45b_56t = cfg.clone(
     cut9_a = -0.28, cut9_c = +0.00, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = +0.01, cut10_si = 0.14,
 
-    fc_L = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
-    fc_R = FiducialCut([[-350E-6, 31E-6], [50E-6, 31E-6], [250E-6, 40E-6], [390E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-390E-6, 60E-6]]),
-    fc_G = FiducialCut([[-338E-6, 32E-6], [50E-6, 32E-6], [250E-6, 42E-6], [385E-6, 80E-6], [270E-6, 124E-6], [-280E-6, 129E-6], [-385E-6, 60E-6]]),
+    fc_L = FiducialCut(single_arm_contour_45b_56t),
+    fc_R = FiducialCut(single_arm_contour_45b_56t),
+    fc_G = FiducialCut(Shrink(single_arm_contour_45b_56t)),
 
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
@@ -239,6 +325,8 @@ cfg_45b_56t = cfg.clone(
 )
 
 #----------------------------------------------------------------------------------------------------
+
+single_arm_contour_45t_56b = [[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]
 
 cfg_45t_56b = cfg.clone(
   anal = dict(
@@ -265,9 +353,9 @@ cfg_45t_56b = cfg.clone(
     cut9_a = -0.28, cut9_c = +0.01, cut9_si = 0.14,
     cut10_a = -0.29, cut10_c = -0.00, cut10_si = 0.14,
 
-    fc_L = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
-    fc_R = FiducialCut([[-50E-6, 31E-6], [-250E-6, 40E-6], [-370E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [380E-6, 42E-6], [330E-6, 31E-6]]),
-    fc_G = FiducialCut([[-50E-6, 32E-6], [-250E-6, 42E-6], [-365E-6, 80E-6], [-265E-6, 130E-6], [250E-6, 132E-6], [355E-6, 95E-6], [375E-6, 43E-6], [330E-6, 32E-6]]),
+    fc_L = FiducialCut(single_arm_contour_45t_56b),
+    fc_R = FiducialCut(single_arm_contour_45t_56b),
+    fc_G = FiducialCut(Shrink(single_arm_contour_45t_56b)),
 
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
