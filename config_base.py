@@ -289,6 +289,10 @@ a_R_2_F, b_R_2_F, c_R_2_F = +6.0E-3, +863E-3,   -0E-3
 #----------------------------------------------------------------------------------------------------
 
 single_arm_contour_45b_56t = [[-300E-6, 34E-6], [50E-6, 34E-6], [245E-6, 45E-6], [365E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-370E-6, 60E-6]]
+single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, +220E-6, 0E-6, +221E-6, 150E-6)
+single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, 1., 115E-6, -1., 115E-6)
+
+double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_high=+219E-6, th_y_high=114E-6)
 
 cfg_45b_56t = cfg.clone(
   anal = dict(
@@ -317,7 +321,7 @@ cfg_45b_56t = cfg.clone(
 
     fc_L = FiducialCut(single_arm_contour_45b_56t),
     fc_R = FiducialCut(single_arm_contour_45b_56t),
-    fc_G = FiducialCut(Shrink(single_arm_contour_45b_56t)),
+    fc_G = FiducialCut(double_arm_contour_45b_56t),
 
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
@@ -327,6 +331,10 @@ cfg_45b_56t = cfg.clone(
 #----------------------------------------------------------------------------------------------------
 
 single_arm_contour_45t_56b = [[-50E-6, 34E-6], [-240E-6, 45E-6], [-360E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [370E-6, 42E-6], [330E-6, 34E-6]]
+single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, -220E-6, 150E-6, -221E-6, 0E-6)
+single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, 1., 115E-6, -1., 115E-6)
+
+double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-219E-6, th_y_high=114E-6)
 
 cfg_45t_56b = cfg.clone(
   anal = dict(
@@ -355,7 +363,7 @@ cfg_45t_56b = cfg.clone(
 
     fc_L = FiducialCut(single_arm_contour_45t_56b),
     fc_R = FiducialCut(single_arm_contour_45t_56b),
-    fc_G = FiducialCut(Shrink(single_arm_contour_45t_56b)),
+    fc_G = FiducialCut(double_arm_contour_45t_56b),
 
     inefficiency_3outof4 = 0.0,
     inefficiency_pile_up = 0.0
