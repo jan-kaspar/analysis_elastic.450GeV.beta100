@@ -1,0 +1,133 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+
+function Pass()
+{
+	echo "    pass"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function InitContour()
+{
+	echo "    contour = Contour(c.anal.fc_L)"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function CutThXY()
+{
+	local x1="$1"
+	local y1="$2"
+	local x2="$3"
+	local y2="$4"
+
+	echo "    contour = CutContour(contour, $x1, $y1, $x2, $y2)"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function Shrink()
+{
+	local shrink_args="$1"
+
+	echo "    c.anal.fc_L = FiducialCut(contour)"
+	echo "    c.anal.fc_R = FiducialCut(contour)"
+	echo "    c.anal.fc_G = FiducialCut(Shrink(contour, $shrink_args))"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function CutVtxX()
+{
+	local min="$1"
+	local max="$2"
+
+	echo "    c.anal.vtx_x_min = $min"
+	echo "    c.anal.vtx_x_max = $max"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function CutVtxY()
+{
+	local min="$1"
+	local max="$2"
+
+	echo "    c.anal.vtx_y_min = $min"
+	echo "    c.anal.vtx_y_max = $max"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function BuildOne()
+{
+	local tag="$1"
+	local command="$2"
+
+	echo "* $tag"
+
+	mkdir -p "$tag"
+
+	(
+		echo "import sys"
+		echo "import os"
+		echo "import FWCore.ParameterSet.Config as cms"
+		echo ""
+		echo "sys.path.append(os.path.relpath(\"../../\"))"
+		echo "from config_common import *"
+		echo ""
+		echo "for c in all_cfg:"
+		
+		eval "$command"
+
+		echo ""
+		echo "#----------"
+		echo ""
+	) > "$tag/config.py"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+BuildOne "default" "Pass"
+
+BuildOne "th_x_low" "InitContour; CutThXY -80E-6 0E-6 -81E-6 150E-6; Shrink \"th_x_high=-85E-6\""
+BuildOne "th_x_mid" "InitContour; CutThXY -120E-6 150E-6 -121E-6 0E-6; CutThXY +120E-6 0E-6 +121E-6 150E-6; Shrink \"th_x_low=-115E-6, th_x_high=+115E-6\""
+BuildOne "th_x_hig" "InitContour; CutThXY +80E-6 150E-6 +81E-6 0E-6; Shrink \"th_x_low=+85E-6\""
+
+BuildOne "th_y_low" "InitContour; CutThXY 1. 85E-6 -1. 85E-6; Shrink \"th_y_high=80E-6\""
+BuildOne "th_y_low_mid" "InitContour; CutThXY 1. 115E-6 -1. 115E-6; Shrink \"th_y_high=110E-6\""
+BuildOne "th_y_hig" "InitContour; CutThXY -1. 75E-6 1. 75E-6; Shrink \"th_y_low=80E-6\""
+
+BuildOne "vtx_x_low" "CutVtxX -100 -0.4"
+BuildOne "vtx_x_mid" "CutVtxX -0.4 +0.4"
+BuildOne "vtx_x_mid2" "CutVtxX -0.2 +0.2"
+BuildOne "vtx_x_hig" "CutVtxX +0.4 +100"
+
+BuildOne "vtx_y_low" "CutVtxY -100 -1.3"
+BuildOne "vtx_y_mid" "CutVtxY -1.3 +1.3"
+BuildOne "vtx_y_hig" "CutVtxY +1.3 100"
+
+BuildOne "vtx_x_y_mid" "CutVtxX -0.4 +0.4; CutVtxY -1.3 +1.3"
+
+BuildOne "opt1" "
+InitContour
+CutThXY +220E-6 0E-6 +221E-6 150E-6
+Shrink \"th_x_high=+219E-6\"
+"
+
+BuildOne "opt2" "
+InitContour
+CutThXY +220E-6 0E-6 +221E-6 150E-6;
+CutThXY 1. 115E-6 -1. 115E-6;
+Shrink \"th_x_high=+219E-6, th_y_high=114E-6\"
+"
+
+BuildOne "opt3" "
+InitContour
+CutThXY +220E-6 0E-6 +221E-6 150E-6;
+CutThXY 1. 115E-6 -1. 115E-6;
+Shrink \"th_x_high=+219E-6, th_y_high=114E-6\"
+CutVtxX -0.4 +0.4
+"

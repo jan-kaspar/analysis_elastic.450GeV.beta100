@@ -6,10 +6,8 @@ sys.path.append(os.path.relpath("../../"))
 from config_common import *
 
 for c in all_cfg:
-    c.anal.vtx_y_min = -1.5
-    c.anal.vtx_y_max = +1.5
+    c.anal.vtx_y_min = -1.3
+    c.anal.vtx_y_max = +1.3
 
 #----------
 
-cfg_45b_56t.anal.L_int = 275647.9
-cfg_45t_56b.anal.L_int = 294217.4
