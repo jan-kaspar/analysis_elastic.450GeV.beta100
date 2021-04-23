@@ -1,4 +1,5 @@
 #include "classes/command_line_tools.hh"
+#include "classes/common_algorithms.hh"
 
 #include "TFile.h"
 #include "TGraph.h"
@@ -90,50 +91,11 @@ void Scale(TGraph *g, double s)
 
 //----------------------------------------------------------------------------------------------------
 
-/// To be kept synchronised with function "ProcessOne" in "../normalisation/normalisation.cc"
 double GetNormalisation(TGraph * /*g*/)
 {
+	// TODO
 	return 1.;
-
-	// TODO: update
-	/*
-	// settings
-	double t_fit_min = 0.01, t_fit_max = 0.05;
-	double t_sum_min = 0.01, t_sum_max = 0.5;
-
-	double si_el_ref = 31.0;	// mb
-
-	// fit
-	TF1 *ff = new TF1("ff", "[0] * exp(-[1]*x)");
-
-	ff->SetParameters(g->Eval(t_fit_min), 20.);
-	g->Fit(ff, "Q", "", t_fit_min, t_fit_max);
-
-	// integrate fit (extrapolation)
-	double c_extr = ff->Integral(0., t_sum_min);
-
-	delete ff;
-
-	// integrate graph
-	double c_graph = 0.;
-	const unsigned int n_div = 1000;
-	double w = (t_sum_max - t_sum_min) / n_div;
-	double v_left = g->Eval(t_sum_min);
-	for (unsigned int i = 0; i < n_div; i++)
-	{
-		double t_right = t_sum_min + double(i + 1) * w;
-		double v_right = g->Eval(t_right);
-
-		c_graph += (v_left + v_right) / 2. * w;
-
-		v_left = v_right;
-	}
-
-	// evaluate normalisation factor
-	double c_full = c_extr + c_graph;
-
-	return si_el_ref / c_full;
-	*/
+	//return 1. / GetNormalizationFactor(g);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -228,7 +190,7 @@ int main(int argc, const char **argv)
 		return 1;
 	}
 
-	// output file	
+	// output file
 	TFile *f_out = new TFile(outFileName.c_str(), "recreate");
 
 	// process all scenarios
