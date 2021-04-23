@@ -4,8 +4,8 @@ cwd=`pwd -P`
 
 ref_dir="../../beta11/4rp"
 
-for f_ref in $ref_dir/{*.cc,make_synchronisation_links,run} $ref_dir/classes/*.{cc,hh} $ref_dir/test/{compare.cc,run_test}
-#for f_ref in ../../beta11/4rp/plots/*/*.asy
+for f_ref in $ref_dir/{*.cc,make_synchronisation_links,run} $ref_dir/classes/*.{cc,hh} $ref_dir/test/{compare.cc,run_test} $ref_dir/studies/*/*.cc
+#for f_ref in $ref_dir/plots/*/*.asy
 do
 	f_loc=${f_ref##*4rp/}
 
