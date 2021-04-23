@@ -317,8 +317,8 @@ int main(int argc, const char **argv)
 	string dir_mc = "data-mc/1E9";
 	string dir_ni = "data-ni";
 
-	t_min = 1E-4;
-	t_max = 4E-2;
+	t_min = 3.1E-4;
+	t_max = 2.5E-2;
 
 	string outputFile = "matrix.root";
 
