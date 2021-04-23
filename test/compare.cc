@@ -8,6 +8,7 @@
 #include <string>
 #include <tuple>
 #include <memory>
+#include <cmath>
 
 using namespace std;
 
@@ -16,8 +17,9 @@ using namespace std;
 std::tuple<double, bool, bool> CompareValues(const double v1, const double v2)
 {
     const double rel_diff = (v1 == 0. && v2 == 0.) ? 0. : (v2 - v1) / (v2 + v1) * 2.;
-    const bool diff_minor = (fabs(rel_diff) > 1E-6);
-    const bool diff_major = (fabs(rel_diff) > 1E-3);
+
+    const bool diff_minor = (fabs(rel_diff) > 1E-6 || isnan(rel_diff));
+    const bool diff_major = (fabs(rel_diff) > 1E-3 || isnan(rel_diff));
 
     return {rel_diff, diff_major, diff_minor};
 }
