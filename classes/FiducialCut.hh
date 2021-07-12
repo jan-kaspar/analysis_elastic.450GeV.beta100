@@ -41,6 +41,8 @@ struct FiducialCut
 
 	void ApplyCDTransform(double C, double D);
 
+	void Scale(double x, double y);
+
 	bool Satisfied(double th_x, double th_y) const;
 
 	void GetThYRange(double th_x, double &th_y_min, double &th_y_max) const;

@@ -47,6 +47,17 @@ void FiducialCut::ApplyCDTransform(double C, double D)
 
 //----------------------------------------------------------------------------------------------------
 
+void FiducialCut::Scale(double x, double y)
+{
+	for (auto &p : points)
+	{
+		p.x *= x;
+		p.y *= y;
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
+
 bool FiducialCut::Satisfied(double th_x, double th_y) const
 {
 	unsigned int n_le = 0, n_gr = 0;
