@@ -79,7 +79,7 @@ struct Environment
 
 	void ApplyRandomOpticsPerturbations()
 	{
-		TVectorD de(16);
+		TVectorD de(n_optical_functions);
 		ApplyRandomOpticsPerturbations(de);
 	}
 
