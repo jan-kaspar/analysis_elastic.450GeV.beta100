@@ -629,11 +629,12 @@ int main(int argc, const char **argv)
 		"tilt-thx-thy",
 		"tilt-thx-thy-LRasym",
 
-		/*
 		"sc-thxy-mode1",
 		"sc-thxy-mode2",
 		"sc-thxy-mode3",
+		"sc-thxy-mode4",
 
+		/*
 		"dx-sigma",
 		"dy-sigma",
 		"dx-non-gauss",
