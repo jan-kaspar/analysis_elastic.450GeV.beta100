@@ -1,7 +1,3 @@
-// FIXME: clean up
-#include <TVectorDfwd.h>
-#include <gsl/gsl_machine.h>
-#include <cstdio>
 #include "classes/common_algorithms.hh"
 #include "classes/common_event.hh"
 #include "classes/common_init.hh"
