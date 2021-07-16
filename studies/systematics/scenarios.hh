@@ -222,10 +222,10 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 		double val_L_x=0., val_L_y=0., val_R_x=0., val_R_y=0.;
 
-		if (mode == "1") { val_L_x = -3.817E-03; val_R_x = -3.929E-03; val_L_y = +1.679E-03, val_R_y = +1.591E-03; }
-		if (mode == "2") { val_L_x = -1.814E-03; val_R_x = +2.019E-03; val_L_y = +7.124E-04, val_R_y = -1.156E-04; }
-		if (mode == "3") { val_L_x = -5.640E-04; val_R_x = -3.916E-04; val_L_y = -5.995E-04, val_R_y = -1.688E-03; }
-		if (mode == "4") { val_L_x = +4.707E-04; val_R_x = -1.109E-04; val_L_y = +1.410E-03, val_R_y = -6.322E-04; }
+		if (mode == "1") { val_L_x = -3.703E-03; val_R_x = -4.047E-03; val_L_y = +1.612E-03, val_R_y = +1.652E-03; }
+		if (mode == "2") { val_L_x = -1.850E-03; val_R_x = +1.952E-03; val_L_y = +7.610E-04, val_R_y = -1.095E-04; }
+		if (mode == "3") { val_L_x = -5.294E-04; val_R_x = -4.059E-04; val_L_y = -4.910E-04, val_R_y = -1.701E-03; }
+		if (mode == "4") { val_L_x = +4.788E-04; val_R_x = -1.064E-04; val_L_y = +1.363E-03, val_R_y = -5.169E-04; }
 
 		if (val_L_x != 0.)
 		{
