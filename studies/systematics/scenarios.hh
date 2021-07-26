@@ -332,14 +332,12 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- normalisation ----------
 
-	/*
 	if (scenario == "norm")
 	{
-		// TODO: update
-		biases.norm = 0.05;
+		// preliminary crude Coulomb-like normalisation
+		biases.norm = 0.10;
 		return 0;
 	}
-	*/
 
 	return 1;
 }
@@ -379,7 +377,7 @@ void LoadNonGaussianDistributions(double si_d_x, double /* si_d_y */)
 	// TODO: remove once functional
 	throw 1;
 
-	// TODO: update path
+	// TODO: update path, avoid absolute paths
 	TFile *f_in = TFile::Open("/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/beta2500/2rp/non-gaussianity/fit_dx.root");
 	f_non_gaussian_dist_d_x = new TF1(* (TF1 *) f_in->Get("ff"));
 	delete f_in;
