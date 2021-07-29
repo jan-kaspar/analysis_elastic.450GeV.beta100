@@ -234,6 +234,7 @@ int main(int argc, const char **argv)
 
 		// calculate event weights
 		vector<double> ws;
+		ws.reserve(modelSplines.size());
 		for (const auto spline : modelSplines)
 			ws.push_back(spline->Eval(k_tr.t) / sw);
 
