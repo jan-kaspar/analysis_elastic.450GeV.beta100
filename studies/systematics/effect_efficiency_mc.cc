@@ -96,9 +96,10 @@ int main()
 		RPInfo(0.96, M_PI/2.)
 	};
 
-	// TODO: increase
-	//const unsigned int n_events = 1000000;
+	// config
 	const unsigned int n_events = 10000;
+
+	const bool debug = false;
 
 	// book histogram
 	TProfile2D *p_eff_vs_th_x_th_y = new TProfile2D("p_eff_vs_th_x_th_y", ";theta_x;theta_y", 50, -450E-6, +450E-6, 50, 0E-6, 150E-6, "S");
@@ -196,10 +197,7 @@ int main()
 			continue;
 
 		TGraph2D *g = new TGraph2D();
-
-		char buf[100];
-		sprintf(buf, "g2_mode_%u", m);
-		g->SetName(buf);
+		g->SetName(("g2_mode_" + to_string(m+1)).c_str());
 
 		for (unsigned int j = 0; j < n_samples_tot; ++j)
 		{
@@ -220,7 +218,8 @@ int main()
 			h2_rms_eff_vs_th_x_th_y->SetBinContent(bx, by, p_eff_vs_th_x_th_y->GetBinError(bx, by));
 
 
-	h2_rms_eff_vs_th_x_th_y->Write();
+	if (debug)
+		h2_rms_eff_vs_th_x_th_y->Write();
 
 	for (auto *g : modeGraphs)
 		g->Write();
@@ -252,8 +251,11 @@ int main()
 		}
 	}
 
-	h2_rms_eff_vs_th_x_th_y_modes->Write();
-	h2_rms_eff_vs_th_x_th_y_diff->Write();
+	if (debug)
+	{
+		h2_rms_eff_vs_th_x_th_y_modes->Write();
+		h2_rms_eff_vs_th_x_th_y_diff->Write();
+	}
 
 	delete f_out;
 
