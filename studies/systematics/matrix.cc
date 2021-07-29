@@ -392,6 +392,7 @@ int main(int argc, const char **argv)
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
 		*/
 
+		// TODO: really correlated -- the determination is diagonal-independent ... ??
 		Mode("eff-mode1", Mode::sNI, Mode::coFull),
 		Mode("eff-mode2", Mode::sNI, Mode::coFull),
 		Mode("eff-mode3", Mode::sNI, Mode::coFull),
@@ -655,7 +656,7 @@ int main(int argc, const char **argv)
 		"unsmearing-model",
 		*/
 
-		"others",
+		//"others",
 	};
 
 	BuildMatrix("all-but-norm", contributions, modes, binnings);
