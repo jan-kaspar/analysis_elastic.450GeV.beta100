@@ -79,9 +79,6 @@ int main(int argc, const char **argv)
 
 	string outFileName = "ouput.root";
 
-	double ineff_intercept = 0.067 + 0.03; // sum from 3/4 and 2/4, respectively
-	double ineff_slope = 140.;	// rad^-1
-
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
@@ -119,8 +116,6 @@ int main(int argc, const char **argv)
 	printf("    model = %s\n", model.c_str());
 	printf("    n_events = %u (%.1E)\n", n_events, double(n_events));
 	printf("    seed = %u\n", seed);
-	printf("    ineff_intercept = %.3E\n", ineff_intercept);
-	printf("    ineff_slope = %.3E\n", ineff_slope);
 	printf("    outFileName = %s\n", outFileName.c_str());
 
 	// run initialisation
@@ -311,10 +306,10 @@ int main(int argc, const char **argv)
 
 		// ----- inefficiency and its correction -----
 
-		double eff = 1. - (ineff_intercept + ineff_slope * fabs(k_sm.th_y));
-		double eff_corr = 1. / (1. - ( (ineff_intercept + biases.eff_intercept) + (ineff_slope + biases.eff_slope) * fabs(k_sm.th_y)));
+		const double eff = 1.;
+		const double eff_corr = (biases.eff_perturbation) ? 1. / (1. - biases.eff_perturbation->Interpolate(k_sm.th_x, fabs(k_sm.th_y))) : 1.;
 
-		double norm_adjustment = eff * eff_corr * (1. + biases.norm);
+		const double norm_adjustment = eff * eff_corr * (1. + biases.norm);
 
 		// fill plots
 		if (!skip)

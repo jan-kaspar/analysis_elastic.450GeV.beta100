@@ -26,8 +26,6 @@ using namespace std;
 Environment env_sim, env_rec;
 Analysis anal_sim, anal_rec;
 
-double ineff_intercept, ineff_slope;
-
 Biases biases;
 
 AcceptanceCalculator accCalc;
@@ -114,8 +112,8 @@ double dist_th_x_th_y_true(double th_x, double th_y)
 double dist_th_x_th_y_syst(double th_x_p, double th_y_p)
 {
 	// error in inefficiency corrections
-	const double ineff_simu = ineff_intercept + ineff_slope * fabs(th_y_p);
-	const double ineff_reco = (ineff_intercept + biases.eff_intercept) + (ineff_slope + biases.eff_slope) * fabs(th_y_p);
+	const double ineff_simu = 0.;
+	const double ineff_reco = (biases.eff_perturbation) ? biases.eff_perturbation->Interpolate(th_x_p, fabs(th_y_p)) : 0.;
 
 	const double eff_corr_effect = (1. - ineff_simu) / (1. - ineff_reco);
 
@@ -344,10 +342,6 @@ int main(int argc, const char **argv)
 
 	string outFileName = "output.root";
 
-	// TODO: update
-	ineff_intercept = 0.067 + 0.03; // sum from 3/4 and 2/4, respectively
-	ineff_slope = 140.;	// rad^-1
-
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
 	{
@@ -380,8 +374,6 @@ int main(int argc, const char **argv)
 	printf("    diagonal = %s\n", diagonal_input.c_str());
 	printf("    scenario = %s\n", scenario.c_str());
 	printf("    model = %s\n", model.c_str());
-	printf("    ineff_intercept = %.3E\n", ineff_intercept);
-	printf("    ineff_slope = %.3E\n", ineff_slope);
 	printf("    outFileName = %s\n", outFileName.c_str());
 
 	// run initialisation

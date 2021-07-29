@@ -7,7 +7,9 @@
 
 #include "TF1.h"
 #include "TFile.h"
+#include "TGraph2D.h"
 
+#include <cstdio>
 #include <vector>
 #include <string>
 
@@ -40,8 +42,7 @@ struct Biases
 	BiasesPerArm L, R;
 
 	// errors of the inefficiency corrections (3/4 and 2/4)
-	double eff_intercept = 0.;
-	double eff_slope = 0.;	// rad^-1
+	TGraph2D *eff_perturbation = nullptr;
 
 	// normalisation error (relative factor)
 	double norm = 0.;
@@ -67,7 +68,7 @@ struct Biases
 		printf("    sc_th_x = %.3E, sc_th_y = %.3E\n", R.sc_th_x, R.sc_th_y);
 
 		printf("global:\n");
-		printf("    eff_intercept = %.3E, eff_slope = %.3E\n", eff_intercept, eff_slope);
+		printf("    eff_perturbation: %s\n", (eff_perturbation) ? eff_perturbation->GetName() : "NONE");
 		printf("    norm = %.3E\n", norm);
 		printf("    use_non_gaussian_d_x = %u\n", use_non_gaussian_d_x);
 		printf("    use_non_gaussian_d_y = %u\n", use_non_gaussian_d_y);
@@ -283,26 +284,24 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- inefficiency correction ----------
 
-	/*
-	if (scenario == "eff-intercept")
+	if (scenario.find("eff-mode") == 0)
 	{
-		// TODO: update
-		// combination from 3/4 (0.003) and 2/4 (0.01)
-		biases.eff_intercept = sqrt(0.003*0.003 + 0.01*0.01);
-		return 0;
-	}
+		const string mode = scenario.substr(8);
 
-	if (scenario == "eff-slope")
-	{
-		// TODO: update
-		biases.eff_slope = 15.;
+		TFile *f_in = TFile::Open((string(getenv("BASE_DIR")) + "/studies/systematics/effect_efficiency_mc.root").c_str());
+
+		TGraph2D *g2 = (TGraph2D*) f_in->Get(("g2_mode_" + mode).c_str());
+		g2->SetDirectory(nullptr);
+		biases.eff_perturbation = g2;
+
+		delete f_in;
+
 		return 0;
 	}
-	*/
 
 	// ---------- beam momentum ----------
 
-	if (scenario.compare("beam-mom") == 0)
+	if (scenario == "beam-mom")
 	{
 		// The relative uncertainty of 10^-3 is the more conservative estimate.
 		// NB: from Eq. (27) in https://cds.cern.ch/record/1546734 one may consider quoting the relative ucertainty

@@ -390,10 +390,11 @@ int main(int argc, const char **argv)
 		Mode("dx-non-gauss", Mode::sNI, Mode::coFull),
 		Mode("dx-mx-corr", Mode::sMC, Mode::coFull),
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
-
-		Mode("eff-intercept", Mode::sNI, Mode::coFull),
-		Mode("eff-slope", Mode::sNI, Mode::coFull),
 		*/
+
+		Mode("eff-mode1", Mode::sNI, Mode::coFull),
+		Mode("eff-mode2", Mode::sNI, Mode::coFull),
+		Mode("eff-mode3", Mode::sNI, Mode::coFull),
 
 		Mode("beam-mom", Mode::sNI, Mode::coFull),
 
@@ -640,10 +641,11 @@ int main(int argc, const char **argv)
 		"dx-non-gauss",
 		"dx-mx-corr",
 		"dy-my-corr",
-
-		"eff-intercept",
-		"eff-slope",
 		*/
+
+		"eff-mode1",
+		"eff-mode2",
+		"eff-mode3",
 
 		"beam-mom",
 

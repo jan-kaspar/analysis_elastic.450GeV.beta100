@@ -33,10 +33,11 @@ configurations=(
 #	"fit_1/dx-non-gauss"
 #	"fit_1/dx-mx-corr"
 #	"fit_1/dy-my-corr"
-#
-#	"fit_1/eff-intercept"
-#	"fit_1/eff-slope"
-#
+
+	"fit_1/eff-mode1"
+	"fit_1/eff-mode2"
+	"fit_1/eff-mode3"
+
 	"fit_1/beam-mom"
 #
 #	"fit_1/mx-sigma"
