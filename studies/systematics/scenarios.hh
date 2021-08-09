@@ -79,7 +79,7 @@ struct Biases
 
 //----------------------------------------------------------------------------------------------------
 
-int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*/, Analysis &/*anal_sim*/, Environment &env_rec, Analysis &anal_rec)
+int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*/, Analysis &anal_sim, Environment &env_rec, Analysis &anal_rec)
 {
 	if (scenario == "none")
 	{
@@ -245,42 +245,40 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- acceptance correction ----------
 
-	/*
 	if (scenario == "dx-sigma")
 	{
-		// TODO: update
-		anal_sim.si_th_x_LRdiff += 0.3E-6;
+		anal_sim.si_th_x_LRdiff += 2.5E-6;
 		return 0;
 	}
 
 	if (scenario == "dy-sigma")
 	{
-		// TODO: update
-		anal_sim.si_th_y_LRdiff += 0.007E-6;
+		anal_sim.si_th_y_LRdiff += 2E-6;
 		return 0;
 	}
 
+	/*
 	if (scenario == "dx-non-gauss")
 	{
 		// TODO: update
 		biases.use_non_gaussian_d_x = true;
 		return 0;
 	}
+	*/
 
 	if (scenario == "dx-mx-corr")
 	{
 		// TODO: update
-		biases.d_m_corr_coef_x = +0.12;
+		biases.d_m_corr_coef_x = 0.;
 		return 0;
 	}
 
 	if (scenario == "dy-my-corr")
 	{
 		// TODO: update
-		biases.d_m_corr_coef_y = -0.26;
+		biases.d_m_corr_coef_y = 0.;
 		return 0;
 	}
-	*/
 
 	// ---------- inefficiency correction ----------
 
@@ -313,21 +311,17 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- unsmearing ----------
 
-	/*
 	if (scenario == "mx-sigma")
 	{
-		// TODO: update
-		anal_sim.si_th_x_2arm += 0.04E-6;
+		anal_sim.si_th_x_2arm += 3E-6;
 		return 0;
 	}
 
 	if (scenario == "my-sigma")
 	{
-		// TODO: update
-		anal_sim.si_th_y_2arm += 0.010E-6;
+		anal_sim.si_th_y_2arm += 1E-6;
 		return 0;
 	}
-	*/
 
 	// ---------- normalisation ----------
 

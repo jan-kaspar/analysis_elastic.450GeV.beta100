@@ -28,8 +28,8 @@ configurations=(
 	"fit_1/sc-thxy-mode3"
 	"fit_1/sc-thxy-mode4"
 
-#	"fit_1/dx-sigma"
-#	"fit_1/dy-sigma"
+	"fit_1/dx-sigma"
+	"fit_1/dy-sigma"
 #	"fit_1/dx-non-gauss"
 
 	"fit_1/eff-mode1"
@@ -37,13 +37,14 @@ configurations=(
 	"fit_1/eff-mode3"
 
 	"fit_1/beam-mom"
-#
-#	"fit_1/mx-sigma"
-#	"fit_1/my-sigma"
-#
-#	"fit_1/norm"
-#
-#	"fitN-4/none"
+
+	"fit_1/mx-sigma"
+	"fit_1/my-sigma"
+
+	"fit_1/norm"
+
+	"fit_2/none"
+	"fit_3/none"
 )
 
 # TODO: migrate to HTCondor

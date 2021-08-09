@@ -384,9 +384,9 @@ int main(int argc, const char **argv)
 		Mode("sc-thxy-mode3", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode4", Mode::sNI, Mode::coFull),
 
-		/*
 		Mode("dx-sigma", Mode::sNI, Mode::coFull),
 		Mode("dy-sigma", Mode::sNI, Mode::coFull),
+		/*
 		Mode("dx-non-gauss", Mode::sNI, Mode::coFull),
 		Mode("dx-mx-corr", Mode::sMC, Mode::coFull),
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
@@ -399,11 +399,9 @@ int main(int argc, const char **argv)
 
 		Mode("beam-mom", Mode::sNI, Mode::coFull),
 
-		/*
 		Mode("mx-sigma", Mode::sNI, Mode::coFull),
 		Mode("my-sigma", Mode::sNI, Mode::coFull),
 		Mode("unsmearing-model", Mode::sNI, Mode::coFull),
-		*/
 
 		Mode("norm", Mode::sExt, Mode::coFull),
 
@@ -411,7 +409,6 @@ int main(int argc, const char **argv)
 	};
 
 	// normalisation uncertainty
-	// TODO: update
 	const double norm_unc = 0.10;
 	const double others_unc = 0.04;
 

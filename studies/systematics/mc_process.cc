@@ -98,9 +98,9 @@ int main(int argc, const char **argv)
 		{ "sc-thxy-mode3", Scenario::mDsdt },
 		{ "sc-thxy-mode4", Scenario::mDsdt },
 
-		/*
 		{ "dx-sigma", Scenario::mDsdt },
 		{ "dy-sigma", Scenario::mDsdt },
+		/*
 		{ "dx-non-gauss", Scenario::mDsdt },
 		{ "dx-mx-corr", Scenario::mDsdt },
 		{ "dy-my-corr", Scenario::mDsdt },
@@ -112,12 +112,10 @@ int main(int argc, const char **argv)
 
 		{ "beam-mom", Scenario::mDsdt },
 
-		/*
 		{ "mx-sigma", Scenario::mUnsmearing },
 		{ "my-sigma", Scenario::mUnsmearing },
 
 		{ "norm", Scenario::mDsdt },
-		*/
 	};
 
 	// parse command line
