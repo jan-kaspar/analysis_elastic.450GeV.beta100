@@ -9,7 +9,7 @@ from config_base import *
 #--------------------
 
 for c in all_cfg:
-  pass
+  c.anal.use_resolution_fits = False
 
 #--------------------
 
