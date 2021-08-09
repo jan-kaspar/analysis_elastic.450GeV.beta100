@@ -82,6 +82,18 @@ int LoadTDistributions()
 		nullptr
 	});
 
+	inputTDistributions.push_back({
+		"fit_2",
+		(TGraph *) GetObject("../../fits_for_corr/imported_fits.root", "g_fit_CH_HighBeta"),
+		nullptr
+	});
+
+	inputTDistributions.push_back({
+		"fit_3",
+		(TGraph *) GetObject("../../fits_for_corr/imported_fits.root", "g_fit_CH_BothBetas"),
+		nullptr
+	});
+
 	// preprocess t-distributions
 	for (auto &itd : inputTDistributions)
 	{
