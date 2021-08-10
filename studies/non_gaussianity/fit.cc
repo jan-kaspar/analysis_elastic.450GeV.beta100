@@ -15,7 +15,9 @@ int main()
 	// get input
 	TFile *f_in = TFile::Open("../../data/fill7291/Totem1/distributions_45t_56b.root");
 	TH1D *h_x_in = (TH1D *) f_in->Get("selected - angles/th_x_diffRL");
-	TH1D *h_y_in = (TH1D *) f_in->Get("selected - angles/th_y_diffRL");
+	TH1D *h_y_in = nullptr;
+	if (details)
+		h_y_in = (TH1D *) f_in->Get("selected - angles/th_y_diffRL");
 
 	// prepare output
 	const string fn_out = (details) ? "fit_details.root" : "fit.root";
