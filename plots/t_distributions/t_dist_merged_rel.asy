@@ -16,8 +16,8 @@ string diagonals_long[] = { "combined" };
 xSizeDef = 8cm;
 ySizeDef = 6cm;
 
-A_ref = 630.;
-B_ref = 20.4;
+A_ref = 230.;
+B_ref = 20.0;
 ref_str = MakeRefStr("");
 
 //TH1_x_min = 0.04;
@@ -31,7 +31,7 @@ void DrawSet(string binning)
 	for (int di : diagonals.keys)
 	{
 		NewPad("$|t|\ung{GeV^2}$", "${\d\si/\d t - \hbox{ref} \over \hbox{ref}}\ ,\ \ \hbox{ref} = $ "+ref_str+"");
-		currentpad.xTicks = LeftTicks(0.05, 0.01);
+		currentpad.xTicks = LeftTicks(0.005, 0.001);
 	
 		for (int dsi : datasets.keys)
 		{
@@ -43,7 +43,7 @@ void DrawSet(string binning)
 				RootGetObject(topDir+"data/merged.root", binning+"/"+datasets[dsi]+"/"+diagonals[di]+"/h_dsdt"),
 				p, datasets[dsi]);
 			
-			limits((0, -0.03), (0.25, 0.03), Crop);
+			limits((0, -0.05), (0.03, 0.05), Crop);
 			xaxis(YEquals(0, false), dashed);
 		}
 	
@@ -59,4 +59,4 @@ void DrawSet(string binning)
 
 //----------------------------------------------------------------------------------------------------
 
-DrawSet("eb");
+DrawSet("sb2");

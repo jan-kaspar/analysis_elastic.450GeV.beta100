@@ -93,7 +93,6 @@ void AddAllModes()
 
 	//--------------------
 
-	/*
 	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 1}}", heavygreen,
 		"", "sc-thxy-mode1", 1,
 		"", "sc-thxy-mode1", 1
@@ -107,6 +106,11 @@ void AddAllModes()
 	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 3}}", heavygreen,
 		"", "sc-thxy-mode3", 1,
 		"", "sc-thxy-mode3", 1
+	);
+
+	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 4}}", heavygreen,
+		"", "sc-thxy-mode4", 1,
+		"", "sc-thxy-mode4", 1
 	);
 	
 	//--------------------
@@ -126,6 +130,7 @@ void AddAllModes()
 		"", "dx-non-gauss", 1
 	);
 
+	/*
 	AddMode("\vbox{\hbox{correlation $d_x$ vs.~$m_x$}}", red+dashed,
 		"", "dx-mx-corr", 1,
 		"", "dx-mx-corr", 1
@@ -135,20 +140,25 @@ void AddAllModes()
 		"", "dy-my-corr", 1,
 		"", "dy-my-corr", 1
 	);
+	*/
 
 	//--------------------
 
-	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{intercept uncertainty}}", black+dashed,
-		"", "eff-intercept", 1,
-		"", "eff-intercept", 1
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 1}}", black+dashed,
+		"", "eff-mode1", 1,
+		"", "eff-mode1", 1
+	);
+
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 2}}", black+dashed,
+		"", "eff-mode2", 1,
+		"", "eff-mode2", 1
+	);
+
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 3}}", black+dashed,
+		"", "eff-mode3", 1,
+		"", "eff-mode3", 1
 	);
 	
-	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{slope uncertainty}}", black+dashed,
-		"", "eff-slope", 1,
-		"", "eff-slope", 1
-	);
-	*/
-
 	//--------------------
 	
 	AddMode("\vbox{\hbox{beam momentum}}", magenta,
@@ -158,7 +168,6 @@ void AddAllModes()
 
 	//--------------------
 
-	/*
 	AddMode("\vbox{\hbox{unsmearing:}\hbox{uncert.~of $\si(m_x)$}}", blue+dashed,
 		"", "mx-sigma", 1,
 		"", "mx-sigma", 1
@@ -174,6 +183,7 @@ void AddAllModes()
 		"", "unsmearing-model", 1
 	);
 
+	/*
 	//--------------------
 
 	AddMode("\vbox{\hbox{normalisation}}", magenta+dashed,

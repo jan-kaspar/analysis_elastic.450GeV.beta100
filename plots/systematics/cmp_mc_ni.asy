@@ -14,7 +14,7 @@ z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.pus
 //z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
 z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
 
-string mc_source = "studies/systematics/data-mc/1E8";
+string mc_source = "studies/systematics/data-mc/1E5";
 
 AddAllModes();
 //FilterModes("sh-thy-LRasym");
@@ -22,6 +22,9 @@ AddAllModes();
 //FilterModes("sh-thy-LRasym");
 //FilterModes("dx-non-gauss");
 //FilterModes("sc-thxy");
+//FilterModes("eff-");
+//FilterModes("-sigma");
+FilterModes("non-gauss");
 
 TH1_x_min = t_min_axis;
 
