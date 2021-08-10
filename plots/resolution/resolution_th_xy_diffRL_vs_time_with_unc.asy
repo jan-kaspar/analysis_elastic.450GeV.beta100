@@ -22,7 +22,7 @@ string quantities[], q_timber[], q_labels[];
 real q_mins[], q_maxs[], q_Ticks[], q_ticks[];
 real q_cens[], q_uncs[];
 quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_mins.push(25); q_maxs.push(40.); q_Ticks.push(5.); q_ticks.push(1.); q_cens.push(32.5); q_uncs.push(2.5);
-quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_mins.push(2); q_maxs.push(12.); q_Ticks.push(2.); q_ticks.push(1.); q_cens.push(8.5); q_uncs.push(2.0);
+quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_mins.push(2); q_maxs.push(12.); q_Ticks.push(2.); q_ticks.push(1.); q_cens.push(8.3); q_uncs.push(1.2);
 
 xSizeDef = 40cm;
 ySizeDef = 6cm;

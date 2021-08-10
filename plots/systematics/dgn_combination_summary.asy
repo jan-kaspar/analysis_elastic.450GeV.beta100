@@ -3,9 +3,6 @@ import pad_layout;
 import common_code;
 include "../common.asy";
 
-AddAllModes();
-//FilterModes("sc-");
-
 string f = topDir + "studies/systematics/matrix.root";
 
 string binning = "sb1";
@@ -24,14 +21,14 @@ string object_labels[] = {
 	"2nd dgn. combination",
 };
 
+string z_labels[];
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
-z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-//z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.06); z_e_Steps.push(0.02); z_e_steps.push(0.01);
+z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.06); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("low $|t|$ zoom");
+z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.06); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("full $|t|$ range");
 
 //----------------------------------------------------------------------------------------------------
 
-void PlotAllModes()
+void PlotMultipleModes()
 {
 	int ci = 0;
 
@@ -55,41 +52,92 @@ void PlotAllModes()
 	AddToLegend("$\pm 1\un{\si}$ {\it envelope of uncertainties (without normalisation)}", p_envelope);
 }
 
+//----------------------------------------------------------------------------------------------------
+
+void PlotOneRow()
+{
+	NewRow();
+
+	frame f_legend;
+
+	for (int zi : z_t_maxs.keys)
+	{
+		NewPad("$|t|\ung{GeV^2}$", "systematic effect$\ung{\%}$");
+
+		PlotMultipleModes();
+
+		real t_Step = z_t_Steps[zi];
+		real t_step = z_t_steps[zi];
+		real e_Step = z_e_Steps[zi] * 100;
+		real e_step = z_e_steps[zi] * 100;
+
+		real t_min = 0;
+		real t_max = z_t_maxs[zi];
+		real e_min = -z_e_maxs[zi] * 100;
+		real e_max = z_e_maxs[zi] * 100;
+
+		currentpad.xTicks = LeftTicks(t_Step, t_step);
+		currentpad.yTicks = RightTicks(e_Step, e_step);
+
+		limits((0, -e_max), (t_max, e_max), Crop);
+
+		xaxis(YEquals(0, false), dashed);
+		yaxis(XEquals(t_min_axis, false), dashed);
+
+		f_legend = BuildLegend();
+		currentpicture.legend.delete();
+	}
+
+	NewPad(false);
+	//add(shift(0, 345) * f_legend);
+	add(shift(0, +80) * f_legend);
+}
 
 //----------------------------------------------------------------------------------------------------
 
-frame f_legend;
-
 for (int zi : z_t_maxs.keys)
-{
-	NewPad("$|t|\ung{GeV^2}$", "systematic effect$\ung{\%}$");
+	NewPadLabel(z_labels[zi]);
 
-	PlotAllModes();
+//----------------------------------------------------------------------------------------------------
 
-	real t_Step = z_t_Steps[zi];
-	real t_step = z_t_steps[zi];
-	real e_Step = z_e_Steps[zi] * 100;
-	real e_step = z_e_steps[zi] * 100;
+AddAllModes();
+FilterModes("sh-thx");
+PlotOneRow();
 
-	real t_min = 0;
-	real t_max = z_t_maxs[zi];
-	real e_min = -z_e_maxs[zi] * 100;
-	real e_max = z_e_maxs[zi] * 100;
+//----------------------------------------------------------------------------------------------------
 
-	currentpad.xTicks = LeftTicks(t_Step, t_step);
-	currentpad.yTicks = RightTicks(e_Step, e_step);
+AddAllModes();
+FilterModes("sh-thy");
+PlotOneRow();
 
-	limits((0, -e_max), (t_max, e_max), Crop);
+//----------------------------------------------------------------------------------------------------
 
-	xaxis(YEquals(0, false), dashed);
-	yaxis(XEquals(t_min_axis, false), dashed);
+AddAllModes();
+FilterModes("tilt-", "beam-mom");
+PlotOneRow();
 
-	f_legend = BuildLegend();
-	currentpicture.legend.delete();
-}
+//----------------------------------------------------------------------------------------------------
 
-NewPad(false);
-//add(shift(0, 345) * f_legend);
-add(shift(0, +100) * f_legend);
+AddAllModes();
+FilterModes("sc-");
+PlotOneRow();
 
-GShipout();
+//----------------------------------------------------------------------------------------------------
+
+AddAllModes();
+FilterModes("eff-");
+PlotOneRow();
+
+//----------------------------------------------------------------------------------------------------
+
+AddAllModes();
+FilterModes("dx-", "dy-");
+PlotOneRow();
+
+//----------------------------------------------------------------------------------------------------
+
+AddAllModes();
+FilterModes("mx-", "my-", "unsmearing-");
+PlotOneRow();
+
+GShipout(vSkip=0mm);

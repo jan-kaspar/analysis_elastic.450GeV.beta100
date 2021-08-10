@@ -112,6 +112,23 @@ void AddAllModes()
 		"", "sc-thxy-mode4", 1,
 		"", "sc-thxy-mode4", 1
 	);
+
+	//--------------------
+
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 1}}", black+dashed,
+		"", "eff-mode1", 1,
+		"", "eff-mode1", 1
+	);
+
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 2}}", black+dashed,
+		"", "eff-mode2", 1,
+		"", "eff-mode2", 1
+	);
+
+	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 3}}", black+dashed,
+		"", "eff-mode3", 1,
+		"", "eff-mode3", 1
+	);
 	
 	//--------------------
 	
@@ -144,30 +161,6 @@ void AddAllModes()
 
 	//--------------------
 
-	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 1}}", black+dashed,
-		"", "eff-mode1", 1,
-		"", "eff-mode1", 1
-	);
-
-	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 2}}", black+dashed,
-		"", "eff-mode2", 1,
-		"", "eff-mode2", 1
-	);
-
-	AddMode("\vbox{\hbox{inefficiency correction:}\hbox{mode 3}}", black+dashed,
-		"", "eff-mode3", 1,
-		"", "eff-mode3", 1
-	);
-	
-	//--------------------
-	
-	AddMode("\vbox{\hbox{beam momentum}}", magenta,
-		"", "beam-mom", 1,
-		"", "beam-mom", 1
-	);
-
-	//--------------------
-
 	AddMode("\vbox{\hbox{unsmearing:}\hbox{uncert.~of $\si(m_x)$}}", blue+dashed,
 		"", "mx-sigma", 1,
 		"", "mx-sigma", 1
@@ -181,6 +174,13 @@ void AddAllModes()
 	AddMode("\vbox{\hbox{unsmearing:}\hbox{model dependence}}", blue+dashed,
 		"", "unsmearing-model", 1,
 		"", "unsmearing-model", 1
+	);
+	
+	//--------------------
+	
+	AddMode("\vbox{\hbox{beam momentum}}", magenta,
+		"", "beam-mom", 1,
+		"", "beam-mom", 1
 	);
 
 	/*
