@@ -9,41 +9,39 @@ diagonals=(
 )
 
 configurations=(
-# TODO: shift to fit_2 and _3
-	"fit_1/none"
-
-	"fit_1/sh-thx"
-	"fit_1/sh-thx-LRasym"
-
-	"fit_1/sh-thy"
-	"fit_1/sh-thy-LRasym"
-	"fit_1/sh-thy-TBuncor"
-	"fit_1/sh-thy-TBuncor-LRasym"
-
-	"fit_1/tilt-thx-thy"
-	"fit_1/tilt-thx-thy-LRasym"
-
-	"fit_1/sc-thxy-mode1"
-	"fit_1/sc-thxy-mode2"
-	"fit_1/sc-thxy-mode3"
-	"fit_1/sc-thxy-mode4"
-
-	"fit_1/dx-sigma"
-	"fit_1/dy-sigma"
-	"fit_1/dx-non-gauss"
-
-	"fit_1/eff-mode1"
-	"fit_1/eff-mode2"
-	"fit_1/eff-mode3"
-
-	"fit_1/beam-mom"
-
-	"fit_1/mx-sigma"
-	"fit_1/my-sigma"
-
-	"fit_1/norm"
-
 	"fit_2/none"
+
+	"fit_2/sh-thx"
+	"fit_2/sh-thx-LRasym"
+
+	"fit_2/sh-thy"
+	"fit_2/sh-thy-LRasym"
+	"fit_2/sh-thy-TBuncor"
+	"fit_2/sh-thy-TBuncor-LRasym"
+
+	"fit_2/tilt-thx-thy"
+	"fit_2/tilt-thx-thy-LRasym"
+
+	"fit_2/sc-thxy-mode1"
+	"fit_2/sc-thxy-mode2"
+	"fit_2/sc-thxy-mode3"
+	"fit_2/sc-thxy-mode4"
+
+	"fit_2/dx-sigma"
+	"fit_2/dy-sigma"
+	"fit_2/dx-non-gauss"
+
+	"fit_2/eff-mode1"
+	"fit_2/eff-mode2"
+	"fit_2/eff-mode3"
+
+	"fit_2/beam-mom"
+
+	"fit_2/mx-sigma"
+	"fit_2/my-sigma"
+
+	"fit_2/norm"
+
 	"fit_3/none"
 )
 

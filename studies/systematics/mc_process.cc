@@ -68,8 +68,8 @@ int main(int argc, const char **argv)
 
 	string ref_scenario = "none";
 
-	string model_base = "fit_1";
-	string model_secondary = "fit_1";
+	string model_base = "fit_2";
+	string model_secondary = "fit_3";
 
 	struct Scenario
 	{

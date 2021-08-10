@@ -76,11 +76,13 @@ vector<InputTDistribution> inputTDistributions;
 int LoadTDistributions()
 {
 	// define input t-distributions
+	/*
 	inputTDistributions.push_back({
 		"fit_1",
 		(TGraph *) GetObject("../../fits_for_corr/fit.root", "g_fit_1"),
 		nullptr
 	});
+	*/
 
 	inputTDistributions.push_back({
 		"fit_2",

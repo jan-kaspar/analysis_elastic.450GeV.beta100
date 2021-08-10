@@ -338,7 +338,7 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 	string scenario = "none";
-	string model = "fit_1";
+	string model = "fit_2";
 
 	string outFileName = "output.root";
 

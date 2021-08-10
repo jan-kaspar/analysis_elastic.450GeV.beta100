@@ -72,7 +72,7 @@ int main(int argc, const char **argv)
 	string cfg_file = "config.py";
 	string diagonal_input = "";
 	string scenario = "none";
-	string model = "fit_1";
+	string model = "fit_2";
 
 	unsigned int n_events = (unsigned int) 1E5;
 	unsigned int seed = 1;
