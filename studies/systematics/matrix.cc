@@ -390,7 +390,7 @@ int main(int argc, const char **argv)
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
 		*/
 
-		// FIXME: really correlated -- the determination is diagonal-independent ... ??
+		// TODO: really correlated -- the determination is diagonal-independent ... ??
 		Mode("eff-mode1", Mode::sNI, Mode::coFull),
 		Mode("eff-mode2", Mode::sNI, Mode::coFull),
 		Mode("eff-mode3", Mode::sNI, Mode::coFull),
