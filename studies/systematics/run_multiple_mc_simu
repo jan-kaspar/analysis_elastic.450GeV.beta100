@@ -30,7 +30,7 @@ configurations=(
 
 	"fit_1/dx-sigma"
 	"fit_1/dy-sigma"
-#	"fit_1/dx-non-gauss"
+	"fit_1/dx-non-gauss"
 #	"fit_1/dx-mx-corr"
 #	"fit_1/dy-my-corr"
 

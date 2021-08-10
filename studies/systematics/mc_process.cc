@@ -100,8 +100,8 @@ int main(int argc, const char **argv)
 
 		{ "dx-sigma", Scenario::mDsdt },
 		{ "dy-sigma", Scenario::mDsdt },
-		/*
 		{ "dx-non-gauss", Scenario::mDsdt },
+		/*
 		{ "dx-mx-corr", Scenario::mDsdt },
 		{ "dy-my-corr", Scenario::mDsdt },
 		*/

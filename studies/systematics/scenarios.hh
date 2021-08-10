@@ -257,28 +257,26 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		return 0;
 	}
 
-	/*
 	if (scenario == "dx-non-gauss")
 	{
-		// TODO: update
 		biases.use_non_gaussian_d_x = true;
 		return 0;
 	}
-	*/
 
+	// due to the model uncertainties, it is difficult to estimate the d-m-corr contributions
+	/*
 	if (scenario == "dx-mx-corr")
 	{
-		// TODO: update
 		biases.d_m_corr_coef_x = 0.;
 		return 0;
 	}
 
 	if (scenario == "dy-my-corr")
 	{
-		// TODO: update
 		biases.d_m_corr_coef_y = 0.;
 		return 0;
 	}
+	*/
 
 	// ---------- inefficiency correction ----------
 
@@ -367,15 +365,11 @@ double ngx_et, ngx_al, ngx_be;
 
 void LoadNonGaussianDistributions(double si_d_x, double /* si_d_y */)
 {
-	// TODO: remove once functional
-	throw 1;
-
-	// TODO: update path, avoid absolute paths
-	TFile *f_in = TFile::Open("/afs/cern.ch/work/j/jkaspar/analyses/elastic/6500GeV/beta2500/2rp/non-gaussianity/fit_dx.root");
-	f_non_gaussian_dist_d_x = new TF1(* (TF1 *) f_in->Get("ff"));
+	TFile *f_in = TFile::Open((string(getenv("BASE_DIR")) + "/studies/non_gaussianity/fit.root").c_str());
+	f_non_gaussian_dist_d_x = new TF1(* (TF1 *) f_in->Get("ff_x"));
 	delete f_in;
 
-	const double range = 6. * 15E-6;
+	const double range = 6. * 30E-6;
 	CalculateNonGaussianDistributionTransformation(f_non_gaussian_dist_d_x, -range, +range, si_d_x, ngx_et, ngx_al, ngx_be);
 }
 

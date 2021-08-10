@@ -386,8 +386,8 @@ int main(int argc, const char **argv)
 
 		Mode("dx-sigma", Mode::sNI, Mode::coFull),
 		Mode("dy-sigma", Mode::sNI, Mode::coFull),
-		/*
 		Mode("dx-non-gauss", Mode::sNI, Mode::coFull),
+		/*
 		Mode("dx-mx-corr", Mode::sMC, Mode::coFull),
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
 		*/
@@ -635,8 +635,8 @@ int main(int argc, const char **argv)
 
 		"dx-sigma",
 		"dy-sigma",
-		/*
 		"dx-non-gauss",
+		/*
 		"dx-mx-corr",
 		"dy-my-corr",
 		*/

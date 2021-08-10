@@ -151,9 +151,7 @@ int main(int argc, const char **argv)
 
 		{ "dx-sigma", Scenario::mDsdt },
 		{ "dy-sigma", Scenario::mDsdt },
-		/*
 		{ "dx-non-gauss", Scenario::mDsdt },
-		*/
 
 		{ "eff-mode1", Scenario::mDsdt },
 		{ "eff-mode2", Scenario::mDsdt },

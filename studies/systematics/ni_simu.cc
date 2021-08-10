@@ -410,8 +410,7 @@ int main(int argc, const char **argv)
 	anal_rec.Print();
 
 	// load non-gaussian distributions
-	// TODO: uncomment when ready
-	//LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
+	LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
 
 	// load input dsigma/dt distribution
 	if (LoadTDistributions() != 0)
