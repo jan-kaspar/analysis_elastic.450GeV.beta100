@@ -390,10 +390,9 @@ int main(int argc, const char **argv)
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
 		*/
 
-		// TODO: really correlated -- the determination is diagonal-independent ... ??
-		Mode("eff-mode1", Mode::sNI, Mode::coFull),
-		Mode("eff-mode2", Mode::sNI, Mode::coFull),
-		Mode("eff-mode3", Mode::sNI, Mode::coFull),
+		Mode("eff-mode1", Mode::sNI, Mode::coNo),
+		Mode("eff-mode2", Mode::sNI, Mode::coNo),
+		Mode("eff-mode3", Mode::sNI, Mode::coNo),
 
 		Mode("beam-mom", Mode::sNI, Mode::coFull),
 
