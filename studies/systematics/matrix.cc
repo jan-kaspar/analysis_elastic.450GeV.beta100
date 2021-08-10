@@ -633,9 +633,9 @@ int main(int argc, const char **argv)
 		"sc-thxy-mode3",
 		"sc-thxy-mode4",
 
-		/*
 		"dx-sigma",
 		"dy-sigma",
+		/*
 		"dx-non-gauss",
 		"dx-mx-corr",
 		"dy-my-corr",
@@ -647,13 +647,9 @@ int main(int argc, const char **argv)
 
 		"beam-mom",
 
-		/*
 		"mx-sigma",
 		"my-sigma",
 		"unsmearing-model",
-		*/
-
-		//"others",
 	};
 
 	BuildMatrix("all-but-norm", contributions, modes, binnings);
