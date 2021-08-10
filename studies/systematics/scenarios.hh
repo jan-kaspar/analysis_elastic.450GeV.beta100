@@ -253,7 +253,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	if (scenario == "dy-sigma")
 	{
-		anal_sim.si_th_y_LRdiff += 2E-6;
+		anal_sim.si_th_y_LRdiff += 1.2E-6;
 		return 0;
 	}
 
@@ -311,13 +311,13 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	if (scenario == "mx-sigma")
 	{
-		anal_sim.si_th_x_2arm += 3E-6;
+		anal_sim.si_th_x_2arm += 2.5E-6;
 		return 0;
 	}
 
 	if (scenario == "my-sigma")
 	{
-		anal_sim.si_th_y_2arm += 1E-6;
+		anal_sim.si_th_y_2arm += 0.6E-6;
 		return 0;
 	}
 
