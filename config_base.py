@@ -257,7 +257,7 @@ cfg = cms.PSet(
   )
 )
 
-si_th_y_1arm = 5.7E-6
+si_th_y_1arm = 5.87E-6
 cfg.anal.si_th_y_1arm = si_th_y_1arm
 cfg.anal.si_th_y_1arm_unc = -999.
 
