@@ -9,7 +9,7 @@ diagonals=(
 )
 
 configurations=(
-# TODO: uncomment others when ready
+# TODO: shift to fit_2
 	"fit_1/none"
 
 	"fit_1/sh-thx"
@@ -44,8 +44,6 @@ configurations=(
 	"fit_1/my-sigma"
 
 	"fit_1/norm"
-
-#	"fitN-4/none"
 )
 
 stat=""

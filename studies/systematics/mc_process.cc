@@ -78,8 +78,6 @@ int main(int argc, const char **argv)
 	};
 
 	vector<Scenario> scenarios = {
-		// TODO: uncomment other when ready
-
 		{ "none", Scenario::mDsdt },
 
 		{ "sh-thx", Scenario::mDsdt },

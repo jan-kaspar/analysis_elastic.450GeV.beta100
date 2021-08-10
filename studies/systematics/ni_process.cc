@@ -119,6 +119,7 @@ int main(int argc, const char **argv)
 
 	string ref_scenario = "none";
 
+	// TODO: shift to fit_2 and _3
 	string model_base = "fit_1"; 		// used for most scenarios
 	string model_secondary = "fit_2";	// used only for unsmearing model uncertainty
 
@@ -129,8 +130,6 @@ int main(int argc, const char **argv)
 	};
 
 	vector<Scenario> scenarios = {
-		// TODO: uncomment other when ready
-
 		{ "none", Scenario::mDsdt },
 
 		{ "sh-thx", Scenario::mDsdt },

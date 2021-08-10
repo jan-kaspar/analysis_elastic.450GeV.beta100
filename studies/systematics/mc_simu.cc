@@ -225,7 +225,6 @@ int main(int argc, const char **argv)
 	TH1D *h_d_y = new TH1D("h_d_y", ";d_y", 200, -20E-6, +20E-6);
 
 	// simulation settings
-	// TODO: check/adjust this
 	const double be = 6.;
 	const double ga = 1. - exp(-be * anal_sim.t_max_full);
 

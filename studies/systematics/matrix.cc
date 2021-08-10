@@ -366,8 +366,6 @@ int main(int argc, const char **argv)
 
 	// list of modes
 	vector<Mode> modes = {
-		// TODO: uncomment others when ready
-
 		Mode("sh-thx", Mode::sNI, Mode::coFull),
 		Mode("sh-thx-LRasym", Mode::sNI, Mode::coFull),
 
@@ -392,7 +390,7 @@ int main(int argc, const char **argv)
 		Mode("dy-my-corr", Mode::sMC, Mode::coFull),
 		*/
 
-		// TODO: really correlated -- the determination is diagonal-independent ... ??
+		// FIXME: really correlated -- the determination is diagonal-independent ... ??
 		Mode("eff-mode1", Mode::sNI, Mode::coFull),
 		Mode("eff-mode2", Mode::sNI, Mode::coFull),
 		Mode("eff-mode3", Mode::sNI, Mode::coFull),
@@ -616,7 +614,6 @@ int main(int argc, const char **argv)
 	vector<string> contributions;
 
 	contributions = {
-		// TODO: uncomment others when ready
 		"sh-thx",
 		"sh-thx-LRasym",
 

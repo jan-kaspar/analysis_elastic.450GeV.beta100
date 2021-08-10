@@ -9,7 +9,7 @@ diagonals=(
 )
 
 configurations=(
-# TODO: uncomment others when ready
+# TODO: shift to fit_2 and _3
 	"fit_1/none"
 
 	"fit_1/sh-thx"
