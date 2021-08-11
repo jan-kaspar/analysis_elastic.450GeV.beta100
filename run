@@ -13,8 +13,6 @@ function PrintUsage()
 	echo -e "	-danti			select anti-diagonals"
 	echo -e "	-O <option>		pass the option to the program"
 	echo -e "	-wait			wait for all programs to finish"
-#	echo -e "	-batch			prepare job for LXBATCH instead of executing locally"
-#	echo -e "	-submit			submit job to LXBATCH, implies -lxbatch option"
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -86,9 +84,6 @@ run_options=""
 waitForPrograms="n"
 pids=""
 
-batch="n"
-submit="n"
-
 rcIncompatibleDiagonal=123
 
 #----------------------------------------------------------------------------------------------------
@@ -131,15 +126,6 @@ do
 
 		"-wait")
 			waitForPrograms="y"
-			;;
-
-		"-lxbatch")
-			lxbatch="y"
-			;;
-
-		"-submit")
-			lxbatch="y"
-			submit="y"
 			;;
 
 		*)

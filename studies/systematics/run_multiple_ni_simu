@@ -45,11 +45,6 @@ configurations=(
 	"fit_3/none"
 )
 
-# TODO: migrate to HTCondor
-use_lxbatch="n"
-bsub_options="pool>1"
-bsub_queue="1nh"
-
 wait_for_jobs="n"
 
 #----------------------------------------------------------------------------------------------------
@@ -60,9 +55,6 @@ function PrintUsage()
 	echo "USAGE: run_multiple_mc_simu [option] [option] ..."
 	echo "OPTIONS:"
 	echo "    -events <int>    number of events to simulate"
-	echo "    -lxbatch         prepare jobs on LXBATCH instead of local machine"
-	echo "    -submit          submit jobs to LXBATCH"
-	echo "    -queue <string>  set LXBATCH queue"
 	echo "    -wait            wait for jobs run in background"
 }
 
@@ -74,19 +66,6 @@ do
 		-h|--help)
 			PrintUsage
 			exit 0
-		;;
-
-		-lxbatch)
-			use_lxbatch="y"
-		;;
-
-		-submit)
-			submit="y"
-		;;
-
-		-queue)
-			bsub_queue="$2"
-			shift
 		;;
 
 		-wait)
@@ -128,13 +107,7 @@ function ExecuteOne()
 		" > "$job_file"
 	chmod u+x "$job_file"
 
-	if [ "$use_lxbatch" == "n" ]
-	then
-		"./$job_file" &
-	else
-		result=`bsub -R "$bsub_options" -q "$bsub_queue" -o /dev/null -e /dev/null "$cwd/$job_file"`
-		echo "    $result"
-	fi
+	"./$job_file" &
 }
 
 #----------------------------------------------------------------------------------------------------
