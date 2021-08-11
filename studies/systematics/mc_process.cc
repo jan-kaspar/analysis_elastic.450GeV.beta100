@@ -40,11 +40,9 @@ TH1D* GetHistogram(const string &dir, const string &model, const string &scenari
 
 //----------------------------------------------------------------------------------------------------
 
-double GetNormalisation(TH1D * /*h*/)
+double GetNormalisation(TH1D *h)
 {
-	// TODO
-	return 1.;
-	//return 1. / GetNormalizationFactor(h);
+	return 1. / GetNormalizationFactor(h);
 }
 
 //----------------------------------------------------------------------------------------------------

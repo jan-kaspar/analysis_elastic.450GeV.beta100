@@ -91,11 +91,9 @@ void Scale(TGraph *g, double s)
 
 //----------------------------------------------------------------------------------------------------
 
-double GetNormalisation(TGraph * /*g*/)
+double GetNormalisation(TGraph *g)
 {
-	// TODO
-	return 1.;
-	//return 1. / GetNormalizationFactor(g);
+	return 1. / GetNormalizationFactor(g);
 }
 
 //----------------------------------------------------------------------------------------------------
