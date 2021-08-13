@@ -270,7 +270,7 @@ void BuildThBinning()
 extern double GetNormalizationFactor(const TObject *obj, bool print_details)
 {
 	// range
-	const double t_min_goal = 3.1E-4, t_max_goal = 7E-4;
+	const double t_min_goal = 3.1E-4, t_max_goal = 5.5E-4;
 
 	// reference cross-section ( a / t^2 )
 	const double a_ref = 0.000260508;
@@ -323,6 +323,38 @@ extern double GetNormalizationFactor(const TObject *obj, bool print_details)
 		}
 
 		return (s_ref > 0) ? s_gra / s_ref : 0.;
+	}
+
+	return 0;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+extern double GetRelativeNormalizationFactor(const TObject *obj, bool print_details)
+{
+	// range
+	const double t_min_goal = 3.1E-4, t_max_goal = 0.02;
+
+	if (obj->InheritsFrom("TH1D"))
+	{
+		const TH1D *h = (TH1D *) obj;
+
+		// determine limits
+		const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
+		const int bi_max = h->GetXaxis()->FindBin(t_max_goal);
+
+		const double t_min = h->GetXaxis()->GetBinLowEdge(bi_min);
+		const double t_max = h->GetXaxis()->GetBinLowEdge(bi_max) + h->GetXaxis()->GetBinWidth(bi_max);
+
+		if (print_details)
+			printf("    summing from bin %i (left edge %.1E) to bin %i (right edge %.1E)\n", bi_min, t_min, bi_max, t_max);
+
+		// sum bin content
+		double n_hist = 0.;
+		for (int bi = bi_min; bi <= bi_max; ++bi)
+			n_hist += h->GetBinContent(bi) * h->GetBinWidth(bi);
+
+		return n_hist;
 	}
 
 	return 0;

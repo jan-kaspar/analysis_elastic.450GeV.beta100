@@ -33,5 +33,6 @@ extern void BuildThBinning();
 //----------------------------------------------------------------------------------------------------
 
 extern double GetNormalizationFactor(const TObject *obj, bool print_details = false);
+extern double GetRelativeNormalizationFactor(const TObject *obj, bool print_details = false);
 
 #endif
