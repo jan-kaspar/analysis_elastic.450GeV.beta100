@@ -221,6 +221,9 @@ int main(int argc, const char **argv)
 		bh_t_re.push_back(new TH1D("", ";|t|;events per bin", N_bins, bin_edges)); bh_t_re[bi]->Sumw2();
 	}
 
+	TH1D *h_m_x = new TH1D("h_m_x", ";d_x", 200, -120E-6, +120E-6);
+	TH1D *h_m_y = new TH1D("h_m_y", ";d_y", 200, -120E-6, +120E-6);
+
 	TH1D *h_d_x = new TH1D("h_d_x", ";d_x", 200, -120E-6, +120E-6);
 	TH1D *h_d_y = new TH1D("h_d_y", ";d_y", 200, -20E-6, +20E-6);
 
@@ -266,6 +269,9 @@ int main(int argc, const char **argv)
 			d_x_reweight = w_des / w_gen;
 			w *= d_x_reweight;
 		}
+
+		h_m_x->Fill(m_x);
+		h_m_y->Fill(m_y);
 
 		h_d_x->Fill(d_x, d_x_reweight);
 		h_d_y->Fill(d_y);
@@ -319,6 +325,9 @@ int main(int argc, const char **argv)
 
 	// save
 	gDirectory = f_out;
+
+	h_m_x->Write();
+	h_m_y->Write();
 
 	h_d_x->Write();
 	h_d_y->Write();
