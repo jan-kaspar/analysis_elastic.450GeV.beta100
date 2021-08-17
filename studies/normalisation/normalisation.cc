@@ -113,10 +113,10 @@ int main(int argc, const char **argv)
 			e.idx_input = ipti;
 			e.idx_dgn = dgni;
 
-			e.h_t = (TH1D *) f_in->Get(("normalization/" + binning + "/h_t_normalized").c_str());
+			e.h_t = (TH1D *) f_in->Get(("normalization+unfolding/" + binning + "/h_t_normalized_unsmeared").c_str());
 			e.h_t->SetDirectory(nullptr);
 
-			e.h_t_no_L = (TH1D *) f_in->Get(("normalization/" + binning + "/h_t_normalized_no_L").c_str());
+			e.h_t_no_L = (TH1D *) f_in->Get(("normalization+unfolding/" + binning + "/h_t_normalized_unsmeared_no_L").c_str());
 			e.h_t_no_L->SetDirectory(nullptr);
 
 			const int bi = e.h_t->FindBin(0.01);
