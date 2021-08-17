@@ -2492,6 +2492,10 @@ int main(int argc, const char **argv)
 
 		bh_t_normalized_unsmeared[bi]->Write();
 		bh_t_normalized_unsmeared_rel_diff[bi]->Write();
+
+		TH1D *h_t_normalized_unsmeared_no_L = new TH1D(* bh_t_normalized_unsmeared[bi]);
+		h_t_normalized_unsmeared_no_L->Scale(anal.L_int);
+		h_t_normalized_unsmeared_no_L->Write("h_t_normalized_unsmeared_no_L");
 	}
 
 	// print counters
