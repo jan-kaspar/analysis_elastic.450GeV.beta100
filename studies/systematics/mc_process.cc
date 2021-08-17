@@ -160,6 +160,7 @@ int main(int argc, const char **argv)
 			TH1D *h_t_re_ref = GetHistogram(inputDirectory, model_base, ref_scenario, binning, "h_t_re");
 
 			// get histogram with effect
+			TH1D *h_t_tr = GetHistogram(inputDirectory, model_base, scenario.label, binning, "h_t_tr");
 			TH1D *h_t_re = GetHistogram(inputDirectory, model_base, scenario.label, binning, "h_t_re");
 
 			// validate input
@@ -184,13 +185,13 @@ int main(int argc, const char **argv)
 
 			if (scenario.mode == Scenario::mUnsmearing)
 			{
-				TH1D *h_unsm_corr = new TH1D(*h_t_tr_ref);
+				TH1D *h_unsm_corr = new TH1D(*h_t_tr);
 				h_unsm_corr->Divide(h_t_re);
 
 				h_t_1 = new TH1D(*h_t_re_ref);
 				h_t_1->Multiply(h_unsm_corr);
 
-				h_t_0 = new TH1D(*h_t_re_ref);
+				h_t_0 = new TH1D(*h_t_tr_ref);
 
 				delete h_unsm_corr;
 			}
