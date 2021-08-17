@@ -227,7 +227,7 @@ int main(int argc, const char **argv)
 					return 2;
 				}
 
-				on = "normalization/"+binnings[bi]+"/h_t_normalized_no_L";
+				on = "normalization+unfolding/"+binnings[bi]+"/h_t_normalized_unsmeared_no_L";
 				TH1D *h_norm_no_L = (TH1D *) f_in->Get(on.c_str());
 				if (!h_norm_no_L)
 				{
