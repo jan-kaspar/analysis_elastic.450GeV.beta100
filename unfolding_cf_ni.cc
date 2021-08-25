@@ -307,7 +307,9 @@ int main(int argc, const char **argv)
 	// models
 	string base_dir = getenv("BASE_DIR");
 	vector<Model> models = {
-		{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
+		//{ "fit-1", base_dir + "/fits_for_corr/fit.root", "g_fit_1" },
+		{ "fit-2", base_dir + "/fits_for_corr/imported_fits.root", "g_fit_CH_HighBeta" },
+		//{ "fit-3", base_dir + "/fits_for_corr/imported_fits.root", "g_fit_CH_BothBetas" },
 	};
 
 	// smearing sigmas
