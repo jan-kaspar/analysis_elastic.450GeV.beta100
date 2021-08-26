@@ -246,7 +246,7 @@ cfg = cms.PSet(
     binnings = cms.vstring("sb1", "sb2", "sb3"),
 
     unsmearing_file = cms.string("unfolding_cf_ni_<diagonal>.root"),
-    unsmearing_object = cms.string("fit-1/<binning>"),
+    unsmearing_object = cms.string("fit-2/<binning>"),
 
     alignment_y_ranges = cms.VPSet(
       cms.PSet(unit=cms.string("L_2_F"), bot_min=cms.double(-24.0), bot_max=cms.double(-6.9), top_min=cms.double(7.4), top_max=cms.double(+25.5)),

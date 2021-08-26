@@ -199,8 +199,8 @@ function MainAnalysisComparison()
 		MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
 		MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
 
-		MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/sb1"
-		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/sb1"
+		MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-2/sb1"
+		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-2/sb1"
 
 		MakeOneComparison "data/merged.root" "sb1/merged/combined/h_dsdt" "global"
 
