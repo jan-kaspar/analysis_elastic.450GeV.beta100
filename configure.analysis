@@ -71,7 +71,6 @@ function AddSubTarget()
 	local options="$5"
 
 	local target="$dir/.$tag.target"
-	rm -f "$target"
 	subtargets="$subtargets $target"
 
 	local deps_expanded=""
@@ -88,6 +87,7 @@ function AddSubTarget()
 }
 
 directory_targets=""
+directory_targets_clean=""
 
 for dir in data/fill*
 do
@@ -135,12 +135,18 @@ do
 	AddSubTarget "distributions" "alignment alignment_final" "distributions.cc" "Totem1" ""
 
 	target="data/$tag/.target"
-	rm -f "$target"
 	directory_targets="$directory_targets $target"
 
+	target_clean="${tag}_clean"
+	directory_targets_clean="$directory_targets_clean $target_clean"
 	(
 		echo  ""
 		echo "$target: $subtargets"
+		echo ""
+		echo "$target_clean:"
+		echo "	rm -f $subtargets"
+		echo "	rm -f $target"
+		echo "	find $dir/ -name \"*.log\" -o -name \"*.root\"|grep -v pileup_correction.root|while read f; do rm \"\$\$f\"; done"
 	) >> "$output"
 done
 
@@ -151,6 +157,13 @@ done
 	echo  ""
 	echo "merge: $directory_targets"
 	echo "	cd data; ./merge"
+) >> "$output"
+
+# clean target
+(
+	echo  ""
+	echo "clean: $directory_targets_clean"
+	echo "	rm -f data/merge.root"
 ) >> "$output"
 
 #----------------------------------------------------------------------------------------------------
