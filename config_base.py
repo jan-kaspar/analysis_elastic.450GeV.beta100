@@ -203,6 +203,8 @@ cfg = cms.PSet(
     vtx_y_min = cms.double(-1E100),
     vtx_y_max = cms.double(+1E100),
 
+    th_x_default = cms.double(0E-6),
+
     si_th_x_1arm_L = cms.double(0.),
     si_th_x_1arm_R = cms.double(0.),
     si_th_x_1arm_unc = cms.double(0.),
@@ -288,8 +290,8 @@ a_R_2_F, b_R_2_F, c_R_2_F = +6.0E-3, +863E-3,   -0E-3
 
 #----------------------------------------------------------------------------------------------------
 
-single_arm_contour_45b_56t = [[-300E-6, 34E-6], [50E-6, 34E-6], [245E-6, 45E-6], [365E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-370E-6, 60E-6]]
-single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, +220E-6, 0E-6, +221E-6, 150E-6)
+single_arm_contour_45b_56t_full = [[-300E-6, 34E-6], [50E-6, 34E-6], [245E-6, 45E-6], [365E-6, 80E-6], [270E-6, 126E-6], [-280E-6, 131E-6], [-370E-6, 60E-6]]
+single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t_full, +220E-6, 0E-6, +221E-6, 150E-6)
 single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, 1., 115E-6, -1., 115E-6)
 
 double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_high=+219E-6, th_y_high=114E-6)
@@ -330,8 +332,8 @@ cfg_45b_56t = cfg.clone(
 
 #----------------------------------------------------------------------------------------------------
 
-single_arm_contour_45t_56b = [[-50E-6, 34E-6], [-240E-6, 45E-6], [-360E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [370E-6, 42E-6], [330E-6, 34E-6]]
-single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, -220E-6, 150E-6, -221E-6, 0E-6)
+single_arm_contour_45t_56b_full = [[-50E-6, 34E-6], [-240E-6, 45E-6], [-360E-6, 80E-6], [-270E-6, 132E-6], [250E-6, 134E-6], [360E-6, 95E-6], [370E-6, 42E-6], [330E-6, 34E-6]]
+single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b_full, -220E-6, 150E-6, -221E-6, 0E-6)
 single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, 1., 115E-6, -1., 115E-6)
 
 double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-219E-6, th_y_high=114E-6)
