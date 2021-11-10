@@ -80,6 +80,8 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	vtx_y_min = ps.getParameter<double>("vtx_y_min");
 	vtx_y_max = ps.getParameter<double>("vtx_y_max");
 
+	th_x_default = ps.getParameter<double>("th_x_default");
+
 	si_th_x_1arm_L = ps.getParameter<double>("si_th_x_1arm_L");
 	si_th_x_1arm_R = ps.getParameter<double>("si_th_x_1arm_R");
 	si_th_x_1arm_unc = ps.getParameter<double>("si_th_x_1arm_unc");

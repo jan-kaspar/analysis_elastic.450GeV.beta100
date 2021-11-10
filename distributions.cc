@@ -1315,7 +1315,7 @@ int main(int argc, const char **argv)
 
 		// define safe flag
 		double safe_th_y_min, safe_th_y_max;
-		anal.fc_G.GetThYRange(0E-6, safe_th_y_min, safe_th_y_max);
+		anal.fc_G.GetThYRange(anal.th_x_default, safe_th_y_min, safe_th_y_max);
 		safe_th_y_min += 10E-6;
 		safe_th_y_max -= 10E-6;
 
@@ -1631,7 +1631,7 @@ int main(int argc, const char **argv)
 		th_y_L_min = min(th_y_L_min, k.th_y_L);
 		th_y_R_min = min(th_y_R_min, k.th_y_R);
 
-		if (fabs(k.th_y) > safe_th_y_min && fabs(k.th_y) < safe_th_y_max)
+		if (safe)
 		{
 			p_diffRL_th_x_vs_time->Fill(ev.timestamp, k.th_x_R - k.th_x_L);
 			p_diffFN_th_x_L_vs_time->Fill(ev.timestamp, k.th_x_L_2_F - k.th_x_L_1_F);

@@ -65,6 +65,7 @@ struct Analysis
 	FiducialCut fc_L, fc_R, fc_G;
 	double vtx_x_min = -1E100, vtx_x_max = +1E100;
 	double vtx_y_min = -1E100, vtx_y_max = +1E100;
+	double th_x_default; // th_x value somewhere in the middle of the fiducial range
 
 	// (un)-smearing parameters
 	double si_th_x_1arm_L;

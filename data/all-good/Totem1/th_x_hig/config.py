@@ -11,6 +11,7 @@ for c in all_cfg:
     c.anal.fc_L = FiducialCut(contour)
     c.anal.fc_R = FiducialCut(contour)
     c.anal.fc_G = FiducialCut(Shrink(contour, th_x_low=+85E-6))
+    c.anal.th_x_default = +100E-6
 
 #----------
 
