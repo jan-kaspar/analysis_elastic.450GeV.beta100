@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# remove old files
+for d in $@
+do
+	rm $d/*.{root,log}
+done
+
+# run distributions, "bootstrap" mode, i.e. with no/default corrections
+./run distributions.cc $@ -O "-bootstrap 1" -wait
+
+# run resolutions
+./run resolution_fit.cc $@ -wait
+
+# run efficiencies
+./run eff3outof4.cc $@ -wait
+./run eff3outof4_fit.cc $@ -wait
+
+# run unfolding correction
+./run unfolding_cf_ni.cc $@ -wait
+
+# re-run distributions, with the above-built corrections
+./run distributions.cc $@ -wait
