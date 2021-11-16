@@ -75,6 +75,7 @@ struct Analysis
 	double si_th_x_2arm_unc;
 	double si_th_x_LRdiff;
 	double si_th_x_LRdiff_unc;
+	double si_th_x_LRdiff_adj;
 
 	double si_th_y_1arm;
 	double si_th_y_1arm_unc;
@@ -82,6 +83,7 @@ struct Analysis
 	double si_th_y_2arm_unc;
 	double si_th_y_LRdiff;
 	double si_th_y_LRdiff_unc;
+	double si_th_y_LRdiff_adj;
 
 	// efficiency parameters
 	bool use_resolution_fits;				// whether to use time-dependent fits of resolution curves

@@ -212,6 +212,7 @@ cfg = cms.PSet(
     si_th_x_2arm_unc = cms.double(0.),
     si_th_x_LRdiff = cms.double(0.),
     si_th_x_LRdiff_unc = cms.double(0.),
+    si_th_x_LRdiff_adj = cms.double(0.),
 
     si_th_y_1arm = cms.double(0.),
     si_th_y_1arm_unc = cms.double(0.),
@@ -219,6 +220,7 @@ cfg = cms.PSet(
     si_th_y_2arm_unc = cms.double(0.),
     si_th_y_LRdiff = cms.double(0.),
     si_th_y_LRdiff_unc = cms.double(0.),
+    si_th_y_LRdiff_adj = cms.double(0.),
 
     use_resolution_fits = cms.bool(True),
 

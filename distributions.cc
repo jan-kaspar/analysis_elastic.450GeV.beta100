@@ -1696,8 +1696,8 @@ int main(int argc, const char **argv)
 		// set time-dependent resolutions
 		if (anal.use_resolution_fits)
 		{
-			anal.si_th_x_LRdiff = accCalc.anal.si_th_x_LRdiff = g_d_x_RMS->Eval(ev.timestamp);
-			anal.si_th_y_LRdiff = accCalc.anal.si_th_y_LRdiff = g_d_y_RMS->Eval(ev.timestamp);
+			anal.si_th_x_LRdiff = accCalc.anal.si_th_x_LRdiff = g_d_x_RMS->Eval(ev.timestamp) + anal.si_th_x_LRdiff_adj;
+			anal.si_th_y_LRdiff = accCalc.anal.si_th_y_LRdiff = g_d_y_RMS->Eval(ev.timestamp) + anal.si_th_y_LRdiff_adj;
 		}
 
 		p_input_beam_div_x_vs_time->Fill(ev.timestamp, anal.si_th_x_1arm_L);

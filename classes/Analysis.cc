@@ -89,6 +89,7 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	si_th_x_2arm_unc = ps.getParameter<double>("si_th_x_2arm_unc");
 	si_th_x_LRdiff = ps.getParameter<double>("si_th_x_LRdiff");
 	si_th_x_LRdiff_unc = ps.getParameter<double>("si_th_x_LRdiff_unc");
+	si_th_x_LRdiff_adj = ps.getParameter<double>("si_th_x_LRdiff_adj");
 
 	si_th_y_1arm = ps.getParameter<double>("si_th_y_1arm");
 	si_th_y_1arm_unc = ps.getParameter<double>("si_th_y_1arm_unc");
@@ -96,6 +97,7 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	si_th_y_2arm_unc = ps.getParameter<double>("si_th_y_2arm_unc");
 	si_th_y_LRdiff = ps.getParameter<double>("si_th_y_LRdiff");
 	si_th_y_LRdiff_unc = ps.getParameter<double>("si_th_y_LRdiff_unc");
+	si_th_y_LRdiff_adj = ps.getParameter<double>("si_th_y_LRdiff_adj");
 
 	use_resolution_fits = ps.getParameter<bool>("use_resolution_fits");
 	use_3outof4_efficiency_fits = ps.getParameter<bool>("use_3outof4_efficiency_fits");
