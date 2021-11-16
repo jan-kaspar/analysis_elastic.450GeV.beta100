@@ -3,7 +3,7 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[];
-datasets.push("data/fill7281/Totem1");
+//datasets.push("data/fill7281/Totem1");
 datasets.push("data/fill7291/Totem1");
 
 string dgns[], d_labels[];
