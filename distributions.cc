@@ -895,7 +895,15 @@ int main(int argc, const char **argv)
 	TGraph *g_th_y_R_vs_th_x_R = new TGraph(); g_th_y_R_vs_th_x_R->SetName("g_th_y_R_vs_th_x_R"); g_th_y_R_vs_th_x_R->SetTitle(";#theta_{x}^{R};#theta_{y}^{R}");
 	TGraph *g_th_y_G_vs_th_x_G = new TGraph(); g_th_y_G_vs_th_x_G->SetName("g_th_y_G_vs_th_x_G"); g_th_y_G_vs_th_x_G->SetTitle(";#theta_{x};#theta_{y}");
 
+	TH2D *h2_th_x_L_vs_th_x_R = new TH2D("h2_th_x_L_vs_th_x_R", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
+	TH2D *h2_th_x_L_vs_th_x_R_low_vtx_x = new TH2D("h2_th_x_L_vs_th_x_R_low_vtx_x", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
+	TH2D *h2_th_x_L_vs_th_x_R_mid_vtx_x = new TH2D("h2_th_x_L_vs_th_x_R_mid_vtx_x", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
+	TH2D *h2_th_x_L_vs_th_x_R_hig_vtx_x = new TH2D("h2_th_x_L_vs_th_x_R_hig_vtx_x", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
+
 	TH2D *h2_th_y_L_vs_th_y_R = new TH2D("h2_th_y_L_vs_th_y_R", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
+	TH2D *h2_th_y_L_vs_th_y_R_low_th_x = new TH2D("h2_th_y_L_vs_th_y_R_low_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
+	TH2D *h2_th_y_L_vs_th_y_R_mid_th_x = new TH2D("h2_th_y_L_vs_th_y_R_mid_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
+	TH2D *h2_th_y_L_vs_th_y_R_hig_th_x = new TH2D("h2_th_y_L_vs_th_y_R_hig_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 
 	TH1D *th_x_diffRL = new TH1D("th_x_diffRL", ";#theta_{x}^{R} - #theta_{x}^{L}", 1000, -500E-6, +500E-6); th_x_diffRL->Sumw2();
 	TH1D *th_y_diffRL = new TH1D("th_y_diffRL", ";#theta_{y}^{R} - #theta_{y}^{L}", 500, -50E-6, +50E-6); th_y_diffRL->Sumw2();
@@ -1524,6 +1532,20 @@ int main(int argc, const char **argv)
 		}
 
 		h2_th_y_L_vs_th_y_R->Fill(k.th_y_R, k.th_y_L);
+		if (k.th_x < -250E-6)
+			h2_th_y_L_vs_th_y_R_low_th_x->Fill(k.th_y_R, k.th_y_L);
+		if (k.th_x >= -250E-6 && k.th_x <= +250E-6)
+			h2_th_y_L_vs_th_y_R_mid_th_x->Fill(k.th_y_R, k.th_y_L);
+		if (k.th_x > +250E-6)
+			h2_th_y_L_vs_th_y_R_hig_th_x->Fill(k.th_y_R, k.th_y_L);
+
+		h2_th_x_L_vs_th_x_R->Fill(k.th_x_R, k.th_x_L);
+		if (k.vtx_x < -0.7)
+			h2_th_x_L_vs_th_x_R_low_vtx_x->Fill(k.th_x_R, k.th_x_L);
+		if (k.vtx_x >= -0.7 && k.vtx_x <= +0.7)
+			h2_th_x_L_vs_th_x_R_mid_vtx_x->Fill(k.th_x_R, k.th_x_L);
+		if (k.vtx_x > +0.7)
+			h2_th_x_L_vs_th_x_R_hig_vtx_x->Fill(k.th_x_R, k.th_x_L);
 
 		h_th_x->Fill(k.th_x);
 		h_th_y->Fill(k.th_y);
@@ -2211,7 +2233,15 @@ int main(int argc, const char **argv)
 	g_th_y_R_vs_th_x_R->Write();
 	g_th_y_G_vs_th_x_G->Write();
 
+	h2_th_x_L_vs_th_x_R->Write();
+	h2_th_x_L_vs_th_x_R_low_vtx_x->Write();
+	h2_th_x_L_vs_th_x_R_mid_vtx_x->Write();
+	h2_th_x_L_vs_th_x_R_hig_vtx_x->Write();
+
 	h2_th_y_L_vs_th_y_R->Write();
+	h2_th_y_L_vs_th_y_R_low_th_x->Write();
+	h2_th_y_L_vs_th_y_R_mid_th_x->Write();
+	h2_th_y_L_vs_th_y_R_hig_th_x->Write();
 
 	if (detailsLevel > 2)
 	{
