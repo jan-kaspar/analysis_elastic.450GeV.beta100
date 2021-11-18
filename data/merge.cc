@@ -1,3 +1,4 @@
+#include <TDirectory.h>
 #include "classes/command_line_tools.hh"
 
 #include "TFile.h"
@@ -86,10 +87,9 @@ struct Entry
 {
 	string input;
 	double stat_unc_scale;
-	string output;
-	bool merge;
+	string tag;
 
-	Entry(const string &_i, double _sus, const string &_o, bool _m) : input(_i), stat_unc_scale(_sus), output(_o), merge(_m) {}
+	Entry(const string &_i, double _sus, const string &_tag) : input(_i), stat_unc_scale(_sus), tag(_tag) {}
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -137,8 +137,9 @@ int main(int argc, const char **argv)
 		return 1;
 	}
 
-	// build list of entries
+	// build list of entries and collections
 	vector<Entry> entries;
+	map<string, vector<string>> collections;
 
 	if (! input_entries.empty())
 	{
@@ -147,32 +148,48 @@ int main(int argc, const char **argv)
 			istringstream iss(ie);
 			string dir; getline(iss, dir, ',');
 			string scale; getline(iss, scale, ',');
-			string label; getline(iss, label, ',');
-			string merge; getline(iss, merge, ',');
+			string tag; getline(iss, tag, ',');
 
-			entries.emplace_back(dir, atof(scale.c_str()), label, atoi(merge.c_str()));
+			entries.emplace_back(dir, atof(scale.c_str()), tag);
+
+			collections["merged"].push_back(tag);
 		}
 
 	} else {
 		printf("* using default list of entries\n");
 
-		// TODO: for -with-hor datasets, change false to true
+		entries.push_back(Entry("fill7280/Totem1", 1., "fill7280"));
 
-		entries.push_back(Entry("fill7280/Totem1", 1., "fill7280", true));
+		entries.push_back(Entry("fill7281/Totem1", 1., "fill7281"));
+		entries.push_back(Entry("fill7281-with-hor/Totem1", 1., "fill7281-with-hor"));
 
-		entries.push_back(Entry("fill7281/Totem1", 1., "fill7281", true));
-		entries.push_back(Entry("fill7281-with-hor/Totem1", 1., "fill7281-with-hor", false));
+		entries.push_back(Entry("fill7282/Totem1", 1., "fill7282"));
+		entries.push_back(Entry("fill7283/Totem1", 1., "fill7283"));
+		entries.push_back(Entry("fill7284/Totem1", 1., "fill7284"));
+		entries.push_back(Entry("fill7285/Totem1", 1., "fill7285"));
 
-		entries.push_back(Entry("fill7282/Totem1", 1., "fill7282", true));
-		entries.push_back(Entry("fill7283/Totem1", 1., "fill7283", true));
-		entries.push_back(Entry("fill7284/Totem1", 1., "fill7284", true));
-		entries.push_back(Entry("fill7285/Totem1", 1., "fill7285", true));
+		entries.push_back(Entry("fill7289/Totem1", 1., "fill7289"));
+		entries.push_back(Entry("fill7289-with-hor/Totem1", 1., "fill7289-with-hor"));
 
-		entries.push_back(Entry("fill7289/Totem1", 1., "fill7289", true));
-		entries.push_back(Entry("fill7289-with-hor/Totem1", 1., "fill7289-with-hor", false));
+		entries.push_back(Entry("fill7291/Totem1", 1., "fill7291"));
+		entries.push_back(Entry("fill7291-with-hor/Totem1", 1., "fill7291-with-hor"));
 
-		entries.push_back(Entry("fill7291/Totem1", 1., "fill7291", true));
-		entries.push_back(Entry("fill7291-with-hor/Totem1", 1., "fill7291-with-hor", false));
+		for (const auto &e : entries)
+		{
+			collections[e.tag] = {e.tag};
+
+			collections["merged-also-with-hor"].push_back(e.tag);
+
+			bool withHor = e.tag.find("-with-hor") != string::npos;
+
+			if (!withHor)
+				collections["merged"].push_back(e.tag);
+
+			if (withHor)
+			{
+				collections["merged-only-with-hor"].push_back(e.tag);
+			}
+		}
 	}
 
 	vector<string> diagonals;
@@ -187,7 +204,16 @@ int main(int argc, const char **argv)
 	// print info
 	printf("* %lu entries:\n", entries.size());
 	for (const auto& e : entries)
-		printf("  %s, %.3f, %s, %u\n", e.input.c_str(), e.stat_unc_scale, e.output.c_str(), e.merge);
+		printf("  %s, %.3f, %s\n", e.input.c_str(), e.stat_unc_scale, e.tag.c_str());
+
+	printf("* %lu collections:\n", collections.size());
+	for (const auto &p : collections)
+	{
+		printf("  %s: ", p.first.c_str());
+		for (const auto &e : p.second)
+			printf("%s, ", e.c_str());
+		printf("\n");
+	}
 
 	// prepare output
 	TFile *f_out = new TFile(output_file_name.c_str(), "recreate");
@@ -197,25 +223,23 @@ int main(int argc, const char **argv)
 	{
 		printf("\t%s\n", binnings[bi].c_str());
 
-		TDirectory *binningDir = f_out->mkdir(binnings[bi].c_str());
+		TDirectory *d_binning = f_out->mkdir(binnings[bi].c_str());
 
-		// list of histograms for final merge
-		vector<SHist> full_list_L, full_list_no_L;				
+		// input from a single entry and diagonal
+		struct InputHists {
+			SHist h_L, h_no_L;
+			InputHists(const SHist &_L, const SHist &_no_L) : h_L(_L), h_no_L(_no_L) {}
+		};
 
-		// map: diagonal --> list of inputs
-		map<string, vector<SHist> > full_map_L, full_map_no_L;
+		// load entries
+		vector<vector<InputHists>> hists; // e_hist[entry index][diagonal index]
 
 		for (unsigned int ei = 0; ei < entries.size(); ei++)
 		{
-			printf("\t\t%s\n", entries[ei].output.c_str());
+			vector<InputHists> temp;
 
-			TDirectory *datasetDir = binningDir->mkdir(entries[ei].output.c_str());
-
-			vector<SHist> ds_list_L, ds_list_no_L;
 			for (unsigned int dgni = 0; dgni < diagonals.size(); dgni++)
 			{
-				printf("\t\t\t%s\n", diagonals[dgni].c_str());
-
 				string fn = entries[ei].input + "/distributions_"+diagonals[dgni]+".root";
 				TFile *f_in = TFile::Open(fn.c_str());
 				if (!f_in)
@@ -241,49 +265,70 @@ int main(int argc, const char **argv)
 				}
 
 				h_norm_L->SetName("h_dsdt");
+				h_norm_L->SetDirectory(nullptr);
+
 				h_norm_no_L->SetName("h_dNdt");
+				h_norm_no_L->SetDirectory(nullptr);
 
-				SHist sc_hist_L(h_norm_L, entries[ei].stat_unc_scale);
-				SHist sc_hist_no_L(h_norm_no_L, entries[ei].stat_unc_scale);
+				temp.emplace_back(SHist(h_norm_L, entries[ei].stat_unc_scale), SHist(h_norm_no_L, entries[ei].stat_unc_scale));
 
-				ds_list_L.push_back(sc_hist_L);
-				ds_list_no_L.push_back(sc_hist_no_L);
-
-				if (entries[ei].merge)
-				{
-					full_list_L.push_back(sc_hist_L);
-					full_list_no_L.push_back(sc_hist_no_L);
-
-					full_map_L[diagonals[dgni]].push_back(sc_hist_L);
-					full_map_no_L[diagonals[dgni]].push_back(sc_hist_no_L);
-				}
-
-				gDirectory = datasetDir->mkdir(diagonals[dgni].c_str());
-				h_norm_L->Write();
-				h_norm_no_L->Write();
+				delete f_in;
 			}
 
-			// save histogram merged from all inputs of a dataset
-			gDirectory = datasetDir->mkdir("combined");
-			Merge(ds_list_L, false)->Write();
-			Merge(ds_list_no_L, true)->Write();
+			hists.emplace_back(temp);
 		}
 
-		// save merged histograms
-		TDirectory *mergedDir = binningDir->mkdir("merged");
-
-		for (map<string, vector<SHist> >::iterator it = full_map_L.begin(); it != full_map_L.end(); ++it)
+		// process all collections
+		for (const auto &p : collections)
 		{
-			gDirectory = mergedDir->mkdir(it->first.c_str());
-			Merge(it->second, false)->Write();
+			TDirectory *d_collection = d_binning->mkdir(p.first.c_str());
 
-			auto it_no_L = full_map_no_L.find(it->first);
-			Merge(it_no_L->second, true)->Write();
+			vector<unsigned int> entry_indices;
+			for (const auto &tag : p.second)
+			{
+				signed int idx = -1;
+				for (unsigned int e_idx = 0; e_idx < entries.size(); ++e_idx)
+				{
+					if (tag == entries[e_idx].tag)
+						idx = e_idx;
+				}
+
+				if (idx < 0)
+				{
+					printf("ERROR: entry with tag '%s' not found. Skipping.", tag.c_str());
+				} else {
+					entry_indices.push_back(idx);
+				}
+			}
+
+			vector<SHist> combined_list_L, combined_list_no_L;
+
+			for (unsigned int dgni = 0; dgni < diagonals.size(); ++dgni)
+			{
+				gDirectory = d_collection->mkdir(diagonals[dgni].c_str());
+
+				vector<SHist> dgn_list_L, dgn_list_no_L;
+
+				for (const auto &e_idx : entry_indices)
+				{
+					dgn_list_L.push_back(hists[e_idx][dgni].h_L);
+					dgn_list_no_L.push_back(hists[e_idx][dgni].h_no_L);
+
+					combined_list_L.push_back(hists[e_idx][dgni].h_L);
+					combined_list_no_L.push_back(hists[e_idx][dgni].h_no_L);
+				}
+
+				Merge(dgn_list_L, false)->Write();
+				Merge(dgn_list_no_L, true)->Write();
+			}
+
+			{
+				gDirectory = d_collection->mkdir("combined");
+
+				Merge(combined_list_L, false)->Write();
+				Merge(combined_list_no_L, true)->Write();
+			}
 		}
-
-		gDirectory = mergedDir->mkdir("combined");
-		Merge(full_list_L, false)->Write();
-		Merge(full_list_no_L, true)->Write();
 	}
 
 	delete f_out;
