@@ -9,7 +9,6 @@ from config_base import *
 #--------------------
 
 for c in all_cfg:
-  # FIXME: does this need updating?
   timestamp_min = 92934
   timestamp_max = 101598
 
@@ -29,6 +28,5 @@ UseFiducialCutsForDataWithHorizontals()
 
 #--------------------
 
-# FIXME: does this need updating?
-cfg_45b_56t.anal.L_int = 38486.6
-cfg_45t_56b.anal.L_int = 37496.1
+cfg_45b_56t.anal.L_int = 37123.9
+cfg_45t_56b.anal.L_int = 33897.3

@@ -9,7 +9,6 @@ from config_base import *
 #--------------------
 
 for c in all_cfg:
-  # FIXME: does this need updating?
   timestamp_min = 206071
   timestamp_max = 218141
 
@@ -24,11 +23,9 @@ for c in all_cfg:
     cms.PSet(run=cms.uint32(324532), ls_first=cms.uint32(1), ls_second=cms.uint32(398)) # just the begginning (complement of the main dataset)
   )
 
-
 UseFiducialCutsForDataWithHorizontals()
 
 #--------------------
 
-# FIXME: does this need updating?
-cfg_45b_56t.anal.L_int = 77306.1
-cfg_45t_56b.anal.L_int = 76180.4
+cfg_45b_56t.anal.L_int = 10486.0
+cfg_45t_56b.anal.L_int = 9630.9

@@ -5,11 +5,14 @@ make -C ../.. -j8 || exit 1
 ./normalisation \
 	-input "../../data/fill7280/Totem1" \
 	-input "../../data/fill7281/Totem1" \
+	-input "../../data/fill7281-with-hor/Totem1" \
 	-input "../../data/fill7282/Totem1" \
 	-input "../../data/fill7283/Totem1" \
 	-input "../../data/fill7284/Totem1" \
 	-input "../../data/fill7285/Totem1" \
 	-input "../../data/fill7289/Totem1" \
+	-input "../../data/fill7289-with-hor/Totem1" \
 	-input "../../data/fill7291/Totem1" \
+	-input "../../data/fill7291-with-hor/Totem1" \
 	-print-details 1 -print-python 1
 	#>> "../../data/fill$fill/config_common.py"
