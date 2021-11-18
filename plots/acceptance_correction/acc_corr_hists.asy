@@ -3,7 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[] = {
-	"data/fill7291/Totem1"
+	"data/fill7281/Totem1",
+	"data/fill7281-with-hor/Totem1"
 };
 
 real t_min[] = { 0.027, 0.02 };
@@ -11,7 +12,7 @@ real t_min[] = { 0.027, 0.02 };
 string dgns[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
-string binning = "eb";
+string binning = "sb1";
 
 for (int dsi : datasets.keys)
 {
@@ -40,7 +41,8 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(f, "acceptance correction/" + binning + "/p_t_phi_corr"), "d0,eb", heavygreen, "phi");
 		draw(RootGetObject(f, "acceptance correction/" + binning + "/p_t_full_corr"), "d0,eb", red, "full = divergence * phi");
 		limits((0, 1e0), (0.03, 1e2), Crop);
-		AttachLegend(NW, NW);
+		AttachLegend(E, E);
+		xaxis(YEquals(50, false), dashed);
 		
 		/*
 		drawGridDef = false;

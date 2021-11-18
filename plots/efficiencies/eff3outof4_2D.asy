@@ -17,7 +17,10 @@ datasets.push("data/fill7289/Totem1"); fills.push("7289");
 //datasets.push("data-bad/fill7290/Totem1"); fills.push("7290");
 datasets.push("data/fill7291/Totem1"); fills.push("7291");
 */
-datasets.push("data/fill7291/Totem1"); fills.push("7291");
+//datasets.push("data/fill7291/Totem1"); fills.push("7291");
+
+datasets.push("data/fill7281/Totem1"); fills.push("7281");
+datasets.push("data/fill7281-with-hor/Totem1"); fills.push("7281");
 
 string diagonals[];
 diagonals.push("45b_56t");
