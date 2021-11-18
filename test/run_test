@@ -76,7 +76,7 @@ function MainAnalysis()
 	fd="${ds%/*}"
 	make -f "makefile.analysis" "data/$fd/.target" -j8 || return 11
 
-	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 12
+	data/merge -entry "data/$ds/,1,test" -output "data/merged.root" &> "data/merge.log" || return 12
 
 	echo "<li>OK</li>" >> "$report"
 
