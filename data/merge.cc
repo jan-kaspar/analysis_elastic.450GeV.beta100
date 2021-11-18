@@ -156,9 +156,12 @@ int main(int argc, const char **argv)
 	} else {
 		printf("* using default list of entries\n");
 
+		// TODO: for -with-hor datasets, change false to true
+
 		entries.push_back(Entry("fill7280/Totem1", 1., "fill7280", true));
 
 		entries.push_back(Entry("fill7281/Totem1", 1., "fill7281", true));
+		entries.push_back(Entry("fill7281-with-hor/Totem1", 1., "fill7281-with-hor", false));
 
 		entries.push_back(Entry("fill7282/Totem1", 1., "fill7282", true));
 		entries.push_back(Entry("fill7283/Totem1", 1., "fill7283", true));
@@ -166,8 +169,10 @@ int main(int argc, const char **argv)
 		entries.push_back(Entry("fill7285/Totem1", 1., "fill7285", true));
 
 		entries.push_back(Entry("fill7289/Totem1", 1., "fill7289", true));
+		entries.push_back(Entry("fill7289-with-hor/Totem1", 1., "fill7289-with-hor", false));
 
 		entries.push_back(Entry("fill7291/Totem1", 1., "fill7291", true));
+		entries.push_back(Entry("fill7291-with-hor/Totem1", 1., "fill7291-with-hor", false));
 	}
 
 	vector<string> diagonals;
