@@ -45,7 +45,7 @@ struct Analysis
 	// binning, |t| in GeV^2
 	double t_min, t_max;
 	double t_min_full, t_max_full;
-	double t_min_fit;
+	double t_min_crop, t_max_crop;
 
 	// elastic selection cuts
 	double n_si;

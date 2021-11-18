@@ -117,11 +117,13 @@ unsigned int SuppressLowStatisticsBins(TProfile *p, int threshold)
 
 //----------------------------------------------------------------------------------------------------
 
-void HideLowTBins(TH1D *h, double threshold)
+void CropTDistribution(TH1D *h, double t_min, double t_max)
 {
 	for (int bi = 1; bi <= h->GetNbinsX(); ++bi)
 	{
-		if (h->GetBinCenter(bi) < threshold)
+		const bool suppress = (h->GetXaxis()->GetBinUpEdge(bi) <= t_min) || (h->GetXaxis()->GetBinLowEdge(bi) >= t_max);
+
+		if (suppress)
 		{
 			h->SetBinContent(bi, 0.);
 			h->SetBinError(bi, 0.);
@@ -1788,7 +1790,7 @@ int main(int argc, const char **argv)
 
 	// hide bins with high uncertainty
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
-		HideLowTBins(bh_t_normalized[bi], anal.t_min_fit);
+		CropTDistribution(bh_t_normalized[bi], anal.t_min_crop, anal.t_max_crop);
 
 	// fit histograms
 	const double th_y_low_bound = (cfg.diagonal == d45b_56t) ? 50E-6 : -120E-6;

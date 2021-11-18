@@ -36,7 +36,8 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	t_max = ps.getParameter<double>("t_max");
 	t_min_full = ps.getParameter<double>("t_min_full");
 	t_max_full = ps.getParameter<double>("t_max_full");
-	t_min_fit = ps.getParameter<double>("t_min_fit");
+	t_min_crop = ps.getParameter<double>("t_min_crop");
+	t_max_crop = ps.getParameter<double>("t_max_crop");
 
 	n_si = ps.getParameter<double>("n_si");
 
@@ -144,7 +145,7 @@ void Analysis::Load(const edm::ParameterSet &ps)
 void Analysis::Print() const
 {
 	printf("t_min=%E, t_max=%E, t_min_full=%E, t_max_full=%E\n", t_min, t_max, t_min_full, t_max_full);
-	printf("t_min_fit=%E\n", t_min_fit);
+	printf("t_min_crop=%E, t_max_crop=%E\n", t_min_crop, t_max_crop);
 
 	printf("\n");
 	printf("%lu excluded runs: ", excl_runs.size());

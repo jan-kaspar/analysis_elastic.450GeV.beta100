@@ -19,6 +19,8 @@ for c in all_cfg:
   c.anal.alignment_t0 = timestamp_min
   c.anal.alignment_ts = (215290 - timestamp_min) / 2.
 
+  c.anal.t_max_crop = 0.009
+
   c.anal.excl_lsIntervals = cms.VPSet(
     cms.PSet(run=cms.uint32(324532), ls_first=cms.uint32(1), ls_second=cms.uint32(398)) # just the begginning (complement of the main dataset)
   )

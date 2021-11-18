@@ -179,7 +179,8 @@ cfg = cms.PSet(
     t_max = cms.double(0.03),
     t_min_full = cms.double(0.),
     t_max_full = cms.double(0.045),
-    t_min_fit = cms.double(0.),
+    t_min_crop = cms.double(3.1E-4),
+    t_max_crop = cms.double(0.025),
 
     n_si = cms.double(4.0),
 

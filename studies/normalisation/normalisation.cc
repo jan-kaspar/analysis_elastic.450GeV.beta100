@@ -119,7 +119,7 @@ int main(int argc, const char **argv)
 			e.h_t_no_L = (TH1D *) f_in->Get(("normalization+unfolding/" + binning + "/h_t_normalized_unsmeared_no_L").c_str());
 			e.h_t_no_L->SetDirectory(nullptr);
 
-			const int bi = e.h_t->FindBin(0.01);
+			const int bi = e.h_t->FindBin(0.008);
 			e.L_int = e.h_t_no_L->GetBinContent(bi) / e.h_t->GetBinContent(bi);
 
 			e.beta = 1. / GetRelativeNormalizationFactor(e.h_t, print_details);
