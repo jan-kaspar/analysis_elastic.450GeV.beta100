@@ -332,8 +332,8 @@ extern double GetNormalizationFactor(const TObject *obj, bool print_details)
 
 extern double GetRelativeNormalizationFactor(const TObject *obj, bool print_details)
 {
-	// range
-	const double t_min_goal = 3.1E-4, t_max_goal = 0.02;
+	// range (t_max given by the -with-hor datasets)
+	const double t_min_goal = 3.1E-4, t_max_goal = 0.009;
 
 	if (obj->InheritsFrom("TH1D"))
 	{
