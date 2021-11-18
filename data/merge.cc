@@ -44,15 +44,15 @@ TH1D* Merge(const vector<SHist> &hists, bool sumBins)
 			double Sv = 0., Su2 = 0.;
 			for (unsigned int hi = 0; hi < hists.size(); hi++)
 			{
-				double v = hists[hi].hist->GetBinContent(bi);
-				double u = hists[hi].hist->GetBinError(bi) * hists[hi].scale;
+				const double v = hists[hi].hist->GetBinContent(bi);
+				const double u = hists[hi].hist->GetBinError(bi) * hists[hi].scale;
 
 				Sv += v;
 				Su2 += u * u;
 			}
 
-			double v = Sv;
-			double u = sqrt(Su2);
+			const double v = Sv;
+			const double u = sqrt(Su2);
 
 			m->SetBinContent(bi, v);
 			m->SetBinError(bi, u);
@@ -61,19 +61,19 @@ TH1D* Merge(const vector<SHist> &hists, bool sumBins)
 			double Svw = 0., Sw = 0.;
 			for (unsigned int hi = 0; hi < hists.size(); hi++)
 			{
-				double v = hists[hi].hist->GetBinContent(bi);
-				double e = hists[hi].hist->GetBinError(bi) * hists[hi].scale;
-				double w = (e > 0.) ? 1./e/e : 0.;
+				const double v = hists[hi].hist->GetBinContent(bi);
+				const double u = hists[hi].hist->GetBinError(bi) * hists[hi].scale;
+				const double w = (u > 0.) ? 1./u/u : 0.;
 
 				Sw += w;
 				Svw += v * w;
 			}
 
-			double v = (Sw > 0.) ? Svw / Sw : 0.;
-			double e = (Sw > 0.) ? 1. / sqrt(Sw) : 0.;
+			const double avg = (Sw > 0.) ? Svw / Sw : 0.;
+			const double avg_unc = (Sw > 0.) ? 1. / sqrt(Sw) : 0.;
 
-			m->SetBinContent(bi, v);
-			m->SetBinError(bi, e);
+			m->SetBinContent(bi, avg);
+			m->SetBinError(bi, avg_unc);
 		}
 	}
 
