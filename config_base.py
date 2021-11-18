@@ -385,3 +385,24 @@ cfg_45t_56t = cfg_45b_56t.clone()
 #----------------------------------------------------------------------------------------------------
 
 all_cfg = [cfg, cfg_45b_56t, cfg_45t_56b, cfg_45b_56b, cfg_45t_56t]
+
+#----------------------------------------------------------------------------------------------------
+
+def UseFiducialCutsForDataWithHorizontals():
+  global single_arm_contour_45b_56t
+  global cfg_45b_56t
+  single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, +166E-6, 0E-6, +165E-6, 150E-6)
+  single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, -215E-6, 150E-6, -216E-6, 0E-6)
+  double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_low=-210E-6, th_x_high=+160E-6, th_y_high=114E-6)
+  cfg_45b_56t.anal.fc_L = FiducialCut(single_arm_contour_45b_56t)
+  cfg_45b_56t.anal.fc_R = FiducialCut(single_arm_contour_45b_56t)
+  cfg_45b_56t.anal.fc_G = FiducialCut(double_arm_contour_45b_56t)
+
+  global single_arm_contour_45t_56b
+  global cfg_45t_56b
+  single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, +166E-6, 0E-6, +165E-6, 150E-6)
+  single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, -215E-6, 150E-6, -216E-6, 0E-6)
+  double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-210E-6, th_x_high=+160E-6, th_y_high=114E-6)
+  cfg_45t_56b.anal.fc_L = FiducialCut(single_arm_contour_45t_56b)
+  cfg_45t_56b.anal.fc_R = FiducialCut(single_arm_contour_45t_56b)
+  cfg_45t_56b.anal.fc_G = FiducialCut(double_arm_contour_45t_56b)
