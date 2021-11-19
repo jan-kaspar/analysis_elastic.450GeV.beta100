@@ -133,6 +133,16 @@ void CropTDistribution(TH1D *h, double t_min, double t_max)
 
 //----------------------------------------------------------------------------------------------------
 
+template <class T>
+void DivideByBinWidth(T *h)
+{
+	auto entries = h->GetEntries();
+	h->Scale(1., "width");
+	h->SetEntries(entries);
+}
+
+//----------------------------------------------------------------------------------------------------
+
 TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
@@ -1695,6 +1705,15 @@ int main(int argc, const char **argv)
 		p_th_y_R_vs_time->Fill(ev.timestamp, k.th_y_R);
 		p_th_y_L_vs_time->Fill(ev.timestamp, k.th_y_L);
 
+		// fill plots before acceptance correction
+		for (unsigned int bi = 0; bi < binnings.size(); bi++)
+		{
+			bh_t_Nev_before[bi]->Fill(k.t, 1.);
+			bh_t_before[bi]->Fill(k.t, 1.);
+		}
+
+		h2_th_y_vs_th_x_before->Fill(k.th_x, k.th_y, 1.);
+
 		// set time-dependent resolutions
 		if (anal.use_resolution_fits)
 		{
@@ -1707,20 +1726,12 @@ int main(int argc, const char **argv)
 
 		// calculate acceptance divergence correction
 		double phi_corr = 0., div_corr = 0.;
-		bool skip = accCalc.Calculate(k, phi_corr, div_corr);
-
-		for (unsigned int bi = 0; bi < binnings.size(); bi++)
-		{
-			bh_t_Nev_before[bi]->Fill(k.t, 1.);
-			bh_t_before[bi]->Fill(k.t, 1.);
-		}
-
-		h2_th_y_vs_th_x_before->Fill(k.th_x, k.th_y, 1.);
+		const bool skip = accCalc.Calculate(k, phi_corr, div_corr);
 
 		if (skip)
 			continue;
 
-		double corr = div_corr * phi_corr;
+		const double corr = div_corr * phi_corr;
 
 		th_min = min(th_min, k.th);
 
@@ -1773,20 +1784,21 @@ int main(int argc, const char **argv)
 	// normalize histograms
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
 	{
-		bh_t_before[bi]->Scale(1., "width");
-		bh_t_after_no_corr[bi]->Scale(1., "width");
-		bh_t_after[bi]->Scale(1., "width");
+		DivideByBinWidth(bh_t_before[bi]);
 
-		bh_t_normalized[bi]->Scale(1., "width");
+		DivideByBinWidth(bh_t_after_no_corr[bi]);
+		DivideByBinWidth(bh_t_after[bi]);
+
+		DivideByBinWidth(bh_t_normalized[bi]);
 	}
 
 	RemovePartiallyFilledBinsThetaXY(h2_th_y_vs_th_x_normalized);
-	h2_th_y_vs_th_x_normalized->Scale(1., "width");
+	DivideByBinWidth(h2_th_y_vs_th_x_normalized);
 
-	th_y_diffRL->Scale(1., "width");
-	th_x_diffRL->Scale(1., "width");
-	th_y_diffRL_safe->Scale(1., "width");
-	th_x_diffRL_safe->Scale(1., "width");
+	DivideByBinWidth(th_y_diffRL);
+	DivideByBinWidth(th_x_diffRL);
+	DivideByBinWidth(th_y_diffRL_safe);
+	DivideByBinWidth(th_x_diffRL_safe);
 
 	// hide bins with high uncertainty
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
