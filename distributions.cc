@@ -915,6 +915,7 @@ int main(int argc, const char **argv)
 	TH2D *h2_th_y_L_vs_th_y_R = new TH2D("h2_th_y_L_vs_th_y_R", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 	TH2D *h2_th_y_L_vs_th_y_R_low_th_x = new TH2D("h2_th_y_L_vs_th_y_R_low_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 	TH2D *h2_th_y_L_vs_th_y_R_mid_th_x = new TH2D("h2_th_y_L_vs_th_y_R_mid_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
+	TH2D *h2_th_y_L_vs_th_y_R_nmid_th_x = new TH2D("h2_th_y_L_vs_th_y_R_nmid_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 	TH2D *h2_th_y_L_vs_th_y_R_hig_th_x = new TH2D("h2_th_y_L_vs_th_y_R_hig_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 
 	TH1D *th_x_diffRL = new TH1D("th_x_diffRL", ";#theta_{x}^{R} - #theta_{x}^{L}", 1000, -500E-6, +500E-6); th_x_diffRL->Sumw2();
@@ -1550,6 +1551,8 @@ int main(int argc, const char **argv)
 			h2_th_y_L_vs_th_y_R_mid_th_x->Fill(k.th_y_R, k.th_y_L);
 		if (k.th_x > +250E-6)
 			h2_th_y_L_vs_th_y_R_hig_th_x->Fill(k.th_y_R, k.th_y_L);
+		if (k.th_x >= -75E-6 && k.th_x <= +75E-6)
+			h2_th_y_L_vs_th_y_R_nmid_th_x->Fill(k.th_y_R, k.th_y_L);
 
 		h2_th_x_L_vs_th_x_R->Fill(k.th_x_R, k.th_x_L);
 		if (k.vtx_x < -0.7)
@@ -2255,6 +2258,7 @@ int main(int argc, const char **argv)
 	h2_th_y_L_vs_th_y_R->Write();
 	h2_th_y_L_vs_th_y_R_low_th_x->Write();
 	h2_th_y_L_vs_th_y_R_mid_th_x->Write();
+	h2_th_y_L_vs_th_y_R_nmid_th_x->Write();
 	h2_th_y_L_vs_th_y_R_hig_th_x->Write();
 
 	if (detailsLevel > 2)
