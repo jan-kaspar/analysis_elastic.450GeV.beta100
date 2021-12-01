@@ -107,7 +107,12 @@ cfg = cms.PSet(
   timber_dir = cms.string(""),
 
   env = cms.PSet(
-    optics_version = cms.string("v1")
+    optics_version = cms.string("v1"),
+
+    al_x_L = cms.double(0.),
+    be_x_L = cms.double(0.),
+    al_x_R = cms.double(0.),
+    be_x_R = cms.double(0.)
   ),
 
   anal = cms.PSet(

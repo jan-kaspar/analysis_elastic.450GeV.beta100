@@ -125,7 +125,29 @@ void Environment::Load(const edm::ParameterSet &ps)
 {
 	optics_version = ps.getParameter<string>("optics_version");
 
+	al_x_L = ps.getParameter<double>("al_x_L");
+	be_x_L = ps.getParameter<double>("be_x_L");
+	al_x_R = ps.getParameter<double>("al_x_R");
+	be_x_R = ps.getParameter<double>("be_x_R");
+
 	Init();
+
+	ApplyRotation(al_x_L, L_x_L_1_F, L_x_L_2_F);
+	ApplyRotation(be_x_L, v_x_L_1_F, v_x_L_2_F);
+	ApplyRotation(al_x_R, L_x_R_1_F, L_x_R_2_F);
+	ApplyRotation(be_x_R, v_x_R_1_F, v_x_R_2_F);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void Environment::ApplyRotation(double angle, double &v_N, double &v_F)
+{
+	const double v_N_old = v_N, v_F_old = v_F;
+
+	const double S = sin(angle), C = cos(angle);
+
+	v_N =  C * v_N_old + S * v_F_old;
+	v_F = -S * v_N_old + C * v_F_old;
 }
 
 //----------------------------------------------------------------------------------------------------

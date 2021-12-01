@@ -42,6 +42,9 @@ struct Environment
 	double L_y_L_1_F, L_y_L_2_F, L_y_R_1_F, L_y_R_2_F;	// mm
 	double D_x_L_1_F, D_x_L_2_F, D_x_R_1_F, D_x_R_2_F;	// mm
 
+	// optics adjustment parameters
+	double al_x_L, be_x_L, al_x_R, be_x_R;
+
 	static constexpr int n_optical_functions = 16;
 
 	// optics perturbation covariance matrices
@@ -74,6 +77,8 @@ struct Environment
 	void Load(const edm::ParameterSet &ps);
 
 	void Print() const;
+
+	static void ApplyRotation(double angle, double &v_N, double &v_F);
 
 	void ApplyRandomOpticsPerturbations(TVectorD &de);
 

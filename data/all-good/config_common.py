@@ -29,6 +29,7 @@ for c in all_cfg:
     "../../../fill7291/Totem1"
   )
 
+  # TODO: is this what I want ??
   c.anal.use_3outof4_efficiency_fits = False
   c.anal.use_pileup_efficiency_fits = False
 
