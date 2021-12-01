@@ -179,7 +179,6 @@ void Environment::Print() const
 	printf("de_x_R_N=%E, de_y_R_N=%E, tilt_R_N=%E\n", de_x_R_N, de_y_R_N, tilt_R_N);
 	printf("de_x_R_F=%E, de_y_R_F=%E, tilt_R_F=%E\n", de_x_R_F, de_y_R_F, tilt_R_F);
 	printf("\n");
-	printf("si_th_y_RL_assym_unc=%E\n", si_th_y_RL_assym_unc);
 	*/
 
 	printf("optics uncertainties: left arm\n");

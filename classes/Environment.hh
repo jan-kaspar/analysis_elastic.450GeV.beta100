@@ -25,9 +25,6 @@ struct Environment
 	double si_th_x_L, si_th_y_L;		// rad
 	double si_th_x_R, si_th_y_R;		// rad
 
-	// TODO: used ?
-	//double si_th_y_RL_assym_unc;		// uncertainty of the L-R assymetry
-
 	// vertex smearing
 	double si_vtx_x, si_vtx_y; 		// mm
 
