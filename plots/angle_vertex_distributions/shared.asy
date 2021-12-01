@@ -16,8 +16,7 @@ TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string dir = "selected - angles";
 
-// TODO
-bool rebin = true;
+bool rebin = false;
 
 //----------------------------------------------------------------------------------------------------
 
