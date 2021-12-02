@@ -55,8 +55,18 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	//k.th_y_R = (env.v_y_R_1_F * h.R_2_F.y - env.v_y_R_2_F * h.R_1_F.y) / D_y_R;
 	k.vtx_y_R = (+ h.R_1_F.y * env.L_y_R_2_F - h.R_2_F.y * env.L_y_R_1_F) / D_y_R;
 
-	// ----- double-arm kinematics reconstruction -----
+	// ----- global reconstruction -----
 
+	DoGlobalReconstruction(k, env);
+
+	return k;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void DoGlobalReconstruction(Kinematics &k, const Environment &env)
+{
+	// ----- double-arm kinematics reconstruction -----
 	k.th_x = (k.th_x_L + k.th_x_R) / 2.;
 	k.th_y = (k.th_y_L + k.th_y_R) / 2.;
 
@@ -64,7 +74,7 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.vtx_y = (k.vtx_y_L + k.vtx_y_R) / 2.;
 
 	// ----- theta reconstruction -----
-	double th_sq = k.th_x*k.th_x + k.th_y*k.th_y;
+	const double th_sq = k.th_x*k.th_x + k.th_y*k.th_y;
 	k.th = sqrt(th_sq);
 	k.phi = atan2(k.th_y, k.th_x);
 
@@ -72,8 +82,6 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.t_x = env.p*env.p * k.th_x * k.th_x;
 	k.t_y = env.p*env.p * k.th_y * k.th_y;
 	k.t = k.t_x + k.t_y;
-
-	return k;
 }
 
 //----------------------------------------------------------------------------------------------------

@@ -12,6 +12,8 @@ class TObject;
 
 //----------------------------------------------------------------------------------------------------
 
+extern void DoGlobalReconstruction(Kinematics &k, const Environment &env);
+
 extern Kinematics DoReconstruction(const HitData &h, const Environment &env);
 
 extern void BuildBinning(const Analysis &anal, const std::string &type, double* &binEdges, unsigned int &bins);

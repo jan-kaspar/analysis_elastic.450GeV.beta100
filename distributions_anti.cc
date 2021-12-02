@@ -363,6 +363,7 @@ int main(int argc, const char **argv)
 
 		anal.post_reco_adjustment_L.Apply(k.th_x_L, k.vtx_x_L, k.th_y_L);
 		anal.post_reco_adjustment_R.Apply(k.th_x_R, k.vtx_x_R, k.th_y_R);
+		DoGlobalReconstruction(k, env);
 
 		// cut evaluation
 		CutData cd;
