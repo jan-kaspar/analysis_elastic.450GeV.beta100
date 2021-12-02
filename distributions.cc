@@ -1350,7 +1350,7 @@ int main(int argc, const char **argv)
 		safe_th_y_min += 10E-6;
 		safe_th_y_max -= 10E-6;
 
-		const bool safe = fabs(k.th_y) > safe_th_y_min && fabs(k.th_y) < safe_th_y_max;
+		const bool safe = fabs(k.th_y) > safe_th_y_min && fabs(k.th_y) < safe_th_y_max && fabs(k.th_x) < 300E-6;
 
 		// fill raw histograms
 		h_timestamp_sel->Fill(ev.timestamp);
