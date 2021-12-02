@@ -1021,49 +1021,51 @@ int main(int argc, const char **argv)
 	OpticsMatchingInput opticsMatchingIntput_full;
 
 	// time-dependence histograms
-	TProfile *p_diffRL_th_x_vs_time = new TProfile("p_diffRL_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	unsigned int td_bins = timestamp_bins / 600;
+
+	TProfile *p_diffRL_th_x_vs_time = new TProfile("p_diffRL_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffRL_th_x_vs_time = new TGraphErrors; gRMS_diffRL_th_x_vs_time->SetName("gRMS_diffRL_th_x_vs_time"); gRMS_diffRL_th_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}#theta_{x}");
 
-	TProfile *p_diffFN_th_x_L_vs_time = new TProfile("p_diffFN_th_x_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffFN_th_x_L_vs_time = new TProfile("p_diffFN_th_x_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{L}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffFN_th_x_L_vs_time = new TGraphErrors; gRMS_diffFN_th_x_L_vs_time->SetName("gRMS_diffFN_th_x_L_vs_time"); gRMS_diffFN_th_x_L_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{x}^{L}");
 
-	TProfile *p_diffFN_th_x_R_vs_time = new TProfile("p_diffFN_th_x_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffFN_th_x_R_vs_time = new TProfile("p_diffFN_th_x_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffFN_th_x_R_vs_time = new TGraphErrors; gRMS_diffFN_th_x_R_vs_time->SetName("gRMS_diffFN_th_x_R_vs_time"); gRMS_diffFN_th_x_R_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{x}^{R}");
 
-	TProfile *p_diffRL_th_y_vs_time = new TProfile("p_diffRL_th_y_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{y}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffRL_th_y_vs_time = new TProfile("p_diffRL_th_y_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{y}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffRL_th_y_vs_time = new TGraphErrors; gRMS_diffRL_th_y_vs_time->SetName("gRMS_diffRL_th_y_vs_time"); gRMS_diffRL_th_y_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}#theta_{y}");
 
-	TProfile *p_diffFN_th_y_L_vs_time = new TProfile("p_diffFN_th_y_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffFN_th_y_L_vs_time = new TProfile("p_diffFN_th_y_L_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{L}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffFN_th_y_L_vs_time = new TGraphErrors; gRMS_diffFN_th_y_L_vs_time->SetName("gRMS_diffFN_th_y_L_vs_time"); gRMS_diffFN_th_y_L_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{y}^{L}");
 
-	TProfile *p_diffFN_th_y_R_vs_time = new TProfile("p_diffFN_th_y_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffFN_th_y_R_vs_time = new TProfile("p_diffFN_th_y_R_vs_time", ";timestamp;mean of #Delta^{F-N}#theta_{y}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffFN_th_y_R_vs_time = new TGraphErrors; gRMS_diffFN_th_y_R_vs_time->SetName("gRMS_diffFN_th_y_R_vs_time"); gRMS_diffFN_th_y_R_vs_time->SetTitle(";timestamp;RMS of #Delta^{F-N}#theta_{y}^{R}");
 
-	TProfile *p_vtx_x_vs_time = new TProfile("p_vtx_x_vs_time", ";timestamp;mean of x^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_vtx_x_vs_time = new TProfile("p_vtx_x_vs_time", ";timestamp;mean of x^{*}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_vtx_x_vs_time = new TGraphErrors; gRMS_vtx_x_vs_time->SetName("gRMS_vtx_x_vs_time"); gRMS_vtx_x_vs_time->SetTitle(";timestamp;RMS of x^{*}");
 
-	TProfile *p_vtx_y_vs_time = new TProfile("p_vtx_y_vs_time", ";timestamp;mean of y^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_vtx_y_vs_time = new TProfile("p_vtx_y_vs_time", ";timestamp;mean of y^{*}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_vtx_y_vs_time = new TGraphErrors; gRMS_vtx_y_vs_time->SetName("gRMS_vtx_y_vs_time"); gRMS_vtx_y_vs_time->SetTitle(";timestamp;RMS of y^{*}");
 
-	TProfile *p_diffRL_vtx_x_vs_time = new TProfile("p_diffRL_vtx_x_vs_time", ";timestamp;mean of #Delta^{R-L}x^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffRL_vtx_x_vs_time = new TProfile("p_diffRL_vtx_x_vs_time", ";timestamp;mean of #Delta^{R-L}x^{*}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffRL_vtx_x_vs_time = new TGraphErrors; gRMS_diffRL_vtx_x_vs_time->SetName("gRMS_diffRL_vtx_x_vs_time"); gRMS_diffRL_vtx_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}x^{*}");
 
-	TProfile *p_diffRL_vtx_y_vs_time = new TProfile("p_diffRL_vtx_y_vs_time", ";timestamp;mean of #Delta^{R-L}y^{*}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_diffRL_vtx_y_vs_time = new TProfile("p_diffRL_vtx_y_vs_time", ";timestamp;mean of #Delta^{R-L}y^{*}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffRL_vtx_y_vs_time = new TGraphErrors; gRMS_diffRL_vtx_y_vs_time->SetName("gRMS_diffRL_vtx_y_vs_time"); gRMS_diffRL_vtx_y_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}y^{*}");
 
-	TProfile *p_th_x_vs_time = new TProfile("p_th_x_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_R_vs_time = new TProfile("p_th_x_R_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_L_vs_time = new TProfile("p_th_x_L_vs_time", ";timestamp;#theta_{x}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_R1F_vs_time = new TProfile("p_th_x_R1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_R2F_vs_time = new TProfile("p_th_x_R2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_L1F_vs_time = new TProfile("p_th_x_L1F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_x_L2F_vs_time = new TProfile("p_th_x_L2F_vs_time", ";timestamp;#theta_{x}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_vs_time = new TProfile("p_th_x_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R_vs_time = new TProfile("p_th_x_R_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L_vs_time = new TProfile("p_th_x_L_vs_time", ";timestamp;#theta_{x}^{L}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R1F_vs_time = new TProfile("p_th_x_R1F_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_R2F_vs_time = new TProfile("p_th_x_R2F_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L1F_vs_time = new TProfile("p_th_x_L1F_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_x_L2F_vs_time = new TProfile("p_th_x_L2F_vs_time", ";timestamp;#theta_{x}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 
-	TProfile *p_th_y_R_vs_time = new TProfile("p_th_y_R_vs_time", ";timestamp;#theta_{y}^{R}", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_th_y_L_vs_time = new TProfile("p_th_y_L_vs_time", ";timestamp;#theta_{y}^{L}", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_y_R_vs_time = new TProfile("p_th_y_R_vs_time", ";timestamp;#theta_{y}^{R}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_th_y_L_vs_time = new TProfile("p_th_y_L_vs_time", ";timestamp;#theta_{y}^{L}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 
-	TProfile *p_input_beam_div_x_vs_time = new TProfile("p_input_beam_div_x_vs_time", ";timestamp", 31, cfg.timestamp_min, cfg.timestamp_max);
-	TProfile *p_input_beam_div_y_vs_time = new TProfile("p_input_beam_div_y_vs_time", ";timestamp", 31, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_input_beam_div_x_vs_time = new TProfile("p_input_beam_div_x_vs_time", ";timestamp", td_bins, cfg.timestamp_min, cfg.timestamp_max);
+	TProfile *p_input_beam_div_y_vs_time = new TProfile("p_input_beam_div_y_vs_time", ";timestamp", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 
 	// book acceptance-correction histograms
 	TProfile *p_t_ub_div_corr = new TProfile("p_t_ub_div_corr", ";t_ub_{y}", 2000., 0., 0.2);
@@ -1207,6 +1209,9 @@ int main(int argc, const char **argv)
 
 		// run reconstruction
 		Kinematics k = DoReconstruction(h_al, env);
+
+		anal.post_reco_adjustment_L.Apply(k.th_x_L, k.vtx_x_L, k.th_y_L);
+		anal.post_reco_adjustment_R.Apply(k.th_x_R, k.vtx_x_R, k.th_y_R);
 
 		/*
 		printf("------------------ event %i --------------\n", ev_idx);

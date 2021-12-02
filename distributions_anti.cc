@@ -361,6 +361,9 @@ int main(int argc, const char **argv)
 		// run reconstruction
 		Kinematics k = DoReconstruction(h_al, env);
 
+		anal.post_reco_adjustment_L.Apply(k.th_x_L, k.vtx_x_L, k.th_y_L);
+		anal.post_reco_adjustment_R.Apply(k.th_x_R, k.vtx_x_R, k.th_y_R);
+
 		// cut evaluation
 		CutData cd;
 		bool select = anal.EvaluateCuts(h_al, k, cd);

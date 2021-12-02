@@ -31,6 +31,19 @@ struct CutData
 
 //----------------------------------------------------------------------------------------------------
 
+struct PostRecoAdjustment
+{
+	double B, C, E, F;
+
+	void Load(const edm::ParameterSet &ps);
+
+	void Print() const;
+
+	void Apply(double &th_x, double &vtx_x, double &th_y) const;
+};
+
+//----------------------------------------------------------------------------------------------------
+
 struct Analysis
 {
 	// input selection
@@ -41,6 +54,9 @@ struct Analysis
 
 	// alignment corrections
 	vector<AlignmentSource> alignment_sources;
+
+	// post-reco adjustments
+	PostRecoAdjustment post_reco_adjustment_L, post_reco_adjustment_R;
 
 	// binning, |t| in GeV^2
 	double t_min, t_max;

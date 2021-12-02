@@ -95,6 +95,15 @@ def CutContour(points, x1, y1, x2, y2):
 
 #----------------------------------------------------------------------------------------------------
 
+def FormatAlignment(al):
+  data = cms.VPSet()
+  for rp, pars in al.items():
+    data.append(cms.PSet(unit = cms.string(rp), a = cms.double(pars["a"]), b = cms.double(pars["b"]), c = cms.double(pars["c"])))
+
+  return cms.VPSet( cms.PSet(data = data) )
+
+#----------------------------------------------------------------------------------------------------
+
 cfg = cms.PSet(
   input_files = cms.vstring(),
   distilled_files = cms.vstring("."),
@@ -179,6 +188,20 @@ cfg = cms.PSet(
     ),
 
     alignment_sources = cms.VPSet(),
+
+    post_reco_adjustment_L = cms.PSet(
+      B = cms.double(0),
+      C = cms.double(0),
+      E = cms.double(0),
+      F = cms.double(0),
+    ),
+
+    post_reco_adjustment_R = cms.PSet(
+      B = cms.double(0),
+      C = cms.double(0),
+      E = cms.double(0),
+      F = cms.double(0),
+    ),
 
     t_min = cms.double(0.),
     t_max = cms.double(0.03),
@@ -304,18 +327,16 @@ single_arm_contour_45b_56t = CutContour(single_arm_contour_45b_56t, 1., 115E-6, 
 
 double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_high=+219E-6, th_y_high=114E-6)
 
+alignment_45b_56t = {
+  "L_2_F" : { "a": a_L_2_F + 2E-3 - 0.3E-3, "b": b_L_2_F - 17E-3, "c": c_L_2_F - 11E-3 - 90E-3 },
+  "L_1_F" : { "a": a_L_1_F + 2E-3 + 0.3E-3, "b": b_L_1_F + 17E-3, "c": c_L_1_F + 11E-3 - 90E-3 },
+  "R_1_F" : { "a": a_R_1_F - 2E-3 + 1.3E-3, "b": b_R_1_F -  3E-3, "c": c_R_1_F + 30E-3 - 90E-3 },
+  "R_2_F" : { "a": a_R_2_F - 2E-3 - 1.3E-3, "b": b_R_2_F +  3E-3, "c": c_R_2_F - 30E-3 - 90E-3 },
+}
+
 cfg_45b_56t = cfg.clone(
   anal = dict(
-    alignment_sources = cms.VPSet(
-      cms.PSet(
-        data = cms.VPSet(
-          cms.PSet(unit=cms.string("L_2_F"), a = cms.double(a_L_2_F + 2E-3 - 0.3E-3), b = cms.double(b_L_2_F - 17E-3), c = cms.double(c_L_2_F - 11E-3 - 90E-3)),
-          cms.PSet(unit=cms.string("L_1_F"), a = cms.double(a_L_1_F + 2E-3 + 0.3E-3), b = cms.double(b_L_1_F + 17E-3), c = cms.double(c_L_1_F + 11E-3 - 90E-3)),
-          cms.PSet(unit=cms.string("R_1_F"), a = cms.double(a_R_1_F - 2E-3 + 1.3E-3), b = cms.double(b_R_1_F -  3E-3), c = cms.double(c_R_1_F + 30E-3 - 90E-3)),
-          cms.PSet(unit=cms.string("R_2_F"), a = cms.double(a_R_2_F - 2E-3 - 1.3E-3), b = cms.double(b_R_2_F +  3E-3), c = cms.double(c_R_2_F - 30E-3 - 90E-3))
-        )
-      )
-    ),
+    alignment_sources = FormatAlignment(alignment_45b_56t),
 
     cut1_a = 1., cut1_c = -1.91E-6, cut1_si = 35E-6,
     cut2_a = 1., cut2_c = +0.53E-6, cut2_si = 8E-6,
@@ -346,18 +367,16 @@ single_arm_contour_45t_56b = CutContour(single_arm_contour_45t_56b, 1., 115E-6, 
 
 double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-219E-6, th_y_high=114E-6)
 
+alignment_45t_56b = {
+  "L_2_F" : { "a": a_L_2_F - 0.3E-3 + 1.5E-3, "b": b_L_2_F - 15E-3, "c": c_L_2_F + 15E-3 + 70E-3},
+  "L_1_F" : { "a": a_L_1_F - 0.3E-3 - 1.5E-3, "b": b_L_1_F + 15E-3, "c": c_L_1_F - 15E-3 + 70E-3},
+  "R_1_F" : { "a": a_R_1_F + 0.3E-3 + 1.3E-3, "b": b_R_1_F + 10E-3, "c": c_R_1_F + 20E-3 + 70E-3},
+  "R_2_F" : { "a": a_R_2_F + 0.3E-3 - 1.3E-3, "b": b_R_2_F - 10E-3, "c": c_R_2_F - 20E-3 + 70E-3},
+}
+
 cfg_45t_56b = cfg.clone(
   anal = dict(
-    alignment_sources = cms.VPSet(
-      cms.PSet(
-        data = cms.VPSet(
-          cms.PSet(unit=cms.string("L_2_F"), a = cms.double(a_L_2_F - 0.3E-3 + 1.5E-3), b = cms.double(b_L_2_F - 15E-3), c = cms.double(c_L_2_F + 15E-3 + 70E-3)),
-          cms.PSet(unit=cms.string("L_1_F"), a = cms.double(a_L_1_F - 0.3E-3 - 1.5E-3), b = cms.double(b_L_1_F + 15E-3), c = cms.double(c_L_1_F - 15E-3 + 70E-3)),
-          cms.PSet(unit=cms.string("R_1_F"), a = cms.double(a_R_1_F + 0.3E-3 + 1.3E-3), b = cms.double(b_R_1_F + 10E-3), c = cms.double(c_R_1_F + 20E-3 + 70E-3)),
-          cms.PSet(unit=cms.string("R_2_F"), a = cms.double(a_R_2_F + 0.3E-3 - 1.3E-3), b = cms.double(b_R_2_F - 10E-3), c = cms.double(c_R_2_F - 20E-3 + 70E-3))
-        )
-      )
-    ),
+    alignment_sources = FormatAlignment(alignment_45t_56b),
 
     cut1_a = 1., cut1_c = -0.47E-6, cut1_si = 34E-6,
     cut2_a = 1., cut2_c = -1.12E-6, cut2_si = 8E-6,

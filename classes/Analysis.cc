@@ -7,6 +7,39 @@
 #include "common_alignment.hh"
 
 #include <cmath>
+#include <cstdio>
+
+//----------------------------------------------------------------------------------------------------
+
+void PostRecoAdjustment::Load(const edm::ParameterSet &ps)
+{
+	B = ps.getParameter<double>("B");
+	C = ps.getParameter<double>("C");
+	E = ps.getParameter<double>("E");
+	F = ps.getParameter<double>("F");
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void PostRecoAdjustment::Print() const
+{
+	printf("B=%.3E, C=%.3E, E=%.3E, F=%.3E\n", B, C, E, F);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void PostRecoAdjustment::Apply(double &th_x, double &vtx_x, double &th_y) const
+{
+	double th_x_orig = th_x, vtx_x_orig = vtx_x;
+
+	th_x = th_x_orig + B * vtx_x_orig;
+	vtx_x = C * th_x_orig + vtx_x_orig;
+
+	th_x_orig = th_x;
+	double th_y_orig = th_y;
+	th_x = th_x_orig + E * th_y_orig;
+	th_y = F * th_x_orig + th_y_orig;
+}
 
 //----------------------------------------------------------------------------------------------------
 
@@ -31,6 +64,9 @@ void Analysis::Load(const edm::ParameterSet &ps)
 		src.Load(p.getParameter<vector<edm::ParameterSet>>("data"));
 		alignment_sources.push_back(src);
 	}
+
+	post_reco_adjustment_L.Load(ps.getParameterSet("post_reco_adjustment_L"));
+	post_reco_adjustment_R.Load(ps.getParameterSet("post_reco_adjustment_R"));
 
 	t_min = ps.getParameter<double>("t_min");
 	t_max = ps.getParameter<double>("t_max");
@@ -170,6 +206,26 @@ void Analysis::Print() const
 	printf("%lu excluded bunches: ", excl_bunches.size());
 	for (const auto &bunch : excl_bunches)
 		printf("%u, ", bunch);
+	printf("\n");
+
+	printf("* alignment sources:\n");
+	for (unsigned int asi = 0; asi < alignment_sources.size(); ++asi)
+	{
+		const auto &as = alignment_sources[asi];
+		printf("    idx %u: type a = %u, type b = %u, type c = %u\n", asi, as.type_a, as.type_b, as.type_c);
+		printf("        constants (type = 1):\n");
+		printf("        L_1_F: a = %+.3f mrad, b = %+.3f mm, c = %+.3f mm\n", as.cnst.a_L_1_F*1E3, as.cnst.b_L_1_F, as.cnst.c_L_1_F);
+		printf("        L_2_F: a = %+.3f mrad, b = %+.3f mm, c = %+.3f mm\n", as.cnst.a_L_2_F*1E3, as.cnst.b_L_2_F, as.cnst.c_L_2_F);
+		printf("        R_1_F: a = %+.3f mrad, b = %+.3f mm, c = %+.3f mm\n", as.cnst.a_R_1_F*1E3, as.cnst.b_R_1_F, as.cnst.c_R_1_F);
+		printf("        R_2_F: a = %+.3f mrad, b = %+.3f mm, c = %+.3f mm\n", as.cnst.a_R_2_F*1E3, as.cnst.b_R_2_F, as.cnst.c_R_2_F);
+	}
+	printf("\n");
+
+	printf("* post-reco adjustments:\n");
+	printf("    left: ");
+	post_reco_adjustment_L.Print();
+	printf("    right: ");
+	post_reco_adjustment_R.Print();
 	printf("\n");
 
 	printf("\n");
