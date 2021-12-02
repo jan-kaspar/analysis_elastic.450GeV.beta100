@@ -912,6 +912,10 @@ int main(int argc, const char **argv)
 	TH2D *h2_th_x_L_vs_th_x_R_mid_vtx_x = new TH2D("h2_th_x_L_vs_th_x_R_mid_vtx_x", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
 	TH2D *h2_th_x_L_vs_th_x_R_hig_vtx_x = new TH2D("h2_th_x_L_vs_th_x_R_hig_vtx_x", ";#theta_{x}^{R};#theta_{x}^{L}", 250, -500E-6, +500E-6, 250, -500E-6, +500E-6);
 
+	TH2D *h2_th_x_diffRL_vs_th_x_G_low_vtx_x = new TH2D("h2_th_x_diffRL_vs_th_x_G_low_vtx_x", ";#theta_{x}^{G};#Delta^{R-L}#theta_{x}", 250, -500E-6, +500E-6, 250, -100E-6, +100E-6);
+	TH2D *h2_th_x_diffRL_vs_th_x_G_mid_vtx_x = new TH2D("h2_th_x_diffRL_vs_th_x_G_mid_vtx_x", ";#theta_{x}^{G};#Delta^{R-L}#theta_{x}", 250, -500E-6, +500E-6, 250, -100E-6, +100E-6);
+	TH2D *h2_th_x_diffRL_vs_th_x_G_hig_vtx_x = new TH2D("h2_th_x_diffRL_vs_th_x_G_hig_vtx_x", ";#theta_{x}^{G};#Delta^{R-L}#theta_{x}", 250, -500E-6, +500E-6, 250, -100E-6, +100E-6);
+
 	TH2D *h2_th_y_L_vs_th_y_R = new TH2D("h2_th_y_L_vs_th_y_R", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 	TH2D *h2_th_y_L_vs_th_y_R_low_th_x = new TH2D("h2_th_y_L_vs_th_y_R_low_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
 	TH2D *h2_th_y_L_vs_th_y_R_mid_th_x = new TH2D("h2_th_y_L_vs_th_y_R_mid_th_x", ";#theta_{y}^{R};#theta_{y}^{L}", 300, -150E-6, +150E-6, 300, -150E-6, +150E-6);
@@ -1021,7 +1025,7 @@ int main(int argc, const char **argv)
 	OpticsMatchingInput opticsMatchingIntput_full;
 
 	// time-dependence histograms
-	unsigned int td_bins = timestamp_bins / 600;
+	unsigned int td_bins = timestamp_bins / 300;
 
 	TProfile *p_diffRL_th_x_vs_time = new TProfile("p_diffRL_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", td_bins, cfg.timestamp_min, cfg.timestamp_max);
 	TGraphErrors *gRMS_diffRL_th_x_vs_time = new TGraphErrors; gRMS_diffRL_th_x_vs_time->SetName("gRMS_diffRL_th_x_vs_time"); gRMS_diffRL_th_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}#theta_{x}");
@@ -1212,6 +1216,7 @@ int main(int argc, const char **argv)
 
 		anal.post_reco_adjustment_L.Apply(k.th_x_L, k.vtx_x_L, k.th_y_L);
 		anal.post_reco_adjustment_R.Apply(k.th_x_R, k.vtx_x_R, k.th_y_R);
+		// TODO: now the G kinematics, t, phi etc. needs to be updated...
 
 		/*
 		printf("------------------ event %i --------------\n", ev_idx);
@@ -1561,11 +1566,20 @@ int main(int argc, const char **argv)
 
 		h2_th_x_L_vs_th_x_R->Fill(k.th_x_R, k.th_x_L);
 		if (k.vtx_x < -0.7)
+		{
 			h2_th_x_L_vs_th_x_R_low_vtx_x->Fill(k.th_x_R, k.th_x_L);
+			h2_th_x_diffRL_vs_th_x_G_low_vtx_x->Fill(k.th_x, k.th_x_R - k.th_x_L);
+		}
 		if (k.vtx_x >= -0.7 && k.vtx_x <= +0.7)
+		{
 			h2_th_x_L_vs_th_x_R_mid_vtx_x->Fill(k.th_x_R, k.th_x_L);
+			h2_th_x_diffRL_vs_th_x_G_mid_vtx_x->Fill(k.th_x, k.th_x_R - k.th_x_L);
+		}
 		if (k.vtx_x > +0.7)
+		{
 			h2_th_x_L_vs_th_x_R_hig_vtx_x->Fill(k.th_x_R, k.th_x_L);
+			h2_th_x_diffRL_vs_th_x_G_hig_vtx_x->Fill(k.th_x, k.th_x_R - k.th_x_L);
+		}
 
 		h_th_x->Fill(k.th_x);
 		h_th_y->Fill(k.th_y);
@@ -2259,6 +2273,10 @@ int main(int argc, const char **argv)
 	h2_th_x_L_vs_th_x_R_low_vtx_x->Write();
 	h2_th_x_L_vs_th_x_R_mid_vtx_x->Write();
 	h2_th_x_L_vs_th_x_R_hig_vtx_x->Write();
+
+	h2_th_x_diffRL_vs_th_x_G_low_vtx_x->Write();
+	h2_th_x_diffRL_vs_th_x_G_mid_vtx_x->Write();
+	h2_th_x_diffRL_vs_th_x_G_hig_vtx_x->Write();
 
 	h2_th_y_L_vs_th_y_R->Write();
 	h2_th_y_L_vs_th_y_R_low_th_x->Write();
