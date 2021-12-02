@@ -290,26 +290,31 @@ cfg = cms.PSet(
   )
 )
 
-si_th_y_1arm = 5.87E-6
-cfg.anal.si_th_y_1arm = si_th_y_1arm
-cfg.anal.si_th_y_1arm_unc = -999.
+#----------------------------------------------------------------------------------------------------
 
-cfg.anal.si_th_y_LRdiff = si_th_y_1arm * math.sqrt(2.)
-cfg.anal.si_th_y_LRdiff_unc = -999.
+def SetResolutions(cfg, si_th_x_1arm, si_th_y_1arm):
+  # horizontal resolution
+  cfg.anal.si_th_x_1arm_L = si_th_x_1arm
+  cfg.anal.si_th_x_1arm_R = si_th_x_1arm
+  cfg.anal.si_th_x_1arm_unc = -999.
 
-cfg.anal.si_th_y_2arm = si_th_y_1arm / math.sqrt(2.)
-cfg.anal.si_th_y_2arm_unc = -999.
+  cfg.anal.si_th_x_LRdiff = si_th_x_1arm * math.sqrt(2.)
+  cfg.anal.si_th_x_LRdiff_unc = -999.
 
-si_th_x_1arm = 23E-6
-cfg.anal.si_th_x_1arm_L = si_th_x_1arm
-cfg.anal.si_th_x_1arm_R = si_th_x_1arm
-cfg.anal.si_th_x_1arm_unc = -999.
+  cfg.anal.si_th_x_2arm = si_th_x_1arm / math.sqrt(2.)
+  cfg.anal.si_th_x_2arm_unc = -999.
 
-cfg.anal.si_th_x_LRdiff = si_th_x_1arm * math.sqrt(2.)
-cfg.anal.si_th_x_LRdiff_unc = -999.
+  # vertical resolution
+  cfg.anal.si_th_y_1arm = si_th_y_1arm
+  cfg.anal.si_th_y_1arm_unc = -999.
 
-cfg.anal.si_th_x_2arm = si_th_x_1arm / math.sqrt(2.)
-cfg.anal.si_th_x_2arm_unc = -999.
+  cfg.anal.si_th_y_LRdiff = si_th_y_1arm * math.sqrt(2.)
+  cfg.anal.si_th_y_LRdiff_unc = -999.
+
+  cfg.anal.si_th_y_2arm = si_th_y_1arm / math.sqrt(2.)
+  cfg.anal.si_th_y_2arm_unc = -999.
+
+SetResolutions(cfg, 23E-6, 5.87E-6)
 
 #----------------------------------------------------------------------------------------------------
 
