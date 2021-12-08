@@ -338,6 +338,17 @@ int main(int argc, const char **argv)
 		printf("ERROR: can't open file `%s' for writing.\n", fn_out.c_str());
 		return 3;
 	}
+
+	// save auxiliary plots
+	TGraph *g_si_m_x = new TGraph();
+	g_si_m_x->SetPoint(0, 0, si_m_x);
+	g_si_m_x->SetPoint(1, 1, si_m_x);
+	g_si_m_x->Write("g_si_m_x");
+
+	TGraph *g_si_m_y = new TGraph();
+	g_si_m_y->SetPoint(0, 0, si_m_y);
+	g_si_m_y->SetPoint(1, 1, si_m_y);
+	g_si_m_y->Write("g_si_m_y");
 	
 	// initialise integration workspaces
 	int_ws_phi_size = 100;
