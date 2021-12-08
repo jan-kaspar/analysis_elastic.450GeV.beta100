@@ -68,7 +68,9 @@ void FitOneR(TH1D *h_dsdt, TGraphErrors *g, double x_value)
 
     // determine v2
     ff->SetParameters(230., 16);
-    h_dsdt->Fit(ff, "Q", "", 0.005, 0.020);
+    ff->SetRange(0.005, 0.020);
+    h_dsdt->Fit(ff, "QR", "");
+    ff->Write("v2_fit");
     const double v2 = ff->GetParameter(0), v2_unc = ff->GetParError(0);
 
     const double R = v1 / v2;
@@ -80,10 +82,12 @@ void FitOneR(TH1D *h_dsdt, TGraphErrors *g, double x_value)
     g->SetPointError(idx, 0., R_unc);
 
     // save results
-    TGraph *g_R = new TGraph();
-    g_R->SetName("g_R");
-    g_R->SetPoint(0, R, R_unc);
-    g_R->Write();
+    TGraph *g_R_data = new TGraph();
+    g_R_data->SetName("g_R_data");
+    g_R_data->SetPoint(0, R, R_unc);
+    g_R_data->SetPoint(1, v1, v1_unc);
+    g_R_data->SetPoint(2, v2, v2_unc);
+    g_R_data->Write();
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -144,7 +148,8 @@ int main()
             "vtx_x_hig", "vtx_x_low", "vtx_x_mid", "vtx_y_hig", "vtx_y_low", "vtx_y_mid",
             "vtx_x_y_mid",
             "opt1", "opt2", "opt3",
-            "default_m_x_adj_+1si", "default_m_x_adj_-1si", "default_m_y_adj_+1si", "default_m_y_adj_-1si", "default_m_x_adj_-1si_m_y_adj_+1si"
+            "default_m_x_adj_+1si", "default_m_x_adj_-1si", "default_m_y_adj_+1si", "default_m_y_adj_-1si", "default_m_x_adj_-1si_m_y_adj_+1si",
+            "tune"
         })
     {
         for (const string &dgn : {"45b_56t", "45t_56b"})
