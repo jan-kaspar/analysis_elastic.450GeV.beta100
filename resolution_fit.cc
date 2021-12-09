@@ -13,7 +13,7 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, TGraphErrors *g_rms, double unc_th)
+void RunOneFit(const vector<pair<double, double>> &fitIntervals, TGraphErrors *g_rms, double unc_th)
 {
 	// local fit function
 	TF1 *ff = new TF1("ff", "1 ++ x");
@@ -23,23 +23,11 @@ void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, TGraphErrors *
 	g_fits->SetName("g_fits");
 	g_fits->SetTitle(";timestamp;RMS");
 
-	// loop over runs
-	for (int rgi = 0; rgi < g_run_boundaries->GetN();)
+	// loop intervals
+	for (const auto &interval : fitIntervals)
 	{
-		// get run boundaries
-		double run, run_beg, run_end;
-		g_run_boundaries->GetPoint(rgi, run_beg, run);
-		g_run_boundaries->GetPoint(rgi+1, run_end, run);
-		rgi += 2;
-
-		printf("run = %.0f\n", run);
-
-		// adjust boundaries to source profile
-		int bi_beg = p->GetXaxis()->FindBin(run_beg);
-		int bi_end = p->GetXaxis()->FindBin(run_end);
-
-		double t_min = p->GetXaxis()->GetBinLowEdge(bi_beg);
-		double t_max = p->GetXaxis()->GetBinLowEdge(bi_end) + p->GetXaxis()->GetBinWidth(bi_end);
+		const double t_min = interval.first;
+		const double t_max = interval.second;
 
 		printf("    t_min = %.0f, t_max = %.0f\n", t_min, t_max);
 
@@ -77,8 +65,8 @@ void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, TGraphErrors *
 		const double b = ff->GetParameter(0);
 
 		int idx = g_fits->GetN();
-		g_fits->SetPoint(idx, run_beg, a*run_beg + b);
-		g_fits->SetPoint(idx+1, run_end, a*run_end + b);
+		g_fits->SetPoint(idx, t_min, a*t_min + b);
+		g_fits->SetPoint(idx+1, t_max, a*t_max + b);
 
 		// clean up
 		delete g_rms_sel;
@@ -149,20 +137,27 @@ int main(int argc, const char **argv)
 	// print settings
 	PrintConfiguration();
 
+	// fit intervals
+	vector<pair<double, double>> fitIntervals = {
+		{78E3, 90E3},
+		{92E3, 102E3},
+		{105E3, 116E3},
+		{122E3, 125E3},
+		{130E3, 144E3},
+		{150E3, 155E3},
+		{205E3, 219E3},
+		{232E3, 245E3},
+	};
+
 	// get input
 	TFile *f_in = new TFile((string("distributions_") + cfg.diagonal_str + ".root").c_str());
 
-	TGraph *g_run_boundaries = (TGraph *) f_in->Get("time dependences/g_run_boundaries");
-	
-	TProfile *p_diffRL_th_x_vs_time = (TProfile *) f_in->Get("time dependences/p_diffRL_th_x_vs_time");
 	TGraphErrors *gRMS_diffRL_th_x_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffRL_th_x_vs_time");
-	
-	TProfile *p_diffRL_th_y_vs_time = (TProfile *) f_in->Get("time dependences/p_diffRL_th_y_vs_time");
 	TGraphErrors *gRMS_diffRL_th_y_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffRL_th_y_vs_time");
 
-	if (!g_run_boundaries || !p_diffRL_th_x_vs_time || !gRMS_diffRL_th_x_vs_time || !p_diffRL_th_y_vs_time || !gRMS_diffRL_th_y_vs_time)
+	if (!gRMS_diffRL_th_x_vs_time || !gRMS_diffRL_th_y_vs_time)
 	{
-		printf("ERROR: input not found (%p, %p, %p, %p, %p)\n", g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time);
+		printf("ERROR: input not found (%p, %p)\n", gRMS_diffRL_th_x_vs_time, gRMS_diffRL_th_y_vs_time);
 		return 1;
 	}
 	
@@ -172,11 +167,11 @@ int main(int argc, const char **argv)
 	// do fits
 	printf("\n\n---------- d_x ----------\n");
 	gDirectory = f_out->mkdir("d_x");
-	RunOneFit(g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time, 3E-6);
+	RunOneFit(fitIntervals, gRMS_diffRL_th_x_vs_time, 3E-6);
 
 	printf("\n\n---------- d_y ----------\n");
 	gDirectory = f_out->mkdir("d_y");
-	RunOneFit(g_run_boundaries, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time, 1E-6);
+	RunOneFit(fitIntervals, gRMS_diffRL_th_y_vs_time, 1E-6);
 
 	// clean up
 	delete f_out;
