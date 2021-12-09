@@ -87,10 +87,10 @@ bool FiducialCut::Satisfied(double th_x, double th_y) const
 
 //----------------------------------------------------------------------------------------------------
 
-void FiducialCut::GetThYRange(double th_x, double &th_y_min, double &th_y_max) const
+tuple<double, double> FiducialCut::GetThYRange(double th_x) const
 {
-	th_y_min = pl_inf;
-	th_y_max = mi_inf;
+	double th_y_min = pl_inf;
+	double th_y_max = mi_inf;
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{
@@ -106,6 +106,8 @@ void FiducialCut::GetThYRange(double th_x, double &th_y_min, double &th_y_max) c
 		th_y_min = min(th_y_int, th_y_min);
 		th_y_max = max(th_y_int, th_y_max);
 	}
+
+	return {th_y_min, th_y_max};
 }
 
 //----------------------------------------------------------------------------------------------------
