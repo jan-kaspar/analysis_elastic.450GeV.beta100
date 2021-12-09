@@ -233,6 +233,7 @@ cfg = cms.PSet(
     vtx_y_max = cms.double(+1E100),
 
     th_x_default = cms.double(0E-6),
+    th_x_safe_max = cms.double(10000E-6),
 
     si_th_x_1arm_L = cms.double(0.),
     si_th_x_1arm_R = cms.double(0.),
