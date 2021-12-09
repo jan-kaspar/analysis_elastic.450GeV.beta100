@@ -5,6 +5,7 @@
 #include "TGraphErrors.h"
 #include "TF1.h"
 #include "TProfile.h"
+#include "TCanvas.h"
 
 #include <string>
 
@@ -12,7 +13,7 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, const TGraphErrors *g_rms, double unc_th)
+void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, TGraphErrors *g_rms, double unc_th)
 {
 	// local fit function
 	TF1 *ff = new TF1("ff", "1 ++ x");
@@ -84,7 +85,14 @@ void RunOneFit(const TGraph *g_run_boundaries, const TProfile *p, const TGraphEr
 	}
 
 	// save output
+	g_fits->SetLineColor(2);
 	g_fits->Write();
+
+	TCanvas *c = new TCanvas();
+	c->SetName("c_cmp_data_fit");
+	g_rms->Draw();
+	g_fits->Draw("l");
+	c->Write();
 
 	// clean up
 	delete ff;
