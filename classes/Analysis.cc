@@ -118,6 +118,7 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	vtx_y_max = ps.getParameter<double>("vtx_y_max");
 
 	th_x_default = ps.getParameter<double>("th_x_default");
+	th_x_safe_max = ps.getParameter<double>("th_x_safe_max");
 
 	si_th_x_1arm_L = ps.getParameter<double>("si_th_x_1arm_L");
 	si_th_x_1arm_R = ps.getParameter<double>("si_th_x_1arm_R");
@@ -265,6 +266,11 @@ void Analysis::Print() const
 	printf("fc_G: "); fc_G.Print();
 	printf("vtx_x: min = %.3E, max = %.3E\n", vtx_x_min, vtx_x_max);
 	printf("vtx_y: min = %.3E, max = %.3E\n", vtx_y_min, vtx_y_max);
+
+	printf("\n");
+	printf("safe-flag parameters:\n");
+	printf("th_x_default = %.3E\n", th_x_default);
+	printf("th_x_safe_max = %.3E\n", th_x_safe_max);
 
 	printf("\n");
 	printf("smearing parameters:\n");
