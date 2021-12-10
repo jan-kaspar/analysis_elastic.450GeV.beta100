@@ -928,13 +928,17 @@ int main(int argc, const char **argv)
 	TH1D *th_y_diffRL_safe = new TH1D("th_y_diffRL_safe", ";#theta_{y}^{R} - #theta_{y}^{L}", 100, 0., 0.); th_y_diffRL_safe->Sumw2();
 
 	TH1D *h_th_x = new TH1D("h_th_x", ";#theta_{x}", 250, -500E-6, +500E-6); h_th_x->SetLineColor(1);
-	TH1D *h_th_y = new TH1D("h_th_y", ";#theta_{y}", 250, -500E-6, +500E-6); h_th_y->SetLineColor(1);
-
 	TH1D *h_th_x_L = new TH1D("h_th_x_L", ";#theta_{x}^{L}", 250, -500E-6, +500E-6); h_th_x_L->SetLineColor(2);
 	TH1D *h_th_x_R = new TH1D("h_th_x_R", ";#theta_{x}^{R}", 250, -500E-6, +500E-6); h_th_x_R->SetLineColor(4);
 
-	TH1D *h_th_y_L = new TH1D("h_th_y_L", ";#theta_{y}^{L}", 250, -500E-6, +500E-6); h_th_y_L->SetLineColor(2);
-	TH1D *h_th_y_R = new TH1D("h_th_y_R", ";#theta_{y}^{R}", 250, -500E-6, +500E-6); h_th_y_R->SetLineColor(4);
+	TH1D *h_th_x_th_y_30_60   = new TH1D("h_th_x_th_y_30_60",   ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_x_th_y_60_90   = new TH1D("h_th_x_th_y_60_90",   ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_x_th_y_90_120  = new TH1D("h_th_x_th_y_90_120",  ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_x_th_y_120_150 = new TH1D("h_th_x_th_y_120_150", ";#theta_{x}", 250, -500E-6, +500E-6);
+
+	TH1D *h_th_y = new TH1D("h_th_y", ";#theta_{y}", 250, -150E-6, +150E-6); h_th_y->SetLineColor(1);
+	TH1D *h_th_y_L = new TH1D("h_th_y_L", ";#theta_{y}^{L}", 250, -150E-6, +150E-6); h_th_y_L->SetLineColor(2);
+	TH1D *h_th_y_R = new TH1D("h_th_y_R", ";#theta_{y}^{R}", 250, -150E-6, +150E-6); h_th_y_R->SetLineColor(4);
 
 	// vertex histograms
 	TH1D *h_vtx_x = new TH1D("h_vtx_x", ";x^{*}", 100, -2.5, +2.5); h_vtx_x->SetLineColor(1);
@@ -1580,11 +1584,19 @@ int main(int argc, const char **argv)
 		}
 
 		h_th_x->Fill(k.th_x);
-		h_th_y->Fill(k.th_y);
-
 		h_th_x_L->Fill(k.th_x_L);
 		h_th_x_R->Fill(k.th_x_R);
 
+		if (fabs(k.th_y) >= 30E-6 && fabs(k.th_y) < 60E-6)
+			h_th_x_th_y_30_60->Fill(k.th_x);
+		if (fabs(k.th_y) >= 60E-6 && fabs(k.th_y) < 90E-6)
+			h_th_x_th_y_60_90->Fill(k.th_x);
+		if (fabs(k.th_y) >= 90E-6 && fabs(k.th_y) < 120E-6)
+			h_th_x_th_y_90_120->Fill(k.th_x);
+		if (fabs(k.th_y) >= 120E-6 && fabs(k.th_y) < 150E-6)
+			h_th_x_th_y_120_150->Fill(k.th_x);
+
+		h_th_y->Fill(k.th_y);
 		h_th_y_L->Fill(k.th_y_L);
 		h_th_y_R->Fill(k.th_y_R);
 
@@ -2292,11 +2304,15 @@ int main(int argc, const char **argv)
 	}
 
 	h_th_x->Write();
-	h_th_y->Write();
-
 	h_th_x_L->Write();
 	h_th_x_R->Write();
 
+	h_th_x_th_y_30_60->Write();
+	h_th_x_th_y_60_90->Write();
+	h_th_x_th_y_90_120->Write();
+	h_th_x_th_y_120_150->Write();
+
+	h_th_y->Write();
 	h_th_y_L->Write();
 	h_th_y_R->Write();
 
