@@ -19,7 +19,15 @@ def Contour(fc):
 
 #----------------------------------------------------------------------------------------------------
 
-def Shrink(points, sigma_x = 16E-6, sigma_y = 4E-6, th_x_low = -100E-6, th_x_high = +100E-6, th_y_low = 50E-6, th_y_high = 100E-6):
+shrink_sigma_x_def = 16E-6
+shrink_sigma_y_def = 4E-6
+
+def Shrink(points, sigma_x = -1, sigma_y = -1, th_x_low = -100E-6, th_x_high = +100E-6, th_y_low = 50E-6, th_y_high = 100E-6):
+  if sigma_x < 0:
+    sigma_x = shrink_sigma_x_def
+  if sigma_y < 0:
+    sigma_y = shrink_sigma_y_def
+
   output = []
   for p in points:
     x = p[0]
