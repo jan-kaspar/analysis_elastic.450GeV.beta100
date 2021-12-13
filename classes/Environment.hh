@@ -18,9 +18,6 @@ struct Environment
 	// beam momentum (GeV)
 	double p, p_L, p_R;
 
-	// beam momentum uncertainty
-	double si_de_p;
-
 	// beam divergence
 	double si_th_x_L, si_th_y_L;		// rad
 	double si_th_x_R, si_th_y_R;		// rad
@@ -30,6 +27,9 @@ struct Environment
 
 	// pitch-induced error (i.e. spatial resolution)
 	double si_de_P_L, si_de_P_R;	// mm
+
+	// alignment uncertainties
+	double si_al_x, si_al_y;
 
 	// optics
 	string optics_version;
@@ -53,18 +53,6 @@ struct Environment
 
 	// optics perturbation generator matrices
 	TMatrixD opt_per_gen;
-
-	// alignment uncertainties
-	double si_de_x, si_de_y;
-
-	// misalignments (mm)
-	// TODO: used ?
-	/*
-	double de_x_L_N, de_y_L_N, tilt_L_N;
-	double de_x_L_F, de_y_L_F, tilt_L_F;
-	double de_x_R_N, de_y_R_N, tilt_R_N;
-	double de_x_R_F, de_y_R_F, tilt_R_F;
-	*/
 
 	Environment();
 

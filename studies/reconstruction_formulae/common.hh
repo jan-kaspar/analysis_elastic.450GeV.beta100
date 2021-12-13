@@ -147,11 +147,10 @@ void SimulateEvent(const Kinematics &k_cv, unsigned int b, Func f_reco, Kinemati
 	// misalignment
 	if (b & sbMisalignment) 
 	{
-
-		h.L_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_2_F.y += gRandom->Gaus() * env_sim.si_de_y;
-		h.L_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_1_F.y += gRandom->Gaus() * env_sim.si_de_y;
-		h.R_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_1_F.y += gRandom->Gaus() * env_sim.si_de_y;
-		h.R_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_2_F.y += gRandom->Gaus() * env_sim.si_de_y;
+		h.L_2_F.x += gRandom->Gaus() * env_sim.si_al_x; h.L_2_F.y += gRandom->Gaus() * env_sim.si_al_y;
+		h.L_1_F.x += gRandom->Gaus() * env_sim.si_al_x; h.L_1_F.y += gRandom->Gaus() * env_sim.si_al_y;
+		h.R_1_F.x += gRandom->Gaus() * env_sim.si_al_x; h.R_1_F.y += gRandom->Gaus() * env_sim.si_al_y;
+		h.R_2_F.x += gRandom->Gaus() * env_sim.si_al_x; h.R_2_F.y += gRandom->Gaus() * env_sim.si_al_y;
 	}
 
 	// pitch error

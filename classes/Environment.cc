@@ -1,4 +1,5 @@
 #include "Environment.hh"
+#include <cstdio>
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
@@ -18,9 +19,6 @@ void Environment::Init()
 	// beam momentum (GeV)
 	p = p_L = p_R = 450.;
 
-	// momentum uncertainty
-	si_de_p = 1E-3 * p;
-
 	// beam divergence (rad, for simulation)
 	si_th_x_L = si_th_x_R = 6.7E-6;	// beta*_x = 70 m
 	si_th_y_L = si_th_y_R = 5.6E-6; // beta*_y = 100 m
@@ -32,18 +30,9 @@ void Environment::Init()
 	// pitch-induced error (mm)
 	si_de_P_L = si_de_P_R = 12E-3;
 
-	// alignment uncertainties
-	// TODO: check if used, move to python?
-	/*
-	si_de_x = 0E-3;
-	si_de_y_R = 0E-3;
-	si_de_y_D = 0E-3;
-	si_tilt = 0E-3;
-	*/
-
-	// other uncertainties
-	// TODO: check if used, move to python?
-	//si_th_y_RL_assym_unc = 0.;
+	// alignment uncertainty (mm)
+	si_al_x = 10E-3;
+	si_al_y = 100E-3;
 
 	InitOptics();
 }
@@ -159,7 +148,11 @@ void Environment::Print() const
 	printf("si_th_x_L=%E, si_th_y_L=%E\n", si_th_x_L, si_th_y_L);
 	printf("si_th_x_R=%E, si_th_y_R=%E\n", si_th_x_R, si_th_y_R);
 	printf("si_vtx_x=%E, si_vtx_y=%E\n", si_vtx_x, si_vtx_y);
-	printf("si_de_P_L=%E, si_de_P_R=%E\n", si_de_P_L, si_de_P_R);
+
+	printf("\n");
+	printf("uncertainties:\n");
+	printf("    alignment: si_al_x=%E, si_al_y=%E\n", si_al_x, si_al_y);
+	printf("    pitch: si_de_P_L=%E, si_de_P_R=%E\n", si_de_P_L, si_de_P_R);
 
 	printf("\n");
 	printf("optics:\n");
@@ -168,18 +161,6 @@ void Environment::Print() const
 	printf("L_x_L_2_F = %E, v_x_L_2_F = %E, L_y_L_2_F = %E, v_y_L_2_F = %E\n", L_x_L_2_F, v_x_L_2_F, L_y_L_2_F, v_y_L_2_F);
 	printf("L_x_R_1_F = %E, v_x_R_1_F = %E, L_y_R_1_F = %E, v_y_R_1_F = %E\n", L_x_R_1_F, v_x_R_1_F, L_y_R_1_F, v_y_R_1_F);
 	printf("L_x_R_2_F = %E, v_x_R_2_F = %E, L_y_R_2_F = %E, v_y_R_2_F = %E\n", L_x_R_2_F, v_x_R_2_F, L_y_R_2_F, v_y_R_2_F);
-
-	// TODO
-	/*
-	printf("\n");
-	printf("si_de_x=%E, si_de_y_R=%E, si_de_y_D=%E, si_tilt=%E\n", si_de_x, si_de_y_R, si_de_y_D, si_tilt);
-	printf("\n");
-	printf("de_x_L_N=%E, de_y_L_N=%E, tilt_L_N=%E\n", de_x_L_N, de_y_L_N, tilt_L_N);
-	printf("de_x_L_F=%E, de_y_L_F=%E, tilt_L_F=%E\n", de_x_L_F, de_y_L_F, tilt_L_F);
-	printf("de_x_R_N=%E, de_y_R_N=%E, tilt_R_N=%E\n", de_x_R_N, de_y_R_N, tilt_R_N);
-	printf("de_x_R_F=%E, de_y_R_F=%E, tilt_R_F=%E\n", de_x_R_F, de_y_R_F, tilt_R_F);
-	printf("\n");
-	*/
 
 	printf("optics uncertainties: left arm\n");
 	printf("\tv_x_N: %.4f\n", sqrt(opt_cov(0, 0)));
