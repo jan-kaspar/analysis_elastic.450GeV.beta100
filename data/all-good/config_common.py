@@ -36,20 +36,20 @@ for c in all_cfg:
 
 cfg_45b_56t.anal.L_int = 1.
 
-single_arm_contour_45b_56t = single_arm_contour_45b_56t_full
-double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_high=+219E-6, th_y_high=114E-6)
+#single_arm_contour_45b_56t = single_arm_contour_45b_56t_full
+#double_arm_contour_45b_56t = Shrink(single_arm_contour_45b_56t, th_x_high=+219E-6, th_y_high=114E-6)
 
-cfg_45b_56t.anal.fc_L = FiducialCut(single_arm_contour_45b_56t)
-cfg_45b_56t.anal.fc_R = FiducialCut(single_arm_contour_45b_56t)
-cfg_45b_56t.anal.fc_G = FiducialCut(double_arm_contour_45b_56t)
+#cfg_45b_56t.anal.fc_L = FiducialCut(single_arm_contour_45b_56t)
+#cfg_45b_56t.anal.fc_R = FiducialCut(single_arm_contour_45b_56t)
+#cfg_45b_56t.anal.fc_G = FiducialCut(double_arm_contour_45b_56t)
 
 #--------------------
 
 cfg_45t_56b.anal.L_int = 1.
 
-single_arm_contour_45t_56b = single_arm_contour_45t_56b_full
-double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-219E-6, th_y_high=114E-6)
+#single_arm_contour_45t_56b = single_arm_contour_45t_56b_full
+#double_arm_contour_45t_56b = Shrink(single_arm_contour_45t_56b, th_x_low=-219E-6, th_y_high=114E-6)
 
-cfg_45t_56b.anal.fc_L = FiducialCut(single_arm_contour_45t_56b)
-cfg_45t_56b.anal.fc_R = FiducialCut(single_arm_contour_45t_56b)
-cfg_45t_56b.anal.fc_G = FiducialCut(double_arm_contour_45t_56b)
+#cfg_45t_56b.anal.fc_L = FiducialCut(single_arm_contour_45t_56b)
+#cfg_45t_56b.anal.fc_R = FiducialCut(single_arm_contour_45t_56b)
+#cfg_45t_56b.anal.fc_G = FiducialCut(double_arm_contour_45t_56b)
