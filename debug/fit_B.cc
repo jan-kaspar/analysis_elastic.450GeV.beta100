@@ -149,7 +149,7 @@ int main()
             "vtx_x_y_mid",
             "opt1", "opt2", "opt3",
             "default_m_x_adj_+1si", "default_m_x_adj_-1si", "default_m_y_adj_+1si", "default_m_y_adj_-1si", "default_m_x_adj_-1si_m_y_adj_+1si",
-            "tune", "tune_none", "tune_1", "tune_12", "tune_123", "tune_1234", "tune_12345"
+            "tune_1", "tune_12", "tune_123", "tune_1234", "tune_12345", "tune_123456", "tune_1234567", "tune_12345678"
         })
     {
         for (const string &dgn : {"45b_56t", "45t_56b"})
