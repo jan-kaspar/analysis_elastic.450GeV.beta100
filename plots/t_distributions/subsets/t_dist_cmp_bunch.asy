@@ -41,7 +41,6 @@ for (int bi : bunches.keys)
 		draw(RootGetObject(f, on), "d0,vl", p+dashed, "ref");
 	}
 
-	// TODO
 	//limits((0, 1e-3), (1.1, 1e3), Crop);
 
 	AttachLegend();
