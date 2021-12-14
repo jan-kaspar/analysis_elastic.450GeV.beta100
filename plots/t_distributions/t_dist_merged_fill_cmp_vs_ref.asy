@@ -45,10 +45,11 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(f, binning + "/" + datasets[dsi] + "/" + diagonals[dgni] + "/h_dsdt"), "d0,eb", d_pens[dgni], d_labels[dgni]);
 	}
 
-	draw(h_ref, "d0,vl", black, "ref");
+	draw(h_ref, "d0,vl", black, "ref (" + dataset_ref + ", " + diagonal_ref + ")");
 
 	limits((0, 4e1), (0.03, 1e4), Crop);
 
 	AttachLegend(datasets[dsi]);
 }
 
+GShipout(hSkip = 0mm);
