@@ -29,5 +29,5 @@ UseFiducialCutsForDataWithHorizontals()
 
 #--------------------
 
-cfg_45b_56t.anal.L_int = 26897.1
-cfg_45t_56b.anal.L_int = 24995.8
+cfg_45b_56t.anal.L_int = 27051.0
+cfg_45t_56b.anal.L_int = 25316.0

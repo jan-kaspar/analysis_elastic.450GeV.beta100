@@ -21,5 +21,5 @@ for c in all_cfg:
 
 #--------------------
 
-cfg_45b_56t.anal.L_int = 78824.5
-cfg_45t_56b.anal.L_int = 79312.5
+cfg_45b_56t.anal.L_int = 81697.1
+cfg_45t_56b.anal.L_int = 80507.3
