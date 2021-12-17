@@ -940,6 +940,9 @@ int main(int argc, const char **argv)
 	TH1D *h_th_y_L = new TH1D("h_th_y_L", ";#theta_{y}^{L}", 250, -150E-6, +150E-6); h_th_y_L->SetLineColor(2);
 	TH1D *h_th_y_R = new TH1D("h_th_y_R", ";#theta_{y}^{R}", 250, -150E-6, +150E-6); h_th_y_R->SetLineColor(4);
 
+	TH1D *h_th_x_sym_cmp = new TH1D("h_th_x_sym_cmp", ";#theta_{x}", 240, -120E-6, +120E-6);
+	TH1D *h_th_y_sym_cmp = new TH1D("h_th_y_sym_cmp", ";#theta_{y}", 240, -120E-6, +120E-6);
+
 	// vertex histograms
 	TH1D *h_vtx_x = new TH1D("h_vtx_x", ";x^{*}", 100, -2.5, +2.5); h_vtx_x->SetLineColor(1);
 	TH1D *h_vtx_x_L = new TH1D("h_vtx_x_L", ";x^{*,L}", 100, -2.5, +2.5); h_vtx_x_L->SetLineColor(2);
@@ -1599,6 +1602,12 @@ int main(int argc, const char **argv)
 		h_th_y->Fill(k.th_y);
 		h_th_y_L->Fill(k.th_y_L);
 		h_th_y_R->Fill(k.th_y_R);
+
+		if (40E-6 < fabs(k.th_x) && fabs(k.th_x) < 120E-6 && 40E-6 < fabs(k.th_y) && fabs(k.th_y) < 120E-6)
+		{
+			h_th_x_sym_cmp->Fill(k.th_x);
+			h_th_y_sym_cmp->Fill(k.th_y);
+		}
 
 		// fill vertex histograms
 		h_vtx_x->Fill(k.vtx_x);
@@ -2315,6 +2324,9 @@ int main(int argc, const char **argv)
 	h_th_y->Write();
 	h_th_y_L->Write();
 	h_th_y_R->Write();
+
+	h_th_x_sym_cmp->Write();
+	h_th_y_sym_cmp->Write();
 
 	TDirectory *d_vertex = f_out->mkdir("selected - vertex");
 	gDirectory = d_vertex;
