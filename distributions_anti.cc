@@ -286,6 +286,12 @@ int main(int argc, const char **argv)
 	TH1D *h_th_y_L = new TH1D("h_th_y_L", ";#theta_{y}^{L}", 960, -120E-6, +120E-6); h_th_y_L->SetLineColor(4);
 	TH1D *h_th_y_R = new TH1D("h_th_y_R", ";#theta_{y}^{R}", 960, -120E-6, +120E-6); h_th_y_R->SetLineColor(2);
 #endif
+
+	TH1D *h_th_x = new TH1D("h_th_x", ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_y = new TH1D("h_th_y", ";#theta_{y}", 250, -150E-6, +150E-6);
+
+	TH1D *h_vtx_x = new TH1D("h_vtx_x", ";x^{*}", 100, -2.5, +2.5);
+	TH1D *h_vtx_y = new TH1D("h_vtx_y", ";y^{*}", 100, -5.0, +5.0);
 	
 	// book acceptance-correction histograms
 	TProfile *p_t_ub_div_corr = new TProfile("p_t_ub_div_corr", ";t_ub_{y}", 2000., 0., 0.2);
@@ -458,6 +464,12 @@ int main(int argc, const char **argv)
 		h_th_y_L->Fill(k.th_y_L);
 		h_th_y_R->Fill(k.th_y_R);
 		*/
+
+		h_th_x->Fill(k.th_x);
+		h_th_y->Fill(k.th_y);
+
+		h_vtx_x->Fill(k.vtx_x);
+		h_vtx_y->Fill(k.vtx_y);
 
 		// calculate acceptance divergence correction
 		double phi_corr = 0., div_corr = 0.;
@@ -694,15 +706,15 @@ int main(int argc, const char **argv)
 	
 	h_th_y_L->Write();
 	h_th_y_R->Write();
-
-	{
-		double x[] = {0, 1, 2, 3};
-		double y[] = {anal.th_y_lcut_L, anal.th_y_hcut_L, anal.th_y_lcut_R, anal.th_y_hcut_R};
-		TGraph *g = new TGraph(4, x, y);
-		g->SetName("g_th_y_cuts");
-		g->Write();
-	}
 */
+
+	h_th_x->Write();
+	h_th_y->Write();
+
+	gDirectory = outF->mkdir("selected - vertex");
+
+	h_vtx_x->Write();
+	h_vtx_y->Write();
 
 	gDirectory = outF->mkdir("binning");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
