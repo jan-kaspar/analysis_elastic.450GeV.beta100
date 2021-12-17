@@ -936,6 +936,10 @@ int main(int argc, const char **argv)
 	TH1D *h_th_x_th_y_90_120  = new TH1D("h_th_x_th_y_90_120",  ";#theta_{x}", 250, -500E-6, +500E-6);
 	TH1D *h_th_x_th_y_120_150 = new TH1D("h_th_x_th_y_120_150", ";#theta_{x}", 250, -500E-6, +500E-6);
 
+	TH1D *h_th_x_low_vtx_x = new TH1D("h_th_x_low_vtx_x", ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_x_mid_vtx_x = new TH1D("h_th_x_mid_vtx_x", ";#theta_{x}", 250, -500E-6, +500E-6);
+	TH1D *h_th_x_hig_vtx_x = new TH1D("h_th_x_hig_vtx_x", ";#theta_{x}", 250, -500E-6, +500E-6);
+
 	TH1D *h_th_y = new TH1D("h_th_y", ";#theta_{y}", 250, -150E-6, +150E-6); h_th_y->SetLineColor(1);
 	TH1D *h_th_y_L = new TH1D("h_th_y_L", ";#theta_{y}^{L}", 250, -150E-6, +150E-6); h_th_y_L->SetLineColor(2);
 	TH1D *h_th_y_R = new TH1D("h_th_y_R", ";#theta_{y}^{R}", 250, -150E-6, +150E-6); h_th_y_R->SetLineColor(4);
@@ -1598,6 +1602,13 @@ int main(int argc, const char **argv)
 			h_th_x_th_y_90_120->Fill(k.th_x);
 		if (fabs(k.th_y) >= 120E-6 && fabs(k.th_y) < 150E-6)
 			h_th_x_th_y_120_150->Fill(k.th_x);
+
+		if (k.vtx_x < -0.4)
+			h_th_x_low_vtx_x->Fill(k.th_x);
+		if (k.vtx_x >= -0.4 && k.vtx_x < +0.4)
+			h_th_x_mid_vtx_x->Fill(k.th_x);
+		if (k.vtx_x >= +0.4)
+			h_th_x_hig_vtx_x->Fill(k.th_x);
 
 		h_th_y->Fill(k.th_y);
 		h_th_y_L->Fill(k.th_y_L);
@@ -2320,6 +2331,10 @@ int main(int argc, const char **argv)
 	h_th_x_th_y_60_90->Write();
 	h_th_x_th_y_90_120->Write();
 	h_th_x_th_y_120_150->Write();
+
+	h_th_x_low_vtx_x->Write();
+	h_th_x_mid_vtx_x->Write();
+	h_th_x_hig_vtx_x->Write();
 
 	h_th_y->Write();
 	h_th_y_L->Write();
