@@ -27,6 +27,9 @@ cut_combinations=(
 	"1,2,5,6,8"
 	"1,2,5,6,8,9"
 	"1,2,5,6,8,9,10"
+
+	# to check the cut-1 discriminant distribution
+	"2,5,6,7,8,9,10"
 )
 
 function RunCutCombinationReconstructions()
@@ -48,7 +51,7 @@ function RunCutCombinationReconstructions()
 	
 		for diagonal in "45b_56t" "45t_56b"
 		do
-			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -input-dir "$src_dir" -cfg "$src_dir/config.py" -cuts "$cut" \
+			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -bootstrap 1 -input-dir "$src_dir" -cfg "$src_dir/config.py" -cuts "$cut" \
 				&> "distributions_$diagonal.log" &
 		done
 
@@ -86,7 +89,7 @@ function RunNSiReconstructions()
 
 		for diagonal in "45b_56t" "45t_56b"
 		do
-			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -input-dir "$src_dir" -cfg "$src_dir/config.py" -n-si "$n_si" \
+			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -bootstrap 1 -input-dir "$src_dir" -cfg "$src_dir/config.py" -n-si "$n_si" \
 				&> "distributions_$diagonal.log" &
 		done
 	
@@ -106,12 +109,12 @@ datasets=(
 	#"fill7283/Totem1"
 	#"fill7284/Totem1"
 	#"fill7285/Totem1"
-	"fill7286/Totem1"
+	#"fill7286/Totem1"
 	#"fill7287/Totem1"
 	#"fill7288/Totem1"
 	#"fill7289/Totem1"
 	#"fill7290/Totem1"
-	#"fill7291/Totem1"
+	"fill7291/Totem1"
 )
 
 cwd=`pwd -P`
