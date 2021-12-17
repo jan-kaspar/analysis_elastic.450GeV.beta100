@@ -8,8 +8,7 @@ string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
 string binnings[] = {
-	"ub",
-	"eb",
+	"sb1",
 };
 
 string histogram = "acceptance correction/<binning>/h_t_after";

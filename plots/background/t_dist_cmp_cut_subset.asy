@@ -9,7 +9,7 @@ datasets.push("fill7281/Totem1");
 //datasets.push("fill7283/Totem1");
 //datasets.push("fill7284/Totem1");
 //datasets.push("fill7285/Totem1");
-datasets.push("fill7286/Totem1");
+//datasets.push("fill7286/Totem1");
 //datasets.push("fill7287/Totem1");
 //datasets.push("fill7288/Totem1");
 //datasets.push("fill7289/Totem1");
@@ -19,8 +19,8 @@ datasets.push("fill7286/Totem1");
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
 
-string histogram = "acceptance correction/eb/h_t_after";
-string histogram_Nev = "acceptance correction/eb/h_t_Nev_after_no_corr";
+string histogram = "acceptance correction/sb1/h_t_after";
+string histogram_Nev = "acceptance correction/sb1/h_t_Nev_after_no_corr";
 
 string combinations[];
 pen comb_pens[];

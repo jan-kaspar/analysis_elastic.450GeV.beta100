@@ -9,12 +9,12 @@ datasets.push("fill7281/Totem1");
 //datasets.push("fill7283/Totem1");
 //datasets.push("fill7284/Totem1");
 //datasets.push("fill7285/Totem1");
-datasets.push("fill7286/Totem1");
+//datasets.push("fill7286/Totem1");
 //datasets.push("fill7287/Totem1");
 //datasets.push("fill7288/Totem1");
 //datasets.push("fill7289/Totem1");
 //datasets.push("fill7290/Totem1");
-//datasets.push("fill7291/Totem1");
+datasets.push("fill7291/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
