@@ -710,8 +710,8 @@ int main(int argc, const char **argv)
 		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 
-		if (i == 5) { x_min = +7.; x_max = +37.; y_min = -10.; y_max = +5.; q_max = 0.5; }
-		if (i == 6) { x_min = -37.; x_max = -7.; y_min = -5.; y_max = +5.; q_max = 0.5; }
+		if (i == 5) { x_min = +7.; x_max = +37.; y_min = -10.; y_max = +5.; q_max = 1.0; }
+		if (i == 6) { x_min = -37.; x_max = -7.; y_min = -5.; y_max = +5.; q_max = 1.0; }
 
 		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -10.; y_max = +10.; q_max = 6.; }
 		if (i == 8) { x_min = -200E-6; x_max = +200E-6; y_min = -100.; y_max = +100.; q_max = 20.0; }
