@@ -1294,19 +1294,24 @@ int main(int argc, const char **argv)
 		}
 
 		// determine normalization factors (luminosity + corrections)
-		double inefficiency_3outof4 = anal.inefficiency_3outof4;
-		if (anal.use_3outof4_efficiency_fits)
-		{
-			inefficiency_3outof4 = 0.;
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
-			inefficiency_3outof4 += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
-		}
+		const double inefficiency_3outof4 = [&]()
+			{
+				double e = 0.;
 
-		double inefficiency_pile_up = anal.inefficiency_pile_up;
-		if (anal.use_pileup_efficiency_fits)
-			inefficiency_pile_up = g_input_pileup_ineff->Eval(ev.timestamp);
+				if (anal.use_3outof4_efficiency_fits)
+				{
+					e += 1. - f_3outof4_efficiency_L_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+					e += 1. - f_3outof4_efficiency_L_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+					e += 1. - f_3outof4_efficiency_R_1_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+					e += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
+				} else
+					e = anal.inefficiency_3outof4;
+				
+				return e;
+			}();
+
+		const double inefficiency_pile_up = (anal.use_pileup_efficiency_fits) ? g_input_pileup_ineff->Eval(ev.timestamp)
+			: anal.inefficiency_pile_up;
 
 		const double norm_corr =
 			1./(1. - (inefficiency_3outof4 + anal.inefficiency_shower_near))
