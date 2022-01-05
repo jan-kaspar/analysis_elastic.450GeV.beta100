@@ -5,15 +5,11 @@ include "../common.asy";
 string datasets[];
 datasets.push("fill7280/Totem1");
 datasets.push("fill7281/Totem1");
-//datasets.push("fill7282/Totem1");
-//datasets.push("fill7283/Totem1");
-//datasets.push("fill7284/Totem1");
-//datasets.push("fill7285/Totem1");
-//datasets.push("fill7286/Totem1");
-//datasets.push("fill7287/Totem1");
-//datasets.push("fill7288/Totem1");
-//datasets.push("fill7289/Totem1");
-//datasets.push("fill7290/Totem1");
+datasets.push("fill7282/Totem1");
+datasets.push("fill7283/Totem1");
+datasets.push("fill7284/Totem1");
+datasets.push("fill7285/Totem1");
+datasets.push("fill7289/Totem1");
 datasets.push("fill7291/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b", "anti_45b_56b", "anti_45t_56t" };
@@ -27,6 +23,10 @@ xSizeDef = 8cm;
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
+
+NewPad(false);
+NewPadLabel("before acceptance cuts+correction");
+NewPadLabel("after acceptance cuts+correction");
 
 for (int dsi : datasets.keys)
 {
@@ -48,7 +48,7 @@ for (int dsi : datasets.keys)
 	}
 
 	limits((0, 1e4), (0.03, 1e9), Crop);
-	AttachLegend("before acceptance correction");
+	AttachLegend();
 
 	//--------------------
 
@@ -62,5 +62,7 @@ for (int dsi : datasets.keys)
 	}
 
 	limits((0, 1e4), (0.03, 1e9), Crop);
-	AttachLegend("after acceptance correction");
+	AttachLegend();
 }
+
+GShipout(vSkip=0mm);
