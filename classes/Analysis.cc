@@ -140,6 +140,7 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	use_resolution_fits = ps.getParameter<bool>("use_resolution_fits");
 	use_3outof4_efficiency_fits = ps.getParameter<bool>("use_3outof4_efficiency_fits");
 	use_pileup_efficiency_fits = ps.getParameter<bool>("use_pileup_efficiency_fits");
+	use_background_fits = ps.getParameter<bool>("use_background_fits");
 
 	inefficiency_3outof4 = ps.getParameter<double>("inefficiency_3outof4");
 	inefficiency_shower_near = ps.getParameter<double>("inefficiency_shower_near");
@@ -286,6 +287,7 @@ void Analysis::Print() const
 	printf("normalisation parameters:\n");
 	printf("use_3outof4_efficiency_fits = %i\n", use_3outof4_efficiency_fits);
 	printf("use_pileup_efficiency_fits= %i\n", use_pileup_efficiency_fits);
+	printf("use_background_fits= %i\n", use_background_fits);
 	printf("inefficiency_3outof4 = %.3f\n", inefficiency_3outof4);
 	printf("inefficiency_shower_near = %.3f\n", inefficiency_shower_near);
 	printf("inefficiency_pile_up = %.3f\n", inefficiency_pile_up);

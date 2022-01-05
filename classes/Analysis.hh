@@ -106,6 +106,7 @@ struct Analysis
 	bool use_resolution_fits;				// whether to use time-dependent fits of resolution curves
 	bool use_3outof4_efficiency_fits;		// whether to use time-dependent fits of 3-out-of-4 efficiency
 	bool use_pileup_efficiency_fits;		// whether to use time-dependent fits of pile-up efficiency
+	bool use_background_fits;				// whether to use background fits
 
 	double inefficiency_3outof4;			// inefficiency from 3-out-of-4 method, used only if use_3outof4_efficiency_fits=false
 	double inefficiency_shower_near;		// inefficiency due to shower in near RP
@@ -114,7 +115,7 @@ struct Analysis
 	double inefficiency_DAQ;				// DAQ inefficiency
 
 	// normalisation correction to subtract background
-	double bckg_corr;
+	double bckg_corr;						// only used if use_background_fits=false
 
 	// (delivered) luminosity
 	double L_int;	// mb^-1

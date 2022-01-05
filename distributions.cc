@@ -506,6 +506,7 @@ int main(int argc, const char **argv)
 		anal.use_resolution_fits = false;
 		anal.use_3outof4_efficiency_fits = false;
 		anal.use_pileup_efficiency_fits = false;
+		anal.use_background_fits = false;
 	}
 
 	// print settings
@@ -639,6 +640,25 @@ int main(int argc, const char **argv)
 		printf(">> loaded unsmearing corrections:\n");
 		for (map<unsigned int, TH1D *>::iterator it = map_unsmearing_correction.begin(); it != map_unsmearing_correction.end(); ++it)
 			printf("\tbinning %s: %p\n", binnings[it->first].c_str(), it->second);
+	}
+
+	// load background correction
+	TF1 *f_bckg_fit = nullptr;
+
+	if (anal.use_background_fits)
+	{
+		string path = inputDir + "/background_fit_combined.root";
+		TFile *f_in = TFile::Open(path.c_str());
+		if (!f_in)
+			printf("ERROR: background-fit file `%s' cannot be opened.\n", path.c_str());
+
+		string obj_path = "sb1/after_acc_corr/mean/ff";
+		f_bckg_fit = (TF1 *) f_in->Get(obj_path.c_str());
+
+		if (!f_bckg_fit)
+			printf("ERROR: background-fit object '%s' cannot be loaded.\n", obj_path.c_str());
+
+		printf(">> using background fit: %p\n", f_bckg_fit);
 	}
 
 	// avoid "replacing existing" messages
@@ -1306,7 +1326,7 @@ int main(int argc, const char **argv)
 					e += 1. - f_3outof4_efficiency_R_2_F->Eval(k.th_x, k.th_y * cfg.th_y_sign);
 				} else
 					e = anal.inefficiency_3outof4;
-				
+
 				return e;
 			}();
 
@@ -1322,7 +1342,9 @@ int main(int argc, const char **argv)
 		p_norm_corr->Fill(ev.timestamp, norm_corr);
 		p_3outof4_corr->Fill(k.th_y, inefficiency_3outof4);
 
-		const double normalization = anal.bckg_corr * norm_corr / anal.L_int;
+		const double bckg_corr = (anal.use_background_fits) ? (1. - f_bckg_fit->Eval(k.t)) : anal.bckg_corr;
+
+		const double normalization = bckg_corr * norm_corr / anal.L_int;
 
 		// data for alignment
 		// (SHOULD use hit positions WITHOUT alignment corrections, i.e. ev.h)
