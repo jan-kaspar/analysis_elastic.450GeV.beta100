@@ -28,8 +28,13 @@ cut_combinations=(
 	"1,2,5,6,8,9"
 	"1,2,5,6,8,9,10"
 
-	# to check the cut-1 discriminant distribution
+	# check distributions when a single cut is lifted
 	"2,5,6,7,8,9,10"
+	"1,2,6,7,8,9,10"
+	"1,2,5,7,8,9,10"
+	"1,2,5,6,7,9,10"
+	"1,2,5,6,7,8,10"
+	"1,2,5,6,7,8,9"
 )
 
 function RunCutCombinationReconstructions()
@@ -103,18 +108,21 @@ function RunNSiReconstructions()
 make -C "../../" -j8 || exit 1
 
 datasets=(
+	# good quality
 	"fill7280/Totem1"
 	"fill7281/Totem1"
-	#"fill7282/Totem1"
-	#"fill7283/Totem1"
-	#"fill7284/Totem1"
-	#"fill7285/Totem1"
+	"fill7282/Totem1"
+	"fill7283/Totem1"
+	"fill7284/Totem1"
+	"fill7285/Totem1"
+	"fill7289/Totem1"
+	"fill7291/Totem1"
+
+	# bad quality
 	#"fill7286/Totem1"
 	#"fill7287/Totem1"
 	#"fill7288/Totem1"
-	#"fill7289/Totem1"
 	#"fill7290/Totem1"
-	"fill7291/Totem1"
 )
 
 cwd=`pwd -P`
