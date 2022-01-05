@@ -1134,6 +1134,7 @@ int main(int argc, const char **argv)
 	// book normalization histograms
 	TProfile *p_norm_corr = new TProfile("p_norm_corr", ";timestamp", timestamp_bins/100, cfg.timestamp_min, cfg.timestamp_max);
 	TProfile *p_3outof4_corr = new TProfile("p_3outof4_corr", ";#theta_{y}^{*}", 120, -150E-6, 150E-6);
+	TProfile *p_bckg_corr = new TProfile("p_bckg_corr", ";|t|", 200, anal.t_min, anal.t_max);
 
 	map<unsigned int, TH1D*> bh_t_normalized;
 	for (unsigned int bi = 0; bi < binnings.size(); ++bi)
@@ -1343,6 +1344,8 @@ int main(int argc, const char **argv)
 		p_3outof4_corr->Fill(k.th_y, inefficiency_3outof4);
 
 		const double bckg_corr = (anal.use_background_fits) ? (1. - f_bckg_fit->Eval(k.t)) : anal.bckg_corr;
+
+		p_bckg_corr->Fill(k.t, bckg_corr);
 
 		const double normalization = bckg_corr * norm_corr / anal.L_int;
 
@@ -2619,6 +2622,7 @@ int main(int argc, const char **argv)
 	gDirectory = normDir;
 	p_norm_corr->Write();
 	p_3outof4_corr->Write();
+	p_bckg_corr->Write();
 
 	h2_th_y_vs_th_x_normalized->Write();
 
