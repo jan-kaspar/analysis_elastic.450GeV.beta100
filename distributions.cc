@@ -143,7 +143,7 @@ void DivideByBinWidth(T *h)
 
 //----------------------------------------------------------------------------------------------------
 
-TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
+TGraph* PlotFiducialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
@@ -158,7 +158,7 @@ TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 
 //----------------------------------------------------------------------------------------------------
 
-void PlotFiductialArcs(const FiducialCut &fc, double th_y_sign)
+void PlotFiducialArcs(const FiducialCut &fc, double th_y_sign)
 {
 	for (double th : { 50E-6, 100E-6, 150E-6, 200E-6, 250E-6, 300E-6, 350E-6 })
 	{
@@ -2566,11 +2566,11 @@ int main(int argc, const char **argv)
 
 	TDirectory *fidCutDir = f_out->mkdir("fiducial cuts");
 	gDirectory = fidCutDir;
-	PlotFiductialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
-	PlotFiductialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
-	PlotFiductialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
+	PlotFiducialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
+	PlotFiducialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
+	PlotFiducialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
 
-	PlotFiductialArcs(anal.fc_G, cfg.th_y_sign);
+	PlotFiducialArcs(anal.fc_G, cfg.th_y_sign);
 
 	TDirectory *accDir = f_out->mkdir("acceptance correction");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
