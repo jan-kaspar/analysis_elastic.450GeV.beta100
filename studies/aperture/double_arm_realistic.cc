@@ -15,7 +15,7 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
-TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
+TGraph* PlotFiducialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
@@ -143,9 +143,9 @@ int main()
 	}
 
 	// save plots
-	PlotFiductialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
-	PlotFiductialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
-	PlotFiductialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
+	PlotFiducialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
+	PlotFiducialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
+	PlotFiducialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
 
 	h2_th_y_vs_th_x_all->Write();
 	h2_th_y_vs_th_x_acc_vtx_neg->Write();

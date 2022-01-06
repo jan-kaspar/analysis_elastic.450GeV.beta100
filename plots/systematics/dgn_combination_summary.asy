@@ -23,8 +23,8 @@ string object_labels[] = {
 
 string z_labels[];
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
-z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.08); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("low $|t|$ zoom");
-z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.08); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("full $|t|$ range");
+z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.10); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("low $|t|$ zoom");
+z_t_maxs.push(0.03); z_t_Steps.push(0.01); z_t_steps.push(0.05); z_e_maxs.push(0.10); z_e_Steps.push(0.02); z_e_steps.push(0.01); z_labels.push("full $|t|$ range");
 
 //----------------------------------------------------------------------------------------------------
 
@@ -138,6 +138,12 @@ PlotOneRow();
 
 AddAllModes();
 FilterModes("mx-", "my-", "unsmearing-");
+PlotOneRow();
+
+//----------------------------------------------------------------------------------------------------
+
+AddAllModes();
+FilterModes("bckg");
 PlotOneRow();
 
 GShipout(vSkip=0mm);

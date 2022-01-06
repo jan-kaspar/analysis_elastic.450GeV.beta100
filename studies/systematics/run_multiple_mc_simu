@@ -42,6 +42,8 @@ configurations=(
 	"fit_2/mx-sigma"
 	"fit_2/my-sigma"
 
+	"fit_2/bckg"
+
 	"fit_2/norm"
 
 	"fit_3/none"

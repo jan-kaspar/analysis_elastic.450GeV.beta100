@@ -156,6 +156,9 @@ int main(int argc, const char **argv)
 	// load non-gaussian distributions
 	LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
 
+	// load uncertainty of the background-subtraction correction
+	LoadBackgroundUncertainty();
+
 	// random seed
 	gRandom->SetSeed(seed);
 
@@ -315,11 +318,15 @@ int main(int argc, const char **argv)
 
 		const double norm_adjustment = eff * eff_corr * (1. + biases.norm);
 
+		// ----- background subtraction uncertainty -----
+
+		const double bckg_adjustment = (1. + biases.bckg * f_bckg_unc->Eval(k_re.t));
+
 		// fill plots
 		if (!skip)
 		{
 			for (unsigned int bi = 0; bi < binnings.size(); ++bi)
-				bh_t_re[bi]->Fill(k_re.t, w * norm_adjustment * phi_corr * div_corr / 2.);
+				bh_t_re[bi]->Fill(k_re.t, w * norm_adjustment * bckg_adjustment * phi_corr * div_corr / 2.);
 		}
 	}
 

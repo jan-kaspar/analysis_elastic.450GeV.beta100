@@ -293,6 +293,9 @@ double dist_t_reco(double t_p)
 	// get all intersections of const-th circle with acceptance boundaries
 	set<double> phis;
 
+	// adjustments due to t-dependent effects (e.g. background-subtraction error)
+	const double adjustment = (1. + biases.bckg * f_bckg_unc->Eval(t_p));
+
 	// calculate integrals over phi sections
 	const double rel_precision = 1E-3;
 	double phiSum = 0.;
@@ -310,7 +313,7 @@ double dist_t_reco(double t_p)
 			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 	}
 
-	return integralSum / phiSum;
+	return adjustment * integralSum / phiSum;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -408,6 +411,9 @@ int main(int argc, const char **argv)
 
 	// load non-gaussian distributions
 	LoadNonGaussianDistributions(anal_sim.si_th_x_LRdiff, anal_sim.si_th_y_LRdiff);
+
+	// load uncertainty of the background-subtraction correction
+	LoadBackgroundUncertainty();
 
 	// load input dsigma/dt distribution
 	if (LoadTDistributions() != 0)

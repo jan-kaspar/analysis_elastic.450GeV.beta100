@@ -400,6 +400,8 @@ int main(int argc, const char **argv)
 		Mode("my-sigma", Mode::sNI, Mode::coFull),
 		Mode("unsmearing-model", Mode::sNI, Mode::coFull),
 
+		Mode("bckg", Mode::sNI, Mode::coFull),
+
 		Mode("norm", Mode::sExt, Mode::coFull),
 
 		Mode("others", Mode::sExt, Mode::coFull),
@@ -646,6 +648,8 @@ int main(int argc, const char **argv)
 		"mx-sigma",
 		"my-sigma",
 		"unsmearing-model",
+
+		"bckg"
 	};
 
 	BuildMatrix("all-but-norm", contributions, modes, binnings);

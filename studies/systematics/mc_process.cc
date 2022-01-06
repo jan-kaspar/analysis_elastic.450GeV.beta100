@@ -111,6 +111,8 @@ int main(int argc, const char **argv)
 		{ "mx-sigma", Scenario::mUnsmearing },
 		{ "my-sigma", Scenario::mUnsmearing },
 
+		{ "bckg", Scenario::mDsdt },
+
 		{ "norm", Scenario::mDsdt },
 	};
 

@@ -47,6 +47,9 @@ struct Biases
 	// normalisation error (relative factor)
 	double norm = 0.;
 
+	// background subtraction
+	double bckg = 0.;
+
 	// non-gaussian distributions
 	bool use_non_gaussian_d_x = false;
 	bool use_non_gaussian_d_y = false;
@@ -70,6 +73,7 @@ struct Biases
 		printf("global:\n");
 		printf("    eff_perturbation: %s\n", (eff_perturbation) ? eff_perturbation->GetName() : "NONE");
 		printf("    norm = %.3E\n", norm);
+		printf("    bckg = %.3E\n", bckg);
 		printf("    use_non_gaussian_d_x = %u\n", use_non_gaussian_d_x);
 		printf("    use_non_gaussian_d_y = %u\n", use_non_gaussian_d_y);
 		printf("    d_m_corr_coef_x = %.3f\n", d_m_corr_coef_x);
@@ -321,6 +325,14 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		return 0;
 	}
 
+	// ---------- background subtraction ----------
+
+	if (scenario == "bckg")
+	{
+		biases.bckg = 1;
+		return 0;
+	}
+
 	// ---------- normalisation ----------
 
 	if (scenario == "norm")
@@ -378,6 +390,17 @@ void LoadNonGaussianDistributions(double si_d_x, double /* si_d_y */)
 double NonGauassianDistribution_d_x(double x)
 {
 	return f_non_gaussian_dist_d_x->Eval(ngx_al*(x + ngx_be)) * ngx_et;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+TF1 *f_bckg_unc = nullptr;
+
+void LoadBackgroundUncertainty()
+{
+	TFile *f_in = TFile::Open((string(getenv("BASE_DIR")) + "/studies/systematics/background_uncertainty.root").c_str());
+	f_bckg_unc = new TF1(* (TF1 *) f_in->Get("ff_unc"));
+	delete f_in;
 }
 
 #endif

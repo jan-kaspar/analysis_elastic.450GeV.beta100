@@ -28,14 +28,14 @@ void AddMode(string _l, pen _p = black,
 	)
 {
 	Mode m;
-	
+
 	m.label = _l;
 	m.p = _p;
 
 	m.mc_file = _mcf;
 	m.mc_tag = _mct;
 	m.mc_ref = _mcr;
-	
+
 	m.ni_file = _nif;
 	m.ni_tag = _nit;
 	m.ni_ref = _nir;
@@ -129,9 +129,9 @@ void AddAllModes()
 		"", "eff-mode3", 1,
 		"", "eff-mode3", 1
 	);
-	
+
 	//--------------------
-	
+
 	AddMode("\vbox{\hbox{uncert.~of $\si(d_x)$}}", blue+dashed,
 		"", "dx-sigma", 1,
 		"", "dx-sigma", 1
@@ -141,7 +141,7 @@ void AddAllModes()
 		"", "dy-sigma", 1,
 		"", "dy-sigma", 1
 	);
-	
+
 	AddMode("\vbox{\hbox{non-gaussianity of $d_x$}}", blue+dashed,
 		"", "dx-non-gauss", 1,
 		"", "dx-non-gauss", 1
@@ -175,12 +175,19 @@ void AddAllModes()
 		"", "unsmearing-model", 1,
 		"", "unsmearing-model", 1
 	);
-	
+
 	//--------------------
-	
+
 	AddMode("\vbox{\hbox{beam momentum}}", magenta,
 		"", "beam-mom", 1,
 		"", "beam-mom", 1
+	);
+
+	//--------------------
+
+	AddMode("\vbox{\hbox{background subtraction}}", magenta,
+		"", "bckg", 1,
+		"", "bckg", 1
 	);
 
 	/*
@@ -215,7 +222,7 @@ void FilterModes(... string filters[])
 				break;
 			}
 		}
-	
+
 		if (keep)
 			sel.push(modes[mi]);
 	}

@@ -4,7 +4,7 @@ include "../common.asy";
 
 string datasets[];
 datasets.push("fill7280/Totem1");
-//datasets.push("fill7281/Totem1");
+datasets.push("fill7281/Totem1");
 //datasets.push("fill7282/Totem1");
 //datasets.push("fill7283/Totem1");
 //datasets.push("fill7284/Totem1");
