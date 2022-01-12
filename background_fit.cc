@@ -92,6 +92,7 @@ void ProcessOne(TH1D *h_in_bt, TH1D *h_in_tb, TH1D *h_in_bb, TH1D *h_in_tt)
 	if (!h_in_bt || !h_in_tb || !h_in_bb || !h_in_tt)
 	{
 		printf("ERROR: incomplete input to ProcessOne\n");
+		return;
 	}
 
 	TGraphErrors *g_bb = new TGraphErrors();
