@@ -2,17 +2,39 @@
 
 make -C ../.. -j8 || exit 1
 
-./normalisation \
-	-input "../../data/fill7280/Totem1" \
-	-input "../../data/fill7281/Totem1" \
-	-input "../../data/fill7281-with-hor/Totem1" \
-	-input "../../data/fill7282/Totem1" \
-	-input "../../data/fill7283/Totem1" \
-	-input "../../data/fill7284/Totem1" \
-	-input "../../data/fill7285/Totem1" \
-	-input "../../data/fill7289/Totem1" \
-	-input "../../data/fill7289-with-hor/Totem1" \
-	-input "../../data/fill7291/Totem1" \
-	-input "../../data/fill7291-with-hor/Totem1" \
-	-print-details 1 -print-python 1
-	#>> "../../data/fill$fill/config_common.py"
+data=""
+data="$data -input ../../data/fill7280/Totem1"
+data="$data -input ../../data/fill7281/Totem1"
+#data="$data -input ../../data/fill7281-with-hor/Totem1"
+data="$data -input ../../data/fill7282/Totem1"
+data="$data -input ../../data/fill7283/Totem1"
+data="$data -input ../../data/fill7284/Totem1"
+data="$data -input ../../data/fill7285/Totem1"
+data="$data -input ../../data/fill7289/Totem1"
+#data="$data -input ../../data/fill7289-with-hor/Totem1"
+data="$data -input ../../data/fill7291/Totem1"
+#data="$data -input ../../data/fill7291-with-hor/Totem1"
+
+./normalisation $data -print-details 1 -print-code 0
+
+if [ "$1" == "apply" ]
+then
+	./normalisation $data -print-details 0 -print-code 1 | while read line
+	do
+		key=${line%%=*}
+		val=${line#*=}
+
+		if [ "$key" == "file" ]
+		then
+			file="$val"
+		fi
+
+		if [ "$key" == "line" ]
+		then
+			echo "$val" >> "$file/../config_common.py"
+		fi
+	done
+else
+	echo ""
+	echo "WARNING: Update not applied to config files. To do so, pass 'apply' argument to the script."
+fi

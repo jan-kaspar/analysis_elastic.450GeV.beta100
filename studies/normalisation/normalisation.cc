@@ -22,7 +22,7 @@ void PrintUsage()
 	printf("    -binning <string>         binning\n");
 
 	printf("    -print-details <bool>     print details\n");
-	printf("    -print-python <bool>      print results in python format\n");
+	printf("    -print-code <bool>        print results in summary format\n");
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ int main(int argc, const char **argv)
 	diagonals.push_back("45t_56b");
 
 	bool print_details = true;
-	bool print_python = false;
+	bool print_code = false;
 
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
@@ -60,7 +60,7 @@ int main(int argc, const char **argv)
 		if (TestStringParameter(argc, argv, argi, "-binning", binning)) continue;
 
 		if (TestBoolParameter(argc, argv, argi, "-print-details", print_details)) continue;
-		if (TestBoolParameter(argc, argv, argi, "-print-python", print_python)) continue;
+		if (TestBoolParameter(argc, argv, argi, "-print-code", print_code)) continue;
 
 		printf("ERROR: unknown option '%s'.\n", argv[argi]);
 		cl_error = 1;
@@ -124,7 +124,7 @@ int main(int argc, const char **argv)
 
 			e.beta = 1. / GetRelativeNormalizationFactor(e.h_t, print_details);
 
-			printf("    L_int = %.1f, raw beta = %.5f\n", e.L_int, e.beta);
+			//printf("    L_int = %.1f, raw beta = %.5f\n", e.L_int, e.beta);
 
 			s_1 += 1.;
 			s_beta += e.beta;
@@ -186,18 +186,12 @@ int main(int argc, const char **argv)
 				e.L_int / e.beta / gamma);
 	}
 
-	/*
-			if (print_python)
-				printf("cfg_%s.anal.L_int = %.1f\n", diagonals[dgni].c_str(), L);
-	*/
-
-	if (print_python)
+	if (print_code)
 	{
-		printf("\n");
 		for (const auto &e : data)
 		{
-			printf("# %s\n", input_specs[e.idx_input].c_str());
-			printf("cfg_%s.anal.L_int = %.1f\n", diagonals[e.idx_dgn].c_str(), e.L_int / e.beta / gamma);
+			printf("file=%s\n", input_specs[e.idx_input].c_str());
+			printf("line=cfg_%s.anal.L_int = %.1f\n", diagonals[e.idx_dgn].c_str(), e.L_int / e.beta / gamma);
 		}
 	}
 
