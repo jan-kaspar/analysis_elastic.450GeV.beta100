@@ -98,11 +98,15 @@ do
 	# this is the single most time consuming task - that's why it is run first
 	opt=""
 	dep_pileup_ZeroBias=""
+	clean_selection="|grep -v ZeroBias"
+
 	if [ "$fast" == "y" ]; then opt="-O \"-fast 1\""; fi
+
 	if [ "$skip_long" == "n" ]
 	then
 		AddSubTarget "pileup_ZeroBias" "" "pileup.cc" "ZeroBias" "$opt"
 		dep_pileup_ZeroBias="pileup_ZeroBias"
+		clean_selection=""
 	fi
 
 	AddSubTarget "pileup_Totem1" "" "pileup.cc" "Totem1" ""
@@ -148,7 +152,7 @@ do
 		echo "$target_clean:"
 		echo "	rm -f $subtargets"
 		echo "	rm -f $target"
-		echo "	find $dir/ -name \"*.log\" -o -name \"*.root\"|grep -v pileup_correction.root|while read f; do rm \"\$\$f\"; done"
+		echo "	find $dir/ -name \"*.log\" -o -name \"*.root\"|grep -v pileup_correction.root $clean_selection |while read f; do rm \"\$\$f\"; done"
 	) >> "$output"
 done
 
