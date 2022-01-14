@@ -9,6 +9,12 @@ done
 # run distributions, "bootstrap" mode, i.e. with no/default corrections
 ./run distributions.cc $@ -O "-bootstrap 1" -wait
 
+# distributions for anti_diagonals
+./run distributions_anti.cc $@ -danti -wait
+
+# run background estimation
+./run background_fit.cc $@ -wait
+
 # run resolutions
 ./run resolution_fit.cc $@ -wait
 
