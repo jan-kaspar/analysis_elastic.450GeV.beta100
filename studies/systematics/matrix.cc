@@ -578,7 +578,7 @@ int main(int argc, const char **argv)
 		}
 	}
 
-	// save modes
+	// save contributions
 	TDirectory *d_contributions = f_out->mkdir("contributions");
 	for (const auto &mode : modes)
 	{
@@ -605,6 +605,26 @@ int main(int argc, const char **argv)
 				char buf[100];
 				sprintf(buf, "combination%u", ci);
 				mode.vh_combined[bi][ci]->Write(buf);
+			}
+		}
+	}
+
+	// save modes (expanded)
+	TDirectory *d_modes = f_out->mkdir("modes");
+	for (const auto &mode : modes)
+	{
+		const unsigned int n_combinations = mode.vh_combined[0].size();
+
+		for (unsigned int ci = 0; ci < n_combinations; ci++)
+		{
+			char buf[100];
+			sprintf(buf, "%s-%i", mode.tag.c_str(), ci);
+			TDirectory *d_mode = d_modes->mkdir(buf);
+
+			for (unsigned int bi = 0; bi < binnings.size(); bi++)
+			{
+				gDirectory = d_mode->mkdir(binnings[bi].c_str());
+				mode.vh_combined[bi][ci]->Write("h");
 			}
 		}
 	}
