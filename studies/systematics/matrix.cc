@@ -224,7 +224,7 @@ void BuildMatrix(const string &label, const vector<string> &contributions, const
 			for (const auto &h : sm->vh_combined[bidx])
 			{
 				hists.push_back(h);
-				hist_correlation.push_back((sm->tag == "others") ? false : true);
+				hist_correlation.push_back(true);
 			}
 		}
 
@@ -403,13 +403,10 @@ int main(int argc, const char **argv)
 		Mode("bckg", Mode::sNI, Mode::coFull),
 
 		Mode("norm", Mode::sExt, Mode::coFull),
-
-		Mode("others", Mode::sExt, Mode::coFull),
 	};
 
 	// normalisation uncertainty
 	const double norm_unc = 0.10;
-	const double others_unc = 0.04;
 
 	// load binning-reference histograms
 	vector<TH1D *> v_binning_h;
@@ -490,7 +487,6 @@ int main(int argc, const char **argv)
 		{
 			double rel_eff = 0.;
 			if (mode.tag == "norm") rel_eff = norm_unc;
-			if (mode.tag == "others") rel_eff = others_unc;
 
 			for (unsigned int dgni = 0; dgni < diagonals.size(); ++dgni)
 			{
