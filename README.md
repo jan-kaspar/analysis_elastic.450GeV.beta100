@@ -8,7 +8,7 @@ mk # run compilation
 
 # data analysis (all steps, all good datasets)
 ./configure.analysis # prepare analysis makefile
-make -f makefile.analysis -j # run the analysis (this make take few hours)
+make -f makefile.analysis -j8 # run the analysis (this make take few hours)
 
 # estimate of systematics
 cd studies/systematics/
@@ -187,14 +187,29 @@ The results will be saved in `matrix.root` file. The covariance matrix products 
 
 # Plots
 
-For many standard plots, the generating scripts are placed in the `plots` directory. They are split by topic into a hierarchy of subdirectories. The scripts written in the Asymptote language. The similarity to C++ should make them at least readable
+For many standard plots, the generating scripts are placed in the `plots` directory. They are split by topic into a hierarchy of subdirectories. The scripts written in the Asymptote language. The similarity to C++ should make them at least readable.
 
 
 
 # Automated testing
- * go to the base directory (where `run` file is)
- * execute `test/run_test`
+
+The repo includes a test suite in the `test` directory. The tests are triggered by executing
+```
+./run_test
+```
+By default the test will check
+  * that there are no left FIXME and TODOs in the code
+  * that compilation is successfull
+  * run static analysis
+  * run a short version of the main analysis (small subset of data)
+  * run a short version of systematics assessment
+
+It can also compare plots (main analysis and systematics) wrt. another version - for that pass `-ref <directory>` to the `run_test` script. The reference plots are carefully selected to cover most steps in the analysis.
+
+The list of test steps can be configured with `-steps <list of steps>` flag.
+
+Tip: I've set up `acron` to run the tests every night and send me an email with the results. I also triggered the tests manually at every significant change of the code to avoid any regression.
 
 
-# TODO
- 1) Prepare analysis makefile: `./configure.analysis`. `-skip-long` option can be passed to skip the very long steps where changes are rare (pile up from ZeroBias).
+# Other tips
+  * `./configure.analysis -skip-long` can be used to skip the very long steps where changes are rare (pile up from ZeroBias).
