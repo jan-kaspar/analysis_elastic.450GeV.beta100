@@ -183,15 +183,18 @@ To run the full machinery, just execute
 ```
 The results will be saved in `matrix.root` file. The covariance matrix products are in the `matrices` directory. By default, two matrices are produced: in directory `all` a matrix with all contributions, in directory `all-but-norm` a matrix where the normalisation uncertainty is not taken into account. In each of these directories, you can find subdirectories for each of the binnings (e.g. `sb1`). The covariance matrix is stored as `cov_mat`, its graphical representation (2D histogram) as `h_corr_mat`. The per-bin uncertainties (from the diagonal of the matrix) are stored as a 1D histogram `h_stddev`. 
 
+
+
 # Plots
+
+For many standard plots, the generating scripts are placed in the `plots` directory. They are split by topic into a hierarchy of subdirectories. The scripts written in the Asymptote language. The similarity to C++ should make them at least readable
+
+
+
+# Automated testing
+ * go to the base directory (where `run` file is)
+ * execute `test/run_test`
 
 
 # TODO
  1) Prepare analysis makefile: `./configure.analysis`. `-skip-long` option can be passed to skip the very long steps where changes are rare (pile up from ZeroBias).
-
-
-
-
-# Automated test
- * go to the base directory (where `run` file is)
- * execute `test/run_test`
