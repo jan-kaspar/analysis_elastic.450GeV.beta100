@@ -148,6 +148,41 @@ The "dataset collection" can be a single dataset (e.g. a fill) or multiple datas
 
 # Systematics
 
+The code to estimate the systematic uncertainties is in `studies/systematics`. In general, there are two ways of the calculation: MC simulation (`mc` in the names) and numerical integration (`ni` in the names). Both calculations assume a true t distribution (some choices are available in `input_distributions.hh`) and then evaluate the observed t distribution provided the selected perturbation scenario. Typically, the NI calculation is preferred - it is faster and has less fluctuations. Some scenarios can, however, only be evaluated with the MC technique. For sure, good agreement between NI and MC results is essential integrity marker.
+
+The simulation is made per diagonal, eventually the results are combined. Different correlations are assumed for different perturbations (see the `matrix.cc` program).
+
+The most important files include:
+  * `scenarios.hh`: list of perturbation scenarios, see below
+  * `mc_simu.cc`, `mc_process.cc`: simulation and post-processing, MC calculation
+  * `ni_simu.cc`, `ni_process.cc`: simulation and post-processing, numerical-integration calculation
+  * `matrix.cc`: combines results from all per-scenario calculations, builds the full covariance matrix of the systematics
+
+Then, there are helper tools to pre-evaluate the effects of certaint systematics and to obtain a form which can be directely plugged in the simulation code (above) and to avoid useless calculation repetitions:
+  * `background_uncertainty.cc`: for background-subtraction uncertainty
+  * `effect_alignment_mc.cc`: for alignment-induced uncertainties
+  * `effect_efficiency_mc.cc`: for 3/4 efficiency-induced uncertainties
+  * `effect_optics_mc.cc`: for optics-induced uncertainties
+
+The perturbation scenarios include (see the `scenarios.hh` file):
+  * `sh-th*`: shift in reco angle, typically due to misalignment; `LRasym` mean asymmetric perturbation between the two arms, `TBuncor` refers to the mode of uncorrelated top-bottom perturbations (the relative top-bottom RP position is strongly constrained with the track-based alignment)
+  * `tilt-thx-thy*`: scenarios corresponding to x-y titls, either due to misalignment or effectively due to optics
+  * `sc-thxy-mode*`: theta*_x and theta*_y scaling scenarios, due to the optics uncertainties
+  * `dx-*`, `dy-*`: perturbations related to the uncertain RMS and shape of the fluctuations of left-right differences in the reco angles (thus containing the beam divergence); `sigma` refers to perturbations of the RMS, `non-gauss` stands for a non-gaussian distribution scenario (for acceptance correction, gaussian distribution is assumed)
+  * `eff-mode*`: perturbation modes related to the 3/4 efficiency, combined from all the diagonal RPs; somewhat complex since in the analysis the efficiency is function both of theta*_x and theta*_y
+  * `beam-mom`: beam-momentum uncertainty
+  * `m*-sigma`: scenarios related to the uncertain theta*_x resolution, thus affecting the unfolding correction
+  * `bckg`: scenario related to the background subtraction
+  * `norm`: scenario related to the normalisation uncertainty
+
+The program `matrix.cc` adds another scenario `unsmearing-model`, reflecting the uncertainty of the choice of the "true" t-distribution.
+
+To run the full machinery, just execute
+```
+./run_all # this may take an hour or so
+```
+The results will be saved in `matrix.root` file. The covariance matrix products are in the `matrices` directory. By default, two matrices are produced: in directory `all` a matrix with all contributions, in directory `all-but-norm` a matrix where the normalisation uncertainty is not taken into account. In each of these directories, you can find subdirectories for each of the binnings (e.g. `sb1`). The covariance matrix is stored as `cov_mat`, its graphical representation (2D histogram) as `h_corr_mat`. The per-bin uncertainties (from the diagonal of the matrix) are stored as a 1D histogram `h_stddev`. 
+
 # Plots
 
 
