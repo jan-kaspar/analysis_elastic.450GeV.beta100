@@ -1,20 +1,29 @@
 # Basic usage
 
+The following instructions have been tested in the LXPLUS7 environment.
+
+Preparation: edit `environment` file to source the right CMSSW environment. Tested with CMSSW_10_6_17.
+
+Initialisation:
 ```
-# initialisation
-bash --rcfile environment # intialise environment
-./configure # prepare makefile and clang compilation dictionary
-mk # run compilation
+bash --rcfile environment  # intialise environment
+./configure  # prepare makefile and clang compilation dictionary
+mk  # run compilation
+```
 
-# data analysis (all steps, all good datasets)
-./configure.analysis # prepare analysis makefile
-make -f makefile.analysis -j8 # run the analysis (this make take few hours)
+Data analysis (all steps, all good datasets):
+```
+./configure.analysis  # prepare analysis makefile
+make -f makefile.analysis -j8  # run the analysis (this make take few hours)
+```
 
-# estimate of systematics
+Estimate of systematics
+```
 cd studies/systematics/
-./run_all
-
+./run_all  # (this may take an hour)
 ```
+
+
 
 # Structure of the repository
 
@@ -31,6 +40,7 @@ A step is applied to a dataset with the `./run` script. The syntax is as follows
 This will apply the step represented by `<src file>` to dataset `<dir1>`, `<dir2>`, ... with the specified options. The most important option is `-d` which allows to select for which diagonals the step shall be exectued. The default is `45b_56t`, `45t_56b` and `combined`.
 
 
+
 # Datasets
 
 The main collection of datasets is in `data/fill*`. They are split by the fill. Each directory contains subdirectories `Totem1` and `ZeroBias` - they refer to the trigger stream. The former is used for most of the analysis, the latter for some efficiency corrections.
@@ -38,6 +48,8 @@ The main collection of datasets is in `data/fill*`. They are split by the fill. 
 The config files are built in hierarchical manner. Some settings are applicable to all fills, some to just one fill, some to a single trigger. The basic config (common to all datasets) is in `config_base.py` in the top directory.
 
 The input files (from CMSSW reco) are listed in `input_files.py` file in the dataset directory. Some directories don't include this file, they can reuse the "distilled" ntuples from other datasets.
+
+
 
 # Config files
 
@@ -74,6 +86,8 @@ Some of the analysis parameters:
   * `norm_corr`: additional normalisation correction
   * `binnings`: list of |t| binnings to be used in the analysis
 
+
+
 # Common code
 
 The often reused code is in the `classes` directory.
@@ -95,6 +109,7 @@ The often reused code is in the `classes` directory.
   * `Kinematics.hh`: structure to hold the elastic-event kinematics
   * `numerical_integration.hh`: tools for numerical integration
   * `Stat.hh`: basic statistical tools
+
 
 
 # Analysis steps
@@ -119,6 +134,8 @@ The source code representing the analysis steps is in the top directory.
 There are dependencies among the steps. In order to respect them, best to use the `makefile.analysis`.
 
 Since some of corrections are determine during the analysis, two iterations (at least) must be made. For the first iteration, it is handy to run the `distributions.cc` step with the `bootstrap` parameter, in order to take the initial corrections from constants in the config file.
+
+
 
 # Results
 
@@ -145,6 +162,8 @@ Since each dataset and each diagonal is processed separately, we need a tool to 
 <binning> / <dataset collection> / <diagonal collection> / <histogram>
 ```
 The "dataset collection" can be a single dataset (e.g. a fill) or multiple datasets. For example, "merged" represents all datasets together. Similarly, "diagonal collection" can be a single diagonal or "combined", i.e. the two diagonals together. "histogram" can either be "h_dsdt", i.e. the differential cross-section, or "h_dNdt", histogram of number of events per bin.
+
+
 
 # Systematics
 
