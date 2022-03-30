@@ -223,6 +223,8 @@ By default the test will check
   * run a short version of the main analysis (small subset of data)
   * run a short version of systematics assessment
 
+Altogether, the test takes some 10 minutes.
+
 It can also compare plots (main analysis and systematics) wrt. another version - for that pass `-ref <directory>` to the `run_test` script. The reference plots are carefully selected to cover most steps in the analysis.
 
 The list of test steps can be configured with `-steps <list of steps>` flag.
